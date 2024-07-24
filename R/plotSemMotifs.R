@@ -6,14 +6,20 @@ plotSemMotifs <- \(dt) {
     geom_point(data = subset(dt, risk < 0 & nonrisk < 0),
                size = 1,
                color = 'grey') +
-    geom_text(data = subset(dt, risk > 0 & nonrisk < 0),
-              mapping = aes(label = motif),
-              size = 4,
-              color = 'firebrick') +
-    geom_text(data = subset(dt, risk < 0 & nonrisk > 0),
-              mapping = aes(label = motif),
-              size = 4,
-              color = '#1D91C0') +
+    geom_point(data = subset(dt, risk > 0 & nonrisk < 0),
+               size = 1,
+               color = 'firebrick') +
+    geom_point(data = subset(dt, risk < 0 & nonrisk > 0),
+               size = 1,
+               color = '#1D91C0') +
+    geom_text_repel(data = subset(dt, risk > 0 & nonrisk < 0),
+                    mapping = aes(label = motif),
+                    size = 4,
+                    color = 'firebrick') +
+    geom_text_repel(data = subset(dt, risk < 0 & nonrisk > 0),
+                    mapping = aes(label = motif),
+                    size = 4,
+                    color = '#1D91C0') +
     geom_text(data = subset(dt, risk > 0 & nonrisk > 0),
               mapping = aes(label = motif),
               size = 4,
