@@ -23,8 +23,6 @@ semMotifBinding(
 
 \item{alt}{character of alternate nulceotide (can be upper or lower)}
 
-\item{semFiles}{character vector of paths to each \code{.sem} file}
-
 \item{semBaselines}{file path to sem baselines}
 }
 \description{
