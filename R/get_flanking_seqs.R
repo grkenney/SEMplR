@@ -1,8 +1,32 @@
-library(GenomicRanges)
-library(BSgenome.Hsapiens.UCSC.hg19)
-
-# get up and downstream seqs
-get_flanking_seqs <- function(vr, up, down, bs_genome_obj=Hsapiens){
+#' Get up and downstream sequences of a variant
+#'
+#' Finds nucleotides up and downstream of a variant within a genome and store
+#' within `upstream` and `downstream` fields in the metadata of the supplied
+#' `VRanges` object.
+#'
+#' @param vr A `VRanges` object with one or more variants. seqnames and ranges
+#' fields are required.
+#' @param up Numeric, number of bases to return upstream of variant
+#' @param down Numeric, number of bases to return downstream of variant
+#' @param bs_genome_obj A `BSgenome` object for the genome build to use.
+#' Defaults to `BSgenome.Hsapiens.UCSC.hg19`.
+#'
+#' @return a `VRanges` object with metadata columns `upstream` and `downstream`.
+#'
+#' @examples
+#'
+#' # Create a VRanges object
+#' vr <- VRanges(seqnames = "chr1", ranges = 15000, ref = "A", alt = "T")
+#'
+#' # Get the 5 bp upstream and 10 bp downstream
+#' get_flanking_seqs(vr, 5, 10)
+#'
+#' @export
+get_flanking_seqs <- function(vr, up, down,
+                              bs_genome_obj=BSgenome.Hsapiens.UCSC.hg19::Hsapiens) {
+  if (length(vr) < 1) {
+    stop("Vranges object must contain at least one variant.")
+  }
   # initialize metadata columns in vrange to store up and downstream seqs
   vr$upstream <- NA
   vr$downstream <- NA
@@ -10,16 +34,16 @@ get_flanking_seqs <- function(vr, up, down, bs_genome_obj=Hsapiens){
   # iterate over variants (rows) in vrange object
   for (i in seq(vr)){
     # get start position of variant
-    start_pos <- start(vr[i])
-    end_pos <- end(vr[i])
+    start_pos <- BiocGenerics::start(vr[i])
+    end_pos <- BiocGenerics::end(vr[i])
 
     # get sequence upstream and downstream of variant start/end
-    upstream <- getSeq(bs_genome_obj,
-                       names=seqnames(vr[i]),
+    upstream <- Biostrings::getSeq(bs_genome_obj,
+                       names=GenomeInfoDb::seqnames(vr[i]),
                        start=start_pos-up,
                        end=start_pos-1)
-    downstream <- getSeq(bs_genome_obj,
-                         names=seqnames(vr[i]),
+    downstream <- Biostrings::getSeq(bs_genome_obj,
+                         names=GenomeInfoDb::seqnames(vr[i]),
                          start=end_pos+1,
                          end=end_pos+down)
 
