@@ -31,6 +31,9 @@ get_flanking_seqs <- function(vr, up, down,
   vr$upstream <- NA
   vr$downstream <- NA
 
+  vr$ref_seq <- NA
+  vr$alt_seq <- NA
+
   # iterate over variants (rows) in vrange object
   for (i in seq(vr)){
     # get start position of variant
@@ -50,6 +53,13 @@ get_flanking_seqs <- function(vr, up, down,
     # store up and downstream sequences in vrange metadata
     vr[i]$upstream <- as.character(upstream)
     vr[i]$downstream <- as.character(downstream)
+
+    # concatenate flanking sequences with variant and store in vrange metadata
+    concat_ref_seq <- Biostrings::xscat(upstream, ref(vr[i]), downstream)
+    concat_alt_seq <- Biostrings::xscat(upstream, alt(vr[i]), downstream)
+
+    vr[i]$ref_seq <- as.character(concat_ref_seq)
+    vr[i]$alt_seq <- as.character(concat_alt_seq)
   }
   return(vr)
 }
