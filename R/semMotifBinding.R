@@ -70,5 +70,5 @@ semMotifBinding <- \(vr,
   }
 
   ## Return
-  return(dt)
+  return(semScores)
 }
