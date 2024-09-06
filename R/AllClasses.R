@@ -56,6 +56,14 @@ SNPEffectMatrix <- function(matrix, tf_name, baseline, pwm_filename = "") {
   )
 }
 
+## SEMReference ----------------------------------------------------------------
+
+setClass("SEMCollection", representation("VIRTUAL"),
+         prototype = prototype(elementType = "SNPEffectMatrix"),
+         contains = "list")
+
+new("SEMCollection")
+
 ## SemplR class ----------------------------------------------------------------
 
 #' Class for storing SEM motif binding calculations for multiple variants
@@ -86,9 +94,39 @@ setClass("SemplR",
 #' @aliases SemplR-class
 #' @rdname SemplR
 #' @export
-SemplR <- function(variants, scores) {
+SemplR <- function(variants=NA, scores=NA) {
+  if (is.na(scores)){
+    scores_table <- data.table(seqnames=character(),
+                               ranges=numeric(),
+                               sem=character(),
+                               nonRiskSeq=numeric(), riskSeq=numeric(),
+                               nonRiskScore=numeric(), riskScore=numeric(),
+                               nonRiskNorm=numeric(), riskNorm=numeric())
+  }
+  else {
+    scores_table = scores
+  }
+
+  if (all(is.na(variants))) {
+    vr = VRanges()
+  }
+
   new("SemplR",
-      variants = VRanges(),
-      scores = data.table()
+      variants = vr,
+      scores = scores_table
       )
 }
+
+setValidity("SemplR", function(object) {
+  expected_column_names <- c("seqnames", "ranges", "sem",
+                             "nonRiskSeq", "riskSeq",
+                             "nonRiskScore", "riskScore",
+                             "nonRiskNorm", "riskNorm")
+  actual_column_names <- colnames(object@scores)
+  if (sum(expected_column_names %in%
+          actual_column_names) != length(expected_column_names)) {
+    "@scores must contain columns with names: seqnames, ranges, sem, nonRiskSeq, riskSeq, nonRiskScore, riskScore, nonRiskNorm, riskNorm"
+  } else {
+    TRUE
+  }
+})
