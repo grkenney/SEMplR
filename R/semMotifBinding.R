@@ -5,91 +5,70 @@
 #' @param pos integer of SNP position
 #' @param ref character of reference nucleotide (can be upper or lower)
 #' @param alt character of alternate nulceotide (can be upper or lower)
-#' @param semFiles character vector of paths to each `.sem` file
-#' @param semBaselines file path to sem baselines
+#' @param semFiles path to sem files
+#' @param semBaselines path to sem baselines file
 #'
-semMotifBinding <- \(chr = "chr12",
-                     pos = 94136009,
-                     ref = "G",
-                     alt = "C",
+semMotifBinding <- \(vr,
                      semFiles,
                      semBaselines) {
 
   ## Load SEM files ##
   ## Load libraries
-  library(data.table)
   library(BSgenome)
   library(BSgenome.Hsapiens.UCSC.hg19)
+  library(stringr)
+  source(here::here("R/loadSEMs.R"))
 
-  ## Read in SEM files
-  sems <- lapply(semFiles, fread, header = TRUE)
+  sems <- loadSEMs(semFiles)
+  bl <- read.table(semBaselines)
+  threshold <- 2^bl[match(gsub(".sem", "", basename(semFiles)), bl[,1]),2]
 
-  ## Add names to sems
-  names(sems) <-
-    lapply(sems, \(x) colnames(x)[[1]]) |>
-    unlist() |>
-    paste0("_", 1:length(sems))
-
-  ## Remove name column and convert to matrix
-  sems <- lapply(sems, \(x) as.matrix(x[,-1]))
-
-  ## Get sequences for each variant ##
+  ## Get maximum kmer length of all TFs ##
   offset <- max(unlist(lapply(sems, nrow)))
 
   ## Collect up/downstream sequences
-  upstream <- getSeq(Hsapiens, chr, pos-offset, pos-1)
-  dnstream <- getSeq(Hsapiens, chr, pos+1, pos+offset)
+  vr <- get_flanking_seqs(vr, offset, offset)
 
-  ## Assemble risk and non-risk sequences
-  nonRiskSeq <- xscat(upstream, ref, dnstream)
-  riskSeq <- xscat(upstream, alt, dnstream)
+  ## Create a new SEMplR object to store results
+  semScores <- SemplR(vr)
 
-  ## Initialize variables for holding sem scores
-  nonRisk <- list()
-  risk <- list()
+  for (i in 1:length(vr)){
+    for(j in 1:length(sems)) {
 
-  for(i in 1:length(sems)) {
+      ## Score risk and non-risk sequences against each sem
+      nonRiskScores <-
+        PWMscoreStartingAt(pwm = t(sems[[j]]),
+                           subject = nonRiskSeq,
+                           starting.at = (offset-nrow(sems[[j]])+2):(offset+1))
+      riskScores <-
+        PWMscoreStartingAt(pwm = t(sems[[j]]),
+                           subject = riskSeq,
+                           starting.at = (offset-nrow(sems[[j]])+2):(offset+1))
 
-    ## Score risk and non-risk sequences against each sem
-    nonRiskScores <-
-      PWMscoreStartingAt(pwm = t(sems[[i]]),
-                         subject = nonRiskSeq,
-                         starting.at = (offset-nrow(sems[[i]])+2):(offset+1))
-    riskScores <-
-      PWMscoreStartingAt(pwm = t(sems[[i]]),
-                         subject = riskSeq,
-                         starting.at = (offset-nrow(sems[[i]])+2):(offset+1))
+      ## Find which frame has the best binding score (and record this)
+      if (max(nonRiskScores) > max(riskScores)){
+        frame <- which.max(nonRiskScores)
+      } else {
+        frame <- which.max(riskScores)
+      }
 
-    ## Find which frame has the best binding score (and record this)
-    if (max(nonRiskScores) > max(riskScores)){
-      frame <- which.max(nonRiskScores)
-    } else {
-      frame <- which.max(riskScores)
+      semScores@scores <- rbind(semScores@scores,
+                                data.table(seqnames=as.character(seqnames(semScores@variants[i])),
+                                           ranges=start(semScores@variants[i]),
+                                           sem=names(sems[j]),
+                                           nonRiskSeq=str_sub(as.character(nonRiskSeq),
+                                                              start = frame,
+                                                              end = frame+nrow(sems[[j]])),
+                                           riskSeq=str_sub(as.character(riskSeq),
+                                                           start = frame,
+                                                           end = frame+nrow(sems[[j]])),
+                                           nonRiskScore=nonRiskScores[frame],
+                                           riskScore=riskScores[frame],
+                                           nonRiskNorm=(2^nonRiskScores[frame] - threshold[j]) / abs(threshold[j]),
+                                           riskNorm=(2^riskScores[frame] - threshold[j]) / abs(threshold[j])))
     }
-
-    ## Select the score from the correct frame
-    nonRisk[[i]] <- nonRiskScores[frame]
-    risk[[i]] <- riskScores[frame]
   }
-
-  ## Add names
-  names(nonRisk) <- names(sems)
-  names(risk) <- names(sems)
-
-  ## Compile into data table
-  dt <-
-    data.table(motif = stack(nonRisk)$ind,
-               nonrisk = do.call(rbind, nonRisk)[,1],
-               risk = do.call(rbind, risk)[,1])
-
-  ## Normalize to threshold
-  # threshold <- 2^(unlist(lapply(sems, min)))
-  bl <- read.table(semBaselines)
-  threshold <- 2^bl[match(gsub(".sem", "", basename(semFiles)), bl[,1]),2]
-  dt$nonrisk <- (2^dt$nonrisk - threshold) / abs(threshold)
-  dt$risk <- (2^dt$risk - threshold) / abs(threshold)
 
   ## Return
   return(dt)
-
 }
