@@ -36,6 +36,8 @@ setClass(
 #' @param pwm_filename A `character` name of the original PWM file used to
 #' generate the SEM
 #'
+#' @importFrom methods new
+#'
 #' @return a SNPEffectMatrix object
 #' @docType class
 #' @aliases SNPEffectMatrix-class
@@ -43,7 +45,7 @@ setClass(
 #' @export
 SNPEffectMatrix <- function(matrix, tf_name, baseline, pwm_filename = "") {
   # convert matrix to data.table in case given in another format
-  matrix <- as.data.table(matrix)
+  matrix <- data.table::as.data.table(matrix)
 
   # convert baseline to numeric
   baseline <- as.numeric(baseline)
@@ -62,14 +64,15 @@ setClass("SEMCollection", representation("VIRTUAL"),
          prototype = prototype(elementType = "SNPEffectMatrix"),
          contains = "list")
 
-new("SEMCollection")
-
 ## SemplR class ----------------------------------------------------------------
 
 #' Class for storing SEM motif binding calculations for multiple variants
 #'
 #' @slot variants A `VRanges` object to hold one or more variants
 #' @slot scores A `data.table` object for motif information and binding scores
+#'
+#' @importFrom VariantAnnotation VRanges
+#' @importFrom data.table data.table
 #'
 #' @export
 setClass("SemplR",
@@ -88,6 +91,8 @@ setClass("SemplR",
 #'
 #' @param variants A `VRanges` object to hold one or more variants
 #' @param scores A `data.table` object for motif information and binding scores
+#'
+#' @importFrom methods new
 #'
 #' @return a SemplR object
 #' @docType class
