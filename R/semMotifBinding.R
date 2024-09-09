@@ -1,26 +1,20 @@
 #' Define a function to calculate risk/non-risk binding propensity
 #' for all SEM motifs provided
 #'
-#' @param chr character of chromosome
-#' @param pos integer of SNP position
-#' @param ref character of reference nucleotide (can be upper or lower)
-#' @param alt character of alternate nulceotide (can be upper or lower)
+#' @param vr `VRanges` object
 #' @param semFiles path to sem files
 #' @param semBaselines path to sem baselines file
 #'
+#' @export
 semMotifBinding <- \(vr,
                      semFiles,
                      semBaselines) {
 
-  ## Load SEM files ##
-  ## Load libraries
-  library(BSgenome)
-  library(BSgenome.Hsapiens.UCSC.hg19)
-  library(stringr)
-  source(here::here("R/loadSEMs.R"))
+  riskNorm <- riskSeq <- nonRiskNorm <- nonRiskSeq <- NULL
 
+  ## Load SEM files ##
   sems <- loadSEMs(semFiles)
-  bl <- read.table(semBaselines)
+  bl <- utils::read.table(semBaselines)
   threshold <- 2^bl[match(gsub(".sem", "", basename(semFiles)), bl[,1]),2]
 
   ## Get maximum kmer length of all TFs ##
@@ -37,12 +31,12 @@ semMotifBinding <- \(vr,
 
       ## Score risk and non-risk sequences against each sem
       nonRiskScores <-
-        PWMscoreStartingAt(pwm = t(sems[[j]]),
-                           subject = nonRiskSeq,
+        Biostrings::PWMscoreStartingAt(pwm = t(sems[[j]]),
+                           subject = vr[i]$ref_seq,
                            starting.at = (offset-nrow(sems[[j]])+2):(offset+1))
       riskScores <-
-        PWMscoreStartingAt(pwm = t(sems[[j]]),
-                           subject = riskSeq,
+        Biostrings::PWMscoreStartingAt(pwm = t(sems[[j]]),
+                           subject = vr[i]$alt_seq,
                            starting.at = (offset-nrow(sems[[j]])+2):(offset+1))
 
       ## Find which frame has the best binding score (and record this)
@@ -53,13 +47,13 @@ semMotifBinding <- \(vr,
       }
 
       semScores@scores <- rbind(semScores@scores,
-                                data.table(seqnames=as.character(seqnames(semScores@variants[i])),
-                                           ranges=start(semScores@variants[i]),
+                                data.table::data.table(seqnames=as.character(GenomeInfoDb::seqnames(semScores@variants[i])),
+                                           ranges=BiocGenerics::start(semScores@variants[i]),
                                            sem=names(sems[j]),
-                                           nonRiskSeq=str_sub(as.character(nonRiskSeq),
+                                           nonRiskSeq=stringr::str_sub(vr[i]$ref_seq,
                                                               start = frame,
                                                               end = frame+nrow(sems[[j]])),
-                                           riskSeq=str_sub(as.character(riskSeq),
+                                           riskSeq=stringr::str_sub(vr[i]$alt_seq,
                                                            start = frame,
                                                            end = frame+nrow(sems[[j]])),
                                            nonRiskScore=nonRiskScores[frame],

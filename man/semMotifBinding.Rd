@@ -5,25 +5,14 @@
 \title{Define a function to calculate risk/non-risk binding propensity
 for all SEM motifs provided}
 \usage{
-semMotifBinding(
-  chr = "chr12",
-  pos = 94136009,
-  ref = "G",
-  alt = "C",
-  semFiles,
-  semBaselines
-)
+semMotifBinding(vr, semFiles, semBaselines)
 }
 \arguments{
-\item{chr}{character of chromosome}
+\item{vr}{\code{VRanges} object}
 
-\item{pos}{integer of SNP position}
+\item{semFiles}{path to sem files}
 
-\item{ref}{character of reference nucleotide (can be upper or lower)}
-
-\item{alt}{character of alternate nulceotide (can be upper or lower)}
-
-\item{semBaselines}{file path to sem baselines}
+\item{semBaselines}{path to sem baselines file}
 }
 \description{
 Define a function to calculate risk/non-risk binding propensity
