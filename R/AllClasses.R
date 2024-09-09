@@ -58,11 +58,13 @@ SNPEffectMatrix <- function(matrix, tf_name, baseline, pwm_filename = "") {
   )
 }
 
-## SEMReference ----------------------------------------------------------------
+## SEMCollection ----------------------------------------------------------------
 
-setClass("SEMCollection", representation("VIRTUAL"),
+setClass("SEMCollection",
+         representation("VIRTUAL"),
          prototype = prototype(elementType = "SNPEffectMatrix"),
          contains = "list")
+
 
 ## SemplR class ----------------------------------------------------------------
 
