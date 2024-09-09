@@ -6,7 +6,7 @@
 \alias{SemplR-class}
 \title{SemplR object and constructor}
 \usage{
-SemplR(variants, scores)
+SemplR(variants = NA, scores = NA)
 }
 \arguments{
 \item{variants}{A \code{VRanges} object to hold one or more variants}

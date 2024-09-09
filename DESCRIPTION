@@ -11,9 +11,13 @@ Imports:
     GenomicRanges,
     GenomeInfoDb,
     BSgenome.Hsapiens.UCSC.hg19,
-    ggplot2
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    ggplot2,
+    ggrepel,
+    VariantAnnotation,
+    stringr,
+    data.table,
+    methods
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
