@@ -1,0 +1,70 @@
+---
+title: "SEMplR Vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{SEMplR_Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>", 
+  fig.height = 7,
+  fig.width = 7
+)
+```
+
+```{r load_pkgs, message=FALSE}
+library(SEMplR)
+library(VariantAnnotation)
+```
+
+# Setup
+First, we will create a `VRanges` object to store our variants of interest.
+```{r init_vr}
+vr <- VRanges(seqnames = c("chr12", "chr19"),
+              ranges = c(94136009, 10640062), 
+              ref = c("G", "T"), alt = c("C", "A"))
+vr
+```
+
+# Loading SEMs
+Nest, we will load our SNP Effect Matrices and baseline file.
+```{r get_files}
+semFiles <- list.files("/users/g/k/gkenney/semplr/data/SEMs", 
+                       pattern = ".sem", full.names = T)
+semBaselines <- "/users/g/k/gkenney/semplr/data/SEMs/BASELINE/SEMs_baseline_norm.txt"
+```
+
+# Scoring Motifs
+Next, we will score the reference and alternate alleles for each variant against the SEMs and normalize to the baseline for each motif.
+```{r score_motifs}
+sempl_obj <- semMotifBinding(vr = vr, semFiles = semFiles, semBaselines = semBaselines)
+sempl_obj
+```
+
+The resulting object contains two slots:
+
+- `variants`: The `VRanges` object for each 
+- `scores`: A data.table object that . There are X columns:
+    - **seqnames** - chromosome name
+    - **ranges** - position of variant
+    - **sem** - SEM name
+    - **nonRiskSeq** - reference allele frame with highest binding score
+    - **riskSeq** - alternate allele frame with highest binding score
+    - **nonRiskScore** - score of reference allele for given SEM
+    - **riskScore** - score of alternate allele for given SEM
+    - **nonRiskNorm** - normalized score of reference allele for given SEM
+    - **riskNorm** - normalized score of alternate allele for given SEM
+
+# Visualization
+
+```{r plot_motif1}
+plotSemMotifs(sempl_obj, variant_i=1)
+```
+
+```{r plot_motif2}
+plotSemMotifs(sempl_obj, variant_i=2)
+```
