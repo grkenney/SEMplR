@@ -30,12 +30,3 @@ Finds nucleotides up and downstream of a variant within a genome and store
 within \code{upstream} and \code{downstream} fields in the metadata of the supplied
 \code{VRanges} object.
 }
-\examples{
-
-# Create a VRanges object
-vr <- VRanges(seqnames = "chr1", ranges = 15000, ref = "A", alt = "T")
-
-# Get the 5 bp upstream and 10 bp downstream
-get_flanking_seqs(vr, 5, 10)
-
-}

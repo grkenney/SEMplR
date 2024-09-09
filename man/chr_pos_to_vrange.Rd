@@ -22,9 +22,3 @@ filled with parameter options supplied.
 \description{
 Builds a VRanges object from genomic position and allele information
 }
-\examples{
-
-vr <- VRanges(seqnames = "chr1", ranges = 15000, ref = "A", alt = "T")
-vr
-
-}

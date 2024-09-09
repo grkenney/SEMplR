@@ -8,11 +8,6 @@
 #' @return a `VRanges` object the seqnames, ranges, ref, and alt columns
 #' filled with parameter options supplied.
 #'
-#' @examples
-#'
-#' vr <- VRanges(seqnames = "chr1", ranges = 15000, ref = "A", alt = "T")
-#' vr
-#'
 #' @export
 chr_pos_to_vrange <- function(chr, pos, ref, alt){
   vr <- VRanges(chr, ranges = pos,
