@@ -31,17 +31,15 @@ vr
 ```
 
 # Loading SEMs
-Nest, we will load our SNP Effect Matrices and baseline file.
+Next, we will load our SNP Effect Matrices and baseline file. Note that this process may take a couple minutes.
 ```{r get_files}
-semFiles <- list.files("/users/g/k/gkenney/semplr/data/SEMs", 
-                       pattern = ".sem", full.names = T)
-semBaselines <- "/users/g/k/gkenney/semplr/data/SEMs/BASELINE/SEMs_baseline_norm.txt"
+sems <- loadSEMs()
 ```
 
 # Scoring Motifs
 Next, we will score the reference and alternate alleles for each variant against the SEMs and normalize to the baseline for each motif.
 ```{r score_motifs}
-sempl_obj <- semMotifBinding(vr = vr, semFiles = semFiles, semBaselines = semBaselines)
+sempl_obj <- semMotifBinding(vr = vr, semList = sems)
 sempl_obj
 ```
 
