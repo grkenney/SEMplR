@@ -31,7 +31,7 @@ vr
 ```
 
 # Loading SEMs
-Next, we will load our SNP Effect Matrices and baseline file. Note that this process may take a couple minutes.
+Next, we will load our SNP Effect Matrices and baseline file. Note that this process may take a couple minutes, if files are downloaded locally, use the `sem_dir` and `baseline_file` options for a faster run time.
 ```{r get_files}
 sems <- loadSEMs()
 ```
