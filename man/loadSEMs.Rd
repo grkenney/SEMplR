@@ -2,13 +2,19 @@
 % Please edit documentation in R/loadSEMs.R
 \name{loadSEMs}
 \alias{loadSEMs}
-\title{Define a function to calculate risk/non-risk binding propensity}
+\title{Load .sem and baseline data from files or from github if file path is not
+provided. Github default data: github.com/Boyle-Lab/SEMpl/raw/master/SEMs/}
 \usage{
-loadSEMs(semFiles)
+loadSEMs(sem_dir = NULL, baseline_file = NULL)
 }
 \arguments{
-\item{semFiles}{character vector of paths to each \code{.sem} file}
+\item{sem_dir}{path to directory containing .sem files.
+Defaults to pulling data from github.}
+
+\item{baseline_file}{path to baselines file.
+Defaults to pulling data from github.}
 }
 \description{
-Define a function to calculate risk/non-risk binding propensity
+Load .sem and baseline data from files or from github if file path is not
+provided. Github default data: github.com/Boyle-Lab/SEMpl/raw/master/SEMs/
 }

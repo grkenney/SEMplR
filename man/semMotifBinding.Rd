@@ -5,14 +5,13 @@
 \title{Define a function to calculate risk/non-risk binding propensity
 for all SEM motifs provided}
 \usage{
-semMotifBinding(vr, semFiles, semBaselines)
+semMotifBinding(vr, semList = NULL)
 }
 \arguments{
 \item{vr}{\code{VRanges} object}
 
-\item{semFiles}{path to sem files}
-
-\item{semBaselines}{path to sem baselines file}
+\item{semList}{a list of \code{SNPEffectMatrix} objects. Defaults to loading .sems
+and baseline data from github.com/Boyle-Lab/SEMpl/raw/master/SEMs/}
 }
 \description{
 Define a function to calculate risk/non-risk binding propensity
