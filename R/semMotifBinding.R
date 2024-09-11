@@ -33,14 +33,15 @@ semMotifBinding <- \(vr,
       sem_matrix <- sems[[j]]@matrix
 
       ## Score risk and non-risk sequences against each sem
+      starting_indices <- (offset-nrow(sem_matrix)+2):(offset+1)
       nonRiskScores <-
         Biostrings::PWMscoreStartingAt(pwm = t(sem_matrix),
                            subject = vr[i]$ref_seq,
-                           starting.at = (offset-nrow(sem_matrix)+2):(offset+1))
+                           starting.at = starting_indices)
       riskScores <-
         Biostrings::PWMscoreStartingAt(pwm = t(sem_matrix),
                            subject = vr[i]$alt_seq,
-                           starting.at = (offset-nrow(sem_matrix)+2):(offset+1))
+                           starting.at = starting_indices)
 
       ## Find which frame has the best binding score (and record this)
       if (max(nonRiskScores) > max(riskScores)){
@@ -48,17 +49,21 @@ semMotifBinding <- \(vr,
       } else {
         frame <- which.max(riskScores)
       }
+      
+      ref_seq_frame <- stringr::str_sub(vr[i]$ref_seq,
+                                        start = starting_indices[frame],
+                                        end = starting_indices[frame]+nrow(sem_matrix))
+      
+      alt_seq_frame <- stringr::str_sub(vr[i]$alt_seq,
+                                        start = starting_indices[frame],
+                                        end = starting_indices[frame]+nrow(sem_matrix))
 
       semScores@scores <- rbind(semScores@scores,
                                 data.table::data.table(seqnames=as.character(GenomeInfoDb::seqnames(semScores@variants[i])),
                                            ranges=BiocGenerics::start(semScores@variants[i]),
                                            sem=sems[[j]]@tf_name,
-                                           nonRiskSeq=stringr::str_sub(vr[i]$ref_seq,
-                                                              start = frame,
-                                                              end = frame+nrow(sem_matrix)),
-                                           riskSeq=stringr::str_sub(vr[i]$alt_seq,
-                                                           start = frame,
-                                                           end = frame+nrow(sem_matrix)),
+                                           nonRiskSeq=ref_seq_frame,
+                                           riskSeq=alt_seq_frame,
                                            nonRiskScore=nonRiskScores[frame],
                                            riskScore=riskScores[frame],
                                            nonRiskNorm=(2^nonRiskScores[frame] - threshold[[j]]) / abs(threshold[[j]]),
