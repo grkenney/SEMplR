@@ -16,7 +16,8 @@ Imports:
     VariantAnnotation,
     stringr,
     data.table,
-    methods
+    methods,
+    readr (>= 2.1.4)
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -25,3 +26,5 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+Remotes:  
+    tidyverse/readr
