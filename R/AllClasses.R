@@ -40,7 +40,7 @@ setClass(
 #'
 #' @return a SNPEffectMatrix object
 #' @docType class
-#' @aliases SNPEffectMatrix-class
+#' @aliases SNPEffectMatrix SNPEffectMatrix-class
 #' @rdname SNPEffectMatrix
 #' @export
 SNPEffectMatrix <- function(matrix, tf_name, baseline, pwm_filename = "") {
@@ -98,7 +98,7 @@ setClass("SemplR",
 #'
 #' @return a SemplR object
 #' @docType class
-#' @aliases SemplR-class
+#' @aliases SemplR SemplR-class
 #' @rdname SemplR
 #' @export
 SemplR <- function(variants=NA, scores=NA) {
