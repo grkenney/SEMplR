@@ -10,15 +10,23 @@
 loadSEMs <- \(sem_dir=NULL, baseline_file=NULL) {
   url_base <- "https://github.com/Boyle-Lab/SEMpl/raw/master/SEMs/"
 
+  # if baseline file not provided, load data from github url,
+  # otherwise, load from filepath provided
   if (is.null(baseline_file)) {
     baselines_url <- paste0(url_base, "BASELINE/SEMs_baseline_norm.txt")
     baselines <- utils::read.delim(url(baselines_url),
                                    sep = "\t", header = FALSE)
+
+  } else if (!file.exists(baseline_file)) {
+    stop("Path to baseline file does not exist: ", baseline_file)
+
   } else {
     baselines <- utils::read.delim(baseline_file, header = FALSE)
   }
 
-  if (is.null(baseline_file)) {
+  # if sem directory not provided, load data from github
+  # otherwise, load data from .sem files in directory path provided
+  if (is.null(sem_dir)) {
     sem_urls <- lapply(baselines[, 1],
                        function(name) {paste0(url_base, name, ".sem")}) |>
       unlist()
