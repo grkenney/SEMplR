@@ -29,8 +29,12 @@ query_seqs <- function(vr, up, down,
                                    end=end_pos+down)
 
   # concatenate flanking sequences with variant and store in vrange metadata
-  concat_ref_seq <- Biostrings::xscat(upstream, VariantAnnotation::ref(vr), downstream)
-  concat_alt_seq <- Biostrings::xscat(upstream, VariantAnnotation::alt(vr), downstream)
+  concat_ref_seq <- Biostrings::xscat(upstream,
+                                      as.character(VariantAnnotation::ref(vr)),
+                                      downstream)
+  concat_alt_seq <- Biostrings::xscat(upstream,
+                                      as.character(VariantAnnotation::alt(vr)),
+                                      downstream)
 
   seq_data <- c(upstream = as.character(upstream),
                 downstream = as.character(downstream),
