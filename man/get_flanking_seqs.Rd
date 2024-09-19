@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_flanking_seqs.R
 \name{get_flanking_seqs}
 \alias{get_flanking_seqs}
-\title{Get up and downstream sequences of a variant}
+\title{Get up and downstream sequences of variant(s) and store in VRanges metadata}
 \usage{
 get_flanking_seqs(
   vr,
