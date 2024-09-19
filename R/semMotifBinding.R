@@ -14,6 +14,8 @@ semMotifBinding <- \(vr,
   ## Load SEM files ##
   if (is.null(semList)) {
     sems <- loadSEMs()
+  } else {
+    sems <- semList
   }
 
   threshold <- lapply(sems, function(x) {2^x@baseline})
@@ -49,11 +51,11 @@ semMotifBinding <- \(vr,
       } else {
         frame <- which.max(riskScores)
       }
-      
+
       ref_seq_frame <- stringr::str_sub(vr[i]$ref_seq,
                                         start = starting_indices[frame],
                                         end = starting_indices[frame]+nrow(sem_matrix))
-      
+
       alt_seq_frame <- stringr::str_sub(vr[i]$alt_seq,
                                         start = starting_indices[frame],
                                         end = starting_indices[frame]+nrow(sem_matrix))
