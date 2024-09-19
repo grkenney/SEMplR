@@ -1,5 +1,47 @@
 #' Get up and downstream sequences of a variant
 #'
+#' Finds nucleotides up and downstream of a variant within a genome
+#'
+#' @param vr A `VRanges` object with one or more variants. seqnames and ranges
+#' fields are required.
+#' @param up Numeric, number of bases to return upstream of variant
+#' @param down Numeric, number of bases to return downstream of variant
+#' @param bs_genome_obj A `BSgenome` object for the genome build to use.
+#' Defaults to `BSgenome.Hsapiens.UCSC.hg19`.
+#'
+#' @return a named nested list with`upstream` and `downstream`,
+#' `ref_seq`, and `alt_seq` fields.
+#'
+query_seqs <- function(vr, up, down,
+                       bs_genome_obj=BSgenome.Hsapiens.UCSC.hg19::Hsapiens){
+  # get start position of variant
+  start_pos <- BiocGenerics::start(vr)
+  end_pos <- BiocGenerics::end(vr)
+
+  # get sequence upstream and downstream of variant start/end
+  upstream <- Biostrings::getSeq(bs_genome_obj,
+                                 names=GenomeInfoDb::seqnames(vr),
+                                 start=start_pos-up,
+                                 end=start_pos-1)
+  downstream <- Biostrings::getSeq(bs_genome_obj,
+                                   names=GenomeInfoDb::seqnames(vr),
+                                   start=end_pos+1,
+                                   end=end_pos+down)
+
+  # concatenate flanking sequences with variant and store in vrange metadata
+  concat_ref_seq <- Biostrings::xscat(upstream, VariantAnnotation::ref(vr), downstream)
+  concat_alt_seq <- Biostrings::xscat(upstream, VariantAnnotation::alt(vr), downstream)
+
+  seq_data <- c(upstream = as.character(upstream),
+                downstream = as.character(downstream),
+                ref_seq = as.character(concat_ref_seq),
+                alt_seq = as.character(concat_alt_seq))
+  return(seq_data)
+}
+
+
+#' Get up and downstream sequences of variant(s) and store in VRanges metadata
+#'
 #' Finds nucleotides up and downstream of a variant within a genome and store
 #' within `upstream` and `downstream` fields in the metadata of the supplied
 #' `VRanges` object.
@@ -27,31 +69,12 @@ get_flanking_seqs <- function(vr, up, down,
   vr$alt_seq <- NA
 
   # iterate over variants (rows) in vrange object
-  for (i in seq(vr)){
-    # get start position of variant
-    start_pos <- BiocGenerics::start(vr[i])
-    end_pos <- BiocGenerics::end(vr[i])
+  flanking_seqs <- lapply(seq_along(vr),
+                          function(i) query_seqs(vr[i],
+                                                 up = up, down = down,
+                                                 bs_genome_obj = bs_genome_obj))
+  # add flanking sequence to vranges metadata
+  mcols(vr) <- as.data.frame(do.call(rbind, flanking_seqs))
 
-    # get sequence upstream and downstream of variant start/end
-    upstream <- Biostrings::getSeq(bs_genome_obj,
-                       names=GenomeInfoDb::seqnames(vr[i]),
-                       start=start_pos-up,
-                       end=start_pos-1)
-    downstream <- Biostrings::getSeq(bs_genome_obj,
-                         names=GenomeInfoDb::seqnames(vr[i]),
-                         start=end_pos+1,
-                         end=end_pos+down)
-
-    # store up and downstream sequences in vrange metadata
-    vr[i]$upstream <- as.character(upstream)
-    vr[i]$downstream <- as.character(downstream)
-
-    # concatenate flanking sequences with variant and store in vrange metadata
-    concat_ref_seq <- Biostrings::xscat(upstream, VariantAnnotation::ref(vr[i]), downstream)
-    concat_alt_seq <- Biostrings::xscat(upstream, VariantAnnotation::alt(vr[i]), downstream)
-
-    vr[i]$ref_seq <- as.character(concat_ref_seq)
-    vr[i]$alt_seq <- as.character(concat_alt_seq)
-  }
   return(vr)
 }
