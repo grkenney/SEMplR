@@ -18,6 +18,20 @@ query_seqs <- function(vr, up, down,
   start_pos <- BiocGenerics::start(vr)
   end_pos <- BiocGenerics::end(vr)
 
+  # check that ref allele matches BSgenome ref
+  bsgenome_ref <- Biostrings::getSeq(bs_genome_obj,
+                                     names=GenomeInfoDb::seqnames(vr),
+                                     start=start_pos,
+                                     end=start_pos) |> as.character()
+
+  if (bsgenome_ref != VariantAnnotation::ref(vr)) {
+    warning(sprintf("Provided ref '%s' != BSgenome ref '%s' for variant at %s:%d",
+                    VariantAnnotation::ref(vr),
+                    bsgenome_ref,
+                    GenomeInfoDb::seqnames(vr),
+                    start_pos))
+  }
+
   # get sequence upstream and downstream of variant start/end
   upstream <- Biostrings::getSeq(bs_genome_obj,
                                  names=GenomeInfoDb::seqnames(vr),
