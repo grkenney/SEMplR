@@ -116,6 +116,8 @@ SemplR <- function(variants=NA, scores=NA) {
 
   if (all(is.na(variants))) {
     vr = VRanges()
+  } else {
+    vr = variants
   }
 
   new("SemplR",
