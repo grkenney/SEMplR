@@ -53,6 +53,8 @@ scoreVariant <- \(vr, sem_matrix, tf_name, offset, threshold) {
 #' @param semList a list of `SNPEffectMatrix` objects. Defaults to loading .sems
 #' and baseline data from github.com/Boyle-Lab/SEMpl/raw/master/SEMs/
 #'
+#' @return a SemplScores object
+#'
 #' @export
 semMotifBinding <- \(vr,
                      semList=NULL) {
@@ -74,8 +76,8 @@ semMotifBinding <- \(vr,
   ## Collect up/downstream sequences
   vr <- get_flanking_seqs(vr, offset, offset)
 
-  ## Create a new SEMplR object to store results
-  semScores <- SemplR(vr)
+  ## Create a new SemplScores object to store results
+  semScores <- SemplScores(vr)
 
   semScores@scores <- data.table::data.table()
 
