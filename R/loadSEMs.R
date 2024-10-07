@@ -10,6 +10,7 @@
 loadSEMs <- \(sem_dir=NULL, baseline_file=NULL) {
   url_base <- "https://github.com/Boyle-Lab/SEMpl/raw/master/SEMs/"
 
+  # if baseline_file not provided, read from github
   if (is.null(baseline_file)) {
     baselines_url <- paste0(url_base, "BASELINE/SEMs_baseline_norm.txt")
     baselines <- utils::read.delim(url(baselines_url),
@@ -18,7 +19,8 @@ loadSEMs <- \(sem_dir=NULL, baseline_file=NULL) {
     baselines <- utils::read.delim(baseline_file, header = FALSE)
   }
 
-  if (is.null(baseline_file)) {
+  # if sem_dir not provided, read from github
+  if (is.null(sem_dir)) {
     sem_urls <- lapply(baselines[, 1],
                        function(name) {paste0(url_base, name, ".sem")}) |>
       unlist()
