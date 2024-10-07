@@ -66,7 +66,7 @@ setClass("SEMCollection",
          contains = "list")
 
 
-## SemplR class ----------------------------------------------------------------
+## SemplScores class ----------------------------------------------------------------
 
 #' Class for storing SEM motif binding calculations for multiple variants
 #'
@@ -77,7 +77,7 @@ setClass("SEMCollection",
 #' @importFrom data.table data.table
 #'
 #' @export
-setClass("SemplR",
+setClass("SemplScores",
          slots = c(variants = "VRanges",
                    scores = "data.table"
                    ),
@@ -87,21 +87,21 @@ setClass("SemplR",
          )
 )
 
-#' SemplR object and constructor
+#' SemplScores object and constructor
 #'
-#' Constructs a SemplR class object.
+#' Constructs a SemplScores class object.
 #'
 #' @param variants A `VRanges` object to hold one or more variants
 #' @param scores A `data.table` object for motif information and binding scores
 #'
 #' @importFrom methods new
 #'
-#' @return a SemplR object
+#' @return a SemplScores object
 #' @docType class
-#' @aliases SemplR SemplR-class
-#' @rdname SemplR
+#' @aliases SemplScores SemplScores-class
+#' @rdname SemplScores
 #' @export
-SemplR <- function(variants=NA, scores=NA) {
+SemplScores <- function(variants=NA, scores=NA) {
   if (is.na(scores)){
     scores_table <- data.table(seqnames=character(),
                                ranges=numeric(),
@@ -120,13 +120,13 @@ SemplR <- function(variants=NA, scores=NA) {
     vr = variants
   }
 
-  new("SemplR",
+  new("SemplScores",
       variants = vr,
       scores = scores_table
       )
 }
 
-setValidity("SemplR", function(object) {
+setValidity("SemplScores", function(object) {
   expected_column_names <- c("seqnames", "ranges", "sem",
                              "nonRiskSeq", "riskSeq",
                              "nonRiskScore", "riskScore",
@@ -139,3 +139,9 @@ setValidity("SemplR", function(object) {
     TRUE
   }
 })
+
+
+setGeneric("getMotif", function(x, motif) standardGeneric("getMotif"))
+setMethod("getMotif", "SemplScores", function(x, motif) x@scores[x@scores$sem == motif])
+
+getMotif(sem_scores, "BHLHB2_GM12878")
