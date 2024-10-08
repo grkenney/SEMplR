@@ -11,17 +11,23 @@
 #' @slot baseline A scrambled baseline, representing the binding score of
 #' randomly scrambled kmers of the same length. This is the binding cutoff
 #' for a TF
+#' @slot sem_id basename of the sem file
 #' @slot tf_name Name of the TF relevant to the SEM
-#' @slot pwm_filename Name of the original PWM file used to generate the SEM
+#' @slot ensembl_id ENSEMBL gene id of the transcription factor
+#' @slot uniprot_id Uniprot protein id of the transcription factor
+#' @slot cell_type cell type/line used for ChipSeq experiment
 #'
 #' @export
 setClass(
   Class = "SNPEffectMatrix",
   slots = c(
     matrix = "data.table",
-    tf_name = "character",
     baseline = "numeric",
-    pwm_filename = "character"
+    sem_id = "character",
+    tf_name = "character",
+    ensembl_id = "character",
+    uniprot_id = "character",
+    cell_type = "character"
   )
 )
 
@@ -33,8 +39,11 @@ setClass(
 #' @param tf_name A `character` name for the transcription factor
 #' @param baseline A `numeric` scrambled baseline, representing the binding
 #' score of randomly scrambled kmers of the same length.
-#' @param pwm_filename A `character` name of the original PWM file used to
-#' generate the SEM
+#' @slot sem_id basename of the sem file
+#' @slot tf_name (optional) Name of the TF relevant to the SEM
+#' @slot ensembl_id (optional) ENSEMBL gene id of the transcription factor
+#' @slot uniprot_id (optional) Uniprot protein id of the transcription factor
+#' @slot cell_type (optional) cell type/line used for ChipSeq experiment
 #'
 #' @importFrom methods new
 #'
@@ -43,7 +52,8 @@ setClass(
 #' @aliases SNPEffectMatrix SNPEffectMatrix-class
 #' @rdname SNPEffectMatrix
 #' @export
-SNPEffectMatrix <- function(matrix, tf_name, baseline, pwm_filename = "") {
+SNPEffectMatrix <- function(matrix, baseline, sem_id, tf_name = "", 
+                            ensembl_id = "", uniprot_id = "", cell_type = "") {
   # convert matrix to data.table in case given in another format
   matrix <- data.table::as.data.table(matrix)
 
@@ -52,11 +62,23 @@ SNPEffectMatrix <- function(matrix, tf_name, baseline, pwm_filename = "") {
 
   new("SNPEffectMatrix",
       matrix = matrix,
-      tf_name = tf_name,
       baseline = baseline,
-      pwm_filename = pwm_filename
+      sem_id = sem_id,
+      tf_name = tf_name,
+      ensembl_id = ensembl_id,
+      uniprot_id = uniprot_id,
+      cell_type = cell_type
   )
 }
+
+
+setValidity("SNPEffectMatrix", function(object) {
+  if (1 != 1) {
+    "length(unique(object$sem_id)) != length(object): sem_id must be unique"
+  } else {
+    TRUE
+  }
+})
 
 ## SEMCollection ----------------------------------------------------------------
 
