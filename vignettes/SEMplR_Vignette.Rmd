@@ -60,7 +60,7 @@ The resulting object contains two slots:
 # Visualization
 
 ```{r plot_motif1}
-plotSemMotifs(sempl_obj, variant_i=1)
+plotSemMotifs(sempl_obj, variant_i=1, label="tf_name")
 ```
 
 ```{r plot_motif2}
