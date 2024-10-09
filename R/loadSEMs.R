@@ -54,19 +54,20 @@ loadSEMs <- \(sem_dir=NULL, baseline_file=NULL, metadata_file=NULL) {
   }
 
   sem_list <- list()
-  for (i in 1:nrow(baselines)) {
+  for (i in 1:length(sem_files)) {
     if (is.null(sem_dir)) {
       sem_matrix <- utils::read.delim(url(sem_urls[i]),
-                                      sep = "\t")[-1, -1]
+                                      sep = "\t")[, -1]
     } else {
       sem_matrix <- utils::read.delim(sem_files[i],
-                                      sep = "\t")[-1, -1]
+                                      sep = "\t")[, -1]
     }
 
-    sem_id <- as.character(baselines[i, 1])
+    sem_id <- tools::file_path_sans_ext(basename(sem_files[i]))
+    baseline <- baselines[baselines[, 1] == sem_id, 2]
 
     sem_list[[sem_id]] <- SNPEffectMatrix(sem_matrix,
-                               baseline = as.numeric(baselines[i, 2]),
+                               baseline = baseline,
                                sem_id = sem_id)
     
     if (!is.null(metadata)) {
