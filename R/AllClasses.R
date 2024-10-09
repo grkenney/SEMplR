@@ -101,10 +101,12 @@ setClass("SEMCollection",
 #' @export
 setClass("SemplScores",
          slots = c(variants = "VRanges",
+                   sem_metadata = "data.table",
                    scores = "data.table"
                    ),
          prototype = list(
            variants = VRanges(),
+           sem_metadata = data.table(),
            scores = data.table()
          )
 )
@@ -115,6 +117,8 @@ setClass("SemplScores",
 #'
 #' @param variants A `VRanges` object to hold one or more variants
 #' @param scores A `data.table` object for motif information and binding scores
+#' @param sem_metadata A `data.table` object of metadata for the SEMs with one 
+#' row for each SEM
 #'
 #' @importFrom methods new
 #'
@@ -123,7 +127,7 @@ setClass("SemplScores",
 #' @aliases SemplScores SemplScores-class
 #' @rdname SemplScores
 #' @export
-SemplScores <- function(variants=NA, scores=NA) {
+SemplScores <- function(variants=NA, scores=NA, sem_metadata=NA) {
   if (is.na(scores)){
     scores_table <- data.table(seqnames=character(),
                                ranges=numeric(),
@@ -133,7 +137,16 @@ SemplScores <- function(variants=NA, scores=NA) {
                                nonRiskNorm=numeric(), riskNorm=numeric())
   }
   else {
-    scores_table = scores
+    scores_table <- scores
+  }
+  
+  if (is.na(sem_metadata)) {
+    sem_metadata <- data.table(tf_name=character(),
+                               ensembl_id=character(),
+                               uniprot_id=character(),
+                               cell_type=character())
+  } else {
+    sem_metadata <- sem_metadata
   }
 
   if (all(is.na(variants))) {
@@ -144,6 +157,7 @@ SemplScores <- function(variants=NA, scores=NA) {
 
   new("SemplScores",
       variants = vr,
+      sem_metadata = sem_metadata,
       scores = scores_table
       )
 }
@@ -163,7 +177,11 @@ setValidity("SemplScores", function(object) {
 })
 
 
-setGeneric("getMotif", function(x, motif) standardGeneric("getMotif"))
-setMethod("getMotif", "SemplScores", function(x, motif) x@scores[x@scores$sem == motif])
+setGeneric("motifScores", function(x, motif) standardGeneric("motifScores"))
+setMethod("motifScores", "SemplScores", 
+          function(x, motif) x@scores[x@scores$sem %in% motif])
 
-getMotif(sem_scores, "BHLHB2_GM12878")
+setGeneric("getMotif", function(x, motif) standardGeneric("getMotif"))
+setMethod("getMotif", "SemplScores", 
+          function(x, motif) x@scores[x@scores$sem == motif])
+
