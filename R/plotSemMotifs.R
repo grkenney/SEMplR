@@ -9,9 +9,11 @@
 #' binding propensity
 #'
 #' @export
-plotSemMotifs <- \(sempl_obj, variant_i) {
+plotSemMotifs <- \(sempl_obj, variant_i, label = "sem") {
 
   dt <- sempl_obj@scores[(variant_i*211-210):(variant_i*211), ]
+  
+  dt <- merge(dt, sempl_obj@sem_metadata, by.x = "sem", by.y = "sem_id")
 
   nonRiskNorm <- riskNorm <- sem <- NULL
 
@@ -29,15 +31,15 @@ plotSemMotifs <- \(sempl_obj, variant_i) {
                size = 1,
                color = '#1D91C0') +
     ggrepel::geom_text_repel(data = subset(dt, riskNorm > 0 & nonRiskNorm < 0),
-                    mapping = aes(label = sem),
+                    mapping = aes(label = .data[[label]]),
                     size = 4,
                     color = 'firebrick') +
     ggrepel::geom_text_repel(data = subset(dt, riskNorm < 0 & nonRiskNorm > 0),
-                    mapping = aes(label = sem),
+                    mapping = aes(label = .data[[label]]),
                     size = 4,
                     color = '#1D91C0') +
     geom_text(data = subset(dt, riskNorm > 0 & nonRiskNorm > 0),
-              mapping = aes(label = sem),
+              mapping = aes(label = .data[[label]]),
               size = 4,
               color = '#b05bc5') +
     scale_x_continuous(breaks = scales::pretty_breaks(),
