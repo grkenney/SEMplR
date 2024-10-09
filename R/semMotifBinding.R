@@ -3,9 +3,9 @@
 #'
 #' @param vr `VRanges` object with a single variant
 #' @param sem_matrix a numeric matrix of motif position by nucleic acid
-#' @param tf_name a string of the transcription factor name
+#' @param sem_id a string with the unique id of the SEM
 #' @param threshold a numeric value of the threshold to use for normalization
-scoreVariant <- \(vr, sem_matrix, tf_name, offset, threshold) {
+scoreVariant <- \(vr, sem_matrix, sem_id, offset, threshold) {
 
   ## Score risk and non-risk sequences against each sem
   starting_indices <- (offset-nrow(sem_matrix)+2):(offset+1)
@@ -35,7 +35,7 @@ scoreVariant <- \(vr, sem_matrix, tf_name, offset, threshold) {
 
   scores <- data.table::data.table(seqnames=as.character(GenomeInfoDb::seqnames(vr)),
                                    ranges=BiocGenerics::start(vr),
-                                   sem=tf_name,
+                                   sem=sem_id,
                                    nonRiskSeq=ref_seq_frame,
                                    riskSeq=alt_seq_frame,
                                    nonRiskScore=nonRiskScores[nonRiskFrame],
@@ -78,6 +78,13 @@ semMotifBinding <- \(vr,
 
   ## Create a new SemplScores object to store results
   semScores <- SemplScores(vr)
+  semScores@sem_metadata <- lapply(semList, 
+                                   function(x) data.table::data.table(sem_id=x@sem_id,
+                                                          tf_name=x@tf_name,
+                                                          ensembl_id=x@ensembl_id,
+                                                          uniprot_id=x@uniprot_id,
+                                                          cell_type=x@cell_type)) |>
+    data.table::rbindlist()
 
   semScores@scores <- data.table::data.table()
 
@@ -85,7 +92,7 @@ semMotifBinding <- \(vr,
     varScore <- lapply(1:length(semList),
                        function(j) { scoreVariant(semScores@variants[i],
                                                   semList[[j]]@matrix,
-                                                  semList[[j]]@tf_name,
+                                                  semList[[j]]@sem_id,
                                                   offset,
                                                   threshold[[j]]) })
     varScoreDt <- data.table::rbindlist(varScore)
