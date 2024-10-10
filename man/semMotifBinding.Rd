@@ -13,6 +13,9 @@ semMotifBinding(vr, semList = NULL)
 \item{semList}{a list of \code{SNPEffectMatrix} objects. Defaults to loading .sems
 and baseline data from github.com/Boyle-Lab/SEMpl/raw/master/SEMs/}
 }
+\value{
+a SemplScores object
+}
 \description{
 Define a function to calculate risk/non-risk binding propensity
 for all SEM motifs provided

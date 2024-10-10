@@ -5,14 +5,16 @@
 \title{Define a function to calculate risk/non-risk binding propensity
 for all SEM motifs provided}
 \usage{
-scoreVariant(vr, sem_matrix, tf_name, offset, threshold)
+scoreVariant(vr, sem_matrix, sem_id, offset, threshold)
 }
 \arguments{
 \item{vr}{\code{VRanges} object with a single variant}
 
 \item{sem_matrix}{a numeric matrix of motif position by nucleic acid}
 
-\item{tf_name}{a string of the transcription factor name}
+\item{sem_id}{a string with the unique id of the SEM}
+
+\item{offset}{maximum number of offset basepairs offset from variant}
 
 \item{threshold}{a numeric value of the threshold to use for normalization}
 }

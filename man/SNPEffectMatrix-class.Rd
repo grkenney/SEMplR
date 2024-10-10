@@ -26,8 +26,14 @@ A, C, G, T (fixed length: 4)}
 randomly scrambled kmers of the same length. This is the binding cutoff
 for a TF}
 
+\item{\code{sem_id}}{basename of the sem file}
+
 \item{\code{tf_name}}{Name of the TF relevant to the SEM}
 
-\item{\code{pwm_filename}}{Name of the original PWM file used to generate the SEM}
+\item{\code{ensembl_id}}{ENSEMBL gene id of the transcription factor}
+
+\item{\code{uniprot_id}}{Uniprot protein id of the transcription factor}
+
+\item{\code{cell_type}}{cell type/line used for ChipSeq experiment}
 }}
 
