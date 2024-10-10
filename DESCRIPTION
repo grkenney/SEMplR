@@ -15,6 +15,7 @@ Imports:
     ggplot2,
     ggrepel,
     VariantAnnotation,
+    IRanges,
     stringr,
     data.table,
     methods,
