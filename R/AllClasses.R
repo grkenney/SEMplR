@@ -190,6 +190,8 @@ setGeneric("motifSub", function(x, motif) standardGeneric("motifSub"))
 #' @param x a SemplScores object
 #' @param motif a sem id represented in x
 #' 
+#' @rdname motifSub
+#' 
 #' @export
 setMethod("motifSub", "SemplScores", 
           function(x, motif) {
@@ -207,6 +209,8 @@ setGeneric("motifScores", function(x, motif) standardGeneric("motifScores"))
 #' @param x a SemplScores object
 #' @param motif a sem id represented in x
 #' 
+#' @rdname motifScores
+#' 
 #' @export
 setMethod("motifScores", "SemplScores", 
           function(x, motif) x@scores[sem %in% motif])
@@ -219,6 +223,8 @@ setGeneric("variantSub", function(x, v) standardGeneric("variantSub"))
 #' 
 #' @param x a SemplScores object
 #' @param v a variant id represented in x
+#' 
+#' @rdname variantSub
 #' 
 #' @export
 setMethod("variantSub", "SemplScores", 
@@ -237,6 +243,8 @@ setGeneric("variantScores", function(x, v) standardGeneric("variantScores"))
 #' @param x a SemplScores object
 #' @param v a variant id represented in x
 #' 
+#' @rdname variantScores
+#' 
 #' @export
 setMethod("variantScores", "SemplScores", 
           function(x, v) x@scores[varId %in% v])
@@ -248,6 +256,8 @@ setGeneric("scores", function(x) standardGeneric("scores"))
 #' Accessor scores slot in a SemplScores object
 #' 
 #' @param x a SemplScores object
+#' 
+#' @rdname scores
 #' 
 #' @export
 setMethod("scores", "SemplScores", 
@@ -261,6 +271,8 @@ setGeneric("variants", function(x) standardGeneric("variants"))
 #' 
 #' @param x a SemplScores object
 #' 
+#' @rdname variants
+#' 
 #' @export
 setMethod("variants", "SemplScores", 
           function(x) x@variants)
@@ -272,6 +284,8 @@ setGeneric("sem_metadata", function(x) standardGeneric("sem_metadata"))
 #' Accessor sem_metadata slot in a SemplScores object
 #' 
 #' @param x a SemplScores object
+#' 
+#' @rdname sem_metadata
 #' 
 #' @export
 setMethod("sem_metadata", "SemplScores", 
@@ -286,9 +300,11 @@ setGeneric("tf_name", function(x, s) standardGeneric("tf_name"))
 #' @param x a SemplScores object
 #' @param s a sem id represented in x
 #'  
+#' @rdname tf_name
+#'  
 #' @export
 setMethod("tf_name", "SemplScores", 
-          function(x, s) x@sem_metadata[sem_id==s]$tf_name)
+          function(x, s) x@sem_metadata[sem_id %in% s]$tf_name)
 
 #' @rdname ensembl_id
 #' @export
@@ -298,6 +314,8 @@ setGeneric("ensembl_id", function(x, s) standardGeneric("ensembl_id"))
 #' 
 #' @param x a SemplScores object
 #' @param s a sem id represented in x
+#'  
+#' @rdname ensembl_id
 #'  
 #' @export
 setMethod("ensembl_id", "SemplScores", 
@@ -312,6 +330,8 @@ setGeneric("uniprot_id", function(x, s) standardGeneric("uniprot_id"))
 #' @param x a SemplScores object
 #' @param s a sem id represented in x
 #' 
+#' @rdname uniprot_id
+#' 
 #' @export
 setMethod("uniprot_id", "SemplScores", 
           function(x, s) x@sem_metadata[sem_id==s]$uniprot_id)
@@ -324,6 +344,8 @@ setGeneric("cell_type", function(x, s) standardGeneric("cell_type"))
 #' 
 #' @param x a SemplScores object
 #' @param s a sem id represented in x
+#' 
+#' @rdname cell_type
 #' 
 #' @export
 setMethod("cell_type", "SemplScores", 
@@ -340,6 +362,8 @@ setGeneric("changed_motif",
 #' @param scores_table the scores slot of a SemplScores object
 #' @param direction direction of binding change. options are: 
 #' 'changed', 'gained', 'lost', 'maintained'
+#' 
+#' @rdname changed_motif
 #' 
 #' @export
 setMethod("changed_motif", "data.table", 
