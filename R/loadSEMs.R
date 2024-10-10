@@ -46,7 +46,7 @@ loadSEMs <- \(sem_dir=NULL, baseline_file=NULL, metadata_file=NULL) {
 
   # if sem_dir not provided, read from github
   if (is.null(sem_dir)) {
-    sem_urls <- lapply(baselines[, 1],
+    sem_files <- lapply(baselines[, 1],
                        function(name) {paste0(url_base, name, ".sem")}) |>
       unlist()
   } else {
@@ -56,7 +56,7 @@ loadSEMs <- \(sem_dir=NULL, baseline_file=NULL, metadata_file=NULL) {
   sem_list <- list()
   for (i in 1:length(sem_files)) {
     if (is.null(sem_dir)) {
-      sem_matrix <- utils::read.delim(url(sem_urls[i]),
+      sem_matrix <- utils::read.delim(url(sem_files[i]),
                                       sep = "\t")[, -1]
     } else {
       sem_matrix <- utils::read.delim(sem_files[i],
