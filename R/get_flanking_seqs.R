@@ -92,7 +92,7 @@ get_flanking_seqs <- function(vr, up, down,
                                                  up = up, down = down,
                                                  bs_genome_obj = bs_genome_obj))
   # add flanking sequence to vranges metadata
-  mcols(vr)[c("upstream", "downstream", 
+  S4Vectors::mcols(vr)[c("upstream", "downstream", 
               "ref_seq", "alt_seq")] <- as.data.frame(do.call(rbind, 
                                                               flanking_seqs))
 
