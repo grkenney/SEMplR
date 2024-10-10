@@ -53,3 +53,5 @@ rsconnect/
 inst/doc
 
 .DS_Store
+
+demo.R
