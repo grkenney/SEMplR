@@ -4,6 +4,7 @@
 #' @param vr `VRanges` object with a single variant
 #' @param sem_matrix a numeric matrix of motif position by nucleic acid
 #' @param sem_id a string with the unique id of the SEM
+#' @param offset maximum number of offset basepairs offset from variant
 #' @param threshold a numeric value of the threshold to use for normalization
 scoreVariant <- \(vr, sem_matrix, sem_id, offset, threshold) {
 
@@ -33,8 +34,7 @@ scoreVariant <- \(vr, sem_matrix, sem_id, offset, threshold) {
   nonRiskNorm <- (2^nonRiskScores[nonRiskFrame] - threshold) / abs(threshold)
   riskNorm <- (2^riskScores[riskFrame] - threshold) / abs(threshold)
 
-  scores <- data.table::data.table(seqnames=as.character(GenomeInfoDb::seqnames(vr)),
-                                   ranges=BiocGenerics::start(vr),
+  scores <- data.table::data.table(varId=vr$id,
                                    sem=sem_id,
                                    nonRiskSeq=ref_seq_frame,
                                    riskSeq=alt_seq_frame,
@@ -74,7 +74,7 @@ semMotifBinding <- \(vr,
   offset <- max(unlist(lapply(sems, function(x) {nrow(x@matrix)})))
 
   ## Collect up/downstream sequences
-  vr <- get_flanking_seqs(vr, offset, offset)
+   vr <- get_flanking_seqs(vr, offset, offset)
 
   ## Create a new SemplScores object to store results
   semScores <- SemplScores(vr)
