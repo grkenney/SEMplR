@@ -1,7 +1,8 @@
-#' Plot non-risk versus risk binding propensity
+#' Plot non-risk versus risk binding propensity for a single variant
 #'
-#' @param sempl_obj a SemplR object with scores populated
-#' @param variant_i numeric, index of the variant within the SEMplR object to plot
+#' @param sempl_obj a SemplScores object with scores populated
+#' @param variant variant id to plot
+#' @param label column in sem_metadata slot of sempl_obj to use for point labels
 #'
 #' @import ggplot2
 #'
@@ -9,9 +10,8 @@
 #' binding propensity
 #'
 #' @export
-plotSemMotifs <- \(sempl_obj, variant_i, label = "sem") {
-
-  dt <- sempl_obj@scores[(variant_i*211-210):(variant_i*211), ]
+plotSemMotifs <- \(sempl_obj, variant, label = "sem") {
+  dt <- variantScores(sempl_obj, variant)
   
   dt <- merge(dt, sempl_obj@sem_metadata, by.x = "sem", by.y = "sem_id")
 
