@@ -1,5 +1,5 @@
 ---
-title: "SEMplR Vignette"
+title: "SEMplR_Vignette"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{SEMplR_Vignette}
@@ -27,14 +27,22 @@ First, we will create a `VRanges` object to store our variants of interest.
 vr <- VRanges(seqnames = c("chr12", "chr19"),
               ranges = c(94136009, 10640062), 
               ref = c("G", "T"), alt = c("C", "A"))
+vr$id <- 1:length(vr)
 vr
 ```
 
 # Loading SEMs
 Next, we will load our SNP Effect Matrices and baseline file. Note that this process may take a couple minutes, if files are downloaded locally, use the `sem_dir` and `baseline_file` options for a faster run time.
 ```{r get_files}
-sems <- loadSEMs()
+sems <- loadSEMs(sem_dir = "SEMs",
+                 baseline_file = "SEMs/BASELINE/SEMs_baseline_norm.txt",
+                 metadata_file =  "metadata.csv")
 ```
+
+```{r}
+plotMotif(sems, "MA0099.2_HeLa")
+```
+
 
 # Scoring Motifs
 Next, we will score the reference and alternate alleles for each variant against the SEMs and normalize to the baseline for each motif.
@@ -60,9 +68,9 @@ The resulting object contains two slots:
 # Visualization
 
 ```{r plot_motif1}
-plotSemMotifs(sempl_obj, variant_i=1, label="tf_name")
+plotSemMotifs(sempl_obj, variant=1, label="tf_name")
 ```
 
 ```{r plot_motif2}
-plotSemMotifs(sempl_obj, variant_i=2)
+plotSemMotifs(sempl_obj, variant=2)
 ```
