@@ -82,6 +82,89 @@ setValidity("SNPEffectMatrix", function(object) {
   }
 })
 
+#' @rdname sem_matrix
+#' @export
+setGeneric("sem_matrix", function(x) standardGeneric("sem_matrix"))
+
+#' Accessor function to pull the matrix slot from a SNPEffectMatrix object
+#' 
+#' @param x a SNPEffectMatrix object
+#'  
+#' @rdname sem_matrix
+#'  
+#' @export
+setMethod("sem_matrix", "SNPEffectMatrix", 
+          function(x) x@matrix)
+
+#' @rdname baseline
+#' @export
+setGeneric("baseline", function(x) standardGeneric("baseline"))
+
+#' Accessor function to pull the matrix slot from a SNPEffectMatrix object
+#' 
+#' @param x a SNPEffectMatrix object
+#'  
+#' @rdname baseline
+#'  
+#' @export
+setMethod("baseline", "SNPEffectMatrix", 
+          function(x) x@baseline)
+
+#' @rdname sem_id
+#' @export
+setGeneric("sem_id", function(x) standardGeneric("sem_id"))
+
+#' Accessor function to pull the sem_id slot from a SNPEffectMatrix object
+#' 
+#' @param x a SNPEffectMatrix object
+#'  
+#' @rdname sem_id
+#'  
+#' @export
+setMethod("sem_id", "SNPEffectMatrix", 
+          function(x) x@sem_id)
+
+#' Accessor function to pull the tf_name slot from a SNPEffectMatrix object
+#' 
+#' @param x a SNPEffectMatrix object
+#'  
+#' @rdname tf_name
+#'  
+#' @export
+setMethod("tf_name", "SNPEffectMatrix", 
+          function(x) x@tf_name)
+
+#' Accessor function to pull the ensembl_id slot from a SNPEffectMatrix object
+#' 
+#' @param x a SNPEffectMatrix object
+#'  
+#' @rdname ensembl_id
+#'  
+#' @export
+setMethod("ensembl_id", "SNPEffectMatrix", 
+          function(x) x@ensembl_id)
+
+#' Accessor function to pull the uniprot_id slot from a SNPEffectMatrix object
+#' 
+#' @param x a SNPEffectMatrix object
+#'  
+#' @rdname uniprot_id
+#'  
+#' @export
+setMethod("uniprot_id", "SNPEffectMatrix", 
+          function(x) x@uniprot_id)
+
+#' Accessor function to pull the cell_type slot from a SNPEffectMatrix object
+#' 
+#' @param x a SNPEffectMatrix object
+#'  
+#' @rdname cell_type
+#'  
+#' @export
+setMethod("cell_type", "SNPEffectMatrix", 
+          function(x) x@cell_type)
+
+
 ## SEMCollection ----------------------------------------------------------------
 
 setClass("SEMCollection",
@@ -133,31 +216,43 @@ setClass("SemplScores",
 #' @aliases SemplScores-class
 #' @rdname SemplScores
 #' @export
-SemplScores <- function(variants=NULL, scores=NULL, sem_metadata=NULL) {
+SemplScores <- function(variants=NULL, sems=NULL, scores=NULL) {
+  if (all(is.null(variants))) {
+    vr <-  VRanges()
+  } else {
+    vr <- variants
+  }
+  
+  if (!("id" %in% names(mcols(vr)))) {
+    mcols(vr)$id <- 1:length(vr)
+  }
+  
+  vr_sem_combos <- expand.grid(names(semList), mcols(vr)$id)
+
   if (is.null(scores)){
-    scores_table <- data.table(varId=character(),
-                               sem=character(),
-                               nonRiskSeq=numeric(), riskSeq=numeric(),
-                               nonRiskScore=numeric(), riskScore=numeric(),
-                               nonRiskNorm=numeric(), riskNorm=numeric())
+    scores_table <- data.table(varId=vr_sem_combos[, 2],
+                               sem=vr_sem_combos[, 1],
+                               nonRiskSeq=NA, riskSeq=NA,
+                               nonRiskScore=NA, riskScore=NA,
+                               nonRiskNorm=NA, riskNorm=NA)
   }
   else {
     scores_table <- scores
   }
   
-  if (is.null(sem_metadata)) {
+  if (is.null(sems)) {
     sem_metadata <- data.table(tf_name=character(),
                                ensembl_id=character(),
                                uniprot_id=character(),
                                cell_type=character())
   } else {
-    sem_metadata <- sem_metadata
-  }
-
-  if (all(is.null(variants))) {
-    vr = VRanges()
-  } else {
-    vr = variants
+    sem_metadata <- lapply(sems, 
+                           function(x) data.table::data.table(sem_id=sem_id(x),
+                                                              tf_name=tf_name(x),
+                                                              ensembl_id=ensembl_id(x),
+                                                              uniprot_id=uniprot_id(x),
+                                                              cell_type=cell_type(x))) |>
+      data.table::rbindlist()
   }
 
   new("SemplScores",
@@ -252,6 +347,9 @@ setMethod("variantScores", "SemplScores",
 #' @rdname scores
 #' @export
 setGeneric("scores", function(x) standardGeneric("scores"))
+setGeneric("scores<-", 
+           function(x, value) standardGeneric("scores<-"))
+
 
 #' Accessor scores slot in a SemplScores object
 #' 
@@ -262,6 +360,11 @@ setGeneric("scores", function(x) standardGeneric("scores"))
 #' @export
 setMethod("scores", "SemplScores", 
           function(x) x@scores)
+
+setMethod("scores<-", "SemplScores", function(x, value) {
+  x@scores <- value
+  x
+})
 
 #' @rdname variants
 #' @export
@@ -280,6 +383,8 @@ setMethod("variants", "SemplScores",
 #' @rdname sem_metadata
 #' @export
 setGeneric("sem_metadata", function(x) standardGeneric("sem_metadata"))
+setGeneric("sem_metadata<-", 
+           function(x, value) standardGeneric("sem_metadata<-"))
 
 #' Accessor sem_metadata slot in a SemplScores object
 #' 
@@ -290,6 +395,10 @@ setGeneric("sem_metadata", function(x) standardGeneric("sem_metadata"))
 #' @export
 setMethod("sem_metadata", "SemplScores", 
           function(x) x@sem_metadata)
+setMethod("sem_metadata<-", "SemplScores", function(x, value) {
+  x@sem_metadata <- value
+  x
+})
 
 #' @rdname tf_name
 #' @export
