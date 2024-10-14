@@ -216,28 +216,40 @@ setClass("SemplScores",
 #' @aliases SemplScores-class
 #' @rdname SemplScores
 #' @export
-SemplScores <- function(variants=NULL, sems=NULL, scores=NULL) {
+SemplScores <- function(variants=NULL, sems=NULL, sem_scores=NULL) {
   if (all(is.null(variants))) {
     vr <-  VRanges()
   } else {
     vr <- variants
   }
   
-  if (!("id" %in% names(mcols(vr)))) {
+  if (length(vr) == 0) {
+    mcols(vr) <- data.frame(id=NA)
+  } else if (!("id" %in% names(mcols(vr)))) {
     mcols(vr)$id <- 1:length(vr)
   }
   
-  vr_sem_combos <- expand.grid(names(semList), mcols(vr)$id)
+  if (length(vr) != 0 | length(sems) != 0) {
+    vr_sem_combos <- expand.grid(names(sems), mcols(vr)$id)
+    sem_col <- vr_sem_combos[, 1]
+    vr_col <- vr_sem_combos[, 2]
+  } else {
+    sem_col <- character()
+    vr_col <- character()
+  }
 
-  if (is.null(scores)){
-    scores_table <- data.table(varId=vr_sem_combos[, 2],
-                               sem=vr_sem_combos[, 1],
+  if (is.null(sem_scores) & nrow(vr_sem_combos) == 0){
+    scores_table <- data.table(varId=vr_col, sem=sem_col,
+                               nonRiskSeq=numeric(), riskSeq=numeric(),
+                               nonRiskScore=numeric(), riskScore=numeric(),
+                               nonRiskNorm=numeric(), riskNorm=numeric())
+  } else if (is.null(sem_scores) & nrow(vr_sem_combos) != 0) {
+    scores_table <- data.table(varId=vr_col, sem=sem_col,
                                nonRiskSeq=NA, riskSeq=NA,
                                nonRiskScore=NA, riskScore=NA,
                                nonRiskNorm=NA, riskNorm=NA)
-  }
-  else {
-    scores_table <- scores
+  } else {
+    scores_table <- sem_scores
   }
   
   if (is.null(sems)) {
