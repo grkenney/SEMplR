@@ -7,7 +7,6 @@ Authors@R:
 Description: What the package does (one paragraph).
 biocViews:
 Imports:
-    BiocManager,
     BiocGenerics,
     Biostrings,
     GenomeInfoDb,
@@ -15,11 +14,10 @@ Imports:
     ggplot2,
     ggrepel,
     VariantAnnotation,
-    IRanges,
-    stringr,
     data.table,
     methods,
-    scales
+    scales,
+    S4Vectors
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
