@@ -39,6 +39,12 @@ sems <- loadSEMs(sem_dir = "SEMs",
                  metadata_file =  "metadata.csv")
 ```
 
+```{r}
+plotMotif(sems, "MA0095.1") |> 
+  ggsave(filename="~/Desktop/motif_plot.png",
+         height = 3, width = 3)
+```
+
 
 ```{r}
 # score variants
@@ -47,6 +53,8 @@ sem_scores <- semMotifBinding(vr = vr, sems)
 
 ```{r}
 plotSemMotifs(sem_scores, "rs9271608", label="tf_name")
+plotSemMotifs(sem_scores, "rs12933575", label="tf_name") |>
+  ggsave(filename = "~/Desktop/var_plot.png", height=4, width=4)
 ```
 
 
@@ -80,9 +88,11 @@ changed_motif(scores(motif_sub), "changed")
 ```{r}
 top_sem <- rownames(enrich)[1]
 
-plotSemVariants(sempl_obj = sem_scores, 
-                sem = top_sem, 
+sem_plt <- plotSemVariants(sempl_obj = sem_scores, 
+                sem = "MA0095.1", 
                 label = "varId") +
-  ggplot2::ggtitle(tf_name(sem_scores, top_sem))
+  ggplot2::ggtitle("YY1")
+  ggsave(plot = sem_plt, filename = "~/Desktop/sem_plot.png",
+         height=4, width=4)
 ```
 
