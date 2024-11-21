@@ -4,12 +4,13 @@
 \alias{addSemMetadata}
 \title{Add metadata to SNPEffectMatrix}
 \usage{
-addSemMetadata(sem, metadata)
+addSemMetadata(x, sem_metadata)
 }
 \arguments{
-\item{sem}{a SNPEffectMatrix object}
+\item{x}{a SNPEffectMatrix object}
 
-\item{metadata}{a data.frame or named vector with metadata for the given sem.}
+\item{sem_metadata}{a data.frame or named vector with metadata for the
+given sem.}
 }
 \value{
 SNPEffectMatrix object

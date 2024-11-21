@@ -6,15 +6,14 @@
 \alias{SemplScores-class}
 \title{SemplScores object and constructor}
 \usage{
-SemplScores(variants = NULL, scores = NULL, sem_metadata = NULL)
+SemplScores(variants = NULL, sems = NULL, semScores = NULL)
 }
 \arguments{
 \item{variants}{A \code{VRanges} object to hold one or more variants}
 
-\item{scores}{A \code{data.table} object for motif information and binding scores}
+\item{sems}{A named list of SNPEffectMatrix objects}
 
-\item{sem_metadata}{A \code{data.table} object of metadata for the SEMs with one
-row for each SEM}
+\item{semScores}{A \code{data.table} object for motif information and binding scores}
 }
 \value{
 a SemplScores object

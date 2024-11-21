@@ -5,13 +5,12 @@
 \title{Define a function to calculate risk/non-risk binding propensity
 for all SEM motifs provided}
 \usage{
-semMotifBinding(vr, semList = NULL)
+semMotifBinding(vr, semList)
 }
 \arguments{
 \item{vr}{\code{VRanges} object}
 
-\item{semList}{a list of \code{SNPEffectMatrix} objects. Defaults to loading .sems
-and baseline data from github.com/Boyle-Lab/SEMpl/raw/master/SEMs/}
+\item{semList}{a list of \code{SNPEffectMatrix} objects}
 }
 \value{
 a SemplScores object

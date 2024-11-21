@@ -14,7 +14,7 @@ Class for storing SEM motif binding calculations for multiple variants
 
 \item{\code{scores}}{A \code{data.table} object for motif information and binding scores}
 
-\item{\code{sem_metadata}}{A \code{data.table} object of metadata for the SEMs with one
+\item{\code{metadata}}{A \code{data.table} object of metadata for the SEMs with one
 row for each SEM}
 }}
 

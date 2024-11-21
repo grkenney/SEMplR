@@ -5,16 +5,16 @@
 \title{Load .sem and baseline data from files or from github if file path is not
 provided. Github default data: github.com/Boyle-Lab/SEMpl/raw/master/SEMs/}
 \usage{
-loadSEMs(sem_dir = NULL, baseline_file = NULL, metadata_file = NULL)
+loadSEMs(semDir = NULL, baselineFile = NULL, metadataFile = NULL)
 }
 \arguments{
-\item{sem_dir}{path to directory containing .sem files.
+\item{semDir}{path to directory containing .sem files.
 Defaults to pulling data from github.}
 
-\item{baseline_file}{path to baselines file.
+\item{baselineFile}{path to baselines file.
 Defaults to pulling data from github.}
 
-\item{metadata_file}{a csv file containing metadata for each sem with columns
+\item{metadataFile}{a csv file containing metadata for each sem with columns
 sem_id, tf_name, ensembl_id, uniprot_id, cell_type where sem_id must match
 the basenames of the sem files.}
 }

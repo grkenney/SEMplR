@@ -4,12 +4,12 @@
 \alias{plotSemVariants}
 \title{Plot non-risk versus risk binding propensity for a single motif}
 \usage{
-plotSemVariants(sempl_obj, sem, label = "varId")
+plotSemVariants(sempl_obj, sem_id, label = "varId")
 }
 \arguments{
 \item{sempl_obj}{a SemplR object with scores populated}
 
-\item{sem}{numeric, index of the variant within the SEMplR object to plot}
+\item{sem_id}{numeric, index of the variant within the SEMplR object to plot}
 
 \item{label}{column in scores slot of sempl_obj to use for point labels}
 }

@@ -7,30 +7,30 @@
 \title{SNPEffectMatrix object and constructor}
 \usage{
 SNPEffectMatrix(
-  matrix,
+  sem,
   baseline,
-  sem_id,
-  tf_name = "",
-  ensembl_id = "",
-  uniprot_id = "",
-  cell_type = ""
+  semId,
+  tf = "",
+  ensembl = "",
+  uniprot = "",
+  cellType = ""
 )
 }
 \arguments{
-\item{matrix}{A \code{data.table} object to hold one or more variants}
+\item{sem}{A \code{data.table} object to hold one or more variants}
 
 \item{baseline}{A \code{numeric} scrambled baseline, representing the binding
 score of randomly scrambled kmers of the same length.}
 
-\item{sem_id}{basename of the sem file}
+\item{semId}{basename of the sem file}
 
-\item{tf_name}{(optional) Name of the TF relevant to the SEM}
+\item{tf}{(optional) Name of the transcription factor relevant to the SEM}
 
-\item{ensembl_id}{(optional) ENSEMBL gene id of the transcription factor}
+\item{ensembl}{(optional) ENSEMBL gene id of the transcription factor}
 
-\item{uniprot_id}{(optional) Uniprot protein id of the transcription factor}
+\item{uniprot}{(optional) Uniprot protein id of the transcription factor}
 
-\item{cell_type}{(optional) cell type/line used for ChipSeq experiment}
+\item{cellType}{(optional) cell type/line used for ChipSeq experiment}
 }
 \value{
 a SNPEffectMatrix object

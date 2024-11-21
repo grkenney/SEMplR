@@ -18,7 +18,7 @@ metadata, which contains the TF name and
 \section{Slots}{
 
 \describe{
-\item{\code{matrix}}{The SEM itself as a data table Rows represent sequence position
+\item{\code{sem}}{The SEM itself as a data table Rows represent sequence position
 (variable length), columns represent effects due to each nucleotide base
 A, C, G, T (fixed length: 4)}
 
@@ -26,14 +26,14 @@ A, C, G, T (fixed length: 4)}
 randomly scrambled kmers of the same length. This is the binding cutoff
 for a TF}
 
-\item{\code{sem_id}}{basename of the sem file}
+\item{\code{semId}}{basename of the sem file}
 
-\item{\code{tf_name}}{Name of the TF relevant to the SEM}
+\item{\code{tf}}{Name of the TF relevant to the SEM}
 
-\item{\code{ensembl_id}}{ENSEMBL gene id of the transcription factor}
+\item{\code{ensembl}}{ENSEMBL gene id of the transcription factor}
 
-\item{\code{uniprot_id}}{Uniprot protein id of the transcription factor}
+\item{\code{uniprot}}{Uniprot protein id of the transcription factor}
 
-\item{\code{cell_type}}{cell type/line used for ChipSeq experiment}
+\item{\code{cellType}}{cell type/line used for ChipSeq experiment}
 }}
 

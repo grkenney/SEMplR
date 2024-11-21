@@ -4,7 +4,7 @@
 \alias{plotSemMotifs}
 \title{Plot non-risk versus risk binding propensity for a single variant}
 \usage{
-plotSemMotifs(sempl_obj, variant, label = "sem")
+plotSemMotifs(sempl_obj, variant, label = "semId")
 }
 \arguments{
 \item{sempl_obj}{a SemplScores object with scores populated}
