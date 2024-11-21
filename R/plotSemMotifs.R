@@ -10,10 +10,10 @@
 #' binding propensity
 #'
 #' @export
-plotSemMotifs <- \(sempl_obj, variant, label = "sem") {
+plotSemMotifs <- \(sempl_obj, variant, label = "semId") {
   dt <- variantScores(sempl_obj, variant)
   
-  dt <- merge(dt, sempl_obj@sem_metadata, by.x = "sem", by.y = "sem_id")
+  dt <- merge(dt, metadata(sempl_obj), by.x = "semId", by.y = "semId")
 
   nonRiskNorm <- riskNorm <- sem <- NULL
 

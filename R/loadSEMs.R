@@ -1,61 +1,62 @@
 #' Add metadata to SNPEffectMatrix
 #' 
-#' @param sem a SNPEffectMatrix object
-#' @param metadata a data.frame or named vector with metadata for the given sem.
+#' @param x a SNPEffectMatrix object
+#' @param sem_metadata a data.frame or named vector with metadata for the 
+#' given sem.
 #' 
 #' @return SNPEffectMatrix object
-addSemMetadata <- function(sem, metadata){
-  sem@tf_name <- metadata$tf_name
-  sem@ensembl_id <- metadata$ensembl_id
-  sem@uniprot_id <- metadata$uniprot_id
-  sem@cell_type <- metadata$cell_type
-  return(sem)
+addSemMetadata <- function(x, sem_metadata){
+  x@tf <- sem_metadata$tf_name
+  x@ensembl <- sem_metadata$ensembl_id
+  x@uniprot <- sem_metadata$uniprot_id
+  x@cellType <- sem_metadata$cell_type
+  return(x)
 }
 
 #' Load .sem and baseline data from files or from github if file path is not
 #' provided. Github default data: github.com/Boyle-Lab/SEMpl/raw/master/SEMs/
 #'
-#' @param sem_dir path to directory containing .sem files.
+#' @param semDir path to directory containing .sem files.
 #' Defaults to pulling data from github.
-#' @param baseline_file path to baselines file.
+#' @param baselineFile path to baselines file.
 #' Defaults to pulling data from github.
-#' @param metadata_file a csv file containing metadata for each sem with columns
+#' @param metadataFile a csv file containing metadata for each sem with columns
 #' sem_id, tf_name, ensembl_id, uniprot_id, cell_type where sem_id must match
 #' the basenames of the sem files.
 #'
 #' @return named list of SNPEffectMatrix objects
 #' 
 #' @export
-loadSEMs <- \(sem_dir=NULL, baseline_file=NULL, metadata_file=NULL) {
+loadSEMs <- \(semDir=NULL, baselineFile=NULL, metadataFile=NULL) {
   url_base <- "https://github.com/Boyle-Lab/SEMpl/raw/master/SEMs/"
   
-  if (!is.null(metadata_file)) {
-    metadata <- utils::read.delim(metadata_file, sep = ",")
+  if (!is.null(metadataFile)) {
+    meta <- utils::read.delim(metadataFile, sep = ",")
   } else {
-    metadata <- NULL
+    meta <- NULL
   }
 
-  # if baseline_file not provided, read from github
-  if (is.null(baseline_file)) {
+  # if baselineFile not provided, read from github
+  if (is.null(baselineFile)) {
     baselines_url <- paste0(url_base, "BASELINE/SEMs_baseline_norm.txt")
     baselines <- utils::read.delim(url(baselines_url),
                                    sep = "\t", header = FALSE)
   } else {
-    baselines <- utils::read.delim(baseline_file, header = FALSE)
+    baselines <- utils::read.delim(baselineFile, header = FALSE)
   }
 
-  # if sem_dir not provided, read from github
-  if (is.null(sem_dir)) {
+  # if semDir not provided, read from github
+  if (is.null(semDir)) {
     sem_files <- lapply(baselines[, 1],
                        function(name) {paste0(url_base, name, ".sem")}) |>
       unlist()
   } else {
-    sem_files <- list.files(sem_dir, pattern = ".sem", full.names = TRUE)
+    sem_files <- list.files(semDir, pattern = ".sem", full.names = TRUE)
   }
 
   sem_list <- list()
   for (i in 1:length(sem_files)) {
-    if (is.null(sem_dir)) {
+    if (is.null(semDir)) {
       sem_matrix <- utils::read.delim(url(sem_files[i]),
                                       sep = "\t")[, -1]
     } else {
@@ -68,11 +69,11 @@ loadSEMs <- \(sem_dir=NULL, baseline_file=NULL, metadata_file=NULL) {
 
     sem_list[[sem_id]] <- SNPEffectMatrix(sem_matrix,
                                baseline = baseline,
-                               sem_id = sem_id)
+                               semId = sem_id)
     
-    if (!is.null(metadata)) {
-      sem_list[[sem_id]] <- addSemMetadata(sem_list[[sem_id]], 
-                     metadata[metadata$sem_id == basename(sem_files[i]), ])
+    if (!is.null(meta)) {
+      sem_list[[sem_id]] <- addSemMetadata(x = sem_list[[sem_id]], 
+                                           sem_metadata = meta[meta$sem_id == basename(sem_files[i]), ])
     }
   }
   

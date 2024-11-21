@@ -5,17 +5,17 @@
 #' mutation in a particular transcription factor (TF) binding motif
 #' This class contains three slots: the matrix, the baseline value, and
 #' metadata, which contains the TF name and
-#' @slot matrix The SEM itself as a data table Rows represent sequence position
+#' @slot sem The SEM itself as a data table Rows represent sequence position
 #' (variable length), columns represent effects due to each nucleotide base
 #' A, C, G, T (fixed length: 4)
 #' @slot baseline A scrambled baseline, representing the binding score of
 #' randomly scrambled kmers of the same length. This is the binding cutoff
 #' for a TF
-#' @slot sem_id basename of the sem file
-#' @slot tf_name Name of the TF relevant to the SEM
-#' @slot ensembl_id ENSEMBL gene id of the transcription factor
-#' @slot uniprot_id Uniprot protein id of the transcription factor
-#' @slot cell_type cell type/line used for ChipSeq experiment
+#' @slot semId basename of the sem file
+#' @slot tf Name of the TF relevant to the SEM
+#' @slot ensembl ENSEMBL gene id of the transcription factor
+#' @slot uniprot Uniprot protein id of the transcription factor
+#' @slot cellType cell type/line used for ChipSeq experiment
 #'
 #' @aliases SNPEffectMatrix-class
 #'
@@ -23,13 +23,13 @@
 setClass(
   Class = "SNPEffectMatrix",
   slots = c(
-    matrix = "data.table",
+    sem = "data.table",
     baseline = "numeric",
-    sem_id = "character",
-    tf_name = "character",
-    ensembl_id = "character",
-    uniprot_id = "character",
-    cell_type = "character"
+    semId = "character",
+    tf = "character",
+    ensembl = "character",
+    uniprot = "character",
+    cellType = "character"
   )
 )
 
@@ -37,15 +37,14 @@ setClass(
 #'
 #' Constructs a SNPEffectMatrix class object.
 #'
-#' @param matrix A `data.table` object to hold one or more variants
-#' @param tf_name A `character` name for the transcription factor
+#' @param sem A `data.table` object to hold one or more variants
 #' @param baseline A `numeric` scrambled baseline, representing the binding
 #' score of randomly scrambled kmers of the same length.
-#' @param sem_id basename of the sem file
-#' @param tf_name (optional) Name of the TF relevant to the SEM
-#' @param ensembl_id (optional) ENSEMBL gene id of the transcription factor
-#' @param uniprot_id (optional) Uniprot protein id of the transcription factor
-#' @param cell_type (optional) cell type/line used for ChipSeq experiment
+#' @param semId basename of the sem file
+#' @param tf (optional) Name of the transcription factor relevant to the SEM
+#' @param ensembl (optional) ENSEMBL gene id of the transcription factor
+#' @param uniprot (optional) Uniprot protein id of the transcription factor
+#' @param cellType (optional) cell type/line used for ChipSeq experiment
 #'
 #' @importFrom methods new
 #'
@@ -54,47 +53,39 @@ setClass(
 #' @aliases SNPEffectMatrix-class
 #' @rdname SNPEffectMatrix
 #' @export
-SNPEffectMatrix <- function(matrix, baseline, sem_id, tf_name = "", 
-                            ensembl_id = "", uniprot_id = "", cell_type = "") {
+SNPEffectMatrix <- function(sem, baseline, semId, tf = "", 
+                            ensembl = "", uniprot = "", cellType = "") {
   # convert matrix to data.table in case given in another format
-  matrix <- data.table::as.data.table(matrix)
+  sem <- data.table::as.data.table(sem)
 
   # convert baseline to numeric
   baseline <- as.numeric(baseline)
 
   new("SNPEffectMatrix",
-      matrix = matrix,
+      sem = sem,
       baseline = baseline,
-      sem_id = sem_id,
-      tf_name = tf_name,
-      ensembl_id = ensembl_id,
-      uniprot_id = uniprot_id,
-      cell_type = cell_type
+      semId = semId,
+      tf = tf,
+      ensembl = ensembl,
+      uniprot = uniprot,
+      cellType = cellType
   )
 }
 
 
-setValidity("SNPEffectMatrix", function(object) {
-  if (1 != 1) {
-    "length(unique(object$sem_id)) != length(object): sem_id must be unique"
-  } else {
-    TRUE
-  }
-})
-
-#' @rdname sem_matrix
+#' @rdname sem
 #' @export
-setGeneric("sem_matrix", function(x) standardGeneric("sem_matrix"))
+setGeneric("sem", function(x) standardGeneric("sem"))
 
 #' Accessor function to pull the matrix slot from a SNPEffectMatrix object
 #' 
 #' @param x a SNPEffectMatrix object
 #'  
-#' @rdname sem_matrix
+#' @rdname sem
 #'  
 #' @export
-setMethod("sem_matrix", "SNPEffectMatrix", 
-          function(x) x@matrix)
+setMethod("sem", "SNPEffectMatrix", 
+          function(x) x@sem)
 
 #' @rdname baseline
 #' @export
@@ -110,59 +101,75 @@ setGeneric("baseline", function(x) standardGeneric("baseline"))
 setMethod("baseline", "SNPEffectMatrix", 
           function(x) x@baseline)
 
-#' @rdname sem_id
+#' @rdname semId
 #' @export
-setGeneric("sem_id", function(x) standardGeneric("sem_id"))
+setGeneric("semId", function(x) standardGeneric("semId"))
 
-#' Accessor function to pull the sem_id slot from a SNPEffectMatrix object
+#' Accessor function to pull the semId slot from a SNPEffectMatrix object
 #' 
 #' @param x a SNPEffectMatrix object
 #'  
-#' @rdname sem_id
+#' @rdname semId
 #'  
 #' @export
-setMethod("sem_id", "SNPEffectMatrix", 
-          function(x) x@sem_id)
+setMethod("semId", "SNPEffectMatrix", 
+          function(x) x@semId)
 
-#' Accessor function to pull the tf_name slot from a SNPEffectMatrix object
+#' @rdname tf
+#' @export
+setGeneric("tf", function(x) standardGeneric("tf"))
+
+#' Accessor function to pull the tf slot from a SNPEffectMatrix object
 #' 
 #' @param x a SNPEffectMatrix object
 #'  
-#' @rdname tf_name
+#' @rdname tf
 #'  
 #' @export
-setMethod("tf_name", "SNPEffectMatrix", 
-          function(x) x@tf_name)
+setMethod("tf", signature("SNPEffectMatrix"), 
+          function(x) x@tf)
+
+#' @rdname ensembl
+#' @export
+setGeneric("ensembl", function(x) standardGeneric("ensembl"))
 
 #' Accessor function to pull the ensembl_id slot from a SNPEffectMatrix object
 #' 
 #' @param x a SNPEffectMatrix object
 #'  
-#' @rdname ensembl_id
+#' @rdname ensembl
 #'  
 #' @export
-setMethod("ensembl_id", "SNPEffectMatrix", 
-          function(x) x@ensembl_id)
+setMethod("ensembl", "SNPEffectMatrix", 
+          function(x) x@ensembl)
 
-#' Accessor function to pull the uniprot_id slot from a SNPEffectMatrix object
+#' @rdname uniprot
+#' @export
+setGeneric("uniprot", function(x) standardGeneric("uniprot"))
+
+#' Accessor function to pull the uniprot slot from a SNPEffectMatrix object
 #' 
 #' @param x a SNPEffectMatrix object
 #'  
-#' @rdname uniprot_id
+#' @rdname uniprot
 #'  
 #' @export
-setMethod("uniprot_id", "SNPEffectMatrix", 
+setMethod("uniprot", "SNPEffectMatrix", 
           function(x) x@uniprot_id)
+
+#' @rdname cellType
+#' @export
+setGeneric("cellType", function(x) standardGeneric("cellType"))
 
 #' Accessor function to pull the cell_type slot from a SNPEffectMatrix object
 #' 
 #' @param x a SNPEffectMatrix object
 #'  
-#' @rdname cell_type
+#' @rdname cellType
 #'  
 #' @export
-setMethod("cell_type", "SNPEffectMatrix", 
-          function(x) x@cell_type)
+setMethod("cellType", "SNPEffectMatrix", 
+          function(x) x@cellType)
 
 
 ## SEMCollection ----------------------------------------------------------------
@@ -179,7 +186,7 @@ setClass("SEMCollection",
 #'
 #' @slot variants A `VRanges` object to hold one or more variants
 #' @slot scores A `data.table` object for motif information and binding scores
-#' @slot sem_metadata A `data.table` object of metadata for the SEMs with one 
+#' @slot metadata A `data.table` object of metadata for the SEMs with one 
 #' row for each SEM
 #'
 #' @importFrom VariantAnnotation VRanges
@@ -190,13 +197,13 @@ setClass("SEMCollection",
 #' @export
 setClass("SemplScores",
          slots = c(variants = "VRanges",
-                   sem_metadata = "data.table",
+                   metadata = "data.table",
                    scores = "data.table"
                    ),
          prototype = list(
-           variants = VRanges(),
-           sem_metadata = data.table(),
-           scores = data.table()
+           variants = VariantAnnotation::VRanges(),
+           metadata = data.table::data.table(),
+           scores = data.table::data.table()
          )
 )
 
@@ -205,32 +212,33 @@ setClass("SemplScores",
 #' Constructs a SemplScores class object.
 #'
 #' @param variants A `VRanges` object to hold one or more variants
-#' @param scores A `data.table` object for motif information and binding scores
-#' @param sem_metadata A `data.table` object of metadata for the SEMs with one 
-#' row for each SEM
+#' @param sems A named list of SNPEffectMatrix objects
+#' @param semScores A `data.table` object for motif information and binding scores
 #'
 #' @importFrom methods new
+#' @importFrom VariantAnnotation VRanges
+#' @importFrom S4Vectors mcols
 #'
 #' @return a SemplScores object
 #' @docType class
 #' @aliases SemplScores-class
 #' @rdname SemplScores
 #' @export
-SemplScores <- function(variants=NULL, sems=NULL, sem_scores=NULL) {
+SemplScores <- function(variants=NULL, sems=NULL, semScores=NULL) {
   if (all(is.null(variants))) {
-    vr <-  VRanges()
+    vr <-  VariantAnnotation::VRanges()
   } else {
     vr <- variants
   }
   
   if (length(vr) == 0) {
-    mcols(vr) <- data.frame(id=NA)
-  } else if (!("id" %in% names(mcols(vr)))) {
-    mcols(vr)$id <- 1:length(vr)
+    S4Vectors::mcols(vr) <- data.frame(id=NA)
+  } else if (!("id" %in% names(S4Vectors::mcols(vr)))) {
+    S4Vectors::mcols(vr)$id <- 1:length(vr)
   }
   
   if (length(vr) != 0 | length(sems) != 0) {
-    vr_sem_combos <- expand.grid(names(sems), mcols(vr)$id)
+    vr_sem_combos <- expand.grid(names(sems), S4Vectors::mcols(vr)$id)
     sem_col <- vr_sem_combos[, 1]
     vr_col <- vr_sem_combos[, 2]
   } else {
@@ -238,51 +246,45 @@ SemplScores <- function(variants=NULL, sems=NULL, sem_scores=NULL) {
     vr_col <- character()
   }
 
-  if (is.null(sem_scores) & nrow(vr_sem_combos) == 0){
-    scores_table <- data.table(varId=vr_col, sem=sem_col,
+  if (is.null(semScores) & nrow(vr_sem_combos) == 0){
+    scores_table <- data.table(varId=vr_col, semId=sem_col,
                                nonRiskSeq=numeric(), riskSeq=numeric(),
                                nonRiskScore=numeric(), riskScore=numeric(),
                                nonRiskNorm=numeric(), riskNorm=numeric())
-  } else if (is.null(sem_scores) & nrow(vr_sem_combos) != 0) {
-    scores_table <- data.table(varId=vr_col, sem=sem_col,
+  } else if (is.null(semScores) & nrow(vr_sem_combos) != 0) {
+    scores_table <- data.table(varId=vr_col, semId=sem_col,
                                nonRiskSeq=NA, riskSeq=NA,
                                nonRiskScore=NA, riskScore=NA,
                                nonRiskNorm=NA, riskNorm=NA)
   } else {
-    scores_table <- sem_scores
+    scores_table <- semScores
   }
   
   if (is.null(sems)) {
-    sem_metadata <- data.table(tf_name=character(),
-                               ensembl_id=character(),
-                               uniprot_id=character(),
-                               cell_type=character())
+    sem_metadata <- data.table(tf=character(),
+                               ensembl=character(),
+                               uniprot=character(),
+                               cellType=character())
   } else {
-    sem_metadata <- lapply(sems, 
-                           function(x) data.table::data.table(sem_id=sem_id(x),
-                                                              tf_name=tf_name(x),
-                                                              ensembl_id=ensembl_id(x),
-                                                              uniprot_id=uniprot_id(x),
-                                                              cell_type=cell_type(x))) |>
-      data.table::rbindlist()
+    sem_metadata <- sems
   }
 
   new("SemplScores",
       variants = vr,
-      sem_metadata = sem_metadata,
+      metadata = sem_metadata,
       scores = scores_table
       )
 }
 
 setValidity("SemplScores", function(object) {
-  expected_column_names <- c("varId", "sem",
+  expected_column_names <- c("varId", "semId",
                              "nonRiskSeq", "riskSeq",
                              "nonRiskScore", "riskScore",
                              "nonRiskNorm", "riskNorm")
   actual_column_names <- colnames(object@scores)
   if (sum(expected_column_names %in%
           actual_column_names) != length(expected_column_names)) {
-    "@scores must contain columns with names: varId, sem, nonRiskSeq, riskSeq, nonRiskScore, riskScore, nonRiskNorm, riskNorm"
+    "@scores must contain columns with names: varId, semId, nonRiskSeq, riskSeq, nonRiskScore, riskScore, nonRiskNorm, riskNorm"
   } else {
     TRUE
   }
@@ -303,8 +305,8 @@ setGeneric("motifSub", function(x, motif) standardGeneric("motifSub"))
 setMethod("motifSub", "SemplScores", 
           function(x, motif) {
             SemplScores(variants = variants(x),
-                        sem_metadata = sem_metadata(x)[sem_id %in% motif],
-                        scores = x@scores[sem %in% motif])
+                        sems = metadata(x)[semId %in% motif],
+                        semScores = x@scores[semId %in% motif])
                         })
 
 #' @rdname motifScores
@@ -320,7 +322,7 @@ setGeneric("motifScores", function(x, motif) standardGeneric("motifScores"))
 #' 
 #' @export
 setMethod("motifScores", "SemplScores", 
-          function(x, motif) x@scores[sem %in% motif])
+          function(x, motif) x@scores[semId %in% motif])
 
 #' @rdname variantSub
 #' @export
@@ -337,8 +339,8 @@ setGeneric("variantSub", function(x, v) standardGeneric("variantSub"))
 setMethod("variantSub", "SemplScores", 
           function(x, v) {
             SemplScores(variants = variants(x)[variants(x)$id %in% v],
-                        sem_metadata = sem_metadata(x),
-                        scores = x@scores[varId %in% v])
+                        sems = metadata(x),
+                        semScores = x@scores[varId %in% v])
           })
 
 #' @rdname variantScores
@@ -392,85 +394,25 @@ setGeneric("variants", function(x) standardGeneric("variants"))
 setMethod("variants", "SemplScores", 
           function(x) x@variants)
 
-#' @rdname sem_metadata
+#' @rdname metadata
 #' @export
-setGeneric("sem_metadata", function(x) standardGeneric("sem_metadata"))
-setGeneric("sem_metadata<-", 
-           function(x, value) standardGeneric("sem_metadata<-"))
+setGeneric("metadata", function(x) standardGeneric("metadata"))
+setGeneric("metadata<-", 
+           function(x, value) standardGeneric("metadata<-"))
 
-#' Accessor sem_metadata slot in a SemplScores object
+#' Accessor metadata slot in a SemplScores object
 #' 
 #' @param x a SemplScores object
 #' 
-#' @rdname sem_metadata
+#' @rdname metadata
 #' 
 #' @export
-setMethod("sem_metadata", "SemplScores", 
-          function(x) x@sem_metadata)
-setMethod("sem_metadata<-", "SemplScores", function(x, value) {
-  x@sem_metadata <- value
+setMethod("metadata", "SemplScores", 
+          function(x) x@metadata)
+setMethod("metadata<-", "SemplScores", function(x, value) {
+  x@metadata <- value
   x
 })
-
-#' @rdname tf_name
-#' @export
-setGeneric("tf_name", function(x, s) standardGeneric("tf_name"))
-
-#' Accessor function to pull tf_name for a given sem id
-#' 
-#' @param x a SemplScores object
-#' @param s a sem id represented in x
-#'  
-#' @rdname tf_name
-#'  
-#' @export
-setMethod("tf_name", "SemplScores", 
-          function(x, s) x@sem_metadata[sem_id %in% s]$tf_name)
-
-#' @rdname ensembl_id
-#' @export
-setGeneric("ensembl_id", function(x, s) standardGeneric("ensembl_id"))
-
-#' Accessor function to pull ensembl_id for a given sem id
-#' 
-#' @param x a SemplScores object
-#' @param s a sem id represented in x
-#'  
-#' @rdname ensembl_id
-#'  
-#' @export
-setMethod("ensembl_id", "SemplScores", 
-          function(x, s) x@sem_metadata[sem_id==s]$ensembl_id)
-
-#' @rdname uniprot_id
-#' @export
-setGeneric("uniprot_id", function(x, s) standardGeneric("uniprot_id"))
-
-#' Accessor function to pull uniprot_id for a given sem id
-#' 
-#' @param x a SemplScores object
-#' @param s a sem id represented in x
-#' 
-#' @rdname uniprot_id
-#' 
-#' @export
-setMethod("uniprot_id", "SemplScores", 
-          function(x, s) x@sem_metadata[sem_id==s]$uniprot_id)
-
-#' @rdname cell_type
-#' @export
-setGeneric("cell_type", function(x, s) standardGeneric("cell_type"))
-
-#' Accessor function to pull cell_type for a given sem id
-#' 
-#' @param x a SemplScores object
-#' @param s a sem id represented in x
-#' 
-#' @rdname cell_type
-#' 
-#' @export
-setMethod("cell_type", "SemplScores", 
-          function(x, s) x@sem_metadata[sem_id==s]$cell_type)
 
 #' @rdname changed_motif
 #' @export

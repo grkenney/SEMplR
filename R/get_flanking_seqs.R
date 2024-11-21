@@ -24,34 +24,31 @@ query_seqs <- function(vr, up, down,
                                      start=start_pos,
                                      end=start_pos) |> as.character()
 
-  if (bsgenome_ref != VariantAnnotation::ref(vr)) {
-    warning(sprintf("Provided ref '%s' != BSgenome ref '%s' for variant at %s:%d",
-                    VariantAnnotation::ref(vr),
-                    bsgenome_ref,
-                    GenomeInfoDb::seqnames(vr),
-                    start_pos))
-  }
+  # if the BSgenome reference allele does not match the provided reference
+  # allele, give a warning
+  # if (bsgenome_ref != VariantAnnotation::ref(vr)) {
+  #   warning(sprintf("Provided ref '%s' != BSgenome ref '%s' for variant at %s:%d \n",
+  #                   VariantAnnotation::ref(vr),
+  #                   bsgenome_ref,
+  #                   GenomeInfoDb::seqnames(vr),
+  #                   start_pos))
+  # }
 
-  # get sequence upstream and downstream of variant start/end
-  upstream <- Biostrings::getSeq(bs_genome_obj,
-                                 names=GenomeInfoDb::seqnames(vr),
-                                 start=start_pos-up,
-                                 end=start_pos-1)
-  downstream <- Biostrings::getSeq(bs_genome_obj,
-                                   names=GenomeInfoDb::seqnames(vr),
-                                   start=end_pos+1,
-                                   end=end_pos+down)
-
-  # concatenate flanking sequences with variant and store in vrange metadata
-  concat_ref_seq <- Biostrings::xscat(upstream,
-                                      as.character(VariantAnnotation::ref(vr)),
-                                      downstream)
-  concat_alt_seq <- Biostrings::xscat(upstream,
+  flanking_seqs <- Biostrings::getSeq(bs_genome_obj,
+                                      names=GenomeInfoDb::seqnames(vr),
+                                      start=start_pos-up,
+                                      end=end_pos+down)
+  
+  concat_ref_seq <- Biostrings::xscat(flanking_seqs[1:up],
+                    as.character(VariantAnnotation::ref(vr)),
+                    flanking_seqs[(up+2):(up+1+down)])
+  concat_alt_seq <- Biostrings::xscat(flanking_seqs[1:up],
                                       as.character(VariantAnnotation::alt(vr)),
-                                      downstream)
+                                      flanking_seqs[(up+2):(up+1+down)])
 
-  seq_data <- c(upstream = as.character(upstream),
-                downstream = as.character(downstream),
+  # combine all data into a named vector
+  seq_data <- c(upstream = as.character(flanking_seqs[1:up]),
+                downstream = as.character(flanking_seqs[(up+2):(up+1+down)]),
                 ref_seq = as.character(concat_ref_seq),
                 alt_seq = as.character(concat_alt_seq))
   return(seq_data)
@@ -79,6 +76,7 @@ get_flanking_seqs <- function(vr, up, down,
   if (length(vr) < 1) {
     stop("Vranges object must contain at least one variant.")
   }
+  
   # initialize metadata columns in vrange to store up and downstream seqs
   vr$upstream <- NA
   vr$downstream <- NA

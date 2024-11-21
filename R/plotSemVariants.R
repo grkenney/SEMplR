@@ -1,7 +1,7 @@
 #' Plot non-risk versus risk binding propensity for a single motif
 #'
 #' @param sempl_obj a SemplR object with scores populated
-#' @param sem numeric, index of the variant within the SEMplR object to plot
+#' @param sem_id numeric, index of the variant within the SEMplR object to plot
 #' @param label column in scores slot of sempl_obj to use for point labels
 #'
 #' @import ggplot2
@@ -10,8 +10,8 @@
 #' binding propensity
 #'
 #' @export
-plotSemVariants <- function(sempl_obj, sem, label = "varId") {
-  dt <- motifScores(sem_scores, sem)
+plotSemVariants <- function(sempl_obj, sem_id, label = "varId") {
+  dt <- motifScores(sempl_obj, sem_id)
   
   var_plot <- ggplot2::ggplot(data = dt,
                               aes(x = nonRiskNorm, y = riskNorm)) +

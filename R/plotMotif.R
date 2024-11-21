@@ -9,9 +9,9 @@
 #'
 #' @export
 plotMotif <- function(sems, motif) {
-  sem_baseline <- sems[[motif]]@baseline
+  sem_baseline <- baseline(sems[[motif]])
   
-  sem_mtx <- sems[[motif]]@matrix
+  sem_mtx <- sem(sems[[motif]])
   sem_mtx$pos <- rownames(sem_mtx)
   
   aa_text_size <- 6
