@@ -4,13 +4,13 @@
 #' @param si SEM id
 gainedContingencyTable <- function(s, si) {
   # Gained in SEM
-  a <- s[(nonRiskNorm < 0 & riskNorm > 0) & sem == si] |> nrow()
+  a <- s[(nonRiskNorm < 0 & riskNorm > 0) & semId == si] |> nrow()
   # Not Gained in SEM
-  b <- s[!(nonRiskNorm < 0 & riskNorm > 0) & sem == si] |> nrow()
+  b <- s[!(nonRiskNorm < 0 & riskNorm > 0) & semId == si] |> nrow()
   # Gained not in SEM
-  c <- s[(nonRiskNorm < 0 & riskNorm > 0) & sem != si] |> nrow()
+  c <- s[(nonRiskNorm < 0 & riskNorm > 0) & semId != si] |> nrow()
   # Not Gained not in SEM
-  d <- s[!(nonRiskNorm < 0 & riskNorm > 0) & sem != si] |> nrow()
+  d <- s[!(nonRiskNorm < 0 & riskNorm > 0) & semId != si] |> nrow()
   
   contingencyTable <- matrix(c(a, c, 
                                b, d), ncol=2)
@@ -23,13 +23,13 @@ gainedContingencyTable <- function(s, si) {
 #' @param si SEM id
 lostContingencyTable <- function(s, si) {
   # Lost in SEM
-  a <- s[(nonRiskNorm > 0 & riskNorm < 0) & sem == si] |> nrow()
+  a <- s[(nonRiskNorm > 0 & riskNorm < 0) & semId == si] |> nrow()
   # Not Lost in SEM
-  b <- s[!(nonRiskNorm > 0 & riskNorm < 0) & sem == si] |> nrow()
+  b <- s[!(nonRiskNorm > 0 & riskNorm < 0) & semId == si] |> nrow()
   # Lost not in SEM
-  c <- s[(nonRiskNorm > 0 & riskNorm < 0) & sem != si] |> nrow()
+  c <- s[(nonRiskNorm > 0 & riskNorm < 0) & semId != si] |> nrow()
   # Not Lost not in SEM
-  d <- s[!(nonRiskNorm > 0 & riskNorm < 0) & sem != si] |> nrow()
+  d <- s[!(nonRiskNorm > 0 & riskNorm < 0) & semId != si] |> nrow()
   
   contingencyTable <- matrix(c(a, c, 
                                b, d), ncol=2)
@@ -43,16 +43,16 @@ lostContingencyTable <- function(s, si) {
 changedContingencyTable <- function(s, si) {
   # Lost in SEM
   a <- s[((nonRiskNorm > 0 & riskNorm < 0) |
-           (nonRiskNorm < 0 & riskNorm > 0)) & sem == si] |> nrow()
+           (nonRiskNorm < 0 & riskNorm > 0)) & semId == si] |> nrow()
   # Not Lost in SEM
   b <- s[!((nonRiskNorm > 0 & riskNorm < 0) |
-             (nonRiskNorm < 0 & riskNorm > 0)) & sem == si] |> nrow()
+             (nonRiskNorm < 0 & riskNorm > 0)) & semId == si] |> nrow()
   # Lost not in SEM
   c <- s[((nonRiskNorm > 0 & riskNorm < 0) |
-            (nonRiskNorm < 0 & riskNorm > 0)) & sem != si] |> nrow()
+            (nonRiskNorm < 0 & riskNorm > 0)) & semId != si] |> nrow()
   # Not Lost not in SEM
   d <- s[!((nonRiskNorm > 0 & riskNorm < 0) |
-             (nonRiskNorm < 0 & riskNorm > 0)) & sem != si] |> nrow()
+             (nonRiskNorm < 0 & riskNorm > 0)) & semId != si] |> nrow()
   
   contingencyTable <- matrix(c(a, c, 
                                b, d), ncol=2)
@@ -86,16 +86,18 @@ getContingencyTable <- function(s, si, d) {
 enrichment <- function(semScores, d="changed") {
   s <- scores(semScores)
   
-  fisher_scores <- matrix(numeric(), ncol=6, nrow=length(unique(s$sem)))
+  fisher_scores <- matrix(numeric(), ncol=7, nrow=length(unique(s$semId)))
   fisher_scores <- data.table(fisher_scores)
-  colnames(fisher_scores) <- c("sem", "odds.ratio",
+  colnames(fisher_scores) <- c("semId", "tf", "odds.ratio",
                                "ci.lower", "ci.upper",
                                "pvalue", "adj.pvalue")
-  fisher_scores$sem <- unique(s$sem)
+  fisher_scores$semId <- unique(s$semId)
+  fisher_scores$tf <- metadata(semScores)$tf[match(fisher_scores$semId, 
+                                                   metadata(semScores)$semId)]
   
   for (i in 1:nrow(fisher_scores)) {
-    si <- fisher_scores$sem[i]
-    ct <- getContingencyTable(s, d, si)
+    si <- fisher_scores$semId[i]
+    ct <- getContingencyTable(s, si, d)
     f <- fisher.test(ct)
     
     fisher_scores[i, "pvalue"] <- f$p.value
