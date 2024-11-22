@@ -96,7 +96,7 @@ semMotifBinding <- \(vr, semList) {
   vr <- get_flanking_seqs(vr, offset, offset)
    
   ## Create a new SemplScores object to store results
-  semScores <- SemplScores(vr, sems = semList)
+  semScores <- SemplScores(vr, semList)
   
   ref_scores <- lapply(semList,
                        function(x) scoreVariants(vr$id, vr$ref_seq, semId(x), sem(x), baseline(x), offset) ) |>
