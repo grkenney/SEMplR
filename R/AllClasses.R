@@ -224,7 +224,7 @@ setClass("SemplScores",
 #' @aliases SemplScores-class
 #' @rdname SemplScores
 #' @export
-SemplScores <- function(variants=NULL, sems=NULL, semScores=NULL) {
+SemplScores <- function(variants=NULL, semsList=NULL, semScores=NULL) {
   if (all(is.null(variants))) {
     vr <-  VariantAnnotation::VRanges()
   } else {
@@ -237,8 +237,8 @@ SemplScores <- function(variants=NULL, sems=NULL, semScores=NULL) {
     S4Vectors::mcols(vr)$id <- 1:length(vr)
   }
   
-  if (length(vr) != 0 | length(sems) != 0) {
-    vr_sem_combos <- expand.grid(names(sems), S4Vectors::mcols(vr)$id)
+  if (length(vr) != 0 | length(semsList) != 0) {
+    vr_sem_combos <- expand.grid(names(semsList), S4Vectors::mcols(vr)$id)
     sem_col <- vr_sem_combos[, 1]
     vr_col <- vr_sem_combos[, 2]
   } else {
@@ -246,27 +246,29 @@ SemplScores <- function(variants=NULL, sems=NULL, semScores=NULL) {
     vr_col <- character()
   }
 
-  if (is.null(semScores) & nrow(vr_sem_combos) == 0){
-    scores_table <- data.table(varId=vr_col, semId=sem_col,
-                               nonRiskSeq=numeric(), riskSeq=numeric(),
+  if (is.null(semScores)){
+    empty_scores <- data.table(nonRiskSeq=numeric(), riskSeq=numeric(),
                                nonRiskScore=numeric(), riskScore=numeric(),
                                nonRiskNorm=numeric(), riskNorm=numeric())
-  } else if (is.null(semScores) & nrow(vr_sem_combos) != 0) {
-    scores_table <- data.table(varId=vr_col, semId=sem_col,
-                               nonRiskSeq=NA, riskSeq=NA,
-                               nonRiskScore=NA, riskScore=NA,
-                               nonRiskNorm=NA, riskNorm=NA)
+    scores_table <- cbind(data.table(varId=vr_col, semId=sem_col), empty_scores)
   } else {
     scores_table <- semScores
   }
   
-  if (is.null(sems)) {
+  if (is.null(semList)) {
     sem_metadata <- data.table(tf=character(),
                                ensembl=character(),
                                uniprot=character(),
                                cellType=character())
   } else {
-    sem_metadata <- sems
+    sem_metadata <- lapply(semList, 
+                           function(x) 
+                             data.table::data.table(semId=x@semId,
+                                                    tf=x@tf,
+                                                    ensembl=x@ensembl,
+                                                    uniprot=x@uniprot,
+                                                    cellType=x@cellType)) |>
+      data.table::rbindlist()
   }
 
   new("SemplScores",
@@ -276,12 +278,16 @@ SemplScores <- function(variants=NULL, sems=NULL, semScores=NULL) {
       )
 }
 
+SemplScores(vr, semList)
+
 setValidity("SemplScores", function(object) {
   expected_column_names <- c("varId", "semId",
                              "nonRiskSeq", "riskSeq",
                              "nonRiskScore", "riskScore",
                              "nonRiskNorm", "riskNorm")
   actual_column_names <- colnames(object@scores)
+  print(actual_column_names)
+  print(object@scores)
   if (sum(expected_column_names %in%
           actual_column_names) != length(expected_column_names)) {
     "@scores must contain columns with names: varId, semId, nonRiskSeq, riskSeq, nonRiskScore, riskScore, nonRiskNorm, riskNorm"
