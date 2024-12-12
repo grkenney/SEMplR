@@ -2,18 +2,54 @@
 % Please edit documentation in R/plotMotif.R
 \name{plotMotif}
 \alias{plotMotif}
-\title{Plot motif SEM scores}
+\title{Plot SEM scores for each nucleic acid in each position of the motif}
 \usage{
-plotMotif(sems, motif)
+plotMotif(
+  sems,
+  motif,
+  refSeq = NULL,
+  altSeq = NULL,
+  refIndex = NULL,
+  altIndex = NULL
+)
 }
 \arguments{
 \item{sems}{list of SNPEffectMatrix objects}
 
-\item{motif}{sem id to plot}
+\item{motif}{sem id to plot. If providing a list of SNPEffectMatrix objects,
+must match a name in the list. If providing a single SNPEffectMatrix object,
+can provide any character string.}
+
+\item{refSeq}{(optional) character sequence of reference}
+
+\item{altSeq}{(optional) character sequence of alternate}
+
+\item{refIndex}{(optional) index of variant location on reference}
+
+\item{altIndex}{(optional) index of variant location on alternate}
 }
 \value{
-a \code{ggplot} with sem scores for each amino acid per position
+a \code{ggplot} with sem scores for each nucleic acid per position
 }
 \description{
-Plot motif SEM scores
+Plot SEM scores for each nucleic acid in each position of the motif
+}
+\examples{
+library(VariantAnnotation)
+
+# create an SNP Effect Matrix (SEM)
+sem <- matrix(rnorm(12), ncol = 4)
+colnames(sem) <- c("A", "C", "G", "T")
+
+# create a list of SNPEffectMatrix objects
+s <- SNPEffectMatrix(sem, baseline = -1, semId = "sem_id")
+
+# plot the motif
+plotMotif(s, semId(s))
+
+# color by sequence
+plotMotif(s, semId(s), refSeq = "ACT", altSeq = "ATT")
+
+# color by sequence and highlight variant position
+plotMotif(s, semId(s), refSeq = "ACT", altSeq = "ATT", refIndex = 2)
 }
