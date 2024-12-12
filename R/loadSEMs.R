@@ -1,10 +1,10 @@
-#' Add metadata to SNPEffectMatrix
-#' 
-#' @param x a SNPEffectMatrix object
-#' @param sem_metadata a data.frame or named vector with metadata for the 
-#' given sem.
-#' 
-#' @return SNPEffectMatrix object
+# Add metadata to SNPEffectMatrix
+# 
+# @param x a SNPEffectMatrix object
+# @param sem_metadata a data.frame or named vector with metadata for the 
+# given sem.
+# 
+# @return SNPEffectMatrix object
 addSemMetadata <- function(x, sem_metadata){
   x@tf <- sem_metadata$tf_name
   x@ensembl <- sem_metadata$ensembl_id
