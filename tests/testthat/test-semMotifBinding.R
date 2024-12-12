@@ -47,15 +47,20 @@ test_that("scoreMatrix", {
   expect_equal(scores_a, scores_e)
 })
 
+
 test_that("scoreVariants", {
+  so <- SNPEffectMatrix(SEM_MATRIX, -0.402088,
+                        "MA0151.1", tf = "ARID3A", 
+                        ensembl = "ENSG00000116017", uniprot = "Q99856",
+                        cellType = "HepG2")
   scores_a <- scoreVariants(varId = "rs13216361",
                             varSeq = "TGGCATTTCCTGGCAGAGCCCTGCCTCCCAGCTGTCTAA",
-                            semId = "MA0151.1",
-                            semMtx = SEM_MATRIX,
-                            bl = -0.402088, offset = 19)
+                            semObj = so,
+                            offset = 19)
   scores_e <- data.table(var_id = "rs13216361",
                          sem_mtx_id = "MA0151.1",
                          seq = "AGCCCT",
+                         vari = 4,
                          score = -1.2603331,
                          scoreNorm = -0.44837685)
   expect_equal(scores_a, scores_e)
