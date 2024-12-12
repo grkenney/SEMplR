@@ -11,6 +11,8 @@
 #'
 #' @export
 plotSemVariants <- function(sempl_obj, sem_id, label = "varId") {
+  nonRiskNorm <- riskNorm <- NA
+  
   dt <- motifScores(sempl_obj, sem_id)
   
   var_plot <- ggplot2::ggplot(data = dt,
