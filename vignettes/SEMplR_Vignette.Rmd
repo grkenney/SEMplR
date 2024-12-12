@@ -11,8 +11,8 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>", 
-  fig.height = 7,
-  fig.width = 7
+  fig.height = 5,
+  fig.width = 5
 )
 ```
 
@@ -78,7 +78,69 @@ plotSemMotifs(sempl_obj, variant="1")
 plotSemVariants(sempl_obj, "M00496")
 ```
 
+# Enrichment
+To test for enrichment of differential binding propensity among multiple variants.
 ```{r}
-enrichment(sempl_obj, d = "gained")
+# load our example variants
+vars_df <- utils::read.delim("example_vars.csv", sep=",")[1:50, -1]
+
+# create vrange
+vr <- VariantAnnotation::VRanges(seqnames = vars_df$seqnames,
+                                 ranges = IRanges::IRanges(start=vars_df$start,
+                                                           end=vars_df$end),
+                                 ref = vars_df$ref,
+                                 alt = vars_df$alt)
+# add the rsid to the metadata
+vr$id <- vars_df$id
+```
+
+```{r}
+# score the variants
+sempl_obj <- semMotifBinding(vr = vr, semList = sems)
+```
+
+
+```{r}
+# calculate the enrichment score
+e <- enrichment(sempl_obj, d = "gained")
+e
+```
+```{r}
+plotSemVariants(sempl_obj, sem_id = "M01266")
+```
+
+```{r}
+var_scores <- scores(sempl_obj)[varId == "rs61943586" &
+                                  semId == "M01266"]
+
+plotMotif(sems, "M01266", 
+          refSeq = var_scores$nonRiskSeq, 
+          altSeq = var_scores$riskSeq,
+          refIndex = var_scores$nonRiskVarIndex,
+          altIndex = var_scores$riskVarIndex)
+```
+
+
+```{r}
+var_scores <- scores(sempl_obj)[varId == "rs4318227" &
+                                  semId == "M01266"]
+
+plotMotif(sems, "M01266", 
+          refSeq = var_scores$nonRiskSeq, 
+          altSeq = var_scores$riskSeq,
+          refIndex = var_scores$nonRiskVarIndex,
+          altIndex = var_scores$riskVarIndex)
+```
+
+```{r}
+plotMotif(sems, "M01266", 
+          refSeq = var_scores$nonRiskSeq, 
+          refIndex = var_scores$nonRiskVarIndex)
+```
+
+```{r}
+plotMotif(sems, "M01266", 
+          altSeq = var_scores$riskSeq,
+          altIndex = var_scores$riskVarIndex)
 ```
 
