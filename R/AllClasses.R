@@ -17,8 +17,6 @@
 #' @slot uniprot Uniprot protein id of the transcription factor
 #' @slot cellType cell type/line used for ChipSeq experiment
 #'
-#' @aliases SNPEffectMatrix-class
-#'
 #' @export
 setClass(
   Class = "SNPEffectMatrix",
@@ -50,7 +48,7 @@ setClass(
 #'
 #' @return a SNPEffectMatrix object
 #' @docType class
-#' @aliases SNPEffectMatrix-class
+#' @aliases SNPEffectMatrix-class SNPEffectMatrix
 #' @rdname SNPEffectMatrix
 #' @export
 SNPEffectMatrix <- function(sem, baseline, semId, tf = "", 
@@ -191,8 +189,6 @@ setClass("SEMCollection",
 #'
 #' @importFrom VariantAnnotation VRanges
 #' @importFrom data.table data.table
-#' 
-#' @aliases SemplScores-class
 #'
 #' @export
 setClass("SemplScores",
@@ -212,8 +208,9 @@ setClass("SemplScores",
 #' Constructs a SemplScores class object.
 #'
 #' @param variants A `VRanges` object to hold one or more variants
-#' @param sems A named list of SNPEffectMatrix objects
-#' @param semScores A `data.table` object for motif information and binding scores
+#' @param semList A named list of SNPEffectMatrix objects
+#' @param semScores (optional) A `data.table` object for motif information and 
+#' binding scores
 #'
 #' @importFrom methods new
 #' @importFrom VariantAnnotation VRanges
@@ -221,10 +218,10 @@ setClass("SemplScores",
 #'
 #' @return a SemplScores object
 #' @docType class
-#' @aliases SemplScores-class
+#' @aliases SemplScores-class SemplScores
 #' @rdname SemplScores
 #' @export
-SemplScores <- function(variants=NULL, semsList=NULL, semScores=NULL) {
+SemplScores <- function(variants=NULL, semList=NULL, semScores=NULL) {
   if (all(is.null(variants))) {
     vr <-  VariantAnnotation::VRanges()
   } else {
@@ -237,8 +234,8 @@ SemplScores <- function(variants=NULL, semsList=NULL, semScores=NULL) {
     S4Vectors::mcols(vr)$id <- 1:length(vr)
   }
   
-  if (length(vr) != 0 | length(semsList) != 0) {
-    vr_sem_combos <- expand.grid(names(semsList), S4Vectors::mcols(vr)$id)
+  if (length(vr) != 0 | length(semList) != 0) {
+    vr_sem_combos <- expand.grid(names(semList), S4Vectors::mcols(vr)$id)
     sem_col <- vr_sem_combos[, 1]
     vr_col <- vr_sem_combos[, 2]
   } else {
@@ -278,7 +275,6 @@ SemplScores <- function(variants=NULL, semsList=NULL, semScores=NULL) {
       )
 }
 
-SemplScores(vr, semList)
 
 setValidity("SemplScores", function(object) {
   expected_column_names <- c("varId", "semId",
@@ -286,8 +282,6 @@ setValidity("SemplScores", function(object) {
                              "nonRiskScore", "riskScore",
                              "nonRiskNorm", "riskNorm")
   actual_column_names <- colnames(object@scores)
-  print(actual_column_names)
-  print(object@scores)
   if (sum(expected_column_names %in%
           actual_column_names) != length(expected_column_names)) {
     "@scores must contain columns with names: varId, semId, nonRiskSeq, riskSeq, nonRiskScore, riskScore, nonRiskNorm, riskNorm"
@@ -311,7 +305,7 @@ setGeneric("motifSub", function(x, motif) standardGeneric("motifSub"))
 setMethod("motifSub", "SemplScores", 
           function(x, motif) {
             SemplScores(variants = variants(x),
-                        sems = metadata(x)[semId %in% motif],
+                        semList = metadata(x)[semId %in% motif],
                         semScores = x@scores[semId %in% motif])
                         })
 
@@ -345,7 +339,7 @@ setGeneric("variantSub", function(x, v) standardGeneric("variantSub"))
 setMethod("variantSub", "SemplScores", 
           function(x, v) {
             SemplScores(variants = variants(x)[variants(x)$id %in% v],
-                        sems = metadata(x),
+                        semList = metadata(x),
                         semScores = x@scores[varId %in% v])
           })
 
