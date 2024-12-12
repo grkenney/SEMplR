@@ -2,8 +2,8 @@
 % Please edit documentation in R/semMotifBinding.R
 \name{semMotifBinding}
 \alias{semMotifBinding}
-\title{Define a function to calculate risk/non-risk binding propensity
-for all SEM motifs provided}
+\title{Calculate risk/non-risk binding propensity for all SEM motifs and
+variants provided}
 \usage{
 semMotifBinding(vr, semList)
 }
@@ -16,6 +16,25 @@ semMotifBinding(vr, semList)
 a SemplScores object
 }
 \description{
-Define a function to calculate risk/non-risk binding propensity
-for all SEM motifs provided
+Calculate risk/non-risk binding propensity for all SEM motifs and
+variants provided
+}
+\examples{
+library(VariantAnnotation)
+
+# create an SNP Effect Matrix (SEM)
+sem <- matrix(rnorm(12), ncol = 4)
+colnames(sem) <- c("A", "C", "G", "T")
+
+# create a VRanges object
+vr <- VRanges(seqnames = "chr12",
+              ranges = 94136009, 
+              ref = "G", alt = "C")
+
+# create a list of SNPEffectMatrix objects
+semList <- SNPEffectMatrix(sem, baseline = -1, semId = "sem_id")
+
+# calculate binding propensity
+semMotifBinding(vr, semList)
+
 }

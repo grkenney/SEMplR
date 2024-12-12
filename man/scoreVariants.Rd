@@ -5,18 +5,14 @@
 \title{Define a function to calculate risk/non-risk binding propensity
 for all SEM motifs provided}
 \usage{
-scoreVariants(varId, varSeq, semId, semMtx, bl, offset)
+scoreVariants(varId, varSeq, semObj, offset)
 }
 \arguments{
 \item{varId}{a list of unique character identifiers for each variant}
 
 \item{varSeq}{a list of variant sequences}
 
-\item{semId}{a unique character identifier for the sem}
-
-\item{semMtx}{a numeric matrix of motif position by nucleic acid}
-
-\item{bl}{a numeric value of the baseline to use for normalization}
+\item{semObj}{SNPEffectMatrix object}
 
 \item{offset}{maximum number of offset basepairs offset from variant}
 }
