@@ -51,10 +51,12 @@ sempl_obj <- semMotifBinding(vr = vr, semList = sems)
 sempl_obj
 ```
 
-The resulting object contains two slots:
+The resulting object contains three slots:
 
-- `variants`: The `VRanges` object for each 
-- `scores`: A data.table object that . There are X columns:
+- `variants`: The `VRanges` object containing each variant. Can be accessed with the `variants()` accessor function.
+- `metadata`: A data.table object containing information on the SEMs. Can be accessed with the `metadata()` accessor function.
+- `scores`: A data.table object that contains the results of scoring variants 
+against the SEMs. Can be accessed with the `scores()` accessor function. The columns in this table are:
     - **seqnames** - chromosome name
     - **ranges** - position of variant
     - **sem** - SEM name
