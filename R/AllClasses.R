@@ -48,8 +48,6 @@ setClass(
 #'
 #' @return a SNPEffectMatrix object
 #' @docType class
-#' @aliases SNPEffectMatrix-class SNPEffectMatrix
-#' @rdname SNPEffectMatrix
 #' @export
 SNPEffectMatrix <- function(sem, baseline, semId, tf = "", 
                             ensembl = "", uniprot = "", cellType = "") {
@@ -218,8 +216,6 @@ setClass("SemplScores",
 #'
 #' @return a SemplScores object
 #' @docType class
-#' @aliases SemplScores-class SemplScores
-#' @rdname SemplScores
 #' @export
 SemplScores <- function(variants=NULL, semList=NULL, semScores=NULL) {
   if (all(is.null(variants))) {
@@ -338,6 +334,7 @@ setGeneric("variantSub", function(x, v) standardGeneric("variantSub"))
 #' @export
 setMethod("variantSub", "SemplScores", 
           function(x, v) {
+            varId <- NULL
             SemplScores(variants = variants(x)[variants(x)$id %in% v],
                         semList = metadata(x),
                         semScores = x@scores[varId %in% v])
@@ -353,10 +350,12 @@ setGeneric("variantScores", function(x, v) standardGeneric("variantScores"))
 #' @param v a variant id represented in x
 #' 
 #' @rdname variantScores
-#' 
 #' @export
 setMethod("variantScores", "SemplScores", 
-          function(x, v) x@scores[varId %in% v])
+          function(x, v) {
+            varId <- NULL
+            x@scores[varId %in% v]
+            })
 
 #' @rdname scores
 #' @export
@@ -370,7 +369,7 @@ setGeneric("scores<-",
 #' @param x a SemplScores object
 #' 
 #' @rdname scores
-#' 
+#' @keywords internal
 #' @export
 setMethod("scores", "SemplScores", 
           function(x) x@scores)
