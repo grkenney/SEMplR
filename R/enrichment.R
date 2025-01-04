@@ -3,9 +3,9 @@
 # @param s score table from a SemplScores object
 # @param si SEM id
 # @param lfc Log2FC cutoff (default = 0.5)
-# 
-# @keywords internal
 gainedContingencyTable <- function(s, si, lfc=0.5) {
+  nonRiskNorm <- riskNorm <- absLog2FC <- NULL
+  
   s$absLog2FC <- log2(abs(s$riskNorm) / abs(s$nonRiskNorm))
   # Gained in SEM
   a <- s[(nonRiskNorm < 0 & riskNorm > 0 & abs(absLog2FC) > lfc) & semId == si] |> nrow()
@@ -26,9 +26,9 @@ gainedContingencyTable <- function(s, si, lfc=0.5) {
 # @param s score table from a SemplScores object
 # @param si SEM id
 # @param lfc Log2FC cutoff (default = 0.5)
-# 
-# @keywords internal
 lostContingencyTable <- function(s, si, lfc=0.5) {
+  nonRiskNorm <- riskNorm <- absLog2FC <- NULL
+  
   s$absLog2FC <- log2(abs(s$riskNorm) / abs(s$nonRiskNorm))
   # Lost in SEM
   a <- s[(nonRiskNorm > 0 & riskNorm < 0 & abs(absLog2FC) > lfc) & semId == si] |> nrow()
@@ -49,9 +49,9 @@ lostContingencyTable <- function(s, si, lfc=0.5) {
 # @param s score table from a SemplScores object
 # @param si SEM id
 # @param lfc Log2FC cutoff (default = 0.5)
-# 
-# @keywords internal
 changedContingencyTable <- function(s, si, lfc=0.5) {
+  nonRiskNorm <- riskNorm <- absLog2FC <- NULL
+  
   s$absLog2FC <- log2(abs(s$riskNorm) / abs(s$nonRiskNorm))
   # Lost in SEM
   a <- s[((nonRiskNorm > 0 & riskNorm < 0) |
@@ -78,7 +78,7 @@ changedContingencyTable <- function(s, si, lfc=0.5) {
 # @param d direction of test. Options are: "changed", "gained", "lost"
 # @param lfc Log2FC cutoff (default = 0.5)
 # 
-# @keywords internal
+#' @keywords internal
 getContingencyTable <- function(s, si, d, lfc) {
   if (d == "changed") {
     ct <- changedContingencyTable(s = s, si = si, lfc=0.5)
@@ -110,6 +110,7 @@ getContingencyTable <- function(s, si, d, lfc) {
 #' - `pvalue`: p-value of Fisher's test
 #' - `adj.pvalue`: Benjamini & Hochberg adjusted pvalue
 #' 
+#' @keywords internal
 #' @export
 #' 
 #' @examples
@@ -134,6 +135,8 @@ getContingencyTable <- function(s, si, d, lfc) {
 #' enrichment(s, d = "changed")
 #' 
 enrichment <- function(semScores, d="changed", lfc=0.5) {
+  adj.pvalue <- NULL
+  
   s <- scores(semScores)
   
   fisher_scores <- matrix(numeric(), ncol=8, nrow=length(unique(s$semId)))
