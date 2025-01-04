@@ -67,7 +67,7 @@ plotMotif <- function(sems, motif,
     refseq <- unlist(strsplit(refSeq, ""))
     
     refseq_dt <- data.table(refseq, 1:nrow(sem_mtx), refseq) |> 
-      setNames(c("bp", "motif_pos", "ref"))
+      stats::setNames(c("bp", "motif_pos", "ref"))
     
     sem_mtx_long <- merge(sem_mtx_long, refseq_dt, by=c("bp", "motif_pos"), all.x=T)
     sem_mtx_long[is.na(sem_mtx_long)] <- ""
@@ -79,7 +79,7 @@ plotMotif <- function(sems, motif,
     altseq <- unlist(strsplit(altSeq, ""))
     
     altseq_dt <- data.table(altseq, 1:nrow(sem_mtx), altseq) |> 
-      setNames(c("bp", "motif_pos", "alt"))
+      stats::setNames(c("bp", "motif_pos", "alt"))
     
     sem_mtx_long <- merge(sem_mtx_long, altseq_dt, by=c("bp", "motif_pos"), all.x=T)
     sem_mtx_long[is.na(sem_mtx_long)] <- ""
