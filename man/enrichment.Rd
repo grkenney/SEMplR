@@ -51,3 +51,4 @@ s <- semMotifBinding(vr, semList)
 enrichment(s, d = "changed")
 
 }
+\keyword{internal}

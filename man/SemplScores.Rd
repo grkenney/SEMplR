@@ -3,7 +3,6 @@
 \docType{class}
 \name{SemplScores}
 \alias{SemplScores}
-\alias{SemplScores-class}
 \title{SemplScores object and constructor}
 \usage{
 SemplScores(variants = NULL, semList = NULL, semScores = NULL)

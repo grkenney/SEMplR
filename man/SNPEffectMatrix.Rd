@@ -3,7 +3,6 @@
 \docType{class}
 \name{SNPEffectMatrix}
 \alias{SNPEffectMatrix}
-\alias{SNPEffectMatrix-class}
 \title{SNPEffectMatrix object and constructor}
 \usage{
 SNPEffectMatrix(

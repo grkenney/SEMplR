@@ -15,3 +15,4 @@ scores(x)
 \description{
 Accessor scores slot in a SemplScores object
 }
+\keyword{internal}
