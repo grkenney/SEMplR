@@ -91,7 +91,7 @@ plotSemVariants(sempl_obj, "M00496")
 To test for enrichment of differential binding propensity among multiple variants.
 ```{r}
 # load our example variants
-vars_df <- utils::read.delim("example_vars.csv", sep=",")[1:50, -1]
+vars_df <- utils::read.delim("example_vars.csv", sep=",")[, -1]
 
 # create vrange
 vr <- VariantAnnotation::VRanges(seqnames = vars_df$seqnames,
@@ -108,12 +108,16 @@ vr$id <- vars_df$id
 sempl_obj <- semMotifBinding(vr = vr, semList = sems)
 ```
 
-
 ```{r}
 # calculate the enrichment score
 e <- enrichment(sempl_obj, d = "gained")
 e
 ```
+
+```{r}
+plotEnrichment(e)
+```
+
 ```{r}
 plotSemVariants(sempl_obj, sem_id = "M01266")
 ```
@@ -148,7 +152,4 @@ e <- enrichment(sempl_obj)
 e
 ```
 
-```{r}
-plotEnrichment(e)
-```
 
