@@ -18,15 +18,16 @@ Imports:
     methods,
     scales,
     S4Vectors,
-    MatrixGenerics,
-    stats
+    stats,
+    crayon
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Suggests: 
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    IRanges
 VignetteBuilder: knitr
 License: MIT + file LICENSE
 Config/testthat/edition: 3
