@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 ```{r load_pkgs, message=FALSE}
 library(SEMplR)
 library(VariantAnnotation)
+library(IRanges)
 ```
 
 # Setup
@@ -69,6 +70,12 @@ against the SEMs. Can be accessed with the `scores()` accessor function. The col
 
 # Visualization
 
+```{r}
+v <- viewFrames(sempl_obj, 2)
+v
+```
+
+
 ```{r plot_motif1}
 plotSemMotifs(sempl_obj, variant = "1", label="tf")
 ```
@@ -116,10 +123,8 @@ var_scores <- scores(sempl_obj)[varId == "rs61943586" &
                                   semId == "M01266"]
 
 plotMotif(sems, "M01266", 
-          refSeq = var_scores$nonRiskSeq, 
-          altSeq = var_scores$riskSeq,
-          refIndex = var_scores$nonRiskVarIndex,
-          altIndex = var_scores$riskVarIndex)
+          motifSeq = var_scores$nonRiskSeq[[1]], 
+          highlight = 4)
 ```
 
 
@@ -128,21 +133,22 @@ var_scores <- scores(sempl_obj)[varId == "rs4318227" &
                                   semId == "M01266"]
 
 plotMotif(sems, "M01266", 
-          refSeq = var_scores$nonRiskSeq, 
-          altSeq = var_scores$riskSeq,
-          refIndex = var_scores$nonRiskVarIndex,
-          altIndex = var_scores$riskVarIndex)
+          motifSeq = var_scores$nonRiskSeq[[1]], 
+          highlight = 3)
 ```
 
 ```{r}
 plotMotif(sems, "M01266", 
-          refSeq = var_scores$nonRiskSeq, 
-          refIndex = var_scores$nonRiskVarIndex)
+          motifSeq = var_scores$nonRiskSeq[[1]], 
+          highlight = 3, hcol="red")
 ```
 
 ```{r}
-plotMotif(sems, "M01266", 
-          altSeq = var_scores$riskSeq,
-          altIndex = var_scores$riskVarIndex)
+e <- enrichment(sempl_obj)
+e
+```
+
+```{r}
+plotEnrichment(e)
 ```
 
