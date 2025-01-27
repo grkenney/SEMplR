@@ -1,41 +1,69 @@
-# concatenates list of characters
-concatVars <- function(var_seq) {
+
+# get the start position of each sequence in concatenated string
+getSeqStarts <- function(seq_list) {
+  if (length(seq_list) == 1) {
+    seq_starts <- 1
+  } else {
+    seq_lengths <- nchar(seq_list)[1:(length(seq_list)-1)]
+    seq_starts <- append(1, seq_lengths) |> cumsum()
+  }
+  return(seq_starts)
+}
+
+
+# calculate the starting position of each frame to score in a single sequence
+calcFrameStarts <- function(nbp, nflank, motif_size) {
+  first_start <- nflank + 1 - (motif_size-1)
+  last_start <- nflank + (nbp - 2*nflank)
+  first_start:last_start
+  return(first_start:last_start)
+}
+
+
+# concatenate sequences
+concatSeqs <- function(seq_list) {
   # concatenate all variant sequences together
-  concat_seq <- paste(var_seq, collapse="")
+  concat_seq <- paste(seq_list, collapse="")
   return(concat_seq)
 }
 
 
-# calculate the index to start scorin from for each sequence in concatenated 
-# string given all sequences are the same length
-calcVarStarts <- function(offset, nVars, nFrames) {
-  # calculate the first position of each variant
-  var_starts <- (offset*2+1) * (0:(nVars-1))
+# adjust frame starting positions to reflect position in concatenated string
+adjustFrameStarts <- function(frame_starts_list, seq_starts) {
+  adjusted_frame_starts <- lapply(1:length(seq_starts), 
+                                  function(i) 
+                                    frame_starts_list[[i]] + seq_starts[i] - 1)
+  return(adjusted_frame_starts)
+}
+
+
+fillNestedList <- function(fs, pwm_scores) {
+  re <- lapply(fs, length) |> 
+    unlist() |> 
+    cumsum()
   
-  # find all frame starts for all variants
-  frame_starts <- unlist( lapply( var_starts,
-                                  function(n) n + 
-                                    (offset-nFrames+2):(offset+1) ) )
-  return(frame_starts)
+  rs <- lapply(1:length(fs), 
+                         function(i) re[i]-length(fs[[i]])+1)
+  nested_scores <- lapply(1:length(fs), 
+                          function(i) pwm_scores[rs[[i]]:re[[i]]])
+  return(nested_scores)
 }
 
 
 # score multiple frames within a sequence against an sem matrix
-scoreMatrix <- function(sem_mtx, concat_seq, frame_starts, nFrames) {
+scoreMatrix <- function(sem_mtx, concat_seq, frame_starts) {
   # score all sequences and all frames against the pwm
   pwm_scores <- Biostrings::PWMscoreStartingAt(pwm = t(sem_mtx), 
                                    subject = concat_seq, 
-                                   starting.at = frame_starts)
-  
-  scores_mtx <- matrix(pwm_scores, nrow = nFrames)
-  return(scores_mtx)
+                                   starting.at = unlist(frame_starts))
+  nested_pwm_scores <- fillNestedList(frame_starts, pwm_scores)
+  return(nested_pwm_scores)
 }
 
 
 # normalize scoring against baselines
-normMatrix <- function(scores_mtx, bl) {
-  score_max <- MatrixGenerics::colMaxs(scores_mtx)
-  score_norm <- (2^score_max - 2^bl) / abs(2^bl)
+normMatrix <- function(max_scores, bl) {
+  score_norm <- (2^max_scores - 2^bl) / abs(2^bl)
   return(score_norm)
 }
 
@@ -46,42 +74,59 @@ normMatrix <- function(scores_mtx, bl) {
 #' @param varId a list of unique character identifiers for each variant
 #' @param varSeq a list of variant sequences
 #' @param semObj SNPEffectMatrix object
-#' @param offset maximum number of offset basepairs offset from variant
-scoreVariants <- function(varId, varSeq, semObj, offset) {
-  # concatenate all variant sequences together
-  concatSeq <- paste(varSeq, collapse="")
+#' @param nflank maximum number of offset basepairs offset from variant
+scoreVariants <- function(varId, varSeq, semObj, nflank) {
   
   sm <- sem(semObj)
   bl <- baseline(semObj)
   
   # count number of variants and number of frames (number of sem positions)
   nVars <- length(varSeq)
-  nFrames <- nrow(sm)
+  frame_len <- nrow(sm)
   
-  # calculate position of frame starts in concatenated sequence
-  frameStarts <- calcVarStarts(offset, nVars, nFrames)
+  if (min(nchar(varSeq)) < frame_len) {
+    stop("Variant sequence length ", min(nchar(varSeq)), 
+         " is less than SEM length of ", frame_len, 
+         ". \n Make sure all variant sequences are greater than or equal",
+         "to SEM length")
+  }
   
-  scoresMtx <- scoreMatrix(sm, concatSeq, frameStarts, nFrames)
+  frame_starts <- lapply(varSeq, 
+                         function(x) 
+                           calcFrameStarts(nbp = nchar(x), 
+                                           nflank = nflank, 
+                                           motif_size = frame_len))
   
-  maxScoreIndex <- apply(scoresMtx, 2, which.max)
+  cseq <- concatSeqs(varSeq)
+  seq_starts <- getSeqStarts(seq_list = varSeq)
+  adjusted_frames <- adjustFrameStarts(frame_starts, seq_starts)
   
-  var_i <- lapply(maxScoreIndex, function(x) nFrames - x + 1)
-
-  # get the sequence of the frame
-  seq_frame_start <- unlist(lapply(1:length(maxScoreIndex), 
-                                   function(i) ( frameStarts[maxScoreIndex[i] + (0:nVars * nFrames)[i]] )))
+  scoresList <- scoreMatrix(sm, cseq, adjusted_frames)
   
-  seq_frame <- unlist( lapply( seq_frame_start, 
-                               function(x) substr(concatSeq, x, x + nFrames - 1) ))
+  maxScoreIndex <- lapply(scoresList, which.max)
+  maxScores <- lapply(1:length(scoresList), 
+                      function(i) scoresList[[i]][[maxScoreIndex[[i]]]]) |>
+    unlist()
   
-  score_norm <- normMatrix(scoresMtx, bl)
+  # get the top scoring frame
+  frameSeq <- lapply(1:length(adjusted_frames), 
+                     function(i) substr(cseq, 
+                                        adjusted_frames[[i]][[maxScoreIndex[[i]]]], 
+                                        adjusted_frames[[i]][[maxScoreIndex[[i]]]] + frame_len - 1)) |>
+    unlist()
+  
+  maxFrameStart <- lapply(1:length(frame_starts),
+                          function(i) frame_starts[[i]][maxScoreIndex[[i]]]) |>
+    unlist()
+  
+  normScores <- normMatrix(maxScores, bl)
   
   scores_dt <- data.table::data.table(var_id=varId,
                                       sem_mtx_id=semId(semObj),
-                                      seq=seq_frame,
-                                      vari=unlist(var_i),
-                                      score=scoresMtx[maxScoreIndex],
-                                      scoreNorm=score_norm)
+                                      seq=frameSeq,
+                                      vari=maxFrameStart,
+                                      score=maxScores,
+                                      scoreNorm=normScores)
   
   return(scores_dt)
 }
