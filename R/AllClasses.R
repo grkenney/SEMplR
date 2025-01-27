@@ -445,3 +445,89 @@ setMethod("changed_motif", "data.table",
           }
           )
 
+
+## SequenceFrame -----------------------------------------------------
+#' Class to store information about sequencing frame and variant location
+#'
+#' @slot seqName 
+#' @slot frameStart
+#' @slot frameStop
+#' @slot sequence
+#'
+#' @export
+setClass(
+  Class = "SequenceFrame",
+  slots = c(
+    seqName = "character",
+    frameStart = "numeric",
+    frameStop = "numeric",
+    sequence = "character",
+    variantIndex = "numeric"
+  )
+)
+
+
+#' SequenceFrame object and constructor
+#'
+#' Constructs a SequenceFrame class object.
+#'
+#' @param seqName name to display alongside sequence
+#' @param frameStart index of frame start
+#' @param frameStop index of frame stop
+#' @param sequence character sequence
+#' @param variantIndex index of variant base pair(s)
+#' 
+#' @importFrom methods new
+#'
+#' @return a SequenceFrame object
+#' @docType class
+#' @export
+SequenceFrame <- function(seqName, frameStart, frameStop, 
+                          sequence, variantIndex) {
+  new("SequenceFrame",
+      seqName = seqName,
+      frameStart = frameStart,
+      frameStop = frameStop,
+      sequence = sequence,
+      variantIndex = variantIndex)
+}
+
+
+#' Show function for SequenceFrame
+#' 
+#' @param object a SequenceFrame object
+#' 
+#' @importFrom crayon bgRed
+#' 
+#' @rdname show
+#' 
+#' @export
+setMethod("show", "SequenceFrame",
+          function(object) {
+            for (i in 1:length(object@sequence)) {
+              prefix <- substr(object@sequence[i], 
+                               start = 1, 
+                               stop = object@frameStart[i] - 1)
+              
+              fp <- substr(object@sequence[i], 
+                           object@frameStart[i], 
+                           min(object@variantIndex)-1)
+              
+              v <- substr(object@sequence[i], 
+                          min(object@variantIndex),
+                          max(object@variantIndex))
+              
+              fs <- substr(object@sequence[i], 
+                           max(object@variantIndex)+1, 
+                           object@frameStop[i])
+              
+              suffix <- substr(object@sequence[i], 
+                               start = object@frameStop[i]+1, 
+                               stop = nchar(object@sequence[i]))
+              
+              grey7 <- crayon::make_style("#777777", bg=TRUE)
+
+              cat(object@seqName[i], ": ", prefix, grey7(fp), bgRed(v), grey7(fs), suffix, "\n", sep="")
+            }
+          }
+)
