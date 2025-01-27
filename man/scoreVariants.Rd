@@ -5,7 +5,7 @@
 \title{Define a function to calculate risk/non-risk binding propensity
 for all SEM motifs provided}
 \usage{
-scoreVariants(varId, varSeq, semObj, offset)
+scoreVariants(varId, varSeq, semObj, nflank)
 }
 \arguments{
 \item{varId}{a list of unique character identifiers for each variant}
@@ -14,7 +14,7 @@ scoreVariants(varId, varSeq, semObj, offset)
 
 \item{semObj}{SNPEffectMatrix object}
 
-\item{offset}{maximum number of offset basepairs offset from variant}
+\item{nflank}{maximum number of offset basepairs offset from variant}
 }
 \description{
 Define a function to calculate risk/non-risk binding propensity

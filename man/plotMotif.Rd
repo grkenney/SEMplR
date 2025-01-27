@@ -4,14 +4,7 @@
 \alias{plotMotif}
 \title{Plot SEM scores for each nucleic acid in each position of the motif}
 \usage{
-plotMotif(
-  sems,
-  motif,
-  refSeq = NULL,
-  altSeq = NULL,
-  refIndex = NULL,
-  altIndex = NULL
-)
+plotMotif(sems, motif, motifSeq = NULL, highlight = NULL, hcol = "dodgerblue")
 }
 \arguments{
 \item{sems}{list of SNPEffectMatrix objects}
@@ -20,13 +13,11 @@ plotMotif(
 must match a name in the list. If providing a single SNPEffectMatrix object,
 can provide any character string.}
 
-\item{refSeq}{(optional) character sequence of reference}
+\item{motifSeq}{(optional) character sequence to color on plot}
 
-\item{altSeq}{(optional) character sequence of alternate}
+\item{highlight}{(optional) index of variant location on reference}
 
-\item{refIndex}{(optional) index of variant location on reference}
-
-\item{altIndex}{(optional) index of variant location on alternate}
+\item{hcol}{(optional) color of motifSeq basepairs}
 }
 \value{
 a \code{ggplot} with sem scores for each nucleic acid per position
@@ -48,8 +39,5 @@ s <- SNPEffectMatrix(sem, baseline = -1, semId = "sem_id")
 plotMotif(s, semId(s))
 
 # color by sequence
-plotMotif(s, semId(s), refSeq = "ACT", altSeq = "ATT")
-
-# color by sequence and highlight variant position
-plotMotif(s, semId(s), refSeq = "ACT", altSeq = "ATT", refIndex = 2)
+plotMotif(s, semId(s), motifSeq = "ACT", highlight = 2)
 }
