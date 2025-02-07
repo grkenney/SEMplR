@@ -137,6 +137,7 @@ scoreVariants <- function(varId, varSeq, semObj, nflank) {
 #'
 #' @param vr `VRanges` object
 #' @param semList a list of `SNPEffectMatrix` objects
+#' @param bs_genome_obj A `BSgenome` object for the genome build to use.
 #'
 #' @return a SemplScores object
 #'
@@ -160,7 +161,8 @@ scoreVariants <- function(varId, varSeq, semObj, nflank) {
 #' # calculate binding propensity
 #' semMotifBinding(vr, semList)
 #' 
-semMotifBinding <- \(vr, semList) {
+semMotifBinding <- \(vr, semList, 
+                     bs_genome_obj=BSgenome.Hsapiens.UCSC.hg19::Hsapiens) {
   riskNorm <- riskSeq <- nonRiskNorm <- nonRiskSeq <- NULL
   
   # if semList is not a list, make it a named list
@@ -172,7 +174,7 @@ semMotifBinding <- \(vr, semList) {
   offset <- max(unlist(lapply(semList, function(x) {nrow(sem(x))})))
 
   ## Collect up/downstream sequences
-  vr <- get_flanking_seqs(vr, offset, offset)
+  vr <- getFlankingSeqs(vr, offset, offset, bs_genome_obj)
    
   ## Create a new SemplScores object to store results
   semScores <- SemplScores(vr, semList)

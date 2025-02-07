@@ -5,12 +5,18 @@
 \title{Calculate risk/non-risk binding propensity for all SEM motifs and
 variants provided}
 \usage{
-semMotifBinding(vr, semList)
+semMotifBinding(
+  vr,
+  semList,
+  bs_genome_obj = BSgenome.Hsapiens.UCSC.hg19::Hsapiens
+)
 }
 \arguments{
 \item{vr}{\code{VRanges} object}
 
 \item{semList}{a list of \code{SNPEffectMatrix} objects}
+
+\item{bs_genome_obj}{A \code{BSgenome} object for the genome build to use.}
 }
 \value{
 a SemplScores object
