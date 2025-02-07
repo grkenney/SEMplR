@@ -10,8 +10,20 @@ Class to store information about sequencing frame and variant location
 \section{Slots}{
 
 \describe{
-\item{\code{seqName}}{}
+\item{\code{seqName}}{name to display alongside sequence}
 
-\item{\code{sequence}}{}
+\item{\code{frameStart}}{index of frame start}
+
+\item{\code{frameStop}}{index of frame stop}
+
+\item{\code{sequence}}{character sequence}
+
+\item{\code{variantIndex}}{index of variant base pair(s)}
+
+\item{\code{motif}}{sem id to display}
+
+\item{\code{tf}}{tf name to display}
+
+\item{\code{variantName}}{name of the variant to display}
 }}
 

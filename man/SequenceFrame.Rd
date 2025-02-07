@@ -5,7 +5,16 @@
 \alias{SequenceFrame}
 \title{SequenceFrame object and constructor}
 \usage{
-SequenceFrame(seqName, frameStart, frameStop, sequence, variantIndex)
+SequenceFrame(
+  seqName,
+  frameStart,
+  frameStop,
+  sequence,
+  variantIndex,
+  motif,
+  tf,
+  variantName
+)
 }
 \arguments{
 \item{seqName}{name to display alongside sequence}
@@ -17,6 +26,12 @@ SequenceFrame(seqName, frameStart, frameStop, sequence, variantIndex)
 \item{sequence}{character sequence}
 
 \item{variantIndex}{index of variant base pair(s)}
+
+\item{motif}{sem id to display}
+
+\item{tf}{tf name to display}
+
+\item{variantName}{name of the variant to display}
 }
 \value{
 a SequenceFrame object
