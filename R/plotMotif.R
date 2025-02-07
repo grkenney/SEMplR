@@ -87,8 +87,8 @@ plotMotif <- function(sems, motif,
     geom_text(aes(label=sem_mtx_long$bp), size = text_size, col=sem_mtx_long$mcol) +
     scale_x_continuous(breaks = scales::breaks_pretty(n = nrow(sem_mtx))) +
     theme(legend.position="none") +
-    xlab("Position in Motif") +
-    ylab("SNP Effect Score") +
+    ggplot2::xlab("Position in Motif") +
+    ggplot2::ylab("SNP Effect Score") +
     theme(text = element_text(size = 12)) +
     ggtitle(motif)
   
