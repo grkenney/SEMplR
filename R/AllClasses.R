@@ -182,7 +182,7 @@ setClass("SEMCollection",
 #'
 #' @slot variants A `VRanges` object to hold one or more variants
 #' @slot scores A `data.table` object for motif information and binding scores
-#' @slot metadata A `data.table` object of metadata for the SEMs with one 
+#' @slot semData A `data.table` object of metadata for the SEMs with one 
 #' row for each SEM
 #'
 #' @importFrom VariantAnnotation VRanges
@@ -191,12 +191,12 @@ setClass("SEMCollection",
 #' @export
 setClass("SemplScores",
          slots = c(variants = "VRanges",
-                   metadata = "data.table",
+                   semData = "data.table",
                    scores = "data.table"
                    ),
          prototype = list(
            variants = VariantAnnotation::VRanges(),
-           metadata = data.table::data.table(),
+           semData = data.table::data.table(),
            scores = data.table::data.table()
          )
 )
@@ -266,7 +266,7 @@ SemplScores <- function(variants=NULL, semList=NULL, semScores=NULL) {
 
   new("SemplScores",
       variants = vr,
-      metadata = sem_metadata,
+      semData = sem_metadata,
       scores = scores_table
       )
 }
@@ -301,7 +301,7 @@ setGeneric("motifSub", function(x, motif) standardGeneric("motifSub"))
 setMethod("motifSub", "SemplScores", 
           function(x, motif) {
             SemplScores(variants = variants(x),
-                        semList = metadata(x)[semId %in% motif],
+                        semList = semData(x)[semId %in% motif],
                         semScores = x@scores[semId %in% motif])
                         })
 
@@ -336,7 +336,7 @@ setMethod("variantSub", "SemplScores",
           function(x, v) {
             varId <- NULL
             SemplScores(variants = variants(x)[variants(x)$id %in% v],
-                        semList = metadata(x),
+                        semList = semData(x),
                         semScores = x@scores[varId %in% v])
           })
 
@@ -393,23 +393,23 @@ setGeneric("variants", function(x) standardGeneric("variants"))
 setMethod("variants", "SemplScores", 
           function(x) x@variants)
 
-#' @rdname metadata
+#' @rdname semData
 #' @export
-setGeneric("metadata", function(x) standardGeneric("metadata"))
-setGeneric("metadata<-", 
-           function(x, value) standardGeneric("metadata<-"))
+setGeneric("semData", function(x) standardGeneric("semData"))
+setGeneric("semData<-", 
+           function(x, value) standardGeneric("semData<-"))
 
-#' Accessor metadata slot in a SemplScores object
+#' Accessor semData slot in a SemplScores object
 #' 
 #' @param x a SemplScores object
 #' 
-#' @rdname metadata
+#' @rdname semData
 #' 
 #' @export
-setMethod("metadata", "SemplScores", 
-          function(x) x@metadata)
-setMethod("metadata<-", "SemplScores", function(x, value) {
-  x@metadata <- value
+setMethod("semData", "SemplScores", 
+          function(x) x@semData)
+setMethod("semData<-", "SemplScores", function(x, value) {
+  x@semData <- value
   x
 })
 
@@ -449,11 +449,15 @@ setMethod("changed_motif", "data.table",
 ## SequenceFrame -----------------------------------------------------
 #' Class to store information about sequencing frame and variant location
 #'
-#' @slot seqName 
-#' @slot frameStart
-#' @slot frameStop
-#' @slot sequence
-#'
+#' @slot seqName name to display alongside sequence
+#' @slot frameStart index of frame start
+#' @slot frameStop index of frame stop
+#' @slot sequence character sequence
+#' @slot variantIndex index of variant base pair(s)
+#' @slot motif sem id to display
+#' @slot tf tf name to display
+#' @slot variantName name of the variant to display
+#' 
 #' @export
 setClass(
   Class = "SequenceFrame",
@@ -462,7 +466,10 @@ setClass(
     frameStart = "numeric",
     frameStop = "numeric",
     sequence = "character",
-    variantIndex = "numeric"
+    variantIndex = "numeric",
+    motif = "character",
+    tf = "character",
+    variantName = "character"
   )
 )
 
@@ -476,20 +483,27 @@ setClass(
 #' @param frameStop index of frame stop
 #' @param sequence character sequence
 #' @param variantIndex index of variant base pair(s)
+#' @param motif sem id to display
+#' @param tf tf name to display
+#' @param variantName name of the variant to display
 #' 
 #' @importFrom methods new
 #'
 #' @return a SequenceFrame object
 #' @docType class
+#' 
 #' @export
 SequenceFrame <- function(seqName, frameStart, frameStop, 
-                          sequence, variantIndex) {
+                          sequence, variantIndex, motif, tf, variantName) {
   new("SequenceFrame",
       seqName = seqName,
       frameStart = frameStart,
       frameStop = frameStop,
       sequence = sequence,
-      variantIndex = variantIndex)
+      variantIndex = variantIndex,
+      motif = as.character(motif),
+      tf = as.character(tf),
+      variantName = as.character(variantName))
 }
 
 
@@ -498,6 +512,7 @@ SequenceFrame <- function(seqName, frameStart, frameStop,
 #' @param object a SequenceFrame object
 #' 
 #' @importFrom crayon bgRed
+#' @importFrom methods show
 #' 
 #' @rdname show
 #' 
@@ -527,6 +542,12 @@ setMethod("show", "SequenceFrame",
               
               grey7 <- crayon::make_style("#777777", bg=TRUE)
 
+              if (i == 1){
+                cat("Motif:\t", object@motif, "\n")
+                cat("TF:\t", object@tf, "\n")
+                cat("Var:\t", object@variantName, "\n")
+              }
+              
               cat(object@seqName[i], ": ", prefix, grey7(fp), bgRed(v), grey7(fs), suffix, "\n", sep="")
             }
           }

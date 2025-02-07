@@ -145,8 +145,8 @@ enrichment <- function(semScores, d="changed", lfc=0.5) {
                                "ci.lower", "ci.upper",
                                "pvalue", "adj.pvalue")
   fisher_scores$semId <- unique(s$semId)
-  fisher_scores$tf <- metadata(semScores)$tf[match(fisher_scores$semId, 
-                                                   metadata(semScores)$semId)]
+  fisher_scores$tf <- semData(semScores)$tf[match(fisher_scores$semId, 
+                                                  semData(semScores)$semId)]
   
   for (i in 1:nrow(fisher_scores)) {
     si <- fisher_scores$semId[i]

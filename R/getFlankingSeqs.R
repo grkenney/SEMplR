@@ -71,8 +71,8 @@ query_seqs <- function(vr, up, down,
 #' @return a `VRanges` object with metadata columns `upstream` and `downstream`.
 #'
 #' @export
-get_flanking_seqs <- function(vr, up, down,
-                              bs_genome_obj=BSgenome.Hsapiens.UCSC.hg19::Hsapiens) {
+getFlankingSeqs <- function(vr, up, down,
+                            bs_genome_obj=BSgenome.Hsapiens.UCSC.hg19::Hsapiens) {
   if (length(vr) < 1) {
     stop("Vranges object must contain at least one variant.")
   }

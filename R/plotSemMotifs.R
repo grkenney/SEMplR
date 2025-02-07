@@ -13,7 +13,7 @@
 plotSemMotifs <- \(sempl_obj, variant, label = "semId") {
   dt <- variantScores(sempl_obj, variant)
   
-  dt <- merge(dt, metadata(sempl_obj), by.x = "semId", by.y = "semId")
+  dt <- merge(dt, semData(sempl_obj), by.x = "semId", by.y = "semId")
 
   nonRiskNorm <- riskNorm <- sem <- NULL
 
