@@ -12,6 +12,8 @@
 #'
 #' @export
 plotEnrichment <- function(e, lab = "tf", sigThreshold = 0.05) {
+  odds.ratio <- sig <- varId <- NULL
+  
   e$lab <- lapply(1:nrow(e), 
                   function(i) 
                     ifelse(e$adj.pvalue[i] < sigThreshold,
@@ -23,7 +25,8 @@ plotEnrichment <- function(e, lab = "tf", sigThreshold = 0.05) {
   e$sig <- factor(e$sig, levels = c(paste0("adj. p-value \u2264 ", sigThreshold), 
                                     paste0("> ", sigThreshold)))
   
-  p <- ggplot(e, aes(x = reorder(semId, odds.ratio), y = odds.ratio, col=sig)) + 
+  p <- ggplot(e, aes(x = stats::reorder(semId, odds.ratio), 
+                     y = odds.ratio, col=sig)) + 
     geom_point() +
     theme_classic() +
     ggrepel::geom_text_repel(aes(semId, odds.ratio, 
