@@ -20,6 +20,7 @@ knitr::opts_chunk$set(
 library(SEMplR)
 library(VariantAnnotation)
 library(IRanges)
+library(ggplot2)
 ```
 
 # Setup
