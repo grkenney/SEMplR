@@ -59,7 +59,7 @@ plotMotif <- function(sems, motif,
     sem_mtx_long <- merge(sem_mtx_long, mseq_dt, by=c("bp", "motif_pos"), 
                           all.x=T)
    
-    sem_mtx_long$mcol[is.na(sem_mtx_long$mcol)] <- "#9d9d9d"
+    sem_mtx_long$mcol[is.na(sem_mtx_long$mcol)] <- "#d7dbdd"
     sem_mtx_long$mseq[is.na(sem_mtx_long$mseq)] <- ""
     
   } 
