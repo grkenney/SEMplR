@@ -71,7 +71,7 @@ against the SEMs. Can be accessed with the `scores()` accessor function. The col
 # Visualization
 
 ```{r}
-v <- viewFrames(sempl_obj, 2)
+v <- viewFrames(sempl_obj, score_index = 2)
 v
 ```
 
@@ -110,7 +110,7 @@ sempl_obj <- semMotifBinding(vr = vr, semList = sems)
 
 ```{r}
 # calculate the enrichment score
-e <- enrichment(sempl_obj, d = "gained")
+e <- enrichment(sempl_obj, d = "lost")
 e
 ```
 
@@ -119,8 +119,19 @@ plotEnrichment(e)
 ```
 
 ```{r}
-plotSemVariants(sempl_obj, sem_id = "M01266")
+plotSemVariants(sempl_obj, sem_id = "MA0144.1")
 ```
+
+```{r}
+plotSemMotifs(sempl_obj, variant = "rs28834970", label = "tf")
+```
+
+```{r}
+plotMotif(sems, motif = "MA0144.1", motifSeq = "TTACCTGCAA", 
+          highlight = 8) + xlab("") + ggtitle("Ref")
+
+```
+
 
 ```{r}
 var_scores <- scores(sempl_obj)[varId == "rs61943586" &
