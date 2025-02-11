@@ -68,12 +68,14 @@ query_seqs <- function(vr, up, down,
 #' @param bs_genome_obj A `BSgenome` object for the genome build to use.
 #' Defaults to `BSgenome.Hsapiens.UCSC.hg19`.
 #'
+#' @importFrom methods is
+#'
 #' @return a `VRanges` object with metadata columns `upstream` and `downstream`.
 #'
 #' @export
 getFlankingSeqs <- function(vr, up, down,
                             bs_genome_obj=BSgenome.Hsapiens.UCSC.hg19::Hsapiens) {
-  if (class(vr) != "VRanges") {
+  if (is(vr)[1] != "VRanges") {
     stop("Input argument vr must be of class VRanges")
   }
   
