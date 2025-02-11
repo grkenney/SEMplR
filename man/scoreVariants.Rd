@@ -2,21 +2,45 @@
 % Please edit documentation in R/semMotifBinding.R
 \name{scoreVariants}
 \alias{scoreVariants}
-\title{Define a function to calculate risk/non-risk binding propensity
-for all SEM motifs provided}
+\title{Calculate risk/non-risk binding propensity for all SEM motifs and
+variants provided}
 \usage{
-scoreVariants(varId, varSeq, semObj, nflank)
+scoreVariants(
+  vr,
+  semList,
+  bs_genome_obj = BSgenome.Hsapiens.UCSC.hg19::Hsapiens
+)
 }
 \arguments{
-\item{varId}{a list of unique character identifiers for each variant}
+\item{vr}{\code{VRanges} object}
 
-\item{varSeq}{a list of variant sequences}
+\item{semList}{a list of \code{SNPEffectMatrix} objects}
 
-\item{semObj}{SNPEffectMatrix object}
-
-\item{nflank}{maximum number of offset basepairs offset from variant}
+\item{bs_genome_obj}{A \code{BSgenome} object for the genome build to use.}
+}
+\value{
+a SemplScores object
 }
 \description{
-Define a function to calculate risk/non-risk binding propensity
-for all SEM motifs provided
+Calculate risk/non-risk binding propensity for all SEM motifs and
+variants provided
+}
+\examples{
+library(VariantAnnotation)
+
+# create an SNP Effect Matrix (SEM)
+sem <- matrix(rnorm(12), ncol = 4)
+colnames(sem) <- c("A", "C", "G", "T")
+
+# create a VRanges object
+vr <- VRanges(seqnames = "chr12",
+              ranges = 94136009, 
+              ref = "G", alt = "C")
+
+# create a list of SNPEffectMatrix objects
+semList <- SNPEffectMatrix(sem, baseline = -1, semId = "sem_id")
+
+# calculate binding propensity
+scoreVariants(vr, semList)
+
 }

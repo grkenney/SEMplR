@@ -45,7 +45,7 @@ vr <- VRanges(seqnames = "chr12",
 semList <- SNPEffectMatrix(sem, baseline = 0.5, semId = "sem_id")
 
 # calculate binding propensity
-s <- semMotifBinding(vr, semList)
+s <- scoreVariants(vr, semList)
 
 # calculate enrichment
 enrichment(s, d = "changed")
