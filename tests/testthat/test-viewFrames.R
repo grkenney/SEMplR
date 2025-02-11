@@ -134,21 +134,29 @@ test_that("viewFrames score_index not in scores", {
                "out of range in SemplScores object")
 })
 
+
 test_that("viewFrames no entry matching vid and sid", {
   expect_error(viewFrames(sempl_obj = SEMPL_SCORES_OBJ, vid = 1, sid = 1),
                "no entry matching")
 })
 
-test_that("viewFrames require sid and vid or score_index", {
+
+test_that("viewFrames require sid and vid or score_index - neither", {
   # neither
   expect_error(viewFrames(sempl_obj = SEMPL_SCORES_OBJ), 
                "must provide either a score_index or a vid and sid")
+})
+
+
+test_that("viewFrames require sid and vid or score_index - vid only", {
   # just vid
   expect_error(viewFrames(sempl_obj = SEMPL_SCORES_OBJ, vid = 1), 
                "must provide either a score_index or a vid and sid")
-  
+})
+
+
+test_that("viewFrames require sid and vid or score_index - sid only", {
   # just sid
   expect_error(viewFrames(sempl_obj = SEMPL_SCORES_OBJ, sid = 1), 
                "must provide either a score_index or a vid and sid")
 })
-

@@ -48,15 +48,15 @@ test_that("scoreMatrix", {
 })
 
 
-test_that("scoreVariants", {
+test_that("calculateScores", {
   so <- SNPEffectMatrix(SEM_MATRIX, -0.402088,
                         "MA0151.1", tf = "ARID3A", 
                         ensembl = "ENSG00000116017", uniprot = "Q99856",
                         cellType = "HepG2")
-  scores_a <- scoreVariants(varId = "rs13216361",
-                            varSeq = "TGGCATTTCCTGGCAGAGCCCTGCCTCCCAGCTGTCTAA",
-                            semObj = so,
-                            nflank = 19)
+  scores_a <- calculateScores(varId = "rs13216361",
+                              varSeq = "TGGCATTTCCTGGCAGAGCCCTGCCTCCCAGCTGTCTAA",
+                              semObj = so,
+                              nflank = 19)
   scores_e <- data.table(var_id = "rs13216361",
                          sem_mtx_id = "MA0151.1",
                          seq = c("AGCCCT"),
@@ -67,7 +67,7 @@ test_that("scoreVariants", {
 })
 
 
-test_that("semMotifBinding SNP", {
+test_that("scoreVariants SNP", {
   so <- SNPEffectMatrix(SEM_MATRIX, -0.402088,
                         "MA0151.1", tf = "ARID3A", 
                         ensembl = "ENSG00000116017", uniprot = "Q99856",
@@ -78,7 +78,7 @@ test_that("semMotifBinding SNP", {
                 ranges = c(94136009, 10640062), 
                 ref = c("G", "T"), alt = c("C", "A"))
   
-  scores_a <- semMotifBinding(vr, so) |> scores()
+  scores_a <- scoreVariants(vr, so) |> scores()
   scores_a[, c("nonRiskScore", "riskScore", "nonRiskNorm", "riskNorm")] <-
     scores_a[, c("nonRiskScore", "riskScore", "nonRiskNorm", "riskNorm")] |>
     round(4)
@@ -109,13 +109,13 @@ test_that("calcFrameStarts 1bp insertion", {
 })
 
 
-test_that("scoreVariants 1bp deletion", {
+test_that("calculateScores 1bp deletion", {
   so <- SNPEffectMatrix(SEM_MATRIX, -0.402088,
                         "MA0151.1", tf = "ARID3A", 
                         ensembl = "ENSG00000116017", uniprot = "Q99856",
                         cellType = "HepG2")
   
-  scores_a1 <- scoreVariants("1", "GGCTTTGAGGCAT", so, nflank = 6)
+  scores_a1 <- calculateScores("1", "GGCTTTGAGGCAT", so, nflank = 6)
   
   scores_e1 <- data.table(var_id = c('1'),
                           sem_mtx_id = c("MA0151.1"),
@@ -125,7 +125,7 @@ test_that("scoreVariants 1bp deletion", {
                           scoreNorm = c(-0.49943043))
   expect_equal(scores_a1, scores_e1)
   
-  scores_a2 <- scoreVariants("1", "GGCTTTAGGCAT", so, nflank = 6)
+  scores_a2 <- calculateScores("1", "GGCTTTAGGCAT", so, nflank = 6)
   
   scores_e2 <- data.table(var_id = c('1'),
                           sem_mtx_id = c("MA0151.1"),
@@ -137,13 +137,13 @@ test_that("scoreVariants 1bp deletion", {
 })
 
 
-test_that("scoreVariants multiple variants", {
+test_that("calculateScores multiple variants", {
   so <- SNPEffectMatrix(SEM_MATRIX, -0.402088,
                         "MA0151.1", tf = "ARID3A", 
                         ensembl = "ENSG00000116017", uniprot = "Q99856",
                         cellType = "HepG2")
   
-  scores_a1 <- scoreVariants(c("1", "2", "3"), 
+  scores_a1 <- calculateScores(c("1", "2", "3"), 
                              c("GGCTTTGAGGCAT", 
                                "GGCTTTAGGCAT", 
                                "GGCTTTGAGGCAT"), so, nflank = 6)
@@ -158,7 +158,7 @@ test_that("scoreVariants multiple variants", {
 })
 
 
-test_that("semMotifBinding 1bp deletion", {
+test_that("scoreVariants 1bp deletion", {
   so <- SNPEffectMatrix(SEM_MATRIX, -0.402088,
                         "MA0151.1", tf = "ARID3A", 
                         ensembl = "ENSG00000116017", uniprot = "Q99856",
@@ -170,7 +170,48 @@ test_that("semMotifBinding 1bp deletion", {
                 ranges = c(94136009), 
                 ref = c("G"), alt = c(""))
   
-  scores_a <- semMotifBinding(vr, so) |> scores()
+  scores_a <- scoreVariants(vr, so) |> scores()
+  scores_a[, c("nonRiskScore", "riskScore", "nonRiskNorm", "riskNorm")] <-
+    scores_a[, c("nonRiskScore", "riskScore", "nonRiskNorm", "riskNorm")] |>
+    round(4)
+  
+  scores_e <- data.table(varId = c(1),
+                         semId = factor("MA0151.1"),
+                         nonRiskSeq = c("TTTGAG"),
+                         riskSeq = c("TTTAGG"),
+                         nonRiskScore = c(-1.4004),
+                         riskScore = c(-1.5945),
+                         nonRiskNorm = c(-0.4994),
+                         riskNorm = c(-0.5624),
+                         nonRiskVarIndex = c(4),
+                         riskVarIndex = c(4))
+  expect_equal(scores_a, scores_e)
+})
+
+
+test_that("calculateScores variant length is longer than motif length", {
+  so <- SNPEffectMatrix(SEM_MATRIX, -0.402088,
+                        "MA0151.1", tf = "ARID3A", 
+                        ensembl = "ENSG00000116017", uniprot = "Q99856",
+                        cellType = "HepG2")
+  
+  expect_error(calculateScores(varId = NA, varSeq = "ACTG", 
+                               semObj = so, nflank = NA), 
+               "Make sure all variant sequences are greater than or equal to")
+})
+
+
+test_that("scoreVariants make semList a named list if not already", {
+  so <- SNPEffectMatrix(SEM_MATRIX, -0.402088,
+                        "MA0151.1", tf = "ARID3A", 
+                        ensembl = "ENSG00000116017", uniprot = "Q99856",
+                        cellType = "HepG2")
+  
+  vr <- VRanges(seqnames = c("chr12"),
+                ranges = c(94136009), 
+                ref = c("G"), alt = c(""))
+  
+  scores_a <- scoreVariants(vr, so) |> scores()
   scores_a[, c("nonRiskScore", "riskScore", "nonRiskNorm", "riskNorm")] <-
     scores_a[, c("nonRiskScore", "riskScore", "nonRiskNorm", "riskNorm")] |>
     round(4)
