@@ -73,8 +73,12 @@ query_seqs <- function(vr, up, down,
 #' @export
 getFlankingSeqs <- function(vr, up, down,
                             bs_genome_obj=BSgenome.Hsapiens.UCSC.hg19::Hsapiens) {
+  if (class(vr) != "VRanges") {
+    stop("Input argument vr must be of class VRanges")
+  }
+  
   if (length(vr) < 1) {
-    stop("Vranges object must contain at least one variant.")
+    stop("VRanges object must contain at least one variant.")
   }
   
   # initialize metadata columns in vrange to store up and downstream seqs
