@@ -49,7 +49,7 @@ plotMotif(sems, "MA0099.2_HeLa")
 # Scoring Motifs
 Next, we will score the reference and alternate alleles for each variant against the SEMs and normalize to the baseline for each motif.
 ```{r score_motifs}
-sempl_obj <- semMotifBinding(vr = vr, semList = sems)
+sempl_obj <- scoreVariants(vr = vr, semList = sems)
 sempl_obj
 ```
 
@@ -106,7 +106,7 @@ vr$id <- vars_df$id
 
 ```{r}
 # score the variants
-sempl_obj <- semMotifBinding(vr = vr, semList = sems)
+sempl_obj <- scoreVariants(vr = vr, semList = sems)
 ```
 
 ```{r}
