@@ -75,7 +75,7 @@ normMatrix <- function(max_scores, bl) {
 #' @param varSeq a list of variant sequences
 #' @param semObj SNPEffectMatrix object
 #' @param nflank maximum number of offset basepairs offset from variant
-scoreVariants <- function(varId, varSeq, semObj, nflank) {
+calculateScores <- function(varId, varSeq, semObj, nflank) {
   
   sm <- sem(semObj)
   bl <- baseline(semObj)
@@ -87,7 +87,7 @@ scoreVariants <- function(varId, varSeq, semObj, nflank) {
   if (min(nchar(varSeq)) < frame_len) {
     stop("Variant sequence length ", min(nchar(varSeq)), 
          " is less than SEM length of ", frame_len, 
-         ". \n Make sure all variant sequences are greater than or equal",
+         ". \n Make sure all variant sequences are greater than or equal ",
          "to SEM length")
   }
   
@@ -159,9 +159,9 @@ scoreVariants <- function(varId, varSeq, semObj, nflank) {
 #' semList <- SNPEffectMatrix(sem, baseline = -1, semId = "sem_id")
 #' 
 #' # calculate binding propensity
-#' semMotifBinding(vr, semList)
+#' scoreVariants(vr, semList)
 #' 
-semMotifBinding <- \(vr, semList, 
+scoreVariants <- \(vr, semList, 
                      bs_genome_obj=BSgenome.Hsapiens.UCSC.hg19::Hsapiens) {
   riskNorm <- riskSeq <- nonRiskNorm <- nonRiskSeq <- NULL
   
@@ -180,8 +180,8 @@ semMotifBinding <- \(vr, semList,
   semScores <- SemplScores(vr, semList)
 
   ref_scores <- lapply(semList,
-                       function(x) scoreVariants(variants(semScores)$id, 
-                                                 vr$ref_seq, x, offset) ) |>
+                       function(x) calculateScores(variants(semScores)$id, 
+                                                   vr$ref_seq, x, offset) ) |>
     data.table::rbindlist()
   ref_scores_merge <- merge(ref_scores, scores(semScores), 
                             by.x = c("var_id", "sem_mtx_id"), 
@@ -189,8 +189,8 @@ semMotifBinding <- \(vr, semList,
   scores(semScores)[, c("nonRiskSeq", "nonRiskVarIndex", "nonRiskScore", "nonRiskNorm")] <- ref_scores_merge[, c("seq", "vari", "score", "scoreNorm")]
 
   alt_scores <- lapply(semList,
-                       function(x) scoreVariants(variants(semScores)$id,
-                                                 vr$alt_seq, x, offset) ) |>
+                       function(x) calculateScores(variants(semScores)$id,
+                                                   vr$alt_seq, x, offset) ) |>
     data.table::rbindlist()
   
   alt_scores_merge <- merge(alt_scores, scores(semScores), 
