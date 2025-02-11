@@ -12,16 +12,11 @@
 viewFrames <- function(sempl_obj, vid = NULL, sid = NULL, score_index = NULL) {
   varId <- semId <- NULL
   
-  # require that the user supply either a vid and sid or a score_index
-  if ( (is.null(vid) | is.null(sid)) & is.null(score_index) ) {
-    stop("must provide either a score_index or a vid and sid parameter",
-         " corresponding to the frame to view.")
-  }
-  
   # get the corresponding sempl scores row given the vid and sid or the index 
   if (!is.null(vid) & !is.null(sid)) {
     ss <- scores(sempl_obj)[varId == vid & semId == sid]
     
+    # stop if no rows found matching vid and sid
     if (nrow(ss) == 0) {
       stop("no entry matching vid == ", vid, " and sid == ", sid, " found in",
            " the score table.")
@@ -39,19 +34,6 @@ viewFrames <- function(sempl_obj, vid = NULL, sid = NULL, score_index = NULL) {
     # require that the user supply either a vid and sid or a score_index
     stop("must provide either a score_index or a vid and sid parameter",
          " corresponding to the frame to view.")
-  }
-  
-  # if vid and sid supplies, convert to a score_index
-  if (!is.null(vid) & !is.null(sid)) {
-    
-  } else {
-    # if 
-    if (score_index > nrow(scores(sempl_obj))) {
-      stop("score_index ", score_index, " out of range in SemplScores object")
-    } else {
-      # get the corresponding sempl scores row
-      ss <- scores(sempl_obj)[score_index]
-    }
   }
   
   # get the variant that matches the score index
