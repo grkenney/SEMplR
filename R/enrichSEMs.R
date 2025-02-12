@@ -132,9 +132,9 @@ getContingencyTable <- function(s, si, d, lfc) {
 #' s <- scoreVariants(vr, semList)
 #' 
 #' # calculate enrichment
-#' enrichment(s, d = "changed")
+#' enrichSEMs(s, d = "changed")
 #' 
-enrichment <- function(semScores, d="changed", lfc=0.5) {
+enrichSEMs <- function(semScores, d="changed", lfc=0.5) {
   adj.pvalue <- NULL
   
   s <- scores(semScores)
