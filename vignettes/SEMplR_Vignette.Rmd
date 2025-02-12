@@ -111,12 +111,12 @@ sempl_obj <- scoreVariants(vr = vr, semList = sems)
 
 ```{r}
 # calculate the enrichment score
-e <- enrichment(sempl_obj, d = "lost")
+e <- enrichSEMs(sempl_obj, d = "lost")
 e
 ```
 
 ```{r}
-plotEnrichment(e)
+plotSemEnrichment(e)
 ```
 
 ```{r}
@@ -160,7 +160,7 @@ plotMotif(sems, "M01266",
 ```
 
 ```{r}
-e <- enrichment(sempl_obj)
+e <- enrichSEMs(sempl_obj)
 e
 ```
 
