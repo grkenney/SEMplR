@@ -42,7 +42,7 @@ sems[2]
 ```
 
 ```{r}
-plotMotif(sems, "MA0099.2_HeLa")
+plotSEM(sems, "MA0099.2_HeLa")
 ```
 
 
@@ -128,7 +128,7 @@ plotSemMotifs(sempl_obj, variant = "rs28834970", label = "tf")
 ```
 
 ```{r}
-plotMotif(sems, motif = "MA0144.1", motifSeq = "TTACCTGCAA", 
+plotSEM(sems, motif = "MA0144.1", motifSeq = "TTACCTGCAA", 
           highlight = 8) + xlab("") + ggtitle("Ref")
 
 ```
@@ -138,7 +138,7 @@ plotMotif(sems, motif = "MA0144.1", motifSeq = "TTACCTGCAA",
 var_scores <- scores(sempl_obj)[varId == "rs61943586" &
                                   semId == "M01266"]
 
-plotMotif(sems, "M01266", 
+plotSEM(sems, "M01266", 
           motifSeq = var_scores$nonRiskSeq[[1]], 
           highlight = 4)
 ```
@@ -148,13 +148,13 @@ plotMotif(sems, "M01266",
 var_scores <- scores(sempl_obj)[varId == "rs4318227" &
                                   semId == "M01266"]
 
-plotMotif(sems, "M01266", 
+plotSEM(sems, "M01266", 
           motifSeq = var_scores$nonRiskSeq[[1]], 
           highlight = 3)
 ```
 
 ```{r}
-plotMotif(sems, "M01266", 
+plotSEM(sems, "M01266", 
           motifSeq = var_scores$nonRiskSeq[[1]], 
           highlight = 3, hcol="red")
 ```

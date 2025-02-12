@@ -25,11 +25,11 @@
 #' s <- SNPEffectMatrix(sem, baseline = -1, semId = "sem_id")
 #' 
 #' # plot the motif
-#' plotMotif(s, semId(s))
+#' plotSEM(s, semId(s))
 #' 
 #' # color by sequence
-#' plotMotif(s, semId(s), motifSeq = "ACT", highlight = 2)
-plotMotif <- function(sems, motif, 
+#' plotSEM(s, semId(s), motifSeq = "ACT", highlight = 2)
+plotSEM <- function(sems, motif, 
                       motifSeq=NULL, highlight=NULL, hcol="dodgerblue") {
   alt <- ref <- NA
   
