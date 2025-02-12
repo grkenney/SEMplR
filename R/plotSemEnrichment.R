@@ -11,7 +11,7 @@
 #' @return a `ggplot` with sem scores for each nucleic acid per position
 #'
 #' @export
-plotEnrichment <- function(e, lab = "tf", sigThreshold = 0.05) {
+plotSemEnrichment <- function(e, lab = "tf", sigThreshold = 0.05) {
   odds.ratio <- sig <- varId <- NULL
   
   e$lab <- lapply(1:nrow(e), 
