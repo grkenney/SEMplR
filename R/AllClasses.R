@@ -229,30 +229,15 @@ SemplScores <- function(variants=NULL, semList=NULL, semScores=NULL) {
   } else if (!("id" %in% names(S4Vectors::mcols(vr)))) {
     S4Vectors::mcols(vr)$id <- 1:length(vr)
   }
-  
-  if (length(vr) != 0 | length(semList) != 0) {
-    vr_sem_combos <- expand.grid(names(semList), S4Vectors::mcols(vr)$id)
-    sem_col <- vr_sem_combos[, 1]
-    vr_col <- vr_sem_combos[, 2]
-  } else {
-    sem_col <- character()
-    vr_col <- character()
-  }
 
   if (is.null(semScores)){
-    empty_scores <- data.table(nonRiskSeq=numeric(), riskSeq=numeric(),
-                               nonRiskScore=numeric(), riskScore=numeric(),
-                               nonRiskNorm=numeric(), riskNorm=numeric())
-    scores_table <- cbind(data.table(varId=vr_col, semId=sem_col), empty_scores)
+    scores_table <- data.table()
   } else {
     scores_table <- semScores
   }
   
   if (is.null(semList)) {
-    sem_metadata <- data.table(tf=character(),
-                               ensembl=character(),
-                               uniprot=character(),
-                               cellType=character())
+    sem_metadata <- data.table()
   } else {
     sem_metadata <- lapply(semList, 
                            function(x) 
@@ -273,14 +258,18 @@ SemplScores <- function(variants=NULL, semList=NULL, semScores=NULL) {
 
 
 setValidity("SemplScores", function(object) {
-  expected_column_names <- c("varId", "semId",
-                             "nonRiskSeq", "riskSeq",
-                             "nonRiskScore", "riskScore",
-                             "nonRiskNorm", "riskNorm")
-  actual_column_names <- colnames(object@scores)
-  if (sum(expected_column_names %in%
-          actual_column_names) != length(expected_column_names)) {
-    "@scores must contain columns with names: varId, semId, nonRiskSeq, riskSeq, nonRiskScore, riskScore, nonRiskNorm, riskNorm"
+  if (nrow(object@scores) > 0) {
+    expected_column_names <- c("varId", "semId",
+                               "nonRiskSeq", "riskSeq",
+                               "nonRiskScore", "riskScore",
+                               "nonRiskNorm", "riskNorm")
+    actual_column_names <- colnames(object@scores)
+    if (sum(expected_column_names %in%
+            actual_column_names) != length(expected_column_names)) {
+      "@scores must contain columns with names: varId, semId, nonRiskSeq, riskSeq, nonRiskScore, riskScore, nonRiskNorm, riskNorm"
+    } else {
+      TRUE
+    }
   } else {
     TRUE
   }
