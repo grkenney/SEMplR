@@ -228,3 +228,41 @@ test_that("scoreVariants make semList a named list if not already", {
                          riskVarIndex = c(4))
   expect_equal(scores_a, scores_e)
 })
+
+
+test_that("scoreVariants multiple variants not in alphanumeric order", {
+  # create a matrix where the ideal sequence is ACGT
+  SEM_MATRIX <- t(matrix(c(1, 0, 0, 0, 
+                           0, 1, 0, 0,
+                           0, 0, 1, 0,
+                           0, 0, 0, 1), 
+                         nrow=4)) |> data.table()
+  colnames(SEM_MATRIX) <- c("A", "C", "G", "T")
+  
+  so <- SNPEffectMatrix(SEM_MATRIX, 1,
+                        "sem_id", tf = "tf_id", 
+                        ensembl = "", uniprot = "",
+                        cellType = "")
+  
+  vr <- VRanges(seqnames = c("chr12", "chr19"),
+                ranges = c(94136009, 54282691), 
+                ref = c("G", "G"), alt = c("", "C"))
+  vr$id <- c("B", "A")
+  
+  scores_a <- scoreVariants(vr, so) |> scores()
+  scores_a[, c("nonRiskScore", "riskScore", "nonRiskNorm", "riskNorm")] <-
+    scores_a[, c("nonRiskScore", "riskScore", "nonRiskNorm", "riskNorm")] |>
+    round(4)
+  
+  scores_e <- data.table(varId = c("A", "B"),
+                         semId = c("sem_id"),
+                         nonRiskSeq = c("ACGC", "TTGA"),
+                         riskSeq = c("ACCC", "TAGG"),
+                         nonRiskScore = c(3, 1),
+                         riskScore = c(2, 1),
+                         nonRiskNorm = c(3, 0),
+                         riskNorm = c(1, 0),
+                         nonRiskVarIndex = c(3, 3),
+                         riskVarIndex = c(3, 4 ))
+  expect_equal(scores_a, scores_e)
+})
