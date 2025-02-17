@@ -163,7 +163,7 @@ calculateScores <- function(varId, varSeq, semObj, nflank) {
 #' 
 scoreVariants <- \(vr, semList, 
                      bs_genome_obj=BSgenome.Hsapiens.UCSC.hg19::Hsapiens) {
-  riskNorm <- riskSeq <- nonRiskNorm <- nonRiskSeq <- NULL
+  riskNorm <- riskSeq <- nonRiskNorm <- nonRiskSeq <- .SD <- NULL
   
   # if semList is not a list, make it a named list
   if (!is.list(semList)) {
@@ -182,21 +182,32 @@ scoreVariants <- \(vr, semList,
   ref_scores <- lapply(semList,
                        function(x) calculateScores(variants(semScores)$id, 
                                                    vr$ref_seq, x, offset) ) |>
-    data.table::rbindlist()
-  ref_scores_merge <- merge(ref_scores, scores(semScores), 
-                            by.x = c("var_id", "sem_mtx_id"), 
-                            by.y = c("varId", "semId"))
-  scores(semScores)[, c("nonRiskSeq", "nonRiskVarIndex", "nonRiskScore", "nonRiskNorm")] <- ref_scores_merge[, c("seq", "vari", "score", "scoreNorm")]
+    data.table::rbindlist() |>
+    stats::setNames(c("varId", "semId", "nonRiskSeq", "nonRiskVarIndex", 
+                      "nonRiskScore", "nonRiskNorm"))
+  # ref_scores_merge <- merge(ref_scores, scores(semScores), 
+  #                           by.x = c("var_id", "sem_mtx_id"), 
+  #                           by.y = c("varId", "semId")) |>
+  #   setnames("varId", "semId", "nonRiskSeq")
+  # 
+  
+  # scores(semScores)[, c("nonRiskSeq", "nonRiskVarIndex", "nonRiskScore", "nonRiskNorm")] <- ref_scores_merge[, c("seq", "vari", "score", "scoreNorm")]
 
   alt_scores <- lapply(semList,
                        function(x) calculateScores(variants(semScores)$id,
                                                    vr$alt_seq, x, offset) ) |>
-    data.table::rbindlist()
+    data.table::rbindlist() |>
+    stats::setNames(c("varId", "semId", "riskSeq", "riskVarIndex", 
+                      "riskScore", "riskNorm"))
   
-  alt_scores_merge <- merge(alt_scores, scores(semScores), 
-                            by.x = c("var_id", "sem_mtx_id"), 
-                            by.y = c("varId", "semId"))
-  scores(semScores)[, c("riskSeq", "riskVarIndex", "riskScore", "riskNorm")] <- alt_scores_merge[, c("seq", "vari", "score", "scoreNorm")]
+  scores_merge <- merge(ref_scores, alt_scores, by = c("varId", "semId"))
+  data.table::setkey(scores_merge, NULL) # clear the merge keys
+  
+  score_col_order <- c("varId", "semId", "nonRiskSeq", "riskSeq", 
+                       "nonRiskScore", "riskScore", 
+                       "nonRiskNorm", "riskNorm",
+                       "nonRiskVarIndex", "riskVarIndex")
+  scores(semScores) <- scores_merge[,  .SD, .SDcols = score_col_order]
 
   return(semScores)
 }
