@@ -84,7 +84,7 @@ test_that("scoreVariants SNP", {
     round(4)
   
   scores_e <- data.table(varId = c(1, 2),
-                         semId = factor("MA0151.1"),
+                         semId = c("MA0151.1"),
                          nonRiskSeq = c("TTTGAG", "ATCTCC"),
                          riskSeq = c("TTCAGG", "ATCACC"),
                          nonRiskScore = c(-1.4004, -0.8193),
@@ -176,7 +176,7 @@ test_that("scoreVariants 1bp deletion", {
     round(4)
   
   scores_e <- data.table(varId = c(1),
-                         semId = factor("MA0151.1"),
+                         semId = c("MA0151.1"),
                          nonRiskSeq = c("TTTGAG"),
                          riskSeq = c("TTTAGG"),
                          nonRiskScore = c(-1.4004),
@@ -217,7 +217,7 @@ test_that("scoreVariants make semList a named list if not already", {
     round(4)
   
   scores_e <- data.table(varId = c(1),
-                         semId = factor("MA0151.1"),
+                         semId = c("MA0151.1"),
                          nonRiskSeq = c("TTTGAG"),
                          riskSeq = c("TTTAGG"),
                          nonRiskScore = c(-1.4004),
