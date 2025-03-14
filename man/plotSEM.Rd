@@ -4,14 +4,21 @@
 \alias{plotSEM}
 \title{Plot SEM scores for each nucleic acid in each position of the motif}
 \usage{
-plotSEM(sems, motif, motifSeq = NULL, highlight = NULL, hcol = "dodgerblue")
+plotSEM(
+  s,
+  motif = NULL,
+  motifSeq = NULL,
+  highlight = NULL,
+  hcol = "dodgerblue"
+)
 }
 \arguments{
-\item{sems}{list of SNPEffectMatrix objects}
+\item{s}{A SNPEffectMatrix or SNPEffectMatrixCollection object.}
 
-\item{motif}{sem id to plot. If providing a list of SNPEffectMatrix objects,
+\item{motif}{sem id to plot. If providing a SNPEffectMatrixCollection object,
 must match a name in the list. If providing a single SNPEffectMatrix object,
-can provide any character string.}
+this parameter is ignored and the SNPEffectMatrix's semId is used for
+plotting.}
 
 \item{motifSeq}{(optional) character sequence to color on plot}
 

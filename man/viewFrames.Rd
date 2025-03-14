@@ -4,16 +4,16 @@
 \alias{viewFrames}
 \title{View the top scoring frames for a given variant and SEM}
 \usage{
-viewFrames(sempl_obj, vid = NULL, sid = NULL, score_index = NULL)
+viewFrames(s, vid = NULL, sid = NULL, scoreIndex = NULL)
 }
 \arguments{
-\item{sempl_obj}{SemplScores object}
+\item{s}{SemplScores object}
 
 \item{vid}{variant id corresponding to the frame to view}
 
 \item{sid}{SEM id corresponding to the frame to view}
 
-\item{score_index}{index of score to view. \code{vid} and \code{sid} takes prescedent
+\item{scoreIndex}{index of score to view. \code{vid} and \code{sid} takes prescedent
 over this parameter.}
 }
 \value{

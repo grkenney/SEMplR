@@ -12,7 +12,6 @@ SequenceFrame(
   sequence,
   variantIndex,
   motif,
-  tf,
   variantName
 )
 }
@@ -28,8 +27,6 @@ SequenceFrame(
 \item{variantIndex}{index of variant base pair(s)}
 
 \item{motif}{sem id to display}
-
-\item{tf}{tf name to display}
 
 \item{variantName}{name of the variant to display}
 }

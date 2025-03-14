@@ -2,21 +2,21 @@
 % Please edit documentation in R/plotSemMotifs.R
 \name{plotSemMotifs}
 \alias{plotSemMotifs}
-\title{Plot non-risk versus risk binding propensity for a single variant}
+\title{Plot non-alt versus alt binding propensity for a single variant}
 \usage{
-plotSemMotifs(sempl_obj, variant, label = "semId")
+plotSemMotifs(semplObj, variant, label = "semId")
 }
 \arguments{
-\item{sempl_obj}{a SemplScores object with scores populated}
+\item{semplObj}{a SemplScores object with scores populated}
 
 \item{variant}{variant id to plot}
 
-\item{label}{column in sem_metadata slot of sempl_obj to use for point labels}
+\item{label}{column in sem_metadata slot of semplObj to use for point labels}
 }
 \value{
-a \code{ggplot} scatter plot of non-risk binding propensity versus risk
+a \code{ggplot} scatter plot of non-alt binding propensity versus alt
 binding propensity
 }
 \description{
-Plot non-risk versus risk binding propensity for a single variant
+Plot non-alt versus alt binding propensity for a single variant
 }

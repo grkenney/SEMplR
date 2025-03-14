@@ -22,8 +22,6 @@ Class to store information about sequencing frame and variant location
 
 \item{\code{motif}}{sem id to display}
 
-\item{\code{tf}}{tf name to display}
-
 \item{\code{variantName}}{name of the variant to display}
 }}
 
