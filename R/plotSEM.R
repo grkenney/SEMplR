@@ -1,9 +1,10 @@
 #' Plot SEM scores for each nucleic acid in each position of the motif
 #'
-#' @param sems list of SNPEffectMatrix objects
-#' @param motif sem id to plot. If providing a list of SNPEffectMatrix objects,
+#' @param s A SNPEffectMatrix or SNPEffectMatrixCollection object.
+#' @param motif sem id to plot. If providing a SNPEffectMatrixCollection object,
 #' must match a name in the list. If providing a single SNPEffectMatrix object,
-#' can provide any character string.
+#' this parameter is ignored and the SNPEffectMatrix's semId is used for 
+#' plotting.
 #' @param motifSeq (optional) character sequence to color on plot
 #' @param highlight (optional) index of variant location on reference
 #' @param hcol (optional) color of motifSeq basepairs
@@ -29,16 +30,30 @@
 #' 
 #' # color by sequence
 #' plotSEM(s, semId(s), motifSeq = "ACT", highlight = 2)
-plotSEM <- function(sems, motif, 
-                      motifSeq=NULL, highlight=NULL, hcol="dodgerblue") {
+plotSEM <- function(s, motif=NULL, 
+                    motifSeq=NULL, highlight=NULL, hcol="dodgerblue") {
   alt <- ref <- NA
   
-  if (is.list(sems)) {
-    sem_baseline <- baseline(sems[[motif]])
-    sem_mtx <- sem(sems[[motif]])
+  if ("SNPEffectMatrix" %in% is(s)) {
+    sem_baseline <- baseline(s)
+    sem_mtx <- sem(s)
+    motif <- semId(s)
+  } else if ("SNPEffectMatrixCollection" %in% is(s)) {
+    # motif required if providing a SNPEffectMatrixCollection
+    if (is.null(motif)) {
+      stop("must specify the motif to plot if supplying a ",
+      "SNPEffectMatrixCollection")
+    }
+    
+    # check that motif given is in collection
+    if (!(motif %in% names(sems(s)))) {
+      stop("provided motif not found in SNPEffectMatrixCollection: ",
+           "!(motif %in% names(sems(s))")
+    }
+    sem_baseline <- baseline(sems(s, semId = motif))
+    sem_mtx <- sem(sems(s, semId = motif))
   } else {
-    sem_baseline <- baseline(sems)
-    sem_mtx <- sem(sems)
+    stop("s must be a SNPEffectMatrix or a SNPEffectMatrixCollection.")
   }
   
   # pivoting data longer
@@ -51,6 +66,11 @@ plotSEM <- function(sems, motif,
   
   # if sequence is provided for plotting, 
   if (!is.null(motifSeq)) {
+    if(nchar(motifSeq) != nrow(sem_mtx)) {
+      stop(paste0("Number of characters in motifSeq (", nchar(motifSeq), 
+                  ") does not equal the number of rows in the SEM (",
+                  nrow(sem_mtx), ")"))
+    }
     mseq <- unlist(strsplit(motifSeq, ""))
     
     mseq_dt <- data.table(mseq, 1:nrow(sem_mtx), mseq, "white") |> 
