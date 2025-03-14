@@ -1,0 +1,71 @@
+---
+title: "SEMplR_Vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{SEMplR_Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>", 
+  fig.height = 5,
+  fig.width = 5
+)
+```
+
+```{r}
+suppressPackageStartupMessages({
+  library(VariantAnnotation)
+  library(SEMplR)
+})
+```
+
+# Loading SEMs
+```{r}
+sem_files <- list.files("~/Downloads/SEMplR_2-14-25_freeze/SEMs/", 
+                        pattern = ".sem", full.names = T)
+metadata_file <- "~/Downloads/SEMplR_2-14-25_freeze/sempl_metadata.csv"
+meta <- data.table::fread(file = metadata_file, sep = ",")
+
+sc <- loadSEMCollection(semFiles = sem_files, 
+                        semMetaData = meta, 
+                        semMetaKey = "SEM")
+
+sems(sc, "ZSCAN4_secondary")
+semData(sc)
+```
+
+# Build Variant Set
+```{r}
+vr <- VRanges(seqnames = c("chr12", "chr19"),
+              ranges = c(94136009, 10640062), 
+              ref = c("G", "T"), alt = c("C", "A"))
+```
+
+# Score Variants
+```{r}
+sempl_obj <- scoreVariants(vr = vr, semList = sc)
+sempl_obj
+```
+
+# View Frame
+```{r}
+viewFrames(sempl_obj, vid = "chr12:94136009:G>C", sid = "AP2B_HUMAN.SK-N-SH")
+```
+
+```{r}
+plotSEM(sc, motif = "AP2B_HUMAN.SK-N-SH", 
+        motifSeq = "GCTTTGAGGC", highlight = 1)
+plotSEM(sc, motif = "AP2B_HUMAN.SK-N-SH", 
+        motifSeq = "GCTTTCAGGC", highlight = 1, hcol = "red")
+```
+
+```{r}
+plotSemMotifs(sempl_obj, variant = "chr19:10640062:T>A", 
+              label = "transcription_factor")
+```
+
+
