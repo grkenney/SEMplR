@@ -4,17 +4,17 @@
 # @param si SEM id
 # @param lfc Log2FC cutoff (default = 0.5)
 gainedContingencyTable <- function(s, si, lfc=0.5) {
-  nonRiskNorm <- riskNorm <- absLog2FC <- NULL
+  refNorm <- altNorm <- absLog2FC <- NULL
   
-  s$absLog2FC <- log2(abs(s$riskNorm) / abs(s$nonRiskNorm))
+  s$absLog2FC <- log2(abs(s$altNorm) / abs(s$refNorm))
   # Gained in SEM
-  a <- s[(nonRiskNorm < 0 & riskNorm > 0 & abs(absLog2FC) > lfc) & semId == si] |> nrow()
+  a <- s[(refNorm < 0 & altNorm > 0 & abs(absLog2FC) > lfc) & semId == si] |> nrow()
   # Not Gained in SEM
-  b <- s[!(nonRiskNorm < 0 & riskNorm > 0 & abs(absLog2FC) > lfc) & semId == si] |> nrow()
+  b <- s[!(refNorm < 0 & altNorm > 0 & abs(absLog2FC) > lfc) & semId == si] |> nrow()
   # Gained not in SEM
-  c <- s[(nonRiskNorm < 0 & riskNorm > 0 & abs(absLog2FC) > lfc) & semId != si] |> nrow()
+  c <- s[(refNorm < 0 & altNorm > 0 & abs(absLog2FC) > lfc) & semId != si] |> nrow()
   # Not Gained not in SEM
-  d <- s[!(nonRiskNorm < 0 & riskNorm > 0 & abs(absLog2FC) > lfc) & semId != si] |> nrow()
+  d <- s[!(refNorm < 0 & altNorm > 0 & abs(absLog2FC) > lfc) & semId != si] |> nrow()
   
   contingencyTable <- matrix(c(a, c, 
                                b, d), ncol=2)
@@ -27,17 +27,17 @@ gainedContingencyTable <- function(s, si, lfc=0.5) {
 # @param si SEM id
 # @param lfc Log2FC cutoff (default = 0.5)
 lostContingencyTable <- function(s, si, lfc=0.5) {
-  nonRiskNorm <- riskNorm <- absLog2FC <- NULL
+  refNorm <- altNorm <- absLog2FC <- NULL
   
-  s$absLog2FC <- log2(abs(s$riskNorm) / abs(s$nonRiskNorm))
+  s$absLog2FC <- log2(abs(s$altNorm) / abs(s$refNorm))
   # Lost in SEM
-  a <- s[(nonRiskNorm > 0 & riskNorm < 0 & abs(absLog2FC) > lfc) & semId == si] |> nrow()
+  a <- s[(refNorm > 0 & altNorm < 0 & abs(absLog2FC) > lfc) & semId == si] |> nrow()
   # Not Lost in SEM
-  b <- s[!(nonRiskNorm > 0 & riskNorm < 0 & abs(absLog2FC) > lfc) & semId == si] |> nrow()
+  b <- s[!(refNorm > 0 & altNorm < 0 & abs(absLog2FC) > lfc) & semId == si] |> nrow()
   # Lost not in SEM
-  c <- s[(nonRiskNorm > 0 & riskNorm < 0 & abs(absLog2FC) > lfc) & semId != si] |> nrow()
+  c <- s[(refNorm > 0 & altNorm < 0 & abs(absLog2FC) > lfc) & semId != si] |> nrow()
   # Not Lost not in SEM
-  d <- s[!(nonRiskNorm > 0 & riskNorm < 0 & abs(absLog2FC) > lfc) & semId != si] |> nrow()
+  d <- s[!(refNorm > 0 & altNorm < 0 & abs(absLog2FC) > lfc) & semId != si] |> nrow()
   
   contingencyTable <- matrix(c(a, c, 
                                b, d), ncol=2)
@@ -50,21 +50,21 @@ lostContingencyTable <- function(s, si, lfc=0.5) {
 # @param si SEM id
 # @param lfc Log2FC cutoff (default = 0.5)
 changedContingencyTable <- function(s, si, lfc=0.5) {
-  nonRiskNorm <- riskNorm <- absLog2FC <- NULL
+  refNorm <- altNorm <- absLog2FC <- NULL
   
-  s$absLog2FC <- log2(abs(s$riskNorm) / abs(s$nonRiskNorm))
+  s$absLog2FC <- log2(abs(s$altNorm) / abs(s$refNorm))
   # Lost in SEM
-  a <- s[((nonRiskNorm > 0 & riskNorm < 0) |
-           (nonRiskNorm < 0 & riskNorm > 0) & abs(absLog2FC) > lfc) & semId == si] |> nrow()
+  a <- s[((refNorm > 0 & altNorm < 0) |
+           (refNorm < 0 & altNorm > 0) & abs(absLog2FC) > lfc) & semId == si] |> nrow()
   # Not Lost in SEM
-  b <- s[!((nonRiskNorm > 0 & riskNorm < 0) |
-             (nonRiskNorm < 0 & riskNorm > 0) & abs(absLog2FC) > lfc) & semId == si] |> nrow()
+  b <- s[!((refNorm > 0 & altNorm < 0) |
+             (refNorm < 0 & altNorm > 0) & abs(absLog2FC) > lfc) & semId == si] |> nrow()
   # Lost not in SEM
-  c <- s[((nonRiskNorm > 0 & riskNorm < 0) |
-            (nonRiskNorm < 0 & riskNorm > 0) & abs(absLog2FC) > lfc) & semId != si] |> nrow()
+  c <- s[((refNorm > 0 & altNorm < 0) |
+            (refNorm < 0 & altNorm > 0) & abs(absLog2FC) > lfc) & semId != si] |> nrow()
   # Not Lost not in SEM
-  d <- s[!((nonRiskNorm > 0 & riskNorm < 0) |
-             (nonRiskNorm < 0 & riskNorm > 0) & abs(absLog2FC) > lfc) & semId != si] |> nrow()
+  d <- s[!((refNorm > 0 & altNorm < 0) |
+             (refNorm < 0 & altNorm > 0) & abs(absLog2FC) > lfc) & semId != si] |> nrow()
   
   contingencyTable <- matrix(c(a, c, 
                                b, d), ncol=2)
