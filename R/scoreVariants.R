@@ -165,48 +165,49 @@ scoreVariants <- \(vr, semList,
                      bs_genome_obj=BSgenome.Hsapiens.UCSC.hg19::Hsapiens) {
   riskNorm <- riskSeq <- nonRiskNorm <- nonRiskSeq <- .SD <- NULL
   
-  # if semList is not a list, make it a named list
-  if (!is.list(semList)) {
-    semList <- list(semList) |> stats::setNames(semId(semList))
+  # if given a SNPEffectMatrix, make it a SNPEffectMatrixCollection
+  if ("SNPEffectMatrix" %in% is(semList)) {
+    semList <- SNPEffectMatrixCollection(list(semList))
+  }
+  
+  # check that semList is now a SNPEffectMatrixCollection object, else stop
+  if (!("SNPEffectMatrixCollection" %in% is(semList))) {
+    stop("semList must be of class SNPEffectMatrixCollection.",
+         "See ?loadSEMCollection to build a SNPEffectMatrixCollection object")
   }
   
   ## Get maximum kmer length of all TFs ##
-  offset <- max(unlist(lapply(semList, function(x) {nrow(sem(x))})))
+  offset <- lapply(sems(semList), function(x) {nrow(sem(x))}) |>
+    unlist() |>
+    max()
 
   ## Collect up/downstream sequences
   vr <- getFlankingSeqs(vr, offset, offset, bs_genome_obj)
    
   ## Create a new SemplScores object to store results
-  semScores <- SemplScores(vr, semList)
+  semScores <- SemplScores(vr, semData(semList))
 
-  ref_scores <- lapply(semList,
+  ref_scores <- lapply(sems(semList),
                        function(x) calculateScores(variants(semScores)$id, 
                                                    vr$ref_seq, x, offset) ) |>
     data.table::rbindlist() |>
-    stats::setNames(c("varId", "semId", "nonRiskSeq", "nonRiskVarIndex", 
-                      "nonRiskScore", "nonRiskNorm"))
-  # ref_scores_merge <- merge(ref_scores, scores(semScores), 
-  #                           by.x = c("var_id", "sem_mtx_id"), 
-  #                           by.y = c("varId", "semId")) |>
-  #   setnames("varId", "semId", "nonRiskSeq")
-  # 
+    stats::setNames(c("varId", "semId", "refSeq", "refVarIndex", 
+                      "refScore", "refNorm"))
   
-  # scores(semScores)[, c("nonRiskSeq", "nonRiskVarIndex", "nonRiskScore", "nonRiskNorm")] <- ref_scores_merge[, c("seq", "vari", "score", "scoreNorm")]
-
-  alt_scores <- lapply(semList,
+  alt_scores <- lapply(sems(semList),
                        function(x) calculateScores(variants(semScores)$id,
                                                    vr$alt_seq, x, offset) ) |>
     data.table::rbindlist() |>
-    stats::setNames(c("varId", "semId", "riskSeq", "riskVarIndex", 
-                      "riskScore", "riskNorm"))
+    stats::setNames(c("varId", "semId", "altSeq", "altVarIndex", 
+                      "altScore", "altNorm"))
   
   scores_merge <- merge(ref_scores, alt_scores, by = c("varId", "semId"))
   data.table::setkey(scores_merge, NULL) # clear the merge keys
   
-  score_col_order <- c("varId", "semId", "nonRiskSeq", "riskSeq", 
-                       "nonRiskScore", "riskScore", 
-                       "nonRiskNorm", "riskNorm",
-                       "nonRiskVarIndex", "riskVarIndex")
+  score_col_order <- c("varId", "semId", "refSeq", "altSeq", 
+                       "refScore", "altScore", 
+                       "refNorm", "altNorm",
+                       "refVarIndex", "altVarIndex")
   scores(semScores) <- scores_merge[,  .SD, .SDcols = score_col_order]
 
   return(semScores)

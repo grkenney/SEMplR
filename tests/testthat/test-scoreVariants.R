@@ -50,9 +50,7 @@ test_that("scoreMatrix", {
 
 test_that("calculateScores", {
   so <- SNPEffectMatrix(SEM_MATRIX, -0.402088,
-                        "MA0151.1", tf = "ARID3A", 
-                        ensembl = "ENSG00000116017", uniprot = "Q99856",
-                        cellType = "HepG2")
+                        "MA0151.1")
   scores_a <- calculateScores(varId = "rs13216361",
                               varSeq = "TGGCATTTCCTGGCAGAGCCCTGCCTCCCAGCTGTCTAA",
                               semObj = so,
@@ -69,30 +67,27 @@ test_that("calculateScores", {
 
 test_that("scoreVariants SNP", {
   so <- SNPEffectMatrix(SEM_MATRIX, -0.402088,
-                        "MA0151.1", tf = "ARID3A", 
-                        ensembl = "ENSG00000116017", uniprot = "Q99856",
-                        cellType = "HepG2") |> 
-    list() |>
-    setNames("MA0151.1")
+                        "MA0151.1") 
+  
   vr <- VRanges(seqnames = c("chr12", "chr19"),
                 ranges = c(94136009, 10640062), 
                 ref = c("G", "T"), alt = c("C", "A"))
   
   scores_a <- scoreVariants(vr, so) |> scores()
-  scores_a[, c("nonRiskScore", "riskScore", "nonRiskNorm", "riskNorm")] <-
-    scores_a[, c("nonRiskScore", "riskScore", "nonRiskNorm", "riskNorm")] |>
+  scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] <-
+    scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] |>
     round(4)
   
-  scores_e <- data.table(varId = c(1, 2),
+  scores_e <- data.table(varId = c('chr12:94136009:G>C', 'chr19:10640062:T>A'),
                          semId = c("MA0151.1"),
-                         nonRiskSeq = c("TTTGAG", "ATCTCC"),
-                         riskSeq = c("TTCAGG", "ATCACC"),
-                         nonRiskScore = c(-1.4004, -0.8193),
-                         riskScore = c(-1.4285, -0.5419),
-                         nonRiskNorm = c(-0.4994, -0.2511),
-                         riskNorm = c(-0.5091, -0.0923),
-                         nonRiskVarIndex = c(4, 4),
-                         riskVarIndex = c(5, 4))
+                         refSeq = c("TTTGAG", "ATCTCC"),
+                         altSeq = c("TTCAGG", "ATCACC"),
+                         refScore = c(-1.4004, -0.8193),
+                         altScore = c(-1.4285, -0.5419),
+                         refNorm = c(-0.4994, -0.2511),
+                         altNorm = c(-0.5091, -0.0923),
+                         refVarIndex = c(4, 4),
+                         altVarIndex = c(5, 4))
   expect_equal(scores_a, scores_e)
 })
 
@@ -111,9 +106,7 @@ test_that("calcFrameStarts 1bp insertion", {
 
 test_that("calculateScores 1bp deletion", {
   so <- SNPEffectMatrix(SEM_MATRIX, -0.402088,
-                        "MA0151.1", tf = "ARID3A", 
-                        ensembl = "ENSG00000116017", uniprot = "Q99856",
-                        cellType = "HepG2")
+                        "MA0151.1")
   
   scores_a1 <- calculateScores("1", "GGCTTTGAGGCAT", so, nflank = 6)
   
@@ -139,9 +132,7 @@ test_that("calculateScores 1bp deletion", {
 
 test_that("calculateScores multiple variants", {
   so <- SNPEffectMatrix(SEM_MATRIX, -0.402088,
-                        "MA0151.1", tf = "ARID3A", 
-                        ensembl = "ENSG00000116017", uniprot = "Q99856",
-                        cellType = "HepG2")
+                        "MA0151.1")
   
   scores_a1 <- calculateScores(c("1", "2", "3"), 
                              c("GGCTTTGAGGCAT", 
@@ -160,40 +151,34 @@ test_that("calculateScores multiple variants", {
 
 test_that("scoreVariants 1bp deletion", {
   so <- SNPEffectMatrix(SEM_MATRIX, -0.402088,
-                        "MA0151.1", tf = "ARID3A", 
-                        ensembl = "ENSG00000116017", uniprot = "Q99856",
-                        cellType = "HepG2") |> 
-    list() |>
-    setNames("MA0151.1")
+                        "MA0151.1")
   
   vr <- VRanges(seqnames = c("chr12"),
                 ranges = c(94136009), 
                 ref = c("G"), alt = c(""))
   
   scores_a <- scoreVariants(vr, so) |> scores()
-  scores_a[, c("nonRiskScore", "riskScore", "nonRiskNorm", "riskNorm")] <-
-    scores_a[, c("nonRiskScore", "riskScore", "nonRiskNorm", "riskNorm")] |>
+  scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] <-
+    scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] |>
     round(4)
   
-  scores_e <- data.table(varId = c(1),
+  scores_e <- data.table(varId = c('chr12:94136009:delG'),
                          semId = c("MA0151.1"),
-                         nonRiskSeq = c("TTTGAG"),
-                         riskSeq = c("TTTAGG"),
-                         nonRiskScore = c(-1.4004),
-                         riskScore = c(-1.5945),
-                         nonRiskNorm = c(-0.4994),
-                         riskNorm = c(-0.5624),
-                         nonRiskVarIndex = c(4),
-                         riskVarIndex = c(4))
+                         refSeq = c("TTTGAG"),
+                         altSeq = c("TTTAGG"),
+                         refScore = c(-1.4004),
+                         altScore = c(-1.5945),
+                         refNorm = c(-0.4994),
+                         altNorm = c(-0.5624),
+                         refVarIndex = c(4),
+                         altVarIndex = c(4))
   expect_equal(scores_a, scores_e)
 })
 
 
 test_that("calculateScores variant length is longer than motif length", {
   so <- SNPEffectMatrix(SEM_MATRIX, -0.402088,
-                        "MA0151.1", tf = "ARID3A", 
-                        ensembl = "ENSG00000116017", uniprot = "Q99856",
-                        cellType = "HepG2")
+                        "MA0151.1")
   
   expect_error(calculateScores(varId = NA, varSeq = "ACTG", 
                                semObj = so, nflank = NA), 
@@ -203,29 +188,27 @@ test_that("calculateScores variant length is longer than motif length", {
 
 test_that("scoreVariants make semList a named list if not already", {
   so <- SNPEffectMatrix(SEM_MATRIX, -0.402088,
-                        "MA0151.1", tf = "ARID3A", 
-                        ensembl = "ENSG00000116017", uniprot = "Q99856",
-                        cellType = "HepG2")
+                        "MA0151.1")
   
   vr <- VRanges(seqnames = c("chr12"),
                 ranges = c(94136009), 
                 ref = c("G"), alt = c(""))
   
   scores_a <- scoreVariants(vr, so) |> scores()
-  scores_a[, c("nonRiskScore", "riskScore", "nonRiskNorm", "riskNorm")] <-
-    scores_a[, c("nonRiskScore", "riskScore", "nonRiskNorm", "riskNorm")] |>
+  scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] <-
+    scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] |>
     round(4)
   
-  scores_e <- data.table(varId = c(1),
+  scores_e <- data.table(varId = c('chr12:94136009:delG'),
                          semId = c("MA0151.1"),
-                         nonRiskSeq = c("TTTGAG"),
-                         riskSeq = c("TTTAGG"),
-                         nonRiskScore = c(-1.4004),
-                         riskScore = c(-1.5945),
-                         nonRiskNorm = c(-0.4994),
-                         riskNorm = c(-0.5624),
-                         nonRiskVarIndex = c(4),
-                         riskVarIndex = c(4))
+                         refSeq = c("TTTGAG"),
+                         altSeq = c("TTTAGG"),
+                         refScore = c(-1.4004),
+                         altScore = c(-1.5945),
+                         refNorm = c(-0.4994),
+                         altNorm = c(-0.5624),
+                         refVarIndex = c(4),
+                         altVarIndex = c(4))
   expect_equal(scores_a, scores_e)
 })
 
@@ -240,9 +223,7 @@ test_that("scoreVariants multiple variants not in alphanumeric order", {
   colnames(SEM_MATRIX) <- c("A", "C", "G", "T")
   
   so <- SNPEffectMatrix(SEM_MATRIX, 1,
-                        "sem_id", tf = "tf_id", 
-                        ensembl = "", uniprot = "",
-                        cellType = "")
+                        "sem_id")
   
   vr <- VRanges(seqnames = c("chr12", "chr19"),
                 ranges = c(94136009, 54282691), 
@@ -250,19 +231,19 @@ test_that("scoreVariants multiple variants not in alphanumeric order", {
   vr$id <- c("B", "A")
   
   scores_a <- scoreVariants(vr, so) |> scores()
-  scores_a[, c("nonRiskScore", "riskScore", "nonRiskNorm", "riskNorm")] <-
-    scores_a[, c("nonRiskScore", "riskScore", "nonRiskNorm", "riskNorm")] |>
+  scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] <-
+    scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] |>
     round(4)
   
   scores_e <- data.table(varId = c("A", "B"),
                          semId = c("sem_id"),
-                         nonRiskSeq = c("ACGC", "TTGA"),
-                         riskSeq = c("ACCC", "TAGG"),
-                         nonRiskScore = c(3, 1),
-                         riskScore = c(2, 1),
-                         nonRiskNorm = c(3, 0),
-                         riskNorm = c(1, 0),
-                         nonRiskVarIndex = c(3, 3),
-                         riskVarIndex = c(3, 4 ))
+                         refSeq = c("ACGC", "TTGA"),
+                         altSeq = c("ACCC", "TAGG"),
+                         refScore = c(3, 1),
+                         altScore = c(2, 1),
+                         refNorm = c(3, 0),
+                         altNorm = c(1, 0),
+                         refVarIndex = c(3, 3),
+                         altVarIndex = c(3, 4 ))
   expect_equal(scores_a, scores_e)
 })

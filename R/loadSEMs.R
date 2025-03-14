@@ -1,81 +1,69 @@
-# Add metadata to SNPEffectMatrix
-# 
-# @param x a SNPEffectMatrix object
-# @param sem_metadata a data.frame or named vector with metadata for the 
-# given sem.
-# 
-# @return SNPEffectMatrix object
-addSemMetadata <- function(x, sem_metadata){
-  x@tf <- sem_metadata$tf_name
-  x@ensembl <- sem_metadata$ensembl_id
-  x@uniprot <- sem_metadata$uniprot_id
-  x@cellType <- sem_metadata$cell_type
-  return(x)
-}
-
-#' Load .sem and baseline data from files or from github if file path is not
-#' provided. Github default data: github.com/Boyle-Lab/SEMpl/raw/master/SEMs/
+#' Load matrix and baseline data from .sem files
 #'
-#' @param semDir path to directory containing .sem files.
-#' Defaults to pulling data from github.
-#' @param baselineFile path to baselines file.
-#' Defaults to pulling data from github.
-#' @param metadataFile a csv file containing metadata for each sem with columns
-#' sem_id, tf_name, ensembl_id, uniprot_id, cell_type where sem_id must match
-#' the basenames of the sem files.
+#' @param semFile A path to a .sem file. Expects header of file to be in format
+#' `#BASELINE:{bl}` where `bl` is the numeric baseline value. If matrix does
+#' not include baseline header, must be specified in `bl`.
+#' @param semId A unique id for the sem as a `character`. Defaults to
+#' semFile file name without the extension.
+#' @param bl `numeric` baseline value for the SEM. Overrides baseline specified
+#' in semFile header.
 #'
-#' @return named list of SNPEffectMatrix objects
+#' @return A SNPEffectMatrix object
 #' 
 #' @export
-loadSEMs <- \(semDir=NULL, baselineFile=NULL, metadataFile=NULL) {
-  url_base <- "https://github.com/Boyle-Lab/SEMpl/raw/master/SEMs/"
+loadSEM <- \(semFile, semId=NULL, bl=NULL) {
+  s <- data.table::fread(file = semFile, sep = "\t")
   
-  if (!is.null(metadataFile)) {
-    meta <- utils::read.delim(metadataFile, sep = ",")
-  } else {
-    meta <- NULL
+  if (is.null(semId)) {
+    semId <- gsub(pattern = ".sem", 
+                  replacement = "", 
+                  x = basename(semFile))
   }
-
-  # if baselineFile not provided, read from github
-  if (is.null(baselineFile)) {
-    baselines_url <- paste0(url_base, "BASELINE/SEMs_baseline_norm.txt")
-    baselines <- utils::read.delim(url(baselines_url),
-                                   sep = "\t", header = FALSE)
-  } else {
-    baselines <- utils::read.delim(baselineFile, header = FALSE)
-  }
-
-  # if semDir not provided, read from github
-  if (is.null(semDir)) {
-    sem_files <- lapply(baselines[, 1],
-                       function(name) {paste0(url_base, name, ".sem")}) |>
+  
+  # if bl param is null and baseline is in header, use header baseline
+  # if bl is null and baseline is not in header, stop
+  # else, use bl param as baseline by default
+  file_header <- readLines(semFile)[1]
+  if (is.null(bl) & grepl("#BASELINE:", file_header)) {
+    bl <- readLines(semFile)[1] |>
+      strsplit(":") |>
+      lapply("[[", 2) |>
       unlist()
-  } else {
-    sem_files <- list.files(semDir, pattern = ".sem", full.names = TRUE)
-  }
-
-  sem_list <- list()
-  for (i in 1:length(sem_files)) {
-    if (is.null(semDir)) {
-      sem_matrix <- utils::read.delim(url(sem_files[i]),
-                                      sep = "\t")[, -1]
-    } else {
-      sem_matrix <- utils::read.delim(sem_files[i],
-                                      sep = "\t")[, -1]
-    }
-
-    sem_id <- tools::file_path_sans_ext(basename(sem_files[i]))
-    baseline <- baselines[baselines[, 1] == sem_id, 2]
-
-    sem_list[[sem_id]] <- SNPEffectMatrix(sem_matrix,
-                               baseline = baseline,
-                               semId = sem_id)
-    
-    if (!is.null(meta)) {
-      sem_list[[sem_id]] <- addSemMetadata(x = sem_list[[sem_id]], 
-                                           sem_metadata = meta[meta$sem_id == basename(sem_files[i]), ])
-    }
+  } else if (is.null(bl)) {
+    stop("No baseline given. Baseline must be specified in semFile header or",
+         " in bl parameter.")
   }
   
-  return(sem_list)
+  return(SNPEffectMatrix(s, bl, semId))
+}
+
+
+#' Load .sem files and meta data into a SNPEffectMatrixCollection
+#'
+#' @param semFiles A list of paths to .sem files. Expects header of .sem files
+#' to be in format `#BASELINE:{bl}` where `bl` is the numeric baseline value.
+#' If matrix does not include baseline header, must be specified in `bl`.
+#' @param semMetaData A `data.table` with meta data on each SEM
+#' @param semMetaKey The name of a column in semData that matches the semIds in 
+#' the sems list as a `character`. If column entries have a .sem suffix, a new 
+#' column named SEM_KEY will be created without the .sem suffixes.
+#' @param semIds Unique id for the sem as a `character` vector in same order
+#' as sems. Defaults to semFile file name without the extension.
+#' @param bls `numeric` vector or baseline values for the SEMs.
+#' Overrides baseline specified in semFile header.
+#'
+#' @return A SNPEffectMatrix object
+#' 
+#' @export
+loadSEMCollection <- \(semFiles, semMetaData=NULL, semMetaKey="", 
+                       semIds=NULL, bls=NULL) {
+  s <- lapply(1:length(semFiles), 
+              \(i) loadSEM(semFile = semFiles[i],
+                           semId = semIds[i],
+                           bl = bls[i]))
+  
+  sc <- SNPEffectMatrixCollection(sems = s, 
+                                  semData = semMetaData, 
+                                  semKey = semMetaKey)
+  return(sc)
 }

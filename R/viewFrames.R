@@ -1,20 +1,20 @@
 #' View the top scoring frames for a given variant and SEM
 #'
-#' @param sempl_obj SemplScores object
+#' @param s SemplScores object
 #' @param vid variant id corresponding to the frame to view
 #' @param sid SEM id corresponding to the frame to view
-#' @param score_index index of score to view. `vid` and `sid` takes prescedent 
+#' @param scoreIndex index of score to view. `vid` and `sid` takes prescedent 
 #' over this parameter.
 #'
 #' @return a SequenceFrame object
 #'
 #' @export
-viewFrames <- function(sempl_obj, vid = NULL, sid = NULL, score_index = NULL) {
+viewFrames <- function(s, vid = NULL, sid = NULL, scoreIndex = NULL) {
   varId <- semId <- NULL
   
   # get the corresponding sempl scores row given the vid and sid or the index 
   if (!is.null(vid) & !is.null(sid)) {
-    ss <- scores(sempl_obj)[varId == vid & semId == sid]
+    ss <- scores(s)[varId == vid & semId == sid]
     
     # stop if no rows found matching vid and sid
     if (nrow(ss) == 0) {
@@ -22,26 +22,26 @@ viewFrames <- function(sempl_obj, vid = NULL, sid = NULL, score_index = NULL) {
            " the score table.")
     }
     
-  } else if (!is.null(score_index)) {
-    # check that score_index is within the range of sempl_obj scores
-    if (score_index > nrow(scores(sempl_obj))) {
-      stop("score_index ", score_index, " out of range in SemplScores object")
+  } else if (!is.null(scoreIndex)) {
+    # check that scoreIndex is within the range of s scores
+    if (scoreIndex > nrow(scores(s))) {
+      stop("scoreIndex ", scoreIndex, " out of range in SemplScores object")
     }
     # get the corresponding sempl scores row
-    ss <- scores(sempl_obj)[score_index]
+    ss <- scores(s)[scoreIndex]
     
   } else {
-    # require that the user supply either a vid and sid or a score_index
-    stop("must provide either a score_index or a vid and sid parameter",
+    # require that the user supply either a vid and sid or a scoreIndex
+    stop("must provide either a scoreIndex or a vid and sid parameter",
          " corresponding to the frame to view.")
   }
   
   # get the variant that matches the score index
-  vi <- variants(sempl_obj)$id == ss$varId
-  v <- variants(sempl_obj)[vi]
+  vi <- variants(s)$id == ss$varId
+  v <- variants(s)[vi]
   
   # get the corresponding sem matrix
-  motifbp <- nchar(ss$nonRiskSeq)
+  motifbp <- nchar(ss$refSeq)
 
   # get the reference and alternative alleles
   ref_allele <- as.character(VariantAnnotation::ref(v))
@@ -73,8 +73,8 @@ viewFrames <- function(sempl_obj, vid = NULL, sid = NULL, score_index = NULL) {
   vi <- (nchar(v$upstream)+1):(nchar(v$upstream) + nchar(ref_str))
 
   # get the frame start and stop index
-  fstart <- c(ss$nonRiskVarIndex,
-              ss$riskVarIndex)
+  fstart <- c(ss$refVarIndex,
+              ss$altVarIndex)
   fstop <- c(fstart[1] + motifbp-1,
              fstart[2] + motifbp-1)
   
@@ -98,7 +98,6 @@ viewFrames <- function(sempl_obj, vid = NULL, sid = NULL, score_index = NULL) {
                       frameStop = fstop,
                       variantIndex = vi,
                       motif = ss$semId,
-                      tf = semData(sempl_obj)[semId == ss$semId]$tf,
                       variantName = as.character(ss$varId))
   return(sf)
 }
