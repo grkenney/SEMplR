@@ -24,25 +24,44 @@ suppressPackageStartupMessages({
 ```
 
 # Loading SEMs
+
+First, we create a list of file paths to the .sem files we want to include. We will also load the meta data for each sem in a `data.table` object. If meta data is used, all SEMs must be represented in the meta data table.
 ```{r}
 sem_files <- list.files("~/Downloads/SEMplR_2-14-25_freeze/SEMs/", 
                         pattern = ".sem", full.names = T)
 metadata_file <- "~/Downloads/SEMplR_2-14-25_freeze/sempl_metadata.csv"
 meta <- data.table::fread(file = metadata_file, sep = ",")
 
+head(meta)
+```
+
+We will load the matrix and meta data for all SEMs in a single `SNPEffectMatrixCollection` object. This object has two slots, one containing a named list of the matrices and a second slot containing our meta data table with a key column connecting the meta data to the names of the matrices.
+```{r}
 sc <- loadSEMCollection(semFiles = sem_files, 
                         semMetaData = meta, 
                         semMetaKey = "SEM")
+sc
+```
+Printing the `SNPEffectMatrixCollection`, we can see that we have 223 SEMs and 13 meta data features for each.
 
-sems(sc, "ZSCAN4_secondary")
+We can access all SEMs in collection the with the function `sems()` or some subset of matrices by specifying a vector of semIds in the `semId` parameter.
+```{r}
+sems(sc, semId = c("AP2B_HUMAN.SK-N-SH", "ZSCAN4_secondary"))
+```
+
+We can view the SEM meta data slot with the `semData` function.
+```{r}
 semData(sc)
 ```
 
 # Build Variant Set
+
+We will load the variants we want to score as a `VRanges` object.
 ```{r}
 vr <- VRanges(seqnames = c("chr12", "chr19"),
               ranges = c(94136009, 10640062), 
               ref = c("G", "T"), alt = c("C", "A"))
+vr
 ```
 
 # Score Variants
@@ -50,6 +69,19 @@ vr <- VRanges(seqnames = c("chr12", "chr19"),
 sempl_obj <- scoreVariants(vr = vr, semList = sc)
 sempl_obj
 ```
+
+```{r}
+variants(sempl_obj)
+```
+
+```{r}
+semData(sempl_obj)
+```
+
+```{r}
+scores(sempl_obj)
+```
+
 
 # View Frame
 ```{r}
@@ -64,8 +96,16 @@ plotSEM(sc, motif = "AP2B_HUMAN.SK-N-SH",
 ```
 
 ```{r}
-plotSemMotifs(sempl_obj, variant = "chr19:10640062:T>A", 
+plotSemMotifs(sempl_obj, variant = "chr19:10640062:T>A")
+```
+
+```{r}
+plotSemMotifs(sempl_obj, variant = "chr19:10640062:T>A",
               label = "transcription_factor")
 ```
 
+
+```{r}
+plotSemVariants(sempl_obj, semId = "TFAP4_HUMAN.HepG2")
+```
 
