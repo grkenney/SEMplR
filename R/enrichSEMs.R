@@ -141,7 +141,7 @@ enrichSEMs <- function(semScores, d="changed", lfc=0.5) {
   
   sem_data_cols <- semData(semScores) |> colnames()
   fisher_scores <- matrix(numeric(), 
-                          ncol=7+length(colnames(sem_data_cols)), 
+                          ncol=7+length(sem_data_cols), 
                           nrow=length(unique(s$semId)))
   fisher_scores <- data.table(fisher_scores)
   colnames(fisher_scores) <- c("semId", sem_data_cols, 
