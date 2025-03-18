@@ -4,7 +4,12 @@
 \alias{plotSemEnrichment}
 \title{Plot motif enrichment results}
 \usage{
-plotSemEnrichment(e, lab = "semId", sigThreshold = 0.05)
+plotSemEnrichment(
+  e,
+  lab = "semId",
+  sigThreshold = 0.05,
+  sigCol = "dodgerblue2"
+)
 }
 \arguments{
 \item{e}{SEMplR enrichment results data.table}
@@ -14,6 +19,8 @@ Default is "semId".}
 
 \item{sigThreshold}{adjusted pvalue threshold for coloring and labeling
 points. Default is 0.05}
+
+\item{sigCol}{color used to plot significant points}
 }
 \value{
 a \code{ggplot} with sem scores for each nucleic acid per position

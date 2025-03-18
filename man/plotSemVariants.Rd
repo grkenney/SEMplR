@@ -4,7 +4,12 @@
 \alias{plotSemVariants}
 \title{Plot non-alt versus alt binding propensity for a single motif}
 \usage{
-plotSemVariants(semplObj, semId, label = "varId")
+plotSemVariants(
+  semplObj,
+  semId,
+  label = "varId",
+  changedCols = c("#F8766D", "dodgerblue2")
+)
 }
 \arguments{
 \item{semplObj}{a SemplScores object with scores populated}
@@ -12,6 +17,9 @@ plotSemVariants(semplObj, semId, label = "varId")
 \item{semId}{numeric, index of the variant within the SEMplR object to plot}
 
 \item{label}{column in scores slot of semplObj to use for point labels}
+
+\item{changedCols}{vector of length 2 with colors to use for plotting gained
+and lost motifs respectively}
 }
 \value{
 a \code{ggplot} scatter plot of non-alt binding propensity versus alt

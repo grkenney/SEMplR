@@ -20,13 +20,15 @@ prepPlotSemEnrichmentDf <- function(e, lab, sigThreshold) {
 #' Default is "semId".
 #' @param sigThreshold adjusted pvalue threshold for coloring and labeling 
 #' points. Default is 0.05
+#' @param sigCol color used to plot significant points
 #'
 #' @import ggplot2
 #'
 #' @return a `ggplot` with sem scores for each nucleic acid per position
 #'
 #' @export
-plotSemEnrichment <- function(e, lab = "semId", sigThreshold = 0.05) {
+plotSemEnrichment <- function(e, lab = "semId", 
+                              sigThreshold = 0.05, sigCol = "dodgerblue2") {
   odds.ratio <- sig <- varId <- NULL
   
   e <- prepPlotSemEnrichmentDf(e, lab, sigThreshold)
@@ -45,7 +47,7 @@ plotSemEnrichment <- function(e, lab = "semId", sigThreshold = 0.05) {
           legend.position = c(0.15, 0.95),
           legend.background = element_rect(fill=alpha('white', 0)),
           legend.key = element_rect(fill = "transparent", colour = "transparent")) +
-    scale_color_manual(values = c("dodgerblue", "grey"),
+    scale_color_manual(values = c(sigCol, "grey"),
                        breaks = c(paste0("adj. p-value \u2264 ", sigThreshold))) +
     labs(x = "Rank", y = "Odds Ratio", color='Adjusted\np-value') +
     coord_cartesian(xlim=c(0, nrow(e) + nrow(e)/8))

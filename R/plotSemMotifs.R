@@ -3,14 +3,17 @@
 #' @param semplObj a SemplScores object with scores populated
 #' @param variant variant id to plot
 #' @param label column in sem_metadata slot of semplObj to use for point labels
-#'
+#' @param changedCols vector of length 2 with colors to use for plotting gained
+#' and lost motifs respectively
+#' 
 #' @import ggplot2
 #'
 #' @return a `ggplot` scatter plot of non-alt binding propensity versus alt
 #' binding propensity
 #'
 #' @export
-plotSemMotifs <- \(semplObj, variant, label = "semId") {
+plotSemMotifs <- \(semplObj, variant, label = "semId",
+                   changedCols = c("#F8766D", "dodgerblue2")) {
   refNorm <- altNorm <- varId <- sem <- NULL
   
   if (variant %in% scores(semplObj)[, varId]) {
@@ -18,6 +21,10 @@ plotSemMotifs <- \(semplObj, variant, label = "semId") {
   } else {
     stop(paste0("variant not found in SemplScores object. ",
                 variant, " is not in scores(semplObj)[, varId]"))
+  }
+  
+  if (length(changedCols) != 2) {
+    stop("changedCols must be a vector of length 2")
   }
   
   dt <- merge(dt, semData(semplObj), 
@@ -32,25 +39,21 @@ plotSemMotifs <- \(semplObj, variant, label = "semId") {
                color = 'grey') +
     geom_point(data = subset(dt, altNorm > 0 & refNorm < 0),
                size = 1,
-               color = 'firebrick') +
+               color = changedCols[1]) +
     geom_point(data = subset(dt, altNorm < 0 & refNorm > 0),
                size = 1,
-               color = '#1D91C0') +
+               color = changedCols[2]) +
     geom_point(data = subset(dt, altNorm > 0 & refNorm > 0),
                size = 1,
-               color = '#b05bc5') +
+               color = 'grey') +
     ggrepel::geom_text_repel(data = subset(dt, altNorm > 0 & refNorm < 0),
                     mapping = aes(label = .data[[label]]),
                     size = 4,
-                    color = 'firebrick') +
+                    color = changedCols[1]) +
     ggrepel::geom_text_repel(data = subset(dt, altNorm < 0 & refNorm > 0),
                     mapping = aes(label = .data[[label]]),
                     size = 4,
-                    color = '#1D91C0') +
-    ggrepel::geom_text_repel(data = subset(dt, altNorm > 0 & refNorm > 0),
-                             mapping = aes(label = .data[[label]]),
-                             size = 4,
-                             color = '#b05bc5') +
+                    color = changedCols[2]) +
     scale_x_continuous(breaks = scales::pretty_breaks(),
                        limits = \(x) ifelse(abs(x) < 1, c(-1,1), x)) +
     scale_y_continuous(breaks = scales::pretty_breaks(),
