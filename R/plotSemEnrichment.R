@@ -17,7 +17,7 @@ prepPlotSemEnrichmentDf <- function(e, lab, sigThreshold) {
 #'
 #' @param e SEMplR enrichment results data.table
 #' @param lab column in enrichment results to label significant points by. 
-#' Default is "tf".
+#' Default is "semId".
 #' @param sigThreshold adjusted pvalue threshold for coloring and labeling 
 #' points. Default is 0.05
 #'
@@ -26,7 +26,7 @@ prepPlotSemEnrichmentDf <- function(e, lab, sigThreshold) {
 #' @return a `ggplot` with sem scores for each nucleic acid per position
 #'
 #' @export
-plotSemEnrichment <- function(e, lab = "tf", sigThreshold = 0.05) {
+plotSemEnrichment <- function(e, lab = "semId", sigThreshold = 0.05) {
   odds.ratio <- sig <- varId <- NULL
   
   e <- prepPlotSemEnrichmentDf(e, lab, sigThreshold)

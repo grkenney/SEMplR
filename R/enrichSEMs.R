@@ -139,14 +139,18 @@ enrichSEMs <- function(semScores, d="changed", lfc=0.5) {
   
   s <- scores(semScores)
   
-  fisher_scores <- matrix(numeric(), ncol=8, nrow=length(unique(s$semId)))
+  sem_data_cols <- semData(semScores) |> colnames()
+  fisher_scores <- matrix(numeric(), 
+                          ncol=7+length(colnames(sem_data_cols)), 
+                          nrow=length(unique(s$semId)))
   fisher_scores <- data.table(fisher_scores)
-  colnames(fisher_scores) <- c("semId", "tf", "n.changed", "odds.ratio",
+  colnames(fisher_scores) <- c("semId", sem_data_cols, 
+                               "n.changed", "odds.ratio",
                                "ci.lower", "ci.upper",
                                "pvalue", "adj.pvalue")
+  data.table::setkey(fisher_scores, semId)
   fisher_scores$semId <- unique(s$semId)
-  fisher_scores$tf <- semData(semScores)$tf[match(fisher_scores$semId, 
-                                                  semData(semScores)$semId)]
+  fisher_scores[, sem_data_cols] <- semData(semScores)
   
   for (i in 1:nrow(fisher_scores)) {
     si <- fisher_scores$semId[i]

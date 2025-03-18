@@ -4,13 +4,13 @@
 \alias{plotSemEnrichment}
 \title{Plot motif enrichment results}
 \usage{
-plotSemEnrichment(e, lab = "tf", sigThreshold = 0.05)
+plotSemEnrichment(e, lab = "semId", sigThreshold = 0.05)
 }
 \arguments{
 \item{e}{SEMplR enrichment results data.table}
 
 \item{lab}{column in enrichment results to label significant points by.
-Default is "tf".}
+Default is "semId".}
 
 \item{sigThreshold}{adjusted pvalue threshold for coloring and labeling
 points. Default is 0.05}
