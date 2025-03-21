@@ -14,7 +14,7 @@ plotSemVariants(
 \arguments{
 \item{semplObj}{a SemplScores object with scores populated}
 
-\item{semId}{numeric, index of the variant within the SEMplR object to plot}
+\item{semId}{a single character vector matching a semId in the semplObj}
 
 \item{label}{column in scores slot of semplObj to use for point labels}
 

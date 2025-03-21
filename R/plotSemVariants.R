@@ -1,7 +1,7 @@
 #' Plot non-alt versus alt binding propensity for a single motif
 #'
 #' @param semplObj a SemplScores object with scores populated
-#' @param semId numeric, index of the variant within the SEMplR object to plot
+#' @param semId a single character vector matching a semId in the semplObj
 #' @param label column in scores slot of semplObj to use for point labels
 #' @param changedCols vector of length 2 with colors to use for plotting gained
 #' and lost motifs respectively
@@ -17,7 +17,8 @@ plotSemVariants <- function(semplObj, semId, label = "varId",
   refNorm <- altNorm <- NA
   
   if (semId %in% scores(semplObj)[, semId]) {
-    dt <- scores(semplObj)[semId == semId]
+    ix <- semId == scores(semplObj)[, semId]
+    dt <- scores(semplObj)[ix, ]
   } else {
     stop(paste0("semId not found in SemplScores object. ",
                 semId, " is not in scores(semplObj)[, semId]"))

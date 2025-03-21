@@ -17,7 +17,8 @@ plotSemMotifs <- \(semplObj, variant, label = "semId",
   refNorm <- altNorm <- varId <- sem <- NULL
   
   if (variant %in% scores(semplObj)[, varId]) {
-    dt <- scores(semplObj)[varId == variant]
+    ix <- variant == scores(semplObj)[, varId]
+    dt <- scores(semplObj)[ix, ]
   } else {
     stop(paste0("variant not found in SemplScores object. ",
                 variant, " is not in scores(semplObj)[, varId]"))
