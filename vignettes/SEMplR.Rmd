@@ -1,5 +1,5 @@
 ---
-title: "SEMplR_Vignette"
+title: "SEMplR Vignette"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{SEMplR_Vignette}
