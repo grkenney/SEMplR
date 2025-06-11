@@ -137,7 +137,8 @@ calculateScores <- function(varId, varSeq, semObj, nflank) {
 #'
 #' @param vr `VRanges` object
 #' @param semList a list of `SNPEffectMatrix` objects
-#' @param bs_genome_obj A `BSgenome` object for the genome build to use.
+#' @param bs_genome_obj A `BSgenome` object for the genome build to use. ie.
+#' `BSgenome.Hsapiens.UCSC.hg19::Hsapiens`
 #'
 #' @return a SemplScores object
 #'
@@ -159,10 +160,9 @@ calculateScores <- function(varId, varSeq, semObj, nflank) {
 #' semList <- SNPEffectMatrix(sem, baseline = -1, semId = "sem_id")
 #' 
 #' # calculate binding propensity
-#' scoreVariants(vr, semList)
+#' scoreVariants(vr, semList, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 #' 
-scoreVariants <- \(vr, semList, 
-                     bs_genome_obj=BSgenome.Hsapiens.UCSC.hg19::Hsapiens) {
+scoreVariants <- \(vr, semList, bs_genome_obj) {
   riskNorm <- riskSeq <- nonRiskNorm <- nonRiskSeq <- .SD <- NULL
   
   # if given a SNPEffectMatrix, make it a SNPEffectMatrixCollection
