@@ -23,26 +23,13 @@ suppressPackageStartupMessages({
 })
 ```
 
-# Loading SEMs
 
-First, we create a list of file paths to the .sem files we want to include. We will also load the meta data for each sem in a `data.table` object. If meta data is used, all SEMs must be represented in the meta data table.
+Printing the `SNPEffectMatrixCollection`, we can see that we have 223 SEMs and 13 meta data features for each.
 ```{r}
-sem_files <- list.files("~/Downloads/SEMplR_2-14-25_freeze/SEMs/", 
-                        pattern = ".sem", full.names = T)
-metadata_file <- "~/Downloads/SEMplR_2-14-25_freeze/sempl_metadata.csv"
-meta <- data.table::fread(file = metadata_file, sep = ",")
-
-head(meta)
-```
-
-We will load the matrix and meta data for all SEMs in a single `SNPEffectMatrixCollection` object. This object has two slots, one containing a named list of the matrices and a second slot containing our meta data table with a key column connecting the meta data to the names of the matrices.
-```{r}
-sc <- loadSEMCollection(semFiles = sem_files, 
-                        semMetaData = meta, 
-                        semMetaKey = "SEM")
+data(sc)
 sc
 ```
-Printing the `SNPEffectMatrixCollection`, we can see that we have 223 SEMs and 13 meta data features for each.
+
 
 We can access all SEMs in collection the with the function `sems()` or some subset of matrices by specifying a vector of semIds in the `semId` parameter.
 ```{r}
@@ -109,3 +96,60 @@ plotSemMotifs(sempl_obj, variant = "chr19:10640062:T>A",
 plotSemVariants(sempl_obj, semId = "TFAP4_HUMAN.HepG2")
 ```
 
+# Enrichment
+
+```{r}
+# loading data
+caqtl_file <- "/Users/gracekenney/Downloads/caQTL_variants_overlappingPeaks_LD-r2-0.8_withLead.bed"
+caqtls <- data.table::fread(file = caqtl_file, sep = "\t")[1:1000,]
+proxy_ID_split <- strsplit(caqtls$proxy_ID, ":")
+
+# formatting position and alleles
+chr <- lapply(proxy_ID_split, `[[`, 1) |> unlist()
+pos <- lapply(proxy_ID_split, `[[`, 2) |> unlist()
+ref_allele <- lapply(proxy_ID_split, `[[`, 3) |> unlist()
+alt_allele <- lapply(proxy_ID_split, `[[`, 4) |> unlist()
+
+# building variant annotation obj
+vr_e <- VariantAnnotation::VRanges(seqnames = chr,
+                                 ranges = pos, 
+                                 ref = ref_allele, 
+                                 alt = alt_allele)
+
+# score variants
+data(sc)
+
+# score variants
+var_scores_e <- scoreVariants(vr = vr, 
+                            semList = sc,
+                            bs_genome_obj=BSgenome.Hsapiens.UCSC.hg38::Hsapiens)
+
+# calculate enrichment
+es <- enrichSEMs(var_scores_e, lfc = 2, d = "gained")
+
+# plot enrichment
+plotSemEnrichment(es, lab = "transcription_factor", sigThreshold = 0.001)
+```
+
+
+# Extras
+
+# Loading SEMs
+
+First, we create a list of file paths to the .sem files we want to include. We will also load the meta data for each sem in a `data.table` object. If meta data is used, all SEMs must be represented in the meta data table.
+```{r, eval=F}
+sem_files <- list.files("SEMs/", 
+                        pattern = ".sem", full.names = T)
+metadata_file <- "SEMs/sempl_metadata.csv"
+meta <- data.table::fread(file = metadata_file, sep = ",")
+
+head(meta)
+```
+
+We will load the matrix and meta data for all SEMs in a single `SNPEffectMatrixCollection` object. This object has two slots, one containing a named list of the matrices and a second slot containing our meta data table with a key column connecting the meta data to the names of the matrices.
+```{r, eval=F}
+sc <- loadSEMCollection(semFiles = sem_files, 
+                        semMetaData = meta, 
+                        semMetaKey = "SEM")
+sc
+```
