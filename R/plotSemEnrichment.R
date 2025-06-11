@@ -1,11 +1,13 @@
 # Add columns with labels for plotting for significant transcription factors
-prepPlotSemEnrichmentDf <- function(e, lab, sigThreshold) {
+prepPlotSemEnrichmentDf <- function(e, lab, sigThreshold, orThreshold) {
   e$lab <- lapply(1:nrow(e), 
                   function(i) 
-                    ifelse(e$adj.pvalue[i] <= sigThreshold,
+                    ifelse((e$adj.pvalue[i] <= sigThreshold) &
+                             (e$odds.ratio[i] > orThreshold),
                            as.character(e[[lab]][i]), ""))
   
-  e$sig <- ifelse(e$adj.pvalue <= sigThreshold, 
+  e$sig <- ifelse((e$adj.pvalue <= sigThreshold) & 
+                    (e$odds.ratio > orThreshold), 
                   paste0("adj. p-value \u2264 ", sigThreshold), 
                   paste0("> ", sigThreshold))
   e$sig <- factor(e$sig, levels = c(paste0("adj. p-value \u2264 ", sigThreshold), 
@@ -27,11 +29,14 @@ prepPlotSemEnrichmentDf <- function(e, lab, sigThreshold) {
 #' @return a `ggplot` with sem scores for each nucleic acid per position
 #'
 #' @export
-plotSemEnrichment <- function(e, lab = "semId", 
-                              sigThreshold = 0.05, sigCol = "dodgerblue2") {
+plotSemEnrichment <- function(e, 
+                              lab = "semId", 
+                              sigThreshold = 0.05, 
+                              sigCol = "dodgerblue2",
+                              orThreshold = 1.25) {
   odds.ratio <- sig <- varId <- NULL
   
-  e <- prepPlotSemEnrichmentDf(e, lab, sigThreshold)
+  e <- prepPlotSemEnrichmentDf(e, lab, sigThreshold, orThreshold)
   
   p <- ggplot(e, aes(x = stats::reorder(semId, odds.ratio), 
                      y = odds.ratio, col=sig)) + 
