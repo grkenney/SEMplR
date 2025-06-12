@@ -2,7 +2,7 @@ test_that("prepPlotSemEnrichmentDf significant", {
   e <- data.table(semId = "sem_id",
                   tf = "tf_name",
                   n.changed = 1,
-                  odds.ratio = 1,
+                  odds.ratio = 2,
                   ci.lower = 1,
                   ci.upper = 1,
                   pvalue = 0.05,

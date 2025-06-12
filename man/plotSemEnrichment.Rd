@@ -8,7 +8,8 @@ plotSemEnrichment(
   e,
   lab = "semId",
   sigThreshold = 0.05,
-  sigCol = "dodgerblue2"
+  sigCol = "dodgerblue2",
+  orThreshold = 1.25
 )
 }
 \arguments{

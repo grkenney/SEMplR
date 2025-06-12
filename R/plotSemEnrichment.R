@@ -22,6 +22,8 @@ prepPlotSemEnrichmentDf <- function(e, lab, sigThreshold, orThreshold) {
 #' Default is "semId".
 #' @param sigThreshold adjusted pvalue threshold for coloring and labeling 
 #' points. Default is 0.05
+#' @param orThreshold odds ratio threshold for coloring and labeling points. 
+#' Default is 1.25
 #' @param sigCol color used to plot significant points
 #'
 #' @import ggplot2
@@ -32,8 +34,8 @@ prepPlotSemEnrichmentDf <- function(e, lab, sigThreshold, orThreshold) {
 plotSemEnrichment <- function(e, 
                               lab = "semId", 
                               sigThreshold = 0.05, 
-                              sigCol = "dodgerblue2",
-                              orThreshold = 1.25) {
+                              orThreshold = 1.25,
+                              sigCol = "dodgerblue2") {
   odds.ratio <- sig <- varId <- NULL
   
   e <- prepPlotSemEnrichmentDf(e, lab, sigThreshold, orThreshold)
