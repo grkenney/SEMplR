@@ -53,7 +53,7 @@ vr
 
 # Score Variants
 ```{r}
-sempl_obj <- scoreVariants(vr = vr, semList = sc)
+sempl_obj <- scoreVariants(vr = vr, semList = sc, bs_genome_obj=BSgenome.Hsapiens.UCSC.hg38::Hsapiens)
 sempl_obj
 ```
 

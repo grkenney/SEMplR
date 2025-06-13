@@ -45,7 +45,8 @@ vr <- VRanges(seqnames = "chr12",
 semList <- SNPEffectMatrix(sem, baseline = 0.5, semId = "sem_id")
 
 # calculate binding propensity
-s <- scoreVariants(vr, semList)
+s <- scoreVariants(vr, semList, 
+                   bs_genome_obj = BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 
 # calculate enrichment
 enrichSEMs(s, d = "changed")
