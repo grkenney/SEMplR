@@ -73,7 +73,9 @@ test_that("scoreVariants SNP", {
                 ranges = c(94136009, 10640062), 
                 ref = c("G", "T"), alt = c("C", "A"))
   
-  scores_a <- scoreVariants(vr, so) |> scores()
+  scores_a <- scoreVariants(vr, so, 
+                            bs_genome_obj = BSgenome.Hsapiens.UCSC.hg19::Hsapiens) |> 
+    scores()
   scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] <-
     scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] |>
     round(4)
@@ -157,7 +159,9 @@ test_that("scoreVariants 1bp deletion", {
                 ranges = c(94136009), 
                 ref = c("G"), alt = c(""))
   
-  scores_a <- scoreVariants(vr, so) |> scores()
+  scores_a <- scoreVariants(vr, so, 
+                            bs_genome_obj = BSgenome.Hsapiens.UCSC.hg19::Hsapiens) |> 
+    scores()
   scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] <-
     scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] |>
     round(4)
@@ -194,7 +198,9 @@ test_that("scoreVariants make semList a named list if not already", {
                 ranges = c(94136009), 
                 ref = c("G"), alt = c(""))
   
-  scores_a <- scoreVariants(vr, so) |> scores()
+  scores_a <- scoreVariants(vr, so, 
+                            bs_genome_obj = BSgenome.Hsapiens.UCSC.hg19::Hsapiens) |> 
+    scores()
   scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] <-
     scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] |>
     round(4)
@@ -230,7 +236,9 @@ test_that("scoreVariants multiple variants not in alphanumeric order", {
                 ref = c("G", "G"), alt = c("", "C"))
   vr$id <- c("B", "A")
   
-  scores_a <- scoreVariants(vr, so) |> scores()
+  scores_a <- scoreVariants(vr, so, 
+                            bs_genome_obj = BSgenome.Hsapiens.UCSC.hg19::Hsapiens) |> 
+    scores()
   scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] <-
     scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] |>
     round(4)
