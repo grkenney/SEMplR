@@ -1,5 +1,6 @@
 # Add columns with labels for plotting for significant transcription factors
-prepPlotSemEnrichmentDf <- function(e, lab, sigThreshold, orThreshold) {
+prepPlotSemEnrichmentDf <- function(e, lab = "semId", 
+                                    sigThreshold = 0.05, orThreshold = 1.25) {
   e$lab <- lapply(1:nrow(e), 
                   function(i) 
                     ifelse((e$adj.pvalue[i] <= sigThreshold) &
