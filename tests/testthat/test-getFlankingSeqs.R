@@ -1,4 +1,4 @@
-test_that("query_seqs pulls correct seqs", {
+test_that("querySeqs pulls correct seqs", {
   vr <- VRanges(seqnames = "chr12",
                 ranges = 94136009,
                 ref = "G", alt = "C")
@@ -6,7 +6,8 @@ test_that("query_seqs pulls correct seqs", {
                   downstream = "AG",
                   ref_seq = "TTGAG",
                   alt_seq = "TTCAG")
-  seq_data_a <- query_seqs(vr, up = 2, down = 2)
+  seq_data_a <- querySeqs(vr, up = 2, down = 2,
+                          bs_genome_obj = BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
   expect_equal(seq_data_a, seq_data_e)
 })
 
@@ -15,7 +16,8 @@ test_that("getFlankingSeqs normal vranges input", {
   vr <- VRanges(seqnames = "chr12",
                 ranges = 94136009,
                 ref = "G", alt = "C")
-  vr_a <- getFlankingSeqs(vr, 5, 5)
+  vr_a <- getFlankingSeqs(vr, 5, 5, 
+                          bs_genome_obj = BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
   
   # populate VRanges and with expected sequences
   vr$upstream <- "GCTTT"
@@ -28,8 +30,9 @@ test_that("getFlankingSeqs normal vranges input", {
 
 
 test_that("getFlankingSeqs vr not of class VRanges", {
-  expect_error(getFlankingSeqs(NA, 5, 5), 
-               "Input argument vr must be of class VRanges")
+  expect_error(getFlankingSeqs(NA, 5, 5, 
+                               bs_genome_obj = BSgenome.Hsapiens.UCSC.hg19::Hsapiens), 
+               "Input argument x must be of class VRanges or GRanges")
 })
 
 

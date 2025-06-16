@@ -4,16 +4,11 @@
 \alias{getFlankingSeqs}
 \title{Get up and downstream sequences of variant(s) and store in VRanges metadata}
 \usage{
-getFlankingSeqs(
-  vr,
-  up,
-  down,
-  bs_genome_obj = BSgenome.Hsapiens.UCSC.hg19::Hsapiens
-)
+getFlankingSeqs(x, up, down, bs_genome_obj)
 }
 \arguments{
-\item{vr}{A \code{VRanges} object with one or more variants. seqnames and ranges
-fields are required.}
+\item{x}{A \code{VRanges} or \code{GRanges} object with one or more variants.
+seqnames and ranges fields are required.}
 
 \item{up}{Numeric, number of bases to return upstream of variant}
 
