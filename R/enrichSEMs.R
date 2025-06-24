@@ -111,6 +111,6 @@ enrichSEMs <- \(x, semList, bs_genome_obj, background = NULL) {
     result[sem_name, "n_successes"] <- successes
     result[sem_name, "bg_successes"] <- sum(bg$scoreNorm[bg$sem_mtx_id == sem_name] > 0)
   }
-  e$padj <- stats::p.adjust(e$pvalue, method = "BH")
+  result$padj <- stats::p.adjust(result$pvalue, method = "BH")
   return(result)
 }
