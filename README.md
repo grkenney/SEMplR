@@ -2,7 +2,7 @@
 
 SEMplR is an R package for predicting transcription factor binding and the effect of genetic variation on transcription factor binding.
 
-Please see the vignette for a more detailed example workflow. Below are some basic usage examples.
+Please see the vignette for a more detailed example workflow. Below are some examples of basic usage.
 
 ## Installation
 
@@ -26,6 +26,14 @@ sems(sc, semId = c("AP2B_HUMAN.SK-N-SH", "ZSCAN4_secondary"))
 
 ### Predicting transcription factor binding
 
+```
+gr <- GenomicRanges::GRanges(seqnames = chr,
+                             ranges = pos, 
+                             allele = ref_allele)
+result <- scoreBinding(gr, 
+                       semList = sc, 
+                       bs_genome_obj = BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+```
 
 ### Predicting effect of genetic variation on transcription factor binding
 
