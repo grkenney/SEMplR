@@ -13,6 +13,7 @@ getSeqStarts <- function(seq_list) {
 
 # calculate the starting position of each frame to score in a single sequence
 calcFrameStarts <- function(nbp, nflank, motif_size) {
+  nflank <- as.integer(nflank)
   first_start <- nflank + 1 - (motif_size-1)
   last_start <- nflank + (nbp - 2*nflank)
   first_start:last_start
