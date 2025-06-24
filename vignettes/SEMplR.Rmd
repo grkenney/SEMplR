@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
   fig.height = 5,
   fig.width = 5
 )
+options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
 ```{r}
@@ -83,11 +84,8 @@ plotSEM(sc, motif = "AP2B_HUMAN.SK-N-SH",
 ```
 
 ```{r}
-plotSemMotifs(sempl_obj, variant = "chr19:10640062:T>A")
-```
-
-```{r}
-plotSemMotifs(sempl_obj, variant = "chr19:10640062:T>A",
+plotSemMotifs(sempl_obj, 
+              variant = "chr19:10640062:T>A",
               label = "transcription_factor")
 ```
 
