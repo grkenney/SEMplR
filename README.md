@@ -26,16 +26,20 @@ sems(sc, semId = c("AP2B_HUMAN.SK-N-SH", "ZSCAN4_secondary"))
 
 ### Predicting transcription factor binding
 
+Scoring transcription factor binding.
+
 ```
-gr <- GenomicRanges::GRanges(seqnames = chr,
-                             ranges = pos, 
-                             allele = ref_allele)
+gr <- GenomicRanges::GRanges(seqnames = c("chr12", "chr19"),
+                             ranges = c(94136009, 10640062), 
+                             allele = c("G", "T"))
 result <- scoreBinding(gr, 
                        semList = sc, 
                        bs_genome_obj = BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 ```
 
 ### Predicting effect of genetic variation on transcription factor binding
+
+Scoring both alleles of genetic variants for transcription factor binding.
 
 ```
 vr <- VRanges(seqnames = c("chr12", "chr19"),
