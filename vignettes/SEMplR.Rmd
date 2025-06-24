@@ -115,20 +115,40 @@ vr_e <- VariantAnnotation::VRanges(seqnames = chr,
                                  ranges = pos, 
                                  ref = ref_allele, 
                                  alt = alt_allele)
-
-# score variants
 data(sc)
 
 # score variants
-var_scores_e <- scoreVariants(vr = vr, 
+var_scores_e <- scoreVariants(vr = vr_e, 
                             semList = sc,
                             bs_genome_obj=BSgenome.Hsapiens.UCSC.hg38::Hsapiens)
 
-# calculate enrichment
-es <- enrichSEMs(var_scores_e, lfc = 2, d = "gained")
+plotSemVariants(var_scores_e, semId = "MA0151.1")
+```
 
-# plot enrichment
-plotSemEnrichment(es, lab = "transcription_factor", sigThreshold = 0.001)
+```{r}
+plotSemMotifs(var_scores_e, "chr1:906982:C>T", label = "transcription_factor")
+```
+
+# Binding Enrichment
+
+Given this is a large set of variants, we might want to check if some 
+transcription factors are enriched for binding in one allele or the other.
+
+Here, we will test if any of these transcription factors are bound more than
+expected in the reference alleles of this set.
+
+```{r}
+gr_e <- GenomicRanges::GRanges(seqnames = chr,
+                                 ranges = pos, 
+                                 allele = ref_allele)
+
+e <- enrichSEMs(x = gr_e, semList = sc, 
+                bs_genome_obj = BSgenome.Hsapiens.UCSC.hg38::Hsapiens)
+```
+
+```{r}
+plt <- plotEnrich(e, semList = sc)
+plt
 ```
 
 
