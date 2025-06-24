@@ -60,7 +60,7 @@ querySeqs <- function(x, up, down,
                   ref_seq = as.character(concat_ref_seq),
                   alt_seq = as.character(concat_alt_seq))
   } else {
-    if (is.null(allele)) {
+    if (is.null(allele) | length(allele) == 0) {
       allele <- bsgenome_ref
     }
     concat_seq <- Biostrings::xscat(flanking_seqs[1:up],
@@ -86,7 +86,7 @@ querySeqs <- function(x, up, down,
 #' @param up Numeric, number of bases to return upstream of variant
 #' @param down Numeric, number of bases to return downstream of variant
 #' @param bs_genome_obj A `BSgenome` object for the genome build to use.
-#' Defaults to `BSgenome.Hsapiens.UCSC.hg19`.
+#' @param allele Column name in meta data storing allele
 #'
 #' @importFrom methods is
 #'
@@ -94,7 +94,8 @@ querySeqs <- function(x, up, down,
 #'
 #' @export
 getFlankingSeqs <- function(x, up, down,
-                            bs_genome_obj) {
+                            bs_genome_obj,
+                            allele = NULL) {
   if (is(x)[1] != "VRanges" & is(x)[1] != "GRanges") {
     stop("Input argument x must be of class VRanges or GRanges")
   }
@@ -118,7 +119,8 @@ getFlankingSeqs <- function(x, up, down,
                           function(i) querySeqs(x[i],
                                                 up = up, down = down,
                                                 bs_genome_obj = bs_genome_obj, 
-                                                variant = variant))
+                                                variant = variant,
+                                                allele = mcols(x)[allele][i, ]))
 
   # add flanking sequence to vranges metadata
   S4Vectors::mcols(x)[meta_cols] <- as.data.frame(do.call(rbind, 

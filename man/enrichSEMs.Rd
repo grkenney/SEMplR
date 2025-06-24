@@ -2,54 +2,24 @@
 % Please edit documentation in R/enrichSEMs.R
 \name{enrichSEMs}
 \alias{enrichSEMs}
-\title{Calculate enrichment of motifs broken among variant set}
+\title{Calculates binding enrichment for motif(s)}
 \usage{
-enrichSEMs(semScores, d = "changed", lfc = 0.5)
+enrichSEMs(x, semList, bs_genome_obj, background = NULL)
 }
 \arguments{
-\item{semScores}{a SemplScores object}
+\item{x}{A \code{SNPEffectMatrix} or \code{SNPEffectMatrixCollection}}
 
-\item{d}{direction of test. Options are: "changed", "gained", "lost"}
+\item{semList}{A \code{SNPEffectMatrix} or \code{SNPEffectMatrixCollection} object}
 
-\item{lfc}{Log2FC cutoff (default = 0.5)}
+\item{bs_genome_obj}{A \code{BSgenome} object for the genome build to use.}
+
+\item{background}{A list of DNA sequences to use for background. The length of each
+sequence must match the length of sequences in \code{x}}
 }
 \value{
-a data.table with results of the enrichment test
-\itemize{
-\item \code{n.changed}: number of motifs changed in direction specified
-\item \code{odds.ratio}: odds ratio of fisher's test
-\item \code{ci.lower}: lower 95\% confidence interval
-\item \code{ci.upper}: upper 95\% confidence interval
-\item \code{pvalue}: p-value of Fisher's test
-\item \code{adj.pvalue}: Benjamini & Hochberg adjusted pvalue
-}
+a \code{list} of matrices
 }
 \description{
-Performs a Fisher's exact test to test whether a motif is changed in the
-specified direction of change more often than expected within the set of
-variants.
+Perform a binomial test to determine if SNP Effect Matrices are bound more
+often than expected.
 }
-\examples{
-library(VariantAnnotation)
-
-# create an SNP Effect Matrix (SEM)
-sem <- matrix(rnorm(12), ncol = 4)
-colnames(sem) <- c("A", "C", "G", "T")
-
-# create a VRanges object
-vr <- VRanges(seqnames = "chr12",
-              ranges = 94136009, 
-              ref = "G", alt = "C")
-
-# create a list of SNPEffectMatrix objects
-semList <- SNPEffectMatrix(sem, baseline = 0.5, semId = "sem_id")
-
-# calculate binding propensity
-s <- scoreVariants(vr, semList, 
-                   bs_genome_obj = BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
-
-# calculate enrichment
-enrichSEMs(s, d = "changed")
-
-}
-\keyword{internal}

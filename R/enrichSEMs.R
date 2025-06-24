@@ -1,172 +1,116 @@
-# Build a contingency table for gained motifs
-#
-# @param s score table from a SemplScores object
-# @param si SEM id
-# @param lfc Log2FC cutoff (default = 0.5)
-gainedContingencyTable <- function(s, si, lfc=0.5) {
-  refNorm <- altNorm <- absLog2FC <- NULL
-  
-  s$absLog2FC <- log2(abs(s$altNorm) / abs(s$refNorm))
-  # Gained in SEM
-  a <- s[(refNorm < 0 & altNorm > 0 & abs(absLog2FC) > lfc) & semId == si] |> nrow()
-  # Not Gained in SEM
-  b <- s[!(refNorm < 0 & altNorm > 0 & abs(absLog2FC) > lfc) & semId == si] |> nrow()
-  # Gained not in SEM
-  c <- s[(refNorm < 0 & altNorm > 0 & abs(absLog2FC) > lfc) & semId != si] |> nrow()
-  # Not Gained not in SEM
-  d <- s[!(refNorm < 0 & altNorm > 0 & abs(absLog2FC) > lfc) & semId != si] |> nrow()
-  
-  contingencyTable <- matrix(c(a, c, 
-                               b, d), ncol=2)
-  return(contingencyTable)
+.semToPpm <- \(s) {
+  norm_score <- apply(sem(s), 1, 
+                      function(x) (2^x - 2^baseline(s)) / abs(2^baseline(s)))
+  # replace negative scores with zero
+  norm_score[norm_score < 0] <- 0
+  ppm <- apply(norm_score, 2, function(x) x / sum(x))
+  return(ppm)
 }
 
-# Build a contingency table for lost motifs
-#
-# @param s score table from a SemplScores object
-# @param si SEM id
-# @param lfc Log2FC cutoff (default = 0.5)
-lostContingencyTable <- function(s, si, lfc=0.5) {
-  refNorm <- altNorm <- absLog2FC <- NULL
+
+.scrambleFlanks <- function(seqs) {
+  prefix <- substr(seqs, 1, nchar(seqs)/2 - 0.5)
+  suffix <- substr(seqs, nchar(prefix)+2, nchar(seqs))
+  allele <- substr(seqs, nchar(prefix)+1, nchar(prefix)+1)
   
-  s$absLog2FC <- log2(abs(s$altNorm) / abs(s$refNorm))
-  # Lost in SEM
-  a <- s[(refNorm > 0 & altNorm < 0 & abs(absLog2FC) > lfc) & semId == si] |> nrow()
-  # Not Lost in SEM
-  b <- s[!(refNorm > 0 & altNorm < 0 & abs(absLog2FC) > lfc) & semId == si] |> nrow()
-  # Lost not in SEM
-  c <- s[(refNorm > 0 & altNorm < 0 & abs(absLog2FC) > lfc) & semId != si] |> nrow()
-  # Not Lost not in SEM
-  d <- s[!(refNorm > 0 & altNorm < 0 & abs(absLog2FC) > lfc) & semId != si] |> nrow()
+  flank_concat <- lapply(1:length(seqs), 
+                         function(i) stringi::stri_c(prefix[i], suffix[i]))
+  scrambled <- lapply(flank_concat, 
+                      function(x) stringi::stri_rand_shuffle(x)) |> unlist()
+  new_prefix <- substr(scrambled, 1, nchar(prefix))
+  new_suffix <- substr(scrambled, nchar(prefix)+1, nchar(seqs)-1)
   
-  contingencyTable <- matrix(c(a, c, 
-                               b, d), ncol=2)
-  return(contingencyTable)
+  scrambled_seqs <- stringi::stri_c(new_prefix, allele, new_suffix)
+  return(scrambled_seqs)
 }
 
-# Build a contingency table for changed motifs
-#
-# @param s score table from a SemplScores object
-# @param si SEM id
-# @param lfc Log2FC cutoff (default = 0.5)
-changedContingencyTable <- function(s, si, lfc=0.5) {
-  refNorm <- altNorm <- absLog2FC <- NULL
-  
-  s$absLog2FC <- log2(abs(s$altNorm) / abs(s$refNorm))
-  # Lost in SEM
-  a <- s[((refNorm > 0 & altNorm < 0) |
-           (refNorm < 0 & altNorm > 0) & abs(absLog2FC) > lfc) & semId == si] |> nrow()
-  # Not Lost in SEM
-  b <- s[!((refNorm > 0 & altNorm < 0) |
-             (refNorm < 0 & altNorm > 0) & abs(absLog2FC) > lfc) & semId == si] |> nrow()
-  # Lost not in SEM
-  c <- s[((refNorm > 0 & altNorm < 0) |
-            (refNorm < 0 & altNorm > 0) & abs(absLog2FC) > lfc) & semId != si] |> nrow()
-  # Not Lost not in SEM
-  d <- s[!((refNorm > 0 & altNorm < 0) |
-             (refNorm < 0 & altNorm > 0) & abs(absLog2FC) > lfc) & semId != si] |> nrow()
-  
-  contingencyTable <- matrix(c(a, c, 
-                               b, d), ncol=2)
-  return(contingencyTable)
-}
 
-# Return a contingency table according to direction of test
-#
-# @param s score table from a SemplScores object
-# @param si SEM id
-# @param d direction of test. Options are: "changed", "gained", "lost"
-# @param lfc Log2FC cutoff (default = 0.5)
-# 
-#' @keywords internal
-getContingencyTable <- function(s, si, d, lfc) {
-  if (d == "changed") {
-    ct <- changedContingencyTable(s = s, si = si, lfc=0.5)
-  } else if (d == "gained") {
-    ct <- gainedContingencyTable(s = s, si = si, lfc=0.5)
-  } else if (d == "lost") {
-    ct <- lostContingencyTable(s = s, si = si, lfc=0.5)
-  } else {
-    stop("Invalid input for argument d. Must be 'changed', 'gained', or 'lost'")
-  }
-  return(ct)
-}
-
-#' Calculate enrichment of motifs broken among variant set
+#' Convert a SNP Effect Matrix to a position probability matrices (PPMs)
 #' 
-#' Performs a Fisher's exact test to test whether a motif is changed in the
-#' specified direction of change more often than expected within the set of 
-#' variants.
+#' Converts the SNP Effect Matrix in a SNPEffectMatrix or 
+#' SNPEffectMatrixCollection object to a position probability matrix (PPM)
+#' where each entry is the probability of a base at each position in the motif.
 #'
-#' @param semScores a SemplScores object
-#' @param d direction of test. Options are: "changed", "gained", "lost"
-#' @param lfc Log2FC cutoff (default = 0.5)
+#' @param x A `SNPEffectMatrix` or `SNPEffectMatrixCollection` object
 #' 
-#' @return a data.table with results of the enrichment test
-#' - `n.changed`: number of motifs changed in direction specified
-#' - `odds.ratio`: odds ratio of fisher's test
-#' - `ci.lower`: lower 95% confidence interval
-#' - `ci.upper`: upper 95% confidence interval
-#' - `pvalue`: p-value of Fisher's test
-#' - `adj.pvalue`: Benjamini & Hochberg adjusted pvalue
-#' 
-#' @keywords internal
+#' @importFrom methods is
+#'
+#' @return a `list` of matrices
+#'
 #' @export
-#' 
-#' @examples
-#' library(VariantAnnotation)
-#'
-#' # create an SNP Effect Matrix (SEM)
-#' sem <- matrix(rnorm(12), ncol = 4)
-#' colnames(sem) <- c("A", "C", "G", "T")
-#' 
-#' # create a VRanges object
-#' vr <- VRanges(seqnames = "chr12",
-#'               ranges = 94136009, 
-#'               ref = "G", alt = "C")
-#' 
-#' # create a list of SNPEffectMatrix objects
-#' semList <- SNPEffectMatrix(sem, baseline = 0.5, semId = "sem_id")
-#' 
-#' # calculate binding propensity
-#' s <- scoreVariants(vr, semList, 
-#'                    bs_genome_obj = BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
-#' 
-#' # calculate enrichment
-#' enrichSEMs(s, d = "changed")
-#' 
-enrichSEMs <- function(semScores, d="changed", lfc=0.5) {
-  adj.pvalue <- NULL
-  
-  s <- scores(semScores)
-  
-  sem_data_cols <- semData(semScores) |> colnames()
-  fisher_scores <- matrix(numeric(), 
-                          ncol=7+length(sem_data_cols), 
-                          nrow=length(unique(s$semId)))
-  fisher_scores <- data.table(fisher_scores)
-  colnames(fisher_scores) <- c("semId", sem_data_cols, 
-                               "n.changed", "odds.ratio",
-                               "ci.lower", "ci.upper",
-                               "pvalue", "adj.pvalue")
-  data.table::setkey(fisher_scores, semId)
-  fisher_scores$semId <- unique(s$semId)
-  fisher_scores[, sem_data_cols] <- semData(semScores)
-  
-  for (i in 1:nrow(fisher_scores)) {
-    si <- fisher_scores$semId[i]
-    ct <- getContingencyTable(s, si, d, lfc)
-    f <- stats::fisher.test(ct)
-    
-    fisher_scores[i, "n.changed"] <- ct[1,1]
-    fisher_scores[i, "pvalue"] <- f$p.value
-    fisher_scores[i, "odds.ratio"] <- f$estimate
-    fisher_scores[i, "ci.lower"] <- f$conf.int[1]
-    fisher_scores[i, "ci.upper"] <- f$conf.int[2]
+convertSEMsToPPMs <- \(x) {
+  if(is(x)[1] == "SNPEffectMatrixCollection") {
+    ss <- sems(x)
+  } else if (is(x)[1] == "SNPEffectMatrix") {
+    ss <- list(x)
+  } else if (is(x)[1] == "list" & is(x[[1]]) == "SNPEffectMatrix") {
+    ss <- x
+  } else {
+    stop("x must be of class SNPEffectMatrixCollection or SNPEffectMatrix or
+         a list of SNPEffectMatrix objects")
   }
-  fisher_scores$adj.pvalue <- stats::p.adjust(fisher_scores$pvalue, 
-                                              method = "BH")
-  fisher_scores <- fisher_scores[order(adj.pvalue)]
-  return(fisher_scores)
+  
+  ppms <- lapply(ss, function(s) .semToPpm(s))
+  return(ppms)
 }
 
+
+#' Calculates binding enrichment for motif(s)
+#' 
+#' Perform a binomial test to determine if SNP Effect Matrices are bound more
+#' often than expected.
+#'
+#' @param x `GRanges` object
+#' @param x A `SNPEffectMatrix` or `SNPEffectMatrixCollection`
+#' @param semList A `SNPEffectMatrix` or `SNPEffectMatrixCollection` object
+#' @param bs_genome_obj A `BSgenome` object for the genome build to use.
+#' @param background A list of DNA sequences to use for background. The length of each 
+#' sequence must match the length of sequences in `x`
+#'
+#' @return a `list` of matrices
+#'
+#' @export
+enrichSEMs <- \(x, semList, bs_genome_obj, background = NULL) {
+  sem_names <- sems(semList) |> names()
+  result <- data.frame(matrix(ncol = 3, nrow = length(sem_names)))
+  colnames(result) <- c("pvalue", "n_successes", "bg_successes")
+  rownames(result) <- sem_names
+  
+  sb <- scoreBinding(x, 
+                     semList, 
+                     bs_genome_obj, 
+                     allele = "allele")
+  if (is.null(background)) {
+    offset <- lapply(sems(semList), function(x) {nrow(sem(x))}) |>
+      unlist() |>
+      max()
+    x <- getFlankingSeqs(x = x, up = offset, down = offset, 
+                          bs_genome_obj = bs_genome_obj, 
+                          allele = "allele")
+    
+    sf <- .scrambleFlanks(x$seq)
+    bg <- scoreBinding(sf, 
+                       semList, 
+                       BSgenome.Hsapiens.UCSC.hg38::Hsapiens)
+  } else {
+    bg <- scoreBinding(background, 
+                       semList, 
+                       BSgenome.Hsapiens.UCSC.hg38::Hsapiens, 
+                       allele = "allele")
+  }
+  
+  for (sem_name in sem_names) {
+    successes <- sum(sb$scoreNorm[sb$sem_mtx_id == sem_name] > 0)
+    sample_size <- length(sb$scoreNorm[sb$sem_mtx_id == sem_name])
+    prob_success <- (sum(bg$scoreNorm[bg$sem_mtx_id == sem_name] > 0) + 1) / 
+      length(bg$scoreNorm[bg$sem_mtx_id == sem_name])
+    
+    binom_test_res <- stats::binom.test(successes, sample_size, 
+                                 p = prob_success, alternative = "greater")
+    result[sem_name, "pvalue"] <- binom_test_res$p.value
+    result[sem_name, "n_successes"] <- successes
+    result[sem_name, "bg_successes"] <- sum(bg$scoreNorm[bg$sem_mtx_id == sem_name] > 0)
+  }
+  e$padj <- stats::p.adjust(e$pvalue, method = "BH")
+  return(result)
+}

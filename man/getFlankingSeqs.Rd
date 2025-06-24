@@ -4,7 +4,7 @@
 \alias{getFlankingSeqs}
 \title{Get up and downstream sequences of variant(s) and store in VRanges metadata}
 \usage{
-getFlankingSeqs(x, up, down, bs_genome_obj)
+getFlankingSeqs(x, up, down, bs_genome_obj, allele = NULL)
 }
 \arguments{
 \item{x}{A \code{VRanges} or \code{GRanges} object with one or more variants.
@@ -14,8 +14,9 @@ seqnames and ranges fields are required.}
 
 \item{down}{Numeric, number of bases to return downstream of variant}
 
-\item{bs_genome_obj}{A \code{BSgenome} object for the genome build to use.
-Defaults to \code{BSgenome.Hsapiens.UCSC.hg19}.}
+\item{bs_genome_obj}{A \code{BSgenome} object for the genome build to use.}
+
+\item{allele}{Column name in meta data storing allele}
 }
 \value{
 a \code{VRanges} object with metadata columns \code{upstream} and \code{downstream}.
