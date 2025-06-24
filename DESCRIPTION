@@ -10,7 +10,6 @@ Imports:
     BiocGenerics,
     Biostrings,
     GenomeInfoDb,
-    BSgenome.Hsapiens.UCSC.hg19,
     ggplot2,
     ggrepel,
     VariantAnnotation,
@@ -21,7 +20,10 @@ Imports:
     stats,
     crayon,
     rlang,
-    BSgenome.Hsapiens.UCSC.hg38
+    ape,
+    ggtree,
+    stringi,
+    universalmotif
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
@@ -29,7 +31,10 @@ Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
-    IRanges
+    IRanges,
+    GenomicRanges,
+    BSgenome.Hsapiens.UCSC.hg38,
+    BSgenome.Hsapiens.UCSC.hg19
 VignetteBuilder: knitr
 License: MIT + file LICENSE
 Config/testthat/edition: 3
