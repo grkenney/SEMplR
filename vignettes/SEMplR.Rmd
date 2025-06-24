@@ -98,7 +98,7 @@ plotSemVariants(sempl_obj, semId = "TFAP4_HUMAN.HepG2")
 
 ```{r}
 # loading data
-caqtl_file <- "/Users/gracekenney/Downloads/caQTL_variants_overlappingPeaks_LD-r2-0.8_withLead.bed"
+caqtl_file <- "caQTL_variants_overlappingPeaks_LD-r2-0.8_withLead.bed"
 caqtls <- data.table::fread(file = caqtl_file, sep = "\t")[1:1000,]
 proxy_ID_split <- strsplit(caqtls$proxy_ID, ":")
 
