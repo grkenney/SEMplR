@@ -54,7 +54,9 @@ vr
 
 # Score Variants
 ```{r}
-sempl_obj <- scoreVariants(vr = vr, semList = sc, bs_genome_obj=BSgenome.Hsapiens.UCSC.hg38::Hsapiens)
+sempl_obj <- scoreVariants(vr = vr,
+                           semList = sc,
+                           bs_genome_obj=BSgenome.Hsapiens.UCSC.hg38::Hsapiens)
 sempl_obj
 ```
 
@@ -142,6 +144,7 @@ gr_e <- GenomicRanges::GRanges(seqnames = chr,
 
 e <- enrichSEMs(x = gr_e, semList = sc, 
                 bs_genome_obj = BSgenome.Hsapiens.UCSC.hg38::Hsapiens)
+
 ```
 
 ```{r}
