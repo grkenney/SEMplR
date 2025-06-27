@@ -2,7 +2,7 @@ Package: SEMplR
 Title: Predicting Transcription Factor Binding
 Version: 0.0.0.9000
 Authors@R: 
-    person("Grace", "Kenney", email = gkenney@unc.edu, role = c("aut", "cre"),
+    person("Grace", "Kenney", email = "gkenney@unc.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0009-6308-3150"))
 Description: A tool to predict transcription factor binding in genomic regions and genetic variants.
 biocViews:
