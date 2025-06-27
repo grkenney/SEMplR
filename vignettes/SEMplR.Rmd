@@ -98,7 +98,7 @@ plotSemVariants(sempl_obj, semId = "TFAP4_HUMAN.HepG2")
 
 # Enrichment
 
-```{r}
+```{r, eval=FALSE}
 # loading data
 caqtl_file <- "caQTL_variants_overlappingPeaks_LD-r2-0.8_withLead.bed"
 caqtls <- data.table::fread(file = caqtl_file, sep = "\t")[1:1000,]
@@ -125,7 +125,7 @@ var_scores_e <- scoreVariants(vr = vr_e,
 plotSemVariants(var_scores_e, semId = "MA0151.1")
 ```
 
-```{r}
+```{r, eval=FALSE}
 plotSemMotifs(var_scores_e, "chr1:906982:C>T", label = "transcription_factor")
 ```
 
@@ -137,7 +137,7 @@ transcription factors are enriched for binding in one allele or the other.
 Here, we will test if any of these transcription factors are bound more than
 expected in the reference alleles of this set.
 
-```{r}
+```{r, eval=FALSE}
 gr_e <- GenomicRanges::GRanges(seqnames = chr,
                                  ranges = pos, 
                                  allele = ref_allele)
@@ -147,7 +147,7 @@ e <- enrichSEMs(x = gr_e, semList = sc,
 
 ```
 
-```{r}
+```{r, eval=FALSE}
 plt <- plotEnrich(e, semList = sc)
 plt
 ```
