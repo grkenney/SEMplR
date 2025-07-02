@@ -9,7 +9,7 @@ genomic positions provided"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">SEMplR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,6 +21,7 @@ genomic positions provided"></head><body>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/grkenney/SEMplR/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -30,7 +31,7 @@ genomic positions provided"></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Calculate binding propensity for all SEM motifs and genomic positions provided</h1>
-
+      <small class="dont-index">Source: <a href="https://github.com/grkenney/SEMplR/blob/HEAD/R/scoreBinding.R" class="external-link"><code>R/scoreBinding.R</code></a></small>
       <div class="d-none name"><code>scoreBinding.Rd</code></div>
     </div>
 
@@ -88,9 +89,9 @@ genomic positions provided</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate binding propensity</span></span></span>
 <span class="r-in"><span><span class="fu">scoreBinding</span><span class="op">(</span><span class="va">gr</span>, <span class="va">semList</span>, <span class="fu">BSgenome.Hsapiens.UCSC.hg19</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html" class="external-link">Hsapiens</a></span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            var_id sem_mtx_id    seq  vari       score scoreNorm</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            &lt;char&gt;     &lt;char&gt; &lt;char&gt; &lt;int&gt;       &lt;num&gt;     &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: chr12:94136009     sem_id    TGA     3 -0.03869662 0.9470681</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            var_id sem_mtx_id    seq  vari     score scoreNorm</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            &lt;char&gt;     &lt;char&gt; &lt;char&gt; &lt;int&gt;     &lt;num&gt;     &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: chr12:94136009     sem_id    GAG     4 0.8885979  2.702752</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

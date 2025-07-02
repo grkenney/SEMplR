@@ -9,7 +9,7 @@ variants provided"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">SEMplR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,6 +21,7 @@ variants provided"></head><body>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/grkenney/SEMplR/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -30,7 +31,7 @@ variants provided"></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Calculate risk/non-risk binding propensity for all SEM motifs and variants provided</h1>
-
+      <small class="dont-index">Source: <a href="https://github.com/grkenney/SEMplR/blob/HEAD/R/scoreVariants.R" class="external-link"><code>R/scoreVariants.R</code></a></small>
       <div class="d-none name"><code>scoreVariants.Rd</code></div>
     </div>
 
@@ -88,12 +89,12 @@ variants provided</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> variants(1): chr12:94136009:G&gt;C</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> semData(0): </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> scores(1):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 varId  semId refSeq altSeq refScore  altScore  refNorm  altNorm</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                &lt;char&gt; &lt;char&gt; &lt;char&gt; &lt;char&gt;    &lt;num&gt;     &lt;num&gt;    &lt;num&gt;    &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: chr12:94136009:G&gt;C sem_id    TTG    TTC 1.979272 0.2231873 6.885884 1.334619</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 varId  semId refSeq altSeq refScore altScore  refNorm  altNorm</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                &lt;char&gt; &lt;char&gt; &lt;char&gt; &lt;char&gt;    &lt;num&gt;    &lt;num&gt;    &lt;num&gt;    &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: chr12:94136009:G&gt;C sem_id    TTG    TCA 3.971527 3.223434 30.37465 17.68015</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    refVarIndex altVarIndex</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;int&gt;       &lt;int&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:           2           2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:           2           3</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
