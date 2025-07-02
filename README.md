@@ -1,4 +1,4 @@
-# SEMplR <a href="https://grkenney.github.io/SEMplR"><img src="man/figures/SEMplR-B.png" align="right" height="138" alt="SEMplR website" style="float:right; height:138px;" /></a>
+# SEMplR <a href="https://grkenney.github.io/SEMplR"><img src="man/figures/SEMplR-B.png" align="right" height="200" alt="SEMplR website" style="float:right; height:200px;" /></a>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/tidyverse/forcats/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tidyverse/forcats/actions/workflows/R-CMD-check.yaml)
