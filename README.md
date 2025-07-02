@@ -1,5 +1,10 @@
 # SEMplR <a href="https://grkenney.github.io/SEMplR"><img src="man/figures/SEMplR-B.png" align="right" height="138" alt="SEMplR website" style="float:right; height:138px;" /></a>
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/tidyverse/forcats/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tidyverse/forcats/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/tidyverse/forcats/branch/main/graph/badge.svg)](https://app.codecov.io/gh/tidyverse/forcats?branch=main)
+<!-- badges: end -->
+
 
 SEMplR (SNP Effect Matrix Pipeline in R) is an R package for predicting transcription factor binding and the effect of genetic variation on transcription factor binding.
 
