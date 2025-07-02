@@ -1,8 +1,7 @@
-# SEMplR
-## (SNP Effect Matrix Pipeline in R) <a href="https://grkenney.github.io/SEMplR"><img src="man/figures/SEMplR-B.png" align="right" height="138" alt="SEMplR website" style="float:right; height:138px;" /></a>
+# SEMplR <a href="https://grkenney.github.io/SEMplR"><img src="man/figures/SEMplR-B.png" align="right" height="138" alt="SEMplR website" style="float:right; height:138px;" /></a>
 
 
-SEMplR is an R package for predicting transcription factor binding and the effect of genetic variation on transcription factor binding.
+SEMplR (SNP Effect Matrix Pipeline in R) is an R package for predicting transcription factor binding and the effect of genetic variation on transcription factor binding.
 
 Please see the vignette for a more detailed example workflow. Below are some examples of basic usage.
 
