@@ -4,12 +4,21 @@
 \name{SEMplR-package}
 \alias{SEMplR}
 \alias{SEMplR-package}
-\title{SEMplR: What the Package Does (One Line, Title Case)}
+\title{SEMplR: SNP Effect Matrix Pipeline in R}
 \description{
-What the package does (one paragraph).
+SEMplR computes transcription factor binding affinity scores for genomic positions and genetic variants. Scores are computed from SNP Effect Matrices (SEMs) produced by SEMpl. 223 pre-computed SEMs are included with the package or custom sets can be provided. Enrichment can be tested among sets of genomic positions to determine if transcription factor binding events occur more often than expected. Comparing binding affinity scores between alleles can reveal differences in transcription factor binding with genetic variation. This package also includes several visualization functions to view scores both on the motif and variant/position level.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/grkenney/SEMplR}
+  \item \url{https://grkenney.github.io/SEMplR}
+  \item Report bugs at \url{https://www.github.com/grkenney/SEMplR/issues}
+}
+
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Grace Kenney \email{kenney.grace6@gmail.com} (\href{https://orcid.org/0009-0009-6308-3150}{ORCID})
 
 }
 \keyword{internal}

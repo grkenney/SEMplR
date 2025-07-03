@@ -43,6 +43,18 @@
 #' @return a SemplScores object
 #' @docType class
 #' @export
+#' 
+#' @examples
+#' # load default SEMs
+#' data(sc)
+#' 
+#' # create a VRanges object
+#' vr <- VariantAnnotation::VRanges(seqnames = c("chr12", "chr19"),
+#'                                  ranges = c(94136009, 10640062), 
+#'                                  ref = c("G", "T"), alt = c("C", "A"))
+#' 
+#' SemplScores(variants = vr, semData = semData(sc))
+#' 
 SemplScores <- function(variants=NULL, semData=NULL, scores=NULL) {
   # if no variants provided, make an empty VRanges object
   if (all(is.null(variants))) {
@@ -82,6 +94,23 @@ SemplScores <- function(variants=NULL, semData=NULL, scores=NULL) {
 #' @param x a SemplScores object
 #' @rdname variants
 #' @export
+#' 
+#' @examples
+#' library(VariantAnnotation)
+#' 
+#' # load default SEMs
+#' data(sc)
+#' 
+#' # create a VRanges object
+#' vr <- VRanges(seqnames = "chr12",
+#'               ranges = 94136009, 
+#'               ref = "G", alt = "C")
+#' 
+#' # calculate binding propensity
+#' s <- scoreVariants(vr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+#' 
+#' variants(s)
+#' 
 setMethod("variants", "SemplScores", 
           function(x) x@variants)
 
@@ -90,6 +119,23 @@ setMethod("variants", "SemplScores",
 #' @param x a SemplScores object
 #' @rdname semData
 #' @export
+#' 
+#' @examples
+#' library(VariantAnnotation)
+#' 
+#' # load default SEMs
+#' data(sc)
+#' 
+#' # create a VRanges object
+#' vr <- VRanges(seqnames = "chr12",
+#'               ranges = 94136009, 
+#'               ref = "G", alt = "C")
+#' 
+#' # calculate binding propensity
+#' s <- scoreVariants(vr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+#' 
+#' semData(s)
+#' 
 setMethod("semData", "SemplScores", 
           function(x) x@semData)
 
@@ -101,6 +147,23 @@ setMethod("semData", "SemplScores",
 #' @rdname scores
 #' @keywords internal
 #' @export
+#' 
+#' @examples
+#' library(VariantAnnotation)
+#' 
+#' # load default SEMs
+#' data(sc)
+#' 
+#' # create a VRanges object
+#' vr <- VRanges(seqnames = "chr12",
+#'               ranges = 94136009, 
+#'               ref = "G", alt = "C")
+#' 
+#' # calculate binding propensity
+#' s <- scoreVariants(vr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+#' 
+#' scores(s)
+#' 
 setMethod("scores", "SemplScores", 
           function(x) x@scores)
 
@@ -109,32 +172,6 @@ setMethod("scores<-", "SemplScores", function(x, value) {
   x
 })
 
-
-#' Accessor function to subset the scores slot to changed motifs
-#' 
-#' @param scores_table the scores slot of a SemplScores object
-#' @param direction direction of binding change. options are: 
-#' 'changed', 'gained', 'lost', 'maintained'
-#' 
-#' @rdname changed_motif
-#' 
-#' @export
-setMethod("changed_motif", "data.table", 
-          function(scores_table, direction="changed") {
-            if (direction == "gained"){
-              scores_table[(scores_table$refNorm < 0) & (scores_table$altNorm > 0), ]
-            } else if (direction == "lost") {
-              scores_table[(scores_table$refNorm > 0) & (scores_table$altNorm < 0), ]
-            } else if (direction == "maintained") {
-              scores_table[(scores_table$refNorm > 0) & (scores_table$altNorm > 0), ]
-            } else if (direction == "changed") {
-              scores_table[((scores_table$refNorm < 0) & (scores_table$altNorm > 0)) |
-                             ((scores_table$refNorm > 0) & (scores_table$altNorm < 0)), ]
-            } else {
-              stop("direction is not valid. Options are 'gained', 'lost', 'maintained', or 'changed'")
-            }
-          }
-)
 
 # ---- show ----
 

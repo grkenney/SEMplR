@@ -15,4 +15,21 @@ scores(x)
 \description{
 Accessor scores slot in a SemplScores object
 }
+\examples{
+library(VariantAnnotation)
+
+# load default SEMs
+data(sc)
+
+# create a VRanges object
+vr <- VRanges(seqnames = "chr12",
+              ranges = 94136009, 
+              ref = "G", alt = "C")
+
+# calculate binding propensity
+s <- scoreVariants(vr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+
+scores(s)
+
+}
 \keyword{internal}

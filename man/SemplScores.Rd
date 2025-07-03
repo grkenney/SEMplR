@@ -21,3 +21,15 @@ a SemplScores object
 \description{
 Constructs a SemplScores class object.
 }
+\examples{
+# load default SEMs
+data(sc)
+
+# create a VRanges object
+vr <- VariantAnnotation::VRanges(seqnames = c("chr12", "chr19"),
+                                 ranges = c(94136009, 10640062), 
+                                 ref = c("G", "T"), alt = c("C", "A"))
+
+SemplScores(variants = vr, semData = semData(sc))
+
+}

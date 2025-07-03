@@ -15,6 +15,15 @@
 #' @return a SNPEffectMatrix object
 #' @docType class
 #' @export
+#' 
+#' @examples
+#' # build a matrix for a motif of length 4
+#' m <- matrix(rnorm(16), nrow = 4)
+#' colnames(m) <- c("A", "C", "G", "T")
+#' 
+#' # build a SNPEffectMatrix object
+#' SNPEffectMatrix(m, baseline = 1, semId = "sem_id")
+#' 
 SNPEffectMatrix <- function(sem, baseline, semId) {
   .SD <- NULL
   
@@ -113,8 +122,6 @@ setMethod("semId", "SNPEffectMatrix",
 #' 
 #' @param object SNPEffectMatrix object.
 #' @rdname SNPEffectMatrix-class
-#' 
-#' @export
 setMethod("show", "SNPEffectMatrix",
           function(object) {
             cat("An object of class SNPEffectMatrix\n")

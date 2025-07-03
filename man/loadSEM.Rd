@@ -23,3 +23,13 @@ A SNPEffectMatrix object
 \description{
 Load matrix and baseline data from .sem files
 }
+\examples{
+# write a tmp file to hold a SEM
+m <- matrix(rnorm(16), nrow = 4)
+colnames(m) <- c("A", "C", "G", "T")
+tf <- tempfile()
+write.table(m, tf, quote = FALSE, sep = "\t", row.names = FALSE)
+
+loadSEM(tf, semId = "sem_id", bl = 1)
+
+}
