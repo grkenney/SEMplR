@@ -39,6 +39,7 @@ test_that(".makePositionId builds multiple ids", {
 # })
 
 test_that("scoreBinding 2 positions for subset of SEMs", {
+  data(sc)
   x <- GenomicRanges::GRanges(seqnames = c("chr12", "chr13"),
                               ranges = IRanges::IRanges(c(94136009, 50000000), 
                                                         c(94136010, 50000000)),
