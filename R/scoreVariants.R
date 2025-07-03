@@ -69,13 +69,8 @@ normMatrix <- function(max_scores, bl) {
 }
 
 
-#' Define a function to calculate risk/non-risk binding propensity
-#' for all SEM motifs provided
-#'
-#' @param varId a list of unique character identifiers for each variant
-#' @param varSeq a list of variant sequences
-#' @param semObj SNPEffectMatrix object
-#' @param nflank maximum number of offset basepairs offset from variant
+# Define a function to calculate risk/non-risk binding propensityfor all 
+# SEMs provided
 calculateScores <- function(varId, varSeq, semObj, nflank) {
   
   sm <- sem(semObj)
@@ -148,20 +143,16 @@ calculateScores <- function(varId, varSeq, semObj, nflank) {
 #' @examples
 #' library(VariantAnnotation)
 #'
-#' # create an SNP Effect Matrix (SEM)
-#' sem <- matrix(rnorm(12), ncol = 4)
-#' colnames(sem) <- c("A", "C", "G", "T")
+#' # load default SEMs
+#' data(sc)
 #' 
 #' # create a VRanges object
 #' vr <- VRanges(seqnames = "chr12",
 #'               ranges = 94136009, 
 #'               ref = "G", alt = "C")
 #' 
-#' # create a list of SNPEffectMatrix objects
-#' semList <- SNPEffectMatrix(sem, baseline = -1, semId = "sem_id")
-#' 
 #' # calculate binding propensity
-#' scoreVariants(vr, semList, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+#' scoreVariants(vr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 #' 
 scoreVariants <- \(vr, semList, bs_genome_obj) {
   riskNorm <- riskSeq <- nonRiskNorm <- nonRiskSeq <- .SD <- NULL
