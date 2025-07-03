@@ -54,6 +54,51 @@
 
 </dl></div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">VariantAnnotation</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># load default SEMs</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># create a VRanges object</span></span></span>
+<span class="r-in"><span><span class="va">vr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/VariantAnnotation/man/VRanges-class.html" class="external-link">VRanges</a></span><span class="op">(</span>seqnames <span class="op">=</span> <span class="st">"chr12"</span>,</span></span>
+<span class="r-in"><span>              ranges <span class="op">=</span> <span class="fl">94136009</span>, </span></span>
+<span class="r-in"><span>              ref <span class="op">=</span> <span class="st">"G"</span>, alt <span class="op">=</span> <span class="st">"C"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># calculate binding propensity</span></span></span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="scoreVariants.html">scoreVariants</a></span><span class="op">(</span><span class="va">vr</span>, <span class="va">sc</span>, <span class="fu">BSgenome.Hsapiens.UCSC.hg19</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html" class="external-link">Hsapiens</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">scores</span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   varId              semId           refSeq           altSeq</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  &lt;char&gt;             &lt;char&gt;           &lt;char&gt;           &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1: chr12:94136009:G&gt;C AP2B_HUMAN.SK-N-SH       GCTTTGAGGC       GCTTTCAGGC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2: chr12:94136009:G&gt;C ARNT_HUMAN.GM12878        TTTGAGGCA        TTTCAGGCA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3: chr12:94136009:G&gt;C    ATF1_HUMAN.K562      CTTTGAGGCAT      TTCAGGCATCT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4: chr12:94136009:G&gt;C   ATF2_HUMAN.HepG2      CTTTGAGGCAT      CTTTCAGGCAT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5: chr12:94136009:G&gt;C   ATF3_HUMAN.HepG2      GGCTTTGAGGC      TTTCAGGCATC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 219: chr12:94136009:G&gt;C  ZBT7A_HUMAN.HepG2        AAGGCTTTG        AAGGCTTTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 220: chr12:94136009:G&gt;C    ZFX_HUMAN.HepG2       TGAGGCATCT       TCAGGCATCT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221: chr12:94136009:G&gt;C  ZN281_HUMAN.HepG2  GGAGAAGGCTTTGAG  AAGGAGAAGGCTTTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 222: chr12:94136009:G&gt;C ZNF18_HUMAN.HEK293     GCTTTGAGGCAT     GGCTTTCAGGCA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 223: chr12:94136009:G&gt;C   ZSCAN4_secondary GCTTTGAGGCATCTGC GCTTTCAGGCATCTGC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        refScore   altScore    refNorm    altNorm refVarIndex altVarIndex</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           &lt;num&gt;      &lt;num&gt;      &lt;num&gt;      &lt;num&gt;       &lt;int&gt;       &lt;int&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:  -1.689754  -1.994456 -0.3068239 -0.4387981          15          15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:  -6.892799  -4.947151 -0.9693833 -0.8820613          17          17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:  -7.079925  -7.978780 -0.9420095 -0.9688990          16          18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:  -4.890126  -4.983040 -0.9098440 -0.9154673          16          16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:  -8.605674  -8.098831 -0.9885365 -0.9837110          14          17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 219:  -1.859506  -1.607344 -0.6349682 -0.5652506          12          12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 220:  -1.459472  -1.478959 -0.5682106 -0.5740037          19          19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221:  -4.347612  -4.740351 -0.9355197 -0.9508865           8           6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 222:  -5.410220  -7.107575 -0.9264060 -0.9773072          15          14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 223: -15.439088 -13.002975 -0.9998307 -0.9990837          15          15</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

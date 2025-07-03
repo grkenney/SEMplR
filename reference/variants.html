@@ -54,6 +54,41 @@
 
 </dl></div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">VariantAnnotation</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># load default SEMs</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># create a VRanges object</span></span></span>
+<span class="r-in"><span><span class="va">vr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/VariantAnnotation/man/VRanges-class.html" class="external-link">VRanges</a></span><span class="op">(</span>seqnames <span class="op">=</span> <span class="st">"chr12"</span>,</span></span>
+<span class="r-in"><span>              ranges <span class="op">=</span> <span class="fl">94136009</span>, </span></span>
+<span class="r-in"><span>              ref <span class="op">=</span> <span class="st">"G"</span>, alt <span class="op">=</span> <span class="st">"C"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># calculate binding propensity</span></span></span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="scoreVariants.html">scoreVariants</a></span><span class="op">(</span><span class="va">vr</span>, <span class="va">sc</span>, <span class="fu">BSgenome.Hsapiens.UCSC.hg19</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html" class="external-link">Hsapiens</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">variants</span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> VRanges object with 1 range and 5 metadata columns:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       seqnames    ranges strand         ref              alt     totalDepth</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; &lt;character&gt; &lt;characterOrRle&gt; &lt;integerOrRle&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1]    chr12  94136009      *           G                C           &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             refDepth       altDepth   sampleNames softFilterMatrix |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;integerOrRle&gt; &lt;integerOrRle&gt; &lt;factorOrRle&gt;         &lt;matrix&gt; |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1]           &lt;NA&gt;           &lt;NA&gt;          &lt;NA&gt;                  |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  upstream          downstream                ref_seq</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               &lt;character&gt;         &lt;character&gt;            &lt;character&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] CCGTCAAGGAGAAGGCTTT AGGCATCTGCTGTTTTGTT CCGTCAAGGAGAAGGCTTTG..</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      alt_seq                 id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  &lt;character&gt;        &lt;character&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] CCGTCAAGGAGAAGGCTTTC.. chr12:94136009:G&gt;C</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   hardFilters: NULL</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

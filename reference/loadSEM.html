@@ -67,6 +67,28 @@ in semFile header.</p></dd>
     <p>A SNPEffectMatrix object</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># write a tmp file to hold a SEM</span></span></span>
+<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">16</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"C"</span>, <span class="st">"G"</span>, <span class="st">"T"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.table</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">tf</span>, quote <span class="op">=</span> <span class="cn">FALSE</span>, sep <span class="op">=</span> <span class="st">"\t"</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">loadSEM</span><span class="op">(</span><span class="va">tf</span>, semId <span class="op">=</span> <span class="st">"sem_id"</span>, bl <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> An object of class SNPEffectMatrix</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> semId:  sem_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> baseline:  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sem:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             A           C          G          T</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;num&gt;       &lt;num&gt;      &lt;num&gt;      &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  0.1181949 -0.20608719 -2.2741149  1.0743459</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: -1.9117205  0.01917759  2.6825572 -0.6650882</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  0.8620865  0.02956075 -0.3612213  1.1139524</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4: -0.2432367  0.54982754  0.2133557 -0.2458964</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
