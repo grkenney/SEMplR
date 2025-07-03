@@ -40,9 +40,3 @@ setGeneric("variants", function(x) standardGeneric("variants"))
 setGeneric("scores", function(x) standardGeneric("scores"))
 setGeneric("scores<-", 
            function(x, value) standardGeneric("scores<-"))
-
-#' @rdname changed_motif
-#' @export
-setGeneric("changed_motif", 
-           function(scores_table, direction="changed") 
-             standardGeneric("changed_motif"))
