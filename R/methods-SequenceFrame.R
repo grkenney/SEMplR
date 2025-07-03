@@ -8,8 +8,6 @@
 #' @importFrom methods show
 #' 
 #' @rdname show
-#' 
-#' @export
 setMethod("show", "SequenceFrame",
           function(object) {
             for (i in 1:length(object@sequence)) {
