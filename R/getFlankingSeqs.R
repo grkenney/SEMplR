@@ -20,7 +20,7 @@
 #'
 querySeqs <- function(x, up, down,
                       bs_genome_obj,
-                      variant=T,
+                      variant=TRUE,
                       allele=NULL){
   # get start position of variant
   start_pos <- BiocGenerics::start(x)
@@ -91,8 +91,6 @@ querySeqs <- function(x, up, down,
 #' @importFrom methods is
 #'
 #' @return a `VRanges` object with metadata columns `upstream` and `downstream`.
-#'
-#' @export
 getFlankingSeqs <- function(x, up, down,
                             bs_genome_obj,
                             allele = NULL) {
@@ -107,10 +105,10 @@ getFlankingSeqs <- function(x, up, down,
   # define metadata columns in x to store flanking seqs
   if(is(x)[1] == "VRanges") {
     meta_cols <- c("upstream", "downstream", "ref_seq", "alt_seq")
-    variant <- T
+    variant <- TRUE
   } else {
     meta_cols <- c("upstream", "downstream", "seq")
-    variant <- F
+    variant <- FALSE
   }
   S4Vectors::mcols(x)[meta_cols] <- NA
 

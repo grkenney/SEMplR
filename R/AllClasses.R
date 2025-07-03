@@ -71,7 +71,7 @@ setValidity("SNPEffectMatrixCollection", function(object) {
   }
   
   # all sem_ids must be in semData keys
-  keys <- object@semData[, data.table::key(object@semData), with = F] |>
+  keys <- object@semData[, data.table::key(object@semData), with = FALSE] |>
     unlist()
   id_diffs <- setdiff(sem_ids, keys)
   # if there are sem_ids not in keys and semData is not empty

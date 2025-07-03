@@ -158,9 +158,9 @@ plt
 # Loading SEMs
 
 First, we create a list of file paths to the .sem files we want to include. We will also load the meta data for each sem in a `data.table` object. If meta data is used, all SEMs must be represented in the meta data table.
-```{r, eval=F}
+```{r, eval=FALSE}
 sem_files <- list.files("SEMs/", 
-                        pattern = ".sem", full.names = T)
+                        pattern = ".sem", full.names = TRUE)
 metadata_file <- "SEMs/sempl_metadata.csv"
 meta <- data.table::fread(file = metadata_file, sep = ",")
 
@@ -168,9 +168,14 @@ head(meta)
 ```
 
 We will load the matrix and meta data for all SEMs in a single `SNPEffectMatrixCollection` object. This object has two slots, one containing a named list of the matrices and a second slot containing our meta data table with a key column connecting the meta data to the names of the matrices.
-```{r, eval=F}
+```{r, eval=FALSE}
 sc <- loadSEMCollection(semFiles = sem_files, 
                         semMetaData = meta, 
                         semMetaKey = "SEM")
 sc
 ```
+
+```{r}
+devtools::session_info()
+```
+

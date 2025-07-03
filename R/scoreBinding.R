@@ -24,14 +24,14 @@
 
 
 .test_if_sequence_list <- \(x) {
-  is_sequence_list <- T
+  is_sequence_list <- TRUE
   # if is neither a vector or a list, it's not collection of DNA seqs
   if (!(is.vector(x)) & !(is.list(x))) {
-    is_sequence_list <- F
+    is_sequence_list <- FALSE
   }
   # check if it's a character vector
   if (!is.character(x)) {
-    is_sequence_list <- F
+    is_sequence_list <- FALSE
   }
   return(is_sequence_list)
 }

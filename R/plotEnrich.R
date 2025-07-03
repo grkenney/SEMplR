@@ -38,15 +38,19 @@ plotEnrich <- \(e, semList, threshold = 0.05) {
   # significant motifs
   sig_motifs <- rownames(e)[e$padj <= 0.01]
   
+  # store TF names for significant motifs for labeling
+  sm_tf <- unlist(semData(semList)[sig_motifs, "transcription_factor"])
   comparisons <- ggtree::groupOTU(comparisons,
-                                  unlist(semData(semList)[sig_motifs, 
-                                                          "transcription_factor"]),
+                                  sm,
                                   group_name = "sm")
   
   tree <- ggtree::ggtree(comparisons, layout = "fan", open.angle=35) +
     theme(legend.position = "", legend.title = element_blank()) +
     theme(plot.margin = margin(10, 10, 10, 100)) + 
-    ggtree::geom_tiplab(aes(colour = sm), as_ylab = F, size = 1.5, offset = .05) +
+    ggtree::geom_tiplab(aes(colour = sm), 
+                        as_ylab = FALSE, 
+                        size = 1.5, 
+                        offset = .05) +
     scale_color_manual(values=c("grey", "purple4"))
   
   heatmapData <- e[, "padj"] |> as.data.frame()
@@ -58,6 +62,5 @@ plotEnrich <- \(e, semList, threshold = 0.05) {
   
   plt <- plt +
     scale_fill_viridis_c(na.value = "white", direction = -1)
-  print(plt)
   return(plt)
 }
