@@ -42,7 +42,7 @@ often than expected.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">enrichSEMs</span><span class="op">(</span><span class="va">x</span>, <span class="va">semList</span>, <span class="va">bs_genome_obj</span>, background <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">enrichSEMs</span><span class="op">(</span><span class="va">x</span>, <span class="va">semList</span>, background <span class="op">=</span> <span class="cn">NULL</span>, seqs <span class="op">=</span> <span class="cn">NULL</span>, nFlank <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -50,20 +50,27 @@ often than expected.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>A <code>SNPEffectMatrix</code> or <code>SNPEffectMatrixCollection</code></p></dd>
+<dd><p>The scoring table produced by <code>scoreBinding</code></p></dd>
 
 
 <dt id="arg-semlist">semList<a class="anchor" aria-label="anchor" href="#arg-semlist"></a></dt>
 <dd><p>A <code>SNPEffectMatrix</code> or <code>SNPEffectMatrixCollection</code> object</p></dd>
 
 
-<dt id="arg-bs-genome-obj">bs_genome_obj<a class="anchor" aria-label="anchor" href="#arg-bs-genome-obj"></a></dt>
-<dd><p>A <code>BSgenome</code> object for the genome build to use.</p></dd>
-
-
 <dt id="arg-background">background<a class="anchor" aria-label="anchor" href="#arg-background"></a></dt>
-<dd><p>A list of DNA sequences to use for background. The length of each
-sequence must match the length of sequences in <code>x</code></p></dd>
+<dd><p>A list of DNA sequences to use for background. The length
+of each sequence must match the length of sequences in <code>x</code>. By default, will
+scramble the provided sequences.</p></dd>
+
+
+<dt id="arg-seqs">seqs<a class="anchor" aria-label="anchor" href="#arg-seqs"></a></dt>
+<dd><p>The sequences scored in <code>scoreBinding</code></p></dd>
+
+
+<dt id="arg-nflank">nFlank<a class="anchor" aria-label="anchor" href="#arg-nflank"></a></dt>
+<dd><p>Number of flanking nucleotides added to the sequences. Defaults
+to the length of the longest motif. If no flanks were added (ie, sequences
+were scored rather than a <code>GRanges</code>), use <code>nFlank = 0</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

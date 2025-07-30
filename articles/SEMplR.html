@@ -65,18 +65,72 @@
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">VariantAnnotation</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/grkenney/SEMplR" class="external-link">SEMplR</a></span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<p>SEMplR uses SNP Effect Matrices (SEMs) to score potential motifs.
+These are matrices contain binding affinity scores and have rows equal
+to the length of the motif and a column for each nucleotide. SEMs are
+produced by SEMpl, but a default set of 223 are included with this
+package in the <code>sc</code> data object. A full list of the
+transcription factors included in this default set can be found <a href="https://github.com/grkenney/SEMplR/blob/main/vignettes/sempl_metadata.csv" class="external-link">here</a>
+or by running <code>semData(sc)</code>.</p>
+<p>The default SEM collection can be loaded with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></span></code></pre></div>
 <p>Printing the <code>SNPEffectMatrixCollection</code>, we can see that
 we have 223 SEMs and 13 meta data features for each.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></span>
-<span><span class="va">sc</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sc</span></span>
 <span><span class="co">#&gt; An object of class SNPEffectMatrixCollection</span></span>
 <span><span class="co">#&gt; sems(223): AP2B_HUMAN.SK-N-SH, ARNT_HUMAN.GM12878 ... ZNF18_HUMAN.HEK293, ZSCAN4_secondary</span></span>
 <span><span class="co">#&gt; semData(13): transcription_factor, ensembl_id,  ... , PWM_source, SEM_KEY</span></span></code></pre></div>
+<p>Individual SEMs can be accessed with the <code>sems</code>
+accessor:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/sems.html">sems</a></span><span class="op">(</span><span class="va">sc</span>, semId <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AP2B_HUMAN.SK-N-SH"</span>, <span class="st">"ZSCAN4_secondary"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $`AP2B_HUMAN.SK-N-SH`</span></span>
+<span><span class="co">#&gt; An object of class SNPEffectMatrix</span></span>
+<span><span class="co">#&gt; semId:  AP2B_HUMAN.SK-N-SH</span></span>
+<span><span class="co">#&gt; baseline:  -1.161048</span></span>
+<span><span class="co">#&gt; sem:</span></span>
+<span><span class="co">#&gt;             A         C         G         T</span></span>
+<span><span class="co">#&gt;         &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;</span></span>
+<span><span class="co">#&gt;  1: -1.093659 -0.228215 -0.035353 -0.949757</span></span>
+<span><span class="co">#&gt;  2: -1.198571  0.019236 -1.057251 -1.145949</span></span>
+<span><span class="co">#&gt;  3: -1.021307  0.008023 -1.273623 -0.746918</span></span>
+<span><span class="co">#&gt;  4: -0.808380 -0.281746 -0.849156  0.093359</span></span>
+<span><span class="co">#&gt;  5: -0.319849 -0.071797 -0.058358 -0.085237</span></span>
+<span><span class="co">#&gt;  6:  0.119797 -0.640756 -0.336054 -0.787809</span></span>
+<span><span class="co">#&gt;  7: -0.496324 -1.111405  0.034943 -0.894114</span></span>
+<span><span class="co">#&gt;  8: -1.069881 -1.178852  0.005380 -1.079589</span></span>
+<span><span class="co">#&gt;  9: -0.957910 -0.095025 -0.061232 -1.025970</span></span>
+<span><span class="co">#&gt; 10: -0.147762 -0.046611 -0.308033 -0.113474</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $ZSCAN4_secondary</span></span>
+<span><span class="co">#&gt; An object of class SNPEffectMatrix</span></span>
+<span><span class="co">#&gt; semId:  ZSCAN4_secondary</span></span>
+<span><span class="co">#&gt; baseline:  -2.911018</span></span>
+<span><span class="co">#&gt; sem:</span></span>
+<span><span class="co">#&gt;             A          C         G        T</span></span>
+<span><span class="co">#&gt;         &lt;num&gt;      &lt;num&gt;     &lt;num&gt;    &lt;num&gt;</span></span>
+<span><span class="co">#&gt;  1:  0.339681 -1.6258400 -0.852570 -1.40307</span></span>
+<span><span class="co">#&gt;  2: -1.858890  0.2245480 -1.803160 -1.10145</span></span>
+<span><span class="co">#&gt;  3:  0.259177 -1.8665800 -0.744934 -1.62341</span></span>
+<span><span class="co">#&gt;  4: -2.077230  0.1970890 -1.971940 -1.21187</span></span>
+<span><span class="co">#&gt;  5:  0.198878 -2.2059500 -0.760569 -1.76139</span></span>
+<span><span class="co">#&gt;  6: -2.321170  0.1354730 -2.300640 -1.39237</span></span>
+<span><span class="co">#&gt;  7:  0.157553 -2.4685400 -0.741112 -1.84194</span></span>
+<span><span class="co">#&gt;  8: -2.482910  0.0893564 -2.406690 -1.56081</span></span>
+<span><span class="co">#&gt;  9:  0.136749 -2.4335100 -0.704496 -1.94128</span></span>
+<span><span class="co">#&gt; 10: -2.352060  0.1257340 -2.211630 -1.60719</span></span>
+<span><span class="co">#&gt; 11:  0.187489 -2.1923800 -0.641008 -1.76197</span></span>
+<span><span class="co">#&gt; 12: -2.109030  0.1677660 -1.974360 -1.51917</span></span>
+<span><span class="co">#&gt; 13:  0.240220 -1.9354700 -0.655348 -1.54698</span></span>
+<span><span class="co">#&gt; 14: -1.748380  0.2142480 -1.693530 -1.38530</span></span>
+<span><span class="co">#&gt; 15:  0.289375 -1.6708800 -0.698449 -1.42560</span></span>
+<span><span class="co">#&gt; 16: -1.483480  0.2650430 -1.541780 -1.31953</span></span></code></pre></div>
 <p>We can access all SEMs in collection the with the function
 <code><a href="../reference/sems.html">sems()</a></code> or some subset of matrices by specifying a vector of
 semIds in the <code>semId</code> parameter.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sems.html">sems</a></span><span class="op">(</span><span class="va">sc</span>, semId <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AP2B_HUMAN.SK-N-SH"</span>, <span class="st">"ZSCAN4_secondary"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $`AP2B_HUMAN.SK-N-SH`</span></span>
 <span><span class="co">#&gt; An object of class SNPEffectMatrix</span></span>
@@ -121,7 +175,7 @@ semIds in the <code>semId</code> parameter.</p>
 <span><span class="co">#&gt; 16: -1.483480  0.2650430 -1.541780 -1.31953</span></span></code></pre></div>
 <p>We can view the SEM meta data slot with the <code>semData</code>
 function.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/semData.html">semData</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Key: &lt;SEM_KEY&gt;</span></span>
 <span><span class="co">#&gt;      transcription_factor      ensembl_id ebi_complex_ac uniprot_ac</span></span>
@@ -181,7 +235,7 @@ function.</p>
 </h2>
 <p>We will load the variants we want to score as a <code>VRanges</code>
 object.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/VariantAnnotation/man/VRanges-class.html" class="external-link">VRanges</a></span><span class="op">(</span>seqnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chr12"</span>, <span class="st">"chr19"</span><span class="op">)</span>,</span>
 <span>              ranges <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">94136009</span>, <span class="fl">10640062</span><span class="op">)</span>, </span>
 <span>              ref <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"G"</span>, <span class="st">"T"</span><span class="op">)</span>, alt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"C"</span>, <span class="st">"A"</span><span class="op">)</span><span class="op">)</span></span>
@@ -202,7 +256,7 @@ object.</p>
 <div class="section level2">
 <h2 id="score-variants">Score Variants<a class="anchor" aria-label="anchor" href="#score-variants"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sempl_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scoreVariants.html">scoreVariants</a></span><span class="op">(</span>vr <span class="op">=</span> <span class="va">vr</span>,</span>
 <span>                           semList <span class="op">=</span> <span class="va">sc</span>,</span>
 <span>                           bs_genome_obj<span class="op">=</span><span class="fu">BSgenome.Hsapiens.UCSC.hg38</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg38/man/package.html" class="external-link">Hsapiens</a></span><span class="op">)</span></span>
@@ -237,7 +291,7 @@ object.</p>
 <span><span class="co">#&gt; 444:  -5.109413  -5.061910 -0.9619721 -0.9606991           6           6</span></span>
 <span><span class="co">#&gt; 445:  -6.516791  -6.314742 -0.9658232 -0.9606853          17          17</span></span>
 <span><span class="co">#&gt; 446: -17.314249 -17.018033 -0.9999538 -0.9999433           5          16</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/variants.html">variants</a></span><span class="op">(</span><span class="va">sempl_obj</span><span class="op">)</span></span>
 <span><span class="co">#&gt; VRanges object with 2 ranges and 5 metadata columns:</span></span>
 <span><span class="co">#&gt;       seqnames    ranges strand         ref              alt     totalDepth</span></span>
@@ -259,7 +313,7 @@ object.</p>
 <span><span class="co">#&gt;   -------</span></span>
 <span><span class="co">#&gt;   seqinfo: 2 sequences from an unspecified genome; no seqlengths</span></span>
 <span><span class="co">#&gt;   hardFilters: NULL</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/semData.html">semData</a></span><span class="op">(</span><span class="va">sempl_obj</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Key: &lt;SEM_KEY&gt;</span></span>
 <span><span class="co">#&gt;      transcription_factor      ensembl_id ebi_complex_ac uniprot_ac</span></span>
@@ -314,7 +368,7 @@ object.</p>
 <span><span class="co">#&gt; 221:  ZN281_HUMAN.HepG2</span></span>
 <span><span class="co">#&gt; 222: ZNF18_HUMAN.HEK293</span></span>
 <span><span class="co">#&gt; 223:   ZSCAN4_secondary</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/scores.html">scores</a></span><span class="op">(</span><span class="va">sempl_obj</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                   varId              semId           refSeq           altSeq</span></span>
 <span><span class="co">#&gt;                  &lt;char&gt;             &lt;char&gt;           &lt;char&gt;           &lt;char&gt;</span></span>
@@ -346,33 +400,33 @@ object.</p>
 <div class="section level2">
 <h2 id="view-frame">View Frame<a class="anchor" aria-label="anchor" href="#view-frame"></a>
 </h2>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/viewFrames.html">viewFrames</a></span><span class="op">(</span><span class="va">sempl_obj</span>, vid <span class="op">=</span> <span class="st">"chr12:94136009:G&gt;C"</span>, sid <span class="op">=</span> <span class="st">"AP2B_HUMAN.SK-N-SH"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; SEM:  AP2B_HUMAN.SK-N-SH </span></span>
 <span><span class="co">#&gt; Var:  chr12:94136009:G&gt;C </span></span>
 <span><span class="co">#&gt; ref: CTAATAAATACTTGTTGTT<span style="background-color: #BB0000;">G</span><span style="background-color: #767676;">TTTAACAAT</span>AATGATGGTA</span></span>
 <span><span class="co">#&gt; alt: CTAATAAATACTTGTTGT<span style="background-color: #767676;">T</span><span style="background-color: #BB0000;">C</span><span style="background-color: #767676;">TTTAACAA</span>TAATGATGGTA</span></span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSEM.html">plotSEM</a></span><span class="op">(</span><span class="va">sc</span>, motif <span class="op">=</span> <span class="st">"AP2B_HUMAN.SK-N-SH"</span>, </span>
 <span>        motifSeq <span class="op">=</span> <span class="st">"GCTTTGAGGC"</span>, highlight <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="SEMplR_files/figure-html/unnamed-chunk-12-1.png" width="480"></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<p><img src="SEMplR_files/figure-html/unnamed-chunk-14-1.png" width="480"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSEM.html">plotSEM</a></span><span class="op">(</span><span class="va">sc</span>, motif <span class="op">=</span> <span class="st">"AP2B_HUMAN.SK-N-SH"</span>, </span>
 <span>        motifSeq <span class="op">=</span> <span class="st">"GCTTTCAGGC"</span>, highlight <span class="op">=</span> <span class="fl">1</span>, hcol <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="SEMplR_files/figure-html/unnamed-chunk-12-2.png" width="480"></p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<p><img src="SEMplR_files/figure-html/unnamed-chunk-14-2.png" width="480"></p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSemMotifs.html">plotSemMotifs</a></span><span class="op">(</span><span class="va">sempl_obj</span>, </span>
 <span>              variant <span class="op">=</span> <span class="st">"chr19:10640062:T&gt;A"</span>,</span>
 <span>              label <span class="op">=</span> <span class="st">"transcription_factor"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="SEMplR_files/figure-html/unnamed-chunk-13-1.png" width="480"></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<p><img src="SEMplR_files/figure-html/unnamed-chunk-15-1.png" width="480"></p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSemVariants.html">plotSemVariants</a></span><span class="op">(</span><span class="va">sempl_obj</span>, semId <span class="op">=</span> <span class="st">"TFAP4_HUMAN.HepG2"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="SEMplR_files/figure-html/unnamed-chunk-14-1.png" width="480"></p>
+<p><img src="SEMplR_files/figure-html/unnamed-chunk-16-1.png" width="480"></p>
 </div>
 <div class="section level2">
 <h2 id="enrichment">Enrichment<a class="anchor" aria-label="anchor" href="#enrichment"></a>
 </h2>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># loading data</span></span>
 <span><span class="va">caqtl_file</span> <span class="op">&lt;-</span> <span class="st">"caQTL_variants_overlappingPeaks_LD-r2-0.8_withLead.bed"</span></span>
 <span><span class="va">caqtls</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/fread.html" class="external-link">fread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">caqtl_file</span>, sep <span class="op">=</span> <span class="st">"\t"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>,<span class="op">]</span></span>
@@ -397,7 +451,7 @@ object.</p>
 <span>                            bs_genome_obj<span class="op">=</span><span class="fu">BSgenome.Hsapiens.UCSC.hg38</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg38/man/package.html" class="external-link">Hsapiens</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plotSemVariants.html">plotSemVariants</a></span><span class="op">(</span><span class="va">var_scores_e</span>, semId <span class="op">=</span> <span class="st">"MA0151.1"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSemMotifs.html">plotSemMotifs</a></span><span class="op">(</span><span class="va">var_scores_e</span>, <span class="st">"chr1:906982:C&gt;T"</span>, label <span class="op">=</span> <span class="st">"transcription_factor"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -408,14 +462,14 @@ transcription factors are enriched for binding in one allele or the
 other.</p>
 <p>Here, we will test if any of these transcription factors are bound
 more than expected in the reference alleles of this set.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gr_e</span> <span class="op">&lt;-</span> <span class="fu">GenomicRanges</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html" class="external-link">GRanges</a></span><span class="op">(</span>seqnames <span class="op">=</span> <span class="va">chr</span>,</span>
 <span>                                 ranges <span class="op">=</span> <span class="va">pos</span>, </span>
 <span>                                 allele <span class="op">=</span> <span class="va">ref_allele</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">e</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichSEMs.html">enrichSEMs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">gr_e</span>, semList <span class="op">=</span> <span class="va">sc</span>, </span>
 <span>                bs_genome_obj <span class="op">=</span> <span class="fu">BSgenome.Hsapiens.UCSC.hg38</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg38/man/package.html" class="external-link">Hsapiens</a></span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotEnrich.html">plotEnrich</a></span><span class="op">(</span><span class="va">e</span>, semList <span class="op">=</span> <span class="va">sc</span><span class="op">)</span></span>
 <span><span class="va">plt</span></span></code></pre></div>
 </div>
@@ -430,7 +484,7 @@ more than expected in the reference alleles of this set.</p>
 include. We will also load the meta data for each sem in a
 <code>data.table</code> object. If meta data is used, all SEMs must be
 represented in the meta data table.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sem_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="st">"SEMs/"</span>, </span>
 <span>                        pattern <span class="op">=</span> <span class="st">".sem"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">metadata_file</span> <span class="op">&lt;-</span> <span class="st">"SEMs/sempl_metadata.csv"</span></span>
@@ -442,12 +496,12 @@ represented in the meta data table.</p>
 slots, one containing a named list of the matrices and a second slot
 containing our meta data table with a key column connecting the meta
 data to the names of the matrices.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loadSEMCollection.html">loadSEMCollection</a></span><span class="op">(</span>semFiles <span class="op">=</span> <span class="va">sem_files</span>, </span>
 <span>                        semMetaData <span class="op">=</span> <span class="va">meta</span>, </span>
 <span>                        semMetaKey <span class="op">=</span> <span class="st">"SEM"</span><span class="op">)</span></span>
 <span><span class="va">sc</span></span></code></pre></div>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://sessioninfo.r-lib.org/reference/session_info.html" class="external-link">session_info</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB; font-weight: bold;">─ Session info ───────────────────────────────────────────────────────────────</span></span></span>
 <span><span class="co">#&gt;  <span style="color: #555555; font-style: italic;">setting </span> <span style="color: #555555; font-style: italic;">value</span></span></span>
@@ -459,7 +513,7 @@ data to the names of the matrices.</p>
 <span><span class="co">#&gt;  collate  en_US.UTF-8</span></span>
 <span><span class="co">#&gt;  ctype    en_US.UTF-8</span></span>
 <span><span class="co">#&gt;  tz       America/New_York</span></span>
-<span><span class="co">#&gt;  date     2025-07-03</span></span>
+<span><span class="co">#&gt;  date     2025-07-29</span></span>
 <span><span class="co">#&gt;  pandoc   3.1.1 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/ (via rmarkdown)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB; font-weight: bold;">─ Packages ───────────────────────────────────────────────────────────────────</span></span></span>
