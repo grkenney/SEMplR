@@ -3,7 +3,7 @@ pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
   SEMplR: SEMplR.html
-last_built: 2025-07-30T00:55Z
+last_built: 2025-07-30T03:45Z
 urls:
   reference: https://grkenney.github.io/SEMplR/reference
   article: https://grkenney.github.io/SEMplR/articles

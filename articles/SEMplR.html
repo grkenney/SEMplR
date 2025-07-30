@@ -61,10 +61,11 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">VariantAnnotation</span><span class="op">)</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/grkenney/SEMplR" class="external-link">SEMplR</a></span><span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">VariantAnnotation</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/grkenney/SEMplR" class="external-link">SEMplR</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="snp-effect-matrices">SNP Effect Matrices<a class="anchor" aria-label="anchor" href="#snp-effect-matrices"></a>
+</h2>
 <p>SEMplR uses SNP Effect Matrices (SEMs) to score potential motifs.
 These are matrices contain binding affinity scores and have rows equal
 to the length of the motif and a column for each nucleotide. SEMs are
@@ -230,6 +231,7 @@ function.</p>
 <span><span class="co">#&gt; 221:  ZN281_HUMAN.HepG2</span></span>
 <span><span class="co">#&gt; 222: ZNF18_HUMAN.HEK293</span></span>
 <span><span class="co">#&gt; 223:   ZSCAN4_secondary</span></span></code></pre></div>
+</div>
 <div class="section level2">
 <h2 id="build-variant-set">Build Variant Set<a class="anchor" aria-label="anchor" href="#build-variant-set"></a>
 </h2>
@@ -409,19 +411,19 @@ object.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSEM.html">plotSEM</a></span><span class="op">(</span><span class="va">sc</span>, motif <span class="op">=</span> <span class="st">"AP2B_HUMAN.SK-N-SH"</span>, </span>
 <span>        motifSeq <span class="op">=</span> <span class="st">"GCTTTGAGGC"</span>, highlight <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="SEMplR_files/figure-html/unnamed-chunk-14-1.png" width="480"></p>
+<p><img src="SEMplR_files/figure-html/unnamed-chunk-13-1.png" width="480"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSEM.html">plotSEM</a></span><span class="op">(</span><span class="va">sc</span>, motif <span class="op">=</span> <span class="st">"AP2B_HUMAN.SK-N-SH"</span>, </span>
 <span>        motifSeq <span class="op">=</span> <span class="st">"GCTTTCAGGC"</span>, highlight <span class="op">=</span> <span class="fl">1</span>, hcol <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="SEMplR_files/figure-html/unnamed-chunk-14-2.png" width="480"></p>
+<p><img src="SEMplR_files/figure-html/unnamed-chunk-13-2.png" width="480"></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSemMotifs.html">plotSemMotifs</a></span><span class="op">(</span><span class="va">sempl_obj</span>, </span>
 <span>              variant <span class="op">=</span> <span class="st">"chr19:10640062:T&gt;A"</span>,</span>
 <span>              label <span class="op">=</span> <span class="st">"transcription_factor"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="SEMplR_files/figure-html/unnamed-chunk-15-1.png" width="480"></p>
+<p><img src="SEMplR_files/figure-html/unnamed-chunk-14-1.png" width="480"></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSemVariants.html">plotSemVariants</a></span><span class="op">(</span><span class="va">sempl_obj</span>, semId <span class="op">=</span> <span class="st">"TFAP4_HUMAN.HepG2"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="SEMplR_files/figure-html/unnamed-chunk-16-1.png" width="480"></p>
+<p><img src="SEMplR_files/figure-html/unnamed-chunk-15-1.png" width="480"></p>
 </div>
 <div class="section level2">
 <h2 id="enrichment">Enrichment<a class="anchor" aria-label="anchor" href="#enrichment"></a>
