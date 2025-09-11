@@ -23,6 +23,7 @@ Imports:
     ggplot2,
     ggrepel,
     VariantAnnotation,
+    GenomicRanges,
     data.table,
     methods,
     scales,
@@ -33,7 +34,8 @@ Imports:
     ape,
     ggtree,
     stringi,
-    universalmotif
+    universalmotif,
+    Rcpp
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
@@ -43,7 +45,6 @@ Suggests:
     devtools,
     testthat (>= 3.0.0),
     IRanges,
-    GenomicRanges,
     BSgenome.Hsapiens.UCSC.hg38,
     BSgenome.Hsapiens.UCSC.hg19
 VignetteBuilder: knitr
@@ -54,3 +55,5 @@ URL: https://github.com/grkenney/SEMplR, https://grkenney.github.io/SEMplR
 BugReports: https://www.github.com/grkenney/SEMplR/issues
 biocViews: MotifAnnotation, Transcription, SNP, GenomicVariation
 LazyData: true
+LinkingTo: 
+    Rcpp
