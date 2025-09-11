@@ -4,21 +4,16 @@
 \alias{plotSemVariants}
 \title{Plot non-alt versus alt binding propensity for a single motif}
 \usage{
-plotSemVariants(
-  semplObj,
-  semId,
-  label = "varId",
-  changedCols = c("#F8766D", "dodgerblue2")
-)
+plotSemVariants(s, sem, label = "varId", cols = c("#F8766D", "dodgerblue2"))
 }
 \arguments{
-\item{semplObj}{a SemplScores object with scores populated}
+\item{s}{a SemplScores object with scores populated}
 
-\item{semId}{a single character vector matching a semId in the semplObj}
+\item{sem}{a single character vector matching a semId in the semplObj}
 
 \item{label}{column in scores slot of semplObj to use for point labels}
 
-\item{changedCols}{vector of length 2 with colors to use for plotting gained
+\item{cols}{vector of length 2 with colors to use for plotting gained
 and lost motifs respectively}
 }
 \value{

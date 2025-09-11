@@ -5,18 +5,26 @@
 \title{Calculate risk/non-risk binding propensity for all SEM motifs and
 variants provided}
 \usage{
-scoreVariants(vr, semList, bs_genome_obj)
+scoreVariants(x, sem, genome, refCol = NULL, altCol = NULL, varId = NULL)
 }
 \arguments{
-\item{vr}{\code{VRanges} object}
+\item{x}{\code{VRanges} object}
 
-\item{semList}{a list of \code{SNPEffectMatrix} objects}
+\item{sem}{a list of \code{SNPEffectMatrix} objects}
 
-\item{bs_genome_obj}{A \code{BSgenome} object for the genome build to use. ie.
+\item{genome}{A \code{BSgenome} object for the genome build to use. ie.
 \code{BSgenome.Hsapiens.UCSC.hg19::Hsapiens}}
+
+\item{refCol}{If providing a GRanges, the meta data column name with the
+reference (ref) allele. Ignored if providing a VRanges object.}
+
+\item{altCol}{If providing a GRanges, the meta data column name with the
+alternative (alt) allele. Ignored if providing a VRanges object.}
+
+\item{varId}{A column name in the meta data of x to use as a unique id.}
 }
 \value{
-a SemplScores object
+a SEMplScores object
 }
 \description{
 Calculate risk/non-risk binding propensity for all SEM motifs and
@@ -29,11 +37,11 @@ library(VariantAnnotation)
 data(sc)
 
 # create a VRanges object
-vr <- VRanges(seqnames = "chr12",
+x <- VRanges(seqnames = "chr12",
               ranges = 94136009, 
               ref = "G", alt = "C")
 
 # calculate binding propensity
-scoreVariants(vr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+scoreVariants(x, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 
 }

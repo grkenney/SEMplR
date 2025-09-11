@@ -4,17 +4,24 @@
 \alias{enrichSEMs}
 \title{Calculates binding enrichment for motif(s)}
 \usage{
-enrichSEMs(x, semList, bs_genome_obj, background = NULL)
+enrichSEMs(x, sem, background = NULL, seqs = NULL, nFlank = 0, genome = NULL)
 }
 \arguments{
-\item{x}{A \code{SNPEffectMatrix} or \code{SNPEffectMatrixCollection}}
+\item{x}{The scoring table produced by \code{scoreBinding}}
 
-\item{semList}{A \code{SNPEffectMatrix} or \code{SNPEffectMatrixCollection} object}
+\item{sem}{A \code{SNPEffectMatrix} or \code{SNPEffectMatrixCollection} object}
 
-\item{bs_genome_obj}{A \code{BSgenome} object for the genome build to use.}
+\item{background}{A list of DNA sequences to use for background. The length
+of each sequence must match the length of sequences in \code{x}. By default, will
+scramble the provided sequences.}
 
-\item{background}{A list of DNA sequences to use for background. The length of each
-sequence must match the length of sequences in \code{x}}
+\item{seqs}{The sequences scored in \code{scoreBinding}}
+
+\item{nFlank}{Number of flanking nucleotides added to the sequences. Defaults
+to the length of the longest motif. If no flanks were added (ie, sequences
+were scored rather than a \code{GRanges}), use \code{nFlank = 0}.}
+
+\item{genome}{A \code{BSGenome} object. Requried if background isn't specified.}
 }
 \value{
 a \code{list} of matrices

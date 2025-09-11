@@ -4,14 +4,28 @@
 \alias{plotEnrich}
 \title{Plot the results of \code{enrichSEMs}}
 \usage{
-plotEnrich(e, semList, threshold = 0.05)
+plotEnrich(
+  e,
+  sem,
+  label = "transcription_factor",
+  method = "WPCC",
+  threshold = 0.05,
+  sigCol = "purple4"
+)
 }
 \arguments{
 \item{e}{The resulting data.table from \code{enrichSEMs}}
 
-\item{semList}{A \code{SNPEffectMatrixCollection} object}
+\item{sem}{A \code{SNPEffectMatrixCollection} object}
+
+\item{label}{Column in semData(sem) to use for tree labels}
+
+\item{method}{Method to use for SEM comparison.
+See ?universalmotif::compare_motifs for options.}
 
 \item{threshold}{The adjusted p-value threshold for coloring SEMs}
+
+\item{sigCol}{Color to label significant SEM labels}
 }
 \value{
 a \code{ggtree} object

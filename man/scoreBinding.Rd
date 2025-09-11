@@ -5,20 +5,28 @@
 \title{Calculate binding propensity for all SEM motifs and
 genomic positions provided}
 \usage{
-scoreBinding(x, semList, bs_genome_obj, allele = NULL)
+scoreBinding(x, sem, genome, nFlank = NULL, seqId = NULL)
 }
 \arguments{
-\item{x}{\code{GRanges} object}
+\item{x}{\code{GRanges} object or a vector of DNA sequences}
 
-\item{semList}{A \code{SNPEffectMatrix} or \code{SNPEffectMatrixCollection} object}
+\item{sem}{A \code{SNPEffectMatrix} or \code{SNPEffectMatrixCollection} object}
 
-\item{bs_genome_obj}{A \code{BSgenome} object for the genome build to use. ie.
-\code{BSgenome.Hsapiens.UCSC.hg19::Hsapiens}}
+\item{genome}{A \code{BSgenome} object for the genome build to use. ie.
+\code{BSgenome.Hsapiens.UCSC.hg19::Hsapiens}. Required if providing a GRanges
+object. Ignored if providing a vector of sequences.}
 
-\item{allele}{Column name in meta data storing allele}
+\item{nFlank}{Number of flanking nucleotides to add to provided range. By
+default will add flank equal to the length of the longest motif. Ignored
+if providing a vector of sequences.}
+
+\item{seqId}{Column in \code{GRanges} object to use for unique id.
+By default, ids will be generated from the \code{seqnames} and \code{ranges.}
+Ignored if not providing a \code{GRanges} object.}
 }
 \value{
-a \code{data.table} object
+If a \code{GRanges} object is provided, return a \code{SEMplScores} object.
+If a list of sequences is provided, just return the scoring table
 }
 \description{
 Calculate binding propensity for all SEM motifs and
@@ -27,19 +35,14 @@ genomic positions provided
 \examples{
 library(GenomicRanges)
 
-# create an SNP Effect Matrix (SEM)
-s <- matrix(rnorm(12), ncol = 4)
-colnames(s) <- c("A", "C", "G", "T")
+# load SEMs
+data(sc)
 
 # create a GRanges object
 gr <- GenomicRanges::GRanges(seqnames = "chr12",
-              ranges = 94136009, 
-              ref = "G", alt = "C")
-
-# create a list of SNPEffectMatrix objects
-semList <- SNPEffectMatrix(s, baseline = -1, semId = "sem_id")
+              ranges = 94136009)
 
 # calculate binding propensity
-scoreBinding(gr, semList, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+scoreBinding(gr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 
 }
