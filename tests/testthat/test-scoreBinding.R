@@ -1,3 +1,6 @@
+b <- BSgenome.Hsapiens.UCSC.hg19::Hsapiens
+
+
 test_that(".makePositionId builds single position id", {
   x <- GenomicRanges::GRanges(seqnames = "chr12",
                               ranges = 94136009)
@@ -5,12 +8,14 @@ test_that(".makePositionId builds single position id", {
   expect_equal(id_a, "chr12:94136009")
 })
 
+
 test_that(".makePositionId builds single range id", {
   x <- GenomicRanges::GRanges(seqnames = "chr12",
                               ranges = IRanges::IRanges(94136009, 94136010))
   id_a <- .makePositionId(x)
   expect_equal(id_a, "chr12:94136009-94136010")
 })
+
 
 test_that(".makePositionId builds multiple ids", {
   x <- GenomicRanges::GRanges(seqnames = c("chr12", "chr13"),
@@ -20,45 +25,182 @@ test_that(".makePositionId builds multiple ids", {
   expect_equal(id_a, c("chr12:94136009-94136010", "chr13:50000000"))
 })
 
-# test_that(".scoreSingleSite single position for subset of SEMs", {
-#   x <- GenomicRanges::GRanges(seqnames = "chr12",
-#                               ranges = 94136009,
-#                               seq = "CCGTCAAGGAGAAGGCTTTGAGGCATCTGCTGTTTTGTT")
-#   s_a <- .scoreSingleSite(x = x, 
-#                           semList = SNPEffectMatrixCollection(sems(sc)[1:2]), 
-#                    bs_genome_obj = BSgenome.Hsapiens.UCSC.hg19::Hsapiens,
-#                    offset = 19)
-#   s_e <- data.table::data.table(var_id = "chr12:94136009",
-#                                 sem_mtx_id = c("AP2B_HUMAN.SK-N-SH",
-#                                                "ARNT_HUMAN.GM12878"),
-#                                 seq = c("GCTTTGAGGC", "TTTGAGGCA"),
-#                                 vari = c(15, 17),
-#                                 score = c(-1.689754, -6.892799),
-#                                 scoreNorm = c(-0.30682393, -0.96938333))
-#   expect_equal(s_a, s_e)
-# })
 
-test_that("scoreBinding 2 positions for subset of SEMs", {
-  data(sc)
-  x <- GenomicRanges::GRanges(seqnames = c("chr12", "chr13"),
-                              ranges = IRanges::IRanges(c(94136009, 50000000), 
-                                                        c(94136010, 50000000)),
-                              seq = c("CCGTCAAGGAGAAGGCTTTGAGGCATCTGCTGTTTTGTT", 
-                                      "GATCCATCTTCCAGGTTCAGCCCTCTGAGACACTCTTTC"))
-  s_a <- scoreBinding(x = x, semList = sems(sc)[1:2], 
-                      bs_genome_obj = BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+test_that(".testIfSequenceList test invalid x inputs", {
+  expect_false(.testIfSequenceList(GenomicRanges::GRanges()))
   
-  # expcted data
-  var_id_e <- rep(c("chr12:94136009-94136010", "chr13:50000000"), 2)
-  sem_mtx_id_e <- rep(c("AP2B_HUMAN.SK-N-SH", "ARNT_HUMAN.GM12878"), each = 2)
-  seq_e <- c("GCTTTGAGGC", "GGTTCAGCCC", "TTTGAGGCA", "GTTCAGCCC")
-  score_e <- c(-1.689754, -2.983708, -6.892799, -6.997366)
-  scoreNorm_e <- c(-0.30682393, -0.71730079, -0.96938333, -0.97152392)
-  s_e <- data.table::data.table(var_id = var_id_e,
-                                sem_mtx_id = sem_mtx_id_e,
-                                seq = seq_e,
-                                vari = c(6, 5, 8, 6),
-                                score = score_e,
-                                scoreNorm = scoreNorm_e)
-  expect_equal(s_a, s_e)
+  expect_error(.testIfSequenceList(list(TRUE, FALSE)),
+               regexp = "is not an accepted class for scoreBinding.")
+  expect_error(.testIfSequenceList(list(1, 2, 3)),
+               regexp = "is not an accepted class for scoreBinding.")
+  expect_error(.testIfSequenceList(c()),
+               regexp = "is not an accepted class for scoreBinding.")
+  expect_error(.testIfSequenceList(list()),
+               regexp = "is not an accepted class for scoreBinding.")
+  expect_error(.testIfSequenceList(TRUE),
+               regexp = "is not an accepted class for scoreBinding.")
+  expect_error(.testIfSequenceList(list("1", "2")),
+               regexp = "contains invalid nucleotide")
+  expect_error(.testIfSequenceList(list("AC", "TGN")),
+               regexp = "contains invalid nucleotide")
+  expect_error(.testIfSequenceList(list("N", "A")),
+               regexp = "contains invalid nucleotide")
+})
+
+
+test_that(".testIfSequenceList test valid x inputs", {
+  expect_true(.testIfSequenceList(list("AC", "AT")))
+  expect_true(.testIfSequenceList("AC"))
+  expect_true(.testIfSequenceList(c("AC", "TAG")))
+})
+
+
+test_that(".prepRangeMetadata builds id and grabs sequence", {
+  # no flank
+  x <- GenomicRanges::GRanges(seqnames = c("chr12"),
+                              ranges = IRanges::IRanges(c(94136009)))
+  x_a <- .prepRangeMetadata(x = x, sem = sc, 
+                            genome = b, nFlank = 0, 
+                            seqId = NULL)
+  x_e <- GenomicRanges::GRanges(seqnames = c("chr12"),
+                                ranges = IRanges::IRanges(c(94136009)),
+                                id = "chr12:94136009",
+                                sequence = "G")
+  expect_equal(x_a, x_e)
+  
+  # with flank
+  x_a <- .prepRangeMetadata(x = x, sem = sc, 
+                            genome = b, nFlank = 2, 
+                            seqId = NULL)
+  x_e <- GenomicRanges::GRanges(seqnames = c("chr12"),
+                                ranges = IRanges::IRanges(c(94136009)),
+                                id = "chr12:94136009",
+                                sequence = "TTGAG")
+  expect_equal(x_a, x_e)
+})
+
+
+test_that(".prepRangeMetadata fails on invalid input", {
+  x <- GenomicRanges::GRanges(seqnames = c("chr12", "chr13"),
+                              ranges = IRanges::IRanges(c(94136009, 10000000)),
+                              ids = c("A", "A"))
+  # invalid id column
+  expect_error(.prepRangeMetadata(x = x, sem = sc, 
+                            genome = b, nFlank = 0, 
+                            seqId = "foo"), 
+               regexp = "is not a meta data column.")
+  expect_error(.prepRangeMetadata(x = x, sem = sc, 
+                                  genome = b, nFlank = 0,
+                                  seqId = "ids"), 
+               regexp = "column are not unique.")
+  
+  # genome is NULL
+  expect_error(.prepRangeMetadata(x = x, sem = sc, 
+                                  genome = NULL, nFlank = 0,
+                                  seqId = NULL),
+               regexp = "must specify a genome if providing a GRanges object")
+})
+
+
+test_that("scoreBinding invalid inputs", {
+  # invalid x
+  expect_error(scoreBinding(x = TRUE, sem = sc, genome = b), 
+               regexp = "is not an accepted class for scoreBinding")
+  expect_error(scoreBinding(x = NULL, sem = sc, genome = b), 
+               regexp = "is not an accepted class for scoreBinding")
+  expect_error(scoreBinding(x = 1, sem = sc, genome = b), 
+               regexp = "is not an accepted class for scoreBinding")
+  
+  # invalid nFlank
+  x <- GenomicRanges::GRanges(seqnames = c("chr12"),
+                              ranges = IRanges::IRanges(c(94136009)))
+  expect_error(scoreBinding(x = x, sem = sc, genome = b, nFlank = "A"), 
+               regexp = "nFlank must be an integer.")
+})
+
+
+test_that("scoreBinding range scoring", {
+  # invalid nFlank
+  x <- GenomicRanges::GRanges(seqnames = c("chr12"),
+                              ranges = IRanges::IRanges(c(94136009)))
+  sb_a <- scoreBinding(x = x, 
+                       sem = sems(sc, "MA0099.2_HeLa"), 
+                       genome = b)
+  scores_e <- data.table(seqId = "chr12:94136009",
+                         SEM = "MA0099.2_HeLa",
+                         score = -0.96313179,
+                         scoreNorm = -0.02038131,
+                         index = 7,
+                         seq = "TGAGGCA")
+  x_e <- x
+  S4Vectors::mcols(x_e)[, "id"] <- c("chr12:94136009")
+  S4Vectors::mcols(x_e)[, "sequence"] <- c("AGGCTTTGAGGCATC")
+  sb_e <- SEMplScores(ranges = x_e, 
+                      semData = data.table(), 
+                      scores = scores_e)
+  expect_equal(sb_a, sb_e, tolerance = 1e-6)
+})
+
+
+test_that("scoreBinding sequence list scoring", {
+  # invalid nFlank
+  x <- "AGGCTTTGAGGCATC"
+  sb_a <- scoreBinding(x = x, 
+                       sem = sems(sc, "MA0099.2_HeLa"), 
+                       nFlank = 7, seqId = "A")
+  sb_e <- data.table(seqId = "1",
+                     SEM = "MA0099.2_HeLa",
+                     score = -0.96313179,
+                     scoreNorm = -0.02038131,
+                     index = 7,
+                     seq = "TGAGGCA")
+  expect_equal(sb_a, sb_e, tolerance = 1e-6)
+})
+
+
+test_that("scoreBinding test when flank is shorter than SEM", {
+  # invalid nFlank
+  x <- "TTGAGTCAA"
+  sb_a <- scoreBinding(x = x, 
+                       sem = sems(sc, "MA0099.2_HeLa"), 
+                       nFlank = 1, seqId = "A")
+  sb_e <- data.table(seqId = "1",
+                     SEM = "MA0099.2_HeLa",
+                     score = 0.0100808,
+                     scoreNorm = 0.9231947,
+                     index = 2,
+                     seq = "TGAGTCA")
+  expect_equal(sb_a, sb_e, tolerance = 1e-6)
+})
+
+
+test_that("scoreBinding test when flank is zero", {
+  # invalid nFlank
+  x <- "TTGAGTCAA"
+  sb_a <- scoreBinding(x = x, 
+                       sem = sems(sc, "MA0099.2_HeLa"), 
+                       nFlank = 0, seqId = "A")
+  sb_e <- data.table(seqId = "1",
+                     SEM = "MA0099.2_HeLa",
+                     score = 0.0100808,
+                     scoreNorm = 0.9231947,
+                     index = 2,
+                     seq = "TGAGTCA")
+  expect_equal(sb_a, sb_e, tolerance = 1e-6)
+})
+
+
+test_that("scoreBinding test when flank null", {
+  # invalid nFlank
+  x <- "TTGAGTCAA"
+  sb_a <- scoreBinding(x = x, 
+                       sem = sems(sc, "MA0099.2_HeLa"), 
+                       seqId = "A")
+  sb_e <- data.table(seqId = "1",
+                     SEM = "MA0099.2_HeLa",
+                     score = 0.0100808,
+                     scoreNorm = 0.9231947,
+                     index = 2,
+                     seq = "TGAGTCA")
+  expect_equal(sb_a, sb_e, tolerance = 1e-6)
 })

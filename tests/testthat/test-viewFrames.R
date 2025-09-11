@@ -27,7 +27,7 @@ SCORES_DT <- data.table(varId=1:8,
                         refVarIndex=c(3:9, 8),
                         altVarIndex=c(3:9, 8))
 
-SEMPL_SCORES_OBJ <- SemplScores(variants = VR,
+SEMPL_SCORES_OBJ <- SEMplScores(ranges = VR,
                                 semData = data.table(),
                                 scores = SCORES_DT)
 
@@ -124,7 +124,7 @@ test_that("viewFrames variant not in frame", {
 
 test_that("viewFrames scoreIndex not in scores", {
   expect_error(viewFrames(s = SEMPL_SCORES_OBJ, scoreIndex = 9),
-               "out of range in SemplScores object")
+               "out of range in SEMplScores object")
 })
 
 
