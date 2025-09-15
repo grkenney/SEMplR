@@ -1,4 +1,4 @@
-# given a GRanges object, build a position identifier string of format
+# given a GRanges object, x, build a position identifier string of format
 # seqname:position
 .makePositionId <- \(x) {
   start_pos <- IRanges::start(IRanges::ranges(x))
@@ -11,105 +11,179 @@
   return(id)
 }
 
-# # score a single GRanges position against all SEMs
-# .scoreSingleSEM <- \(x, semList, bs_genome_obj, offset) {
-#   id <- .makePositionId(x)
-#   s <- lapply(sems(semList), 
-#               function(y) calculateScores(id, varSeq = x$seq, 
-#                                           semObj = y, 
-#                                           nflank = offset)) |>
-#     data.table::rbindlist()
-#   return(s)
-# }
 
-
-.test_if_sequence_list <- \(x) {
-  is_sequence_list <- TRUE
+# test if x is a list or vector of characters that resembles DNA
+.testIfSequenceList <- \(x) {
   # if is neither a vector or a list, it's not collection of DNA seqs
   if (!(is.vector(x)) & !(is.list(x))) {
-    is_sequence_list <- FALSE
+    # if it's not a GRanges, error
+    if(!is(x, "GRanges")) {
+      stop(is(x)[1], " is not an accepted class for scoreBinding. 
+         x must be a GRanges or VRanges object or vector of DNA sequences")
+    } else {
+      return(FALSE)
+    }
   }
-  # check if it's a character vector
-  if (!is.character(x)) {
-    is_sequence_list <- FALSE
+  
+  # check that x is a character list
+  x_unlist <- x |> unlist()
+  if (!(is.character(x_unlist))) {
+    stop(is(x)[1], " is not an accepted class for scoreBinding. 
+         x must be a GRanges or VRanges object or vector of DNA sequences")
   }
-  return(is_sequence_list)
+  # check if all elements only contain characters A, C, G, T
+  unique_items <- x_unlist |> strsplit(split =  "") |> unlist() |> unique()
+  if (!all(unique_items %in% c("A", "C", "G", "T"))) {
+    invalid_char <- unique_items[!(unique_items %in% c("A", "C", "G", "T"))]
+    stop("x contains invalid nucleotides: ", 
+         paste(invalid_char, collapse = ", "),
+         ". All characters in x must ",
+         "be 'A', 'C', 'G', or 'T'")
+  }
+  return(TRUE)
+}
+
+
+# add sequence and unique id columns to GRanges meta data
+# x: GRanges object
+# sem: SNPEffectMatrixCollection object
+# genome: BSGenomes object
+# nFlank: integer for number of flanking nucleotides to pull 
+# seqId: column name in x to use as unique id.
+# allele: allele column name
+.prepRangeMetadata <- \(x, sem, genome, nFlank, seqId) {
+  # generate a unique sequence id if one is not provided
+  if (is.null(seqId)) {
+    id <- lapply(seq_along(x), 
+                 function(i) .makePositionId(x = x[i])) |>
+      unlist()
+    S4Vectors::mcols(x)[, "id"] <- id
+    
+  } else {
+    # check that the seqId column exists in the meta data
+    if (!(seqId %in% colnames(S4Vectors::mcols(x)))) {
+      stop("'", seqId, "' is not a meta data column. See mcols(x) for ",
+           "the meta data column names or don't specify seqId to generate",
+           "unique ids.")
+    }
+    
+    # make sure ids are unique
+    id <- S4Vectors::mcols(x)[, seqId]
+    if (length(unique(id)) != length(id)) {
+      stop("entries in the ", seqId, " column are not unique.")
+    }
+  }
+  
+  # must provide a reference genome if sequences are not given
+  if (is.null(genome)) {
+    stop("must specify a genome if providing a GRanges object")
+  }
+  
+  # pull the sequence for each range
+  x <- getRangeSeqs(x, genome = genome, 
+                    up = nFlank, down = nFlank)
+  
+  return(x)
 }
 
 
 #' Calculate binding propensity for all SEM motifs and
 #' genomic positions provided
 #'
-#' @param x `GRanges` object
-#' @param semList A `SNPEffectMatrix` or `SNPEffectMatrixCollection` object
-#' @param bs_genome_obj A `BSgenome` object for the genome build to use. ie.
-#' `BSgenome.Hsapiens.UCSC.hg19::Hsapiens`
-#' @param allele Column name in meta data storing allele
+#' @param x `GRanges` object or a vector of DNA sequences
+#' @param sem A `SNPEffectMatrix` or `SNPEffectMatrixCollection` object
+#' @param genome A `BSgenome` object for the genome build to use. ie.
+#' `BSgenome.Hsapiens.UCSC.hg19::Hsapiens`. Required if providing a GRanges 
+#' object. Ignored if providing a vector of sequences.
+#' @param nFlank Number of flanking nucleotides to add to provided range. By 
+#' default will add flank equal to the length of the longest motif. Ignored
+#' if providing a vector of sequences.
+#' @param seqId Column in `GRanges` object to use for unique id. 
+#' By default, ids will be generated from the `seqnames` and `ranges.` 
+#' Ignored if not providing a `GRanges` object.
 #'
-#' @return a `data.table` object
+#' @return If a `GRanges` object is provided, return a `SEMplScores` object. 
+#' If a list of sequences is provided, just return the scoring table
 #'
 #' @export
 #' 
 #' @examples
 #' library(GenomicRanges)
 #'
-#' # create an SNP Effect Matrix (SEM)
-#' s <- matrix(rnorm(12), ncol = 4)
-#' colnames(s) <- c("A", "C", "G", "T")
+#' # load SEMs
+#' data(sc)
 #' 
 #' # create a GRanges object
 #' gr <- GenomicRanges::GRanges(seqnames = "chr12",
-#'               ranges = 94136009, 
-#'               ref = "G", alt = "C")
-#' 
-#' # create a list of SNPEffectMatrix objects
-#' semList <- SNPEffectMatrix(s, baseline = -1, semId = "sem_id")
+#'               ranges = 94136009)
 #' 
 #' # calculate binding propensity
-#' scoreBinding(gr, semList, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+#' scoreBinding(gr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 #' 
-scoreBinding <- \(x, semList, bs_genome_obj, allele = NULL) {
-  is_sequence_list <- .test_if_sequence_list(x)
-  if(is(x)[1] != "GRanges" & !is_sequence_list) {
-    stop(is(x)[1], " is not an accepted class for scoreBinding. 
-         x must be a GRanges object or vector of DNA sequences")
+scoreBinding <- \(x, sem, genome, nFlank = NULL,
+                  seqId = NULL) {
+  # make sure nFlank is an integer, if provided
+  if (!is.null(nFlank) & !is.numeric(nFlank)) {
+    stop("nFlank must be an integer.")
+  } else if (!is.null(nFlank)){
+    nFlank <- as.integer(nFlank)
   }
   
-  # if given a SNPEffectMatrix or a list of SNPEffectMatrix objects,
-  # make it a SNPEffectMatrixCollection
-  if ("SNPEffectMatrix" %in% is(semList)) {
-    semList <- SNPEffectMatrixCollection(list(semList))
-  } else if (is(semList)[1] == "list") {
-    if (is(semList[[1]]) == "SNPEffectMatrix") {
-      semList <- SNPEffectMatrixCollection(semList)
-      }
-  } else if (!("SNPEffectMatrixCollection" %in% is(semList))) {
-    stop("semList must be a SNPEffectMatrixCollection object, 
-         SNPEffectMatrix object, or a list of SNPEffectMatrix objects. 
-         \nSee ?SNPEffectMatrixCollection or use the provided default `sc`")
-  }
+  # determine x input object class/type
+  is_sequence_list <- .testIfSequenceList(x)
   
-  ## Get maximum kmer length of all TFs ##
-  offset <- lapply(sems(semList), function(x) {nrow(sem(x))}) |>
-    unlist() |>
-    max()
+  # convert sem to a collection if it isn't one already
+  sem <- .convertToSNPEffectMatrixCollection(x = sem)
   
-  # get flanking sequences
+  # if a sequence list is not provided, grab the sequences from
+  # the reference genome
   if (!is_sequence_list) {
-    x <- getFlankingSeqs(x, offset, offset, bs_genome_obj, allele)
-    seqs <- x$seq
-    id <- lapply(seq_along(x), function(i) .makePositionId(x = x[i])) |>
-      unlist()
+    # if the number of flanking sequences is not given, use
+    # the length of the longest SEM
+    if (is.null(nFlank)) {
+      # Get maximum length of all SEMs
+      nFlank <- lapply(sems(sem), 
+                       function(x) {nrow(getSEM(x))}) |>
+        unlist() |> max()
+    }
+    
+    x <- .prepRangeMetadata(x = x, 
+                            sem = sem, 
+                            genome = genome, 
+                            nFlank = nFlank, 
+                            seqId = seqId)
+    id <- x$id
+    seqs <- x$sequence
+    
   } else {
+    # if sequence list is given, use sequences and apply an integer id
     seqs <- x
     id <- 1:length(seqs)
+    if (is.null(nFlank)) {
+      nFlank <- 0
+    }
   }
   
-  s <- lapply(sems(semList), 
-              function(y) calculateScores(id, varSeq = seqs, 
-                                          semObj = y, 
-                                          nflank = offset)) |>
-    data.table::rbindlist()
+  s <- lapply(sems(sem), 
+              function(y) scoreSequence(sem = as.matrix(getSEM(y)), 
+                                        dna_sequences = seqs, 
+                                        nFlank = nFlank, 
+                                        bl = getBaseline(y),
+                                        seqIds = id)) 
 
-  return(s)
+  # combine nested list of dataframes into a single data.table with a SEM column
+  s <- s |>
+    data.table::rbindlist(idcol = "SEM")
+  
+  s <- s[, c("seqId", "SEM", "score", "scoreNorm", "index", "seq")]
+  
+  # if working with a GRanges object, return in SEMplScores object,
+  # otherwise, just return the data.frame
+  if (!is_sequence_list) {
+    ss <- SEMplScores(ranges = x, semData = semData(sem), scores = s)
+  } else {
+    ss <- s
+  }
+  
+  return(ss)
 }
