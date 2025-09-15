@@ -1,13 +1,100 @@
+# make sure motif is not null and that provided motif id is in the collection
+.validateMotifInCollection <- \(sem, motif) {
+  # motif required if providing a SNPEffectMatrixCollection
+  if (is.null(motif)) {
+    stop("must specify the motif to plot if supplying a ",
+         "SNPEffectMatrixCollection")
+  }
+  
+  # check that motif given is in collection
+  if (!(motif %in% names(sems(sem)))) {
+    stop("provided motif not found in SNPEffectMatrixCollection.",
+    "See the SEM_KEY column in semData(sem) for available motif ids.")
+  }
+}
+
+
+# validate that sem is a SNPEffectMatrix object or a SNPEffectMatrixCollection 
+# and that the motif id provided is valid
+# define the baseline and matrix for the SEM
+.definePlotSEMParams <- \(sem, motif) {
+  if (is(sem, "SNPEffectMatrix")) {
+    if (!is.null(motif)) {
+      message("motif ignored because SNPEffectMatrix object given.",
+      " See motif argument description in ?plotSEM.")
+    }
+    sem_baseline <- getBaseline(sem)
+    sem_mtx <- getSEM(sem)
+
+  } else if (is(sem, "SNPEffectMatrixCollection")) {
+    .validateMotifInCollection(sem, motif)
+    sem_baseline <- getBaseline(sems(sem, semId = motif))
+    sem_mtx <- getSEM(sems(sem, semId = motif))
+    
+  } else {
+    stop("sem must be a SNPEffectMatrix or a SNPEffectMatrixCollection.")
+  }
+  
+  return(list(sem_baseline = sem_baseline,
+              sem_mtx = sem_mtx))
+}
+
+
+# pivot SEM matrix into a long data.table with score, position, and bp columns
+.formatPlotSEMTable <- \(sem_mtx) {
+  bp <- rep(c("A", "C", "G", "T"), each=nrow(sem_mtx))
+  motif_pos <- rep(1:nrow(sem_mtx), 4)
+  sem_score <- sem_mtx |> 
+    unlist()
+  
+  sem_mtx_long <- data.table(sem_score, motif_pos, bp)
+  return(sem_mtx_long)
+}
+
+
+# define colors to plot nucleotides
+# adds hseq and text_color columns to sem_mtx_long for the sequence to highlight
+# and the color to plot each nucleotide
+.defineNucleotideColors <- \(sem_mtx_long, motifSeq) {
+  motif_length <- max(sem_mtx_long$motif_pos)
+  # if sequence is provided for plotting, 
+  if (!is.null(motifSeq)) {
+    if(nchar(motifSeq) != motif_length) {
+      stop(paste0("Number of characters in motifSeq (", nchar(motifSeq), 
+                  ") does not equal the number of rows in the SEM (",
+                  motif_length, ")"))
+    }
+    mseq <- unlist(strsplit(motifSeq, ""))
+    
+    # going to plot as white first and then overlay bolded, colored sequence
+    mseq_dt <- data.table(mseq, 1:motif_length, mseq, "white") |> 
+      stats::setNames(c("bp", "motif_pos", "mseq", "text_color"))
+    
+    sem_mtx_long <- merge(sem_mtx_long, mseq_dt, by=c("bp", "motif_pos"), 
+                          all.x=T)
+    
+    sem_mtx_long$text_color[is.na(sem_mtx_long$text_color)] <- "#d7dbdd"
+    sem_mtx_long$mseq[is.na(sem_mtx_long$mseq)] <- ""
+    
+  } else {
+    sem_mtx_long$text_color <- "black"
+  }
+  return(sem_mtx_long)
+}
+
+
 #' Plot SEM scores for each nucleic acid in each position of the motif
 #'
-#' @param s A SNPEffectMatrix or SNPEffectMatrixCollection object.
+#' @param sem A SNPEffectMatrix or SNPEffectMatrixCollection object.
 #' @param motif sem id to plot. If providing a SNPEffectMatrixCollection object,
 #' must match a name in the list. If providing a single SNPEffectMatrix object,
 #' this parameter is ignored and the SNPEffectMatrix's semId is used for 
 #' plotting.
-#' @param motifSeq (optional) character sequence to color on plot
-#' @param highlight (optional) index of variant location on reference
-#' @param hcol (optional) color of motifSeq basepairs
+#' @param motifSeq Character sequence to color on plot
+#' @param highlight Index of variant location on reference
+#' @param hcol Color of motifSeq bases
+#' @param hwidth Width of highlight bar
+#' @param size Font size of nucleotides in plot
 #'
 #' @import ggplot2
 #'
@@ -26,85 +113,42 @@
 #' s <- SNPEffectMatrix(sem, baseline = -1, semId = "sem_id")
 #' 
 #' # plot the motif
-#' plotSEM(s, semId(s))
+#' plotSEM(s, getSEMId(s))
 #' 
 #' # color by sequence
-#' plotSEM(s, semId(s), motifSeq = "ACT", highlight = 2)
-plotSEM <- function(s, motif=NULL, 
-                    motifSeq=NULL, highlight=NULL, hcol="dodgerblue") {
-  alt <- ref <- NA
+#' plotSEM(s, getSEMId(s), motifSeq = "ACT", highlight = 2)
+plotSEM <- function(sem, motif=NULL, 
+                    motifSeq=NULL, highlight=NULL, 
+                    hcol="dodgerblue", hwidth = 15,
+                    size = 7) {
+  alt <- ref <- motif_pos <- mseq <- .SD <- 
+    semId <- sem_score <- sm <- varId <- NA
   
-  if ("SNPEffectMatrix" %in% is(s)) {
-    sem_baseline <- baseline(s)
-    sem_mtx <- sem(s)
-    motif <- semId(s)
-  } else if ("SNPEffectMatrixCollection" %in% is(s)) {
-    # motif required if providing a SNPEffectMatrixCollection
-    if (is.null(motif)) {
-      stop("must specify the motif to plot if supplying a ",
-      "SNPEffectMatrixCollection")
-    }
-    
-    # check that motif given is in collection
-    if (!(motif %in% names(sems(s)))) {
-      stop("provided motif not found in SNPEffectMatrixCollection: ",
-           "!(motif %in% names(sems(s))")
-    }
-    sem_baseline <- baseline(sems(s, semId = motif))
-    sem_mtx <- sem(sems(s, semId = motif))
-  } else {
-    stop("s must be a SNPEffectMatrix or a SNPEffectMatrixCollection.")
-  }
+  sem_params <- .definePlotSEMParams(sem, motif)
+  sem_baseline <- sem_params$sem_baseline
+  sem_mtx <- sem_params$sem_mtx
   
-  # pivoting data longer
-  bp <- rep(c("A", "C", "G", "T"), each=nrow(sem_mtx))
-  motif_pos <- rep(1:nrow(sem_mtx), 4)
-  sem_score <- sem_mtx |> 
-    unlist()
+  sem_mtx_long <- .formatPlotSEMTable(sem_mtx)
   
-  sem_mtx_long <- data.table(sem_score, motif_pos, bp)
-  
-  # if sequence is provided for plotting, 
-  if (!is.null(motifSeq)) {
-    if(nchar(motifSeq) != nrow(sem_mtx)) {
-      stop(paste0("Number of characters in motifSeq (", nchar(motifSeq), 
-                  ") does not equal the number of rows in the SEM (",
-                  nrow(sem_mtx), ")"))
-    }
-    mseq <- unlist(strsplit(motifSeq, ""))
-    
-    mseq_dt <- data.table(mseq, 1:nrow(sem_mtx), mseq, "white") |> 
-      stats::setNames(c("bp", "motif_pos", "mseq", "mcol"))
-    
-    sem_mtx_long <- merge(sem_mtx_long, mseq_dt, by=c("bp", "motif_pos"), 
-                          all.x=T)
-   
-    sem_mtx_long$mcol[is.na(sem_mtx_long$mcol)] <- "#d7dbdd"
-    sem_mtx_long$mseq[is.na(sem_mtx_long$mseq)] <- ""
-    
-  } 
-  
-  # if aren't plotting specific sequence
-  if(is.null(motifSeq)) {
-    sem_mtx_long$mcol <- "black"
-  }
-  
-  text_size <- 7
+  sem_mtx_long <- .defineNucleotideColors(sem_mtx_long = sem_mtx_long,
+                                          motifSeq = motifSeq)
   
   motif_plot <- ggplot2::ggplot(sem_mtx_long, 
                                 aes(x=motif_pos, y=sem_score)) +
     theme_classic()
   
   if (!is.null(highlight)) {
-    motif_plot <- motif_plot + geom_vline(xintercept = highlight, size = 15, 
+    motif_plot <- motif_plot + geom_vline(xintercept = highlight, 
+                                          linewidth = hwidth, 
                                           col=hcol, alpha = 0.1)
   }
   
   motif_plot <- motif_plot + 
-    geom_hline(yintercept=0, color = "#eaeaea", size = 1) +
+    geom_hline(yintercept=0, color = "#eaeaea", linewidth = 1) +
     geom_hline(yintercept=sem_baseline, linetype="dashed", 
-               color = "#eaeaea", size = 1) + 
-    geom_text(aes(label=sem_mtx_long$bp), size = text_size, col=sem_mtx_long$mcol) +
+               color = "#eaeaea", linewidth = 1) + 
+    geom_text(aes(label=sem_mtx_long$bp), size = size, 
+              col=sem_mtx_long$text_color) +
     scale_x_continuous(breaks = scales::breaks_pretty(n = nrow(sem_mtx))) +
     theme(legend.position="none") +
     ggplot2::xlab("Position in Motif") +
@@ -115,7 +159,7 @@ plotSEM <- function(s, motif=NULL,
   
   if (!is.null(motifSeq)) {
     motif_plot <- motif_plot +
-      geom_text(aes(label=mseq), size = text_size, 
+      geom_text(aes(label=mseq), size = size, 
                 col=hcol, fontface="bold")
   }
 

@@ -1,9 +1,31 @@
+# validate label, variant, and cols parameters
+.validatePlotSemVariantsInputs <- \(s, label, semId, cols) {
+  # check that sem label is in the sem meta data
+  meta_cols <- S4Vectors::mcols(getRanges(s)) |>
+    colnames()
+  if (!(label %in% meta_cols)) {
+    stop("label not found in S4Vectors::mcols(getRanges(s)).")
+  }
+  
+  # check that semId is a valid id in s
+  if (!(semId %in% scores(s)[, semId])) {
+    stop(paste0("variant not found in SemplScores object. ",
+                semId, " is not in scores(s)[, semId]"))
+  }
+  
+  # check that cols is length 2
+  if (length(cols) != 2) {
+    stop("cols must be a vector of length 2")
+  }
+}
+
+
 #' Plot non-alt versus alt binding propensity for a single motif
 #'
-#' @param semplObj a SemplScores object with scores populated
-#' @param semId a single character vector matching a semId in the semplObj
+#' @param s a SemplScores object with scores populated
+#' @param sem a single character vector matching a semId in the semplObj
 #' @param label column in scores slot of semplObj to use for point labels
-#' @param changedCols vector of length 2 with colors to use for plotting gained
+#' @param cols vector of length 2 with colors to use for plotting gained
 #' and lost motifs respectively
 #'
 #' @import ggplot2
@@ -31,46 +53,38 @@
 #' 
 #' plotSemVariants(s, "IKZF1_HUMAN.GM12878")
 #' 
-plotSemVariants <- function(semplObj, semId, label = "varId",
-                            changedCols = c("#F8766D", "dodgerblue2")) {
-  refNorm <- altNorm <- NA
+plotSemVariants <- function(s, sem, label = "varId",
+                            cols = c("#F8766D", "dodgerblue2")) {
+  refNorm <- altNorm <- ix <- semId <- NA
+  .validatePlotSemVariantsInputs <- \(s, label, sem, cols)
   
-  if (semId %in% scores(semplObj)[, semId]) {
-    ix <- semId == scores(semplObj)[, semId]
-    dt <- scores(semplObj)[ix, ]
-  } else {
-    stop(paste0("semId not found in SemplScores object. ",
-                semId, " is not in scores(semplObj)[, semId]"))
-  }
+  ix <- scores(s)[, semId] == sem
+  scores_dt <- scores(s)[ix, ]
   
-  if (length(changedCols) != 2) {
-    stop("changedCols must be a vector of length 2")
-  }
-  
-  var_plot <- ggplot2::ggplot(data = dt,
+  var_plot <- ggplot2::ggplot(data = scores_dt,
                               aes(x = refNorm, y = altNorm)) +
     geom_vline(xintercept = 0, linetype = 2, col = 'grey') +
     geom_hline(yintercept = 0, linetype = 2, col  = 'grey') +
-    geom_point(data = subset(dt, altNorm < 0 & refNorm < 0),
+    geom_point(data = subset(scores_dt, altNorm < 0 & refNorm < 0),
                size = 1,
                color = 'grey') +
-    geom_point(data = subset(dt, altNorm > 0 & refNorm < 0),
+    geom_point(data = subset(scores_dt, altNorm > 0 & refNorm < 0),
                size = 1,
-               color = changedCols[1]) +
-    geom_point(data = subset(dt, altNorm < 0 & refNorm > 0),
+               color = cols[1]) +
+    geom_point(data = subset(scores_dt, altNorm < 0 & refNorm > 0),
                size = 1,
-               color = changedCols[2]) +
-    geom_point(data = subset(dt, altNorm > 0 & refNorm > 0),
+               color = cols[2]) +
+    geom_point(data = subset(scores_dt, altNorm > 0 & refNorm > 0),
                size = 1,
                color = 'grey') +
-    ggrepel::geom_text_repel(data = subset(dt, altNorm > 0 & refNorm < 0),
+    ggrepel::geom_text_repel(data = subset(scores_dt, altNorm > 0 & refNorm < 0),
                              mapping = aes(label = .data[[label]]),
                              size = 4,
-                             color = changedCols[1]) +
-    ggrepel::geom_text_repel(data = subset(dt, altNorm < 0 & refNorm > 0),
+                             color = cols[1]) +
+    ggrepel::geom_text_repel(data = subset(scores_dt, altNorm < 0 & refNorm > 0),
                              mapping = aes(label = .data[[label]]),
                              size = 4,
-                             color = changedCols[2]) +
+                             color = cols[2]) +
     scale_x_continuous(breaks = scales::pretty_breaks(),
                        limits = \(x) ifelse(abs(x) < 1, c(-1,1), x)) +
     scale_y_continuous(breaks = scales::pretty_breaks(),

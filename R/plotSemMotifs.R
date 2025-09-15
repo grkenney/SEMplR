@@ -1,9 +1,30 @@
+# validate label, variant, and cols parameters
+.validatePlotSemMotifsInputs <- \(s, label, variant, cols) {
+  semId <- varId <- NA
+  # check that sem label is in the sem meta data
+  if (!(label %in% colnames(semData(s)))) {
+    stop("label not found in colnames(semData(s)).")
+  }
+  
+  # check that variant is a valid id in s
+  if (!(variant %in% scores(s)[, varId])) {
+    stop(paste0("variant not found in SemplScores object. ",
+                variant, " is not in scores(s)[, varId]"))
+  }
+  
+  # check that cols is length 2
+  if (length(cols) != 2) {
+    stop("cols must be a vector of length 2")
+  }
+}
+
+
 #' Plot non-alt versus alt binding propensity for a single variant
 #'
-#' @param semplObj a SemplScores object with scores populated
+#' @param s a SemplScores object with scores populated
 #' @param variant variant id to plot
 #' @param label column in sem_metadata slot of semplObj to use for point labels
-#' @param changedCols vector of length 2 with colors to use for plotting gained
+#' @param cols vector of length 2 with colors to use for plotting gained
 #' and lost motifs respectively
 #' 
 #' @import ggplot2
@@ -31,24 +52,17 @@
 #' 
 #' plotSemMotifs(s, "chr12:94136009:G>C", label = "transcription_factor")
 #' 
-plotSemMotifs <- \(semplObj, variant, label = "semId",
-                   changedCols = c("#F8766D", "dodgerblue2")) {
+plotSemMotifs <- \(s, variant, label = "semId",
+                   cols = c("#F8766D", "dodgerblue2")) {
   refNorm <- altNorm <- varId <- sem <- NULL
+  .validatePlotSemMotifsInputs(s = s, label = label, 
+                               variant = variant, cols = cols)
   
-  if (variant %in% scores(semplObj)[, varId]) {
-    ix <- variant == scores(semplObj)[, varId]
-    dt <- scores(semplObj)[ix, ]
-  } else {
-    stop(paste0("variant not found in SemplScores object. ",
-                variant, " is not in scores(semplObj)[, varId]"))
-  }
-  
-  if (length(changedCols) != 2) {
-    stop("changedCols must be a vector of length 2")
-  }
-  
-  dt <- merge(dt, semData(semplObj), 
-              by.x = "semId", by.y = data.table::key(semData(semplObj)))
+  ix <- variant == scores(s)[, varId]
+  dt <- scores(s)[ix, ]
+
+  dt <- merge(dt, semData(s), 
+              by.x = "semId", by.y = data.table::key(semData(s)))
 
   sem_motif_plot <- ggplot2::ggplot(data = dt,
                                     aes(x = refNorm, y = altNorm)) +
@@ -59,21 +73,21 @@ plotSemMotifs <- \(semplObj, variant, label = "semId",
                color = 'grey') +
     geom_point(data = subset(dt, altNorm > 0 & refNorm < 0),
                size = 1,
-               color = changedCols[1]) +
+               color = cols[1]) +
     geom_point(data = subset(dt, altNorm < 0 & refNorm > 0),
                size = 1,
-               color = changedCols[2]) +
+               color = cols[2]) +
     geom_point(data = subset(dt, altNorm > 0 & refNorm > 0),
                size = 1,
                color = 'grey') +
     ggrepel::geom_text_repel(data = subset(dt, altNorm > 0 & refNorm < 0),
                     mapping = aes(label = .data[[label]]),
                     size = 4,
-                    color = changedCols[1]) +
+                    color = cols[1]) +
     ggrepel::geom_text_repel(data = subset(dt, altNorm < 0 & refNorm > 0),
                     mapping = aes(label = .data[[label]]),
                     size = 4,
-                    color = changedCols[2]) +
+                    color = cols[2]) +
     scale_x_continuous(breaks = scales::pretty_breaks(),
                        limits = \(x) ifelse(abs(x) < 1, c(-1,1), x)) +
     scale_y_continuous(breaks = scales::pretty_breaks(),
