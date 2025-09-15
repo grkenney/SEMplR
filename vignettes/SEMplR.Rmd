@@ -1,8 +1,12 @@
 ---
 title: "SEMplR Vignette"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette: default
+  BiocStyle::html_vignette:
+    toc: yes
+    toc_float: yes
 vignette: >
-  %\VignetteIndexEntry{SEMplR_Vignette}
+  %\VignetteIndexEntry{SEMplR Vignette} 
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,20 +21,26 @@ knitr::opts_chunk$set(
 options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
-```{r}
-suppressPackageStartupMessages({
-  library(VariantAnnotation)
-  library(SEMplR)
-})
+```{r load_libraries, message=FALSE}
+library(VariantAnnotation)
+library(SEMplR)
 ```
 
+
+# SNP Effect Matrices
+
+SEMplR uses SNP Effect Matrices (SEMs) to score potential motifs. These are matrices contain binding affinity scores and have rows equal to the length of the motif and a column for each nucleotide. SEMs are produced by SEMpl, but a default set of 223 are included with this package in the `sc` data object. A full list of the transcription factors included in this default set can be found [here](https://github.com/grkenney/SEMplR/blob/main/vignettes/sempl_metadata.csv) or by running `semData(sc)`.
+
+The default SEM collection can be loaded with:
+
+```{r}
+data(sc)
+```
 
 Printing the `SNPEffectMatrixCollection`, we can see that we have 223 SEMs and 13 meta data features for each.
 ```{r}
-data(sc)
 sc
 ```
-
 
 We can access all SEMs in collection the with the function `sems()` or some subset of matrices by specifying a vector of semIds in the `semId` parameter.
 ```{r}
@@ -42,41 +52,7 @@ We can view the SEM meta data slot with the `semData` function.
 semData(sc)
 ```
 
-# Build Variant Set
-
-We will load the variants we want to score as a `VRanges` object.
-```{r}
-vr <- VRanges(seqnames = c("chr12", "chr19"),
-              ranges = c(94136009, 10640062), 
-              ref = c("G", "T"), alt = c("C", "A"))
-vr
-```
-
-# Score Variants
-```{r}
-sempl_obj <- scoreVariants(vr = vr,
-                           semList = sc,
-                           bs_genome_obj=BSgenome.Hsapiens.UCSC.hg38::Hsapiens)
-sempl_obj
-```
-
-```{r}
-variants(sempl_obj)
-```
-
-```{r}
-semData(sempl_obj)
-```
-
-```{r}
-scores(sempl_obj)
-```
-
-
-# View Frame
-```{r}
-viewFrames(sempl_obj, vid = "chr12:94136009:G>C", sid = "AP2B_HUMAN.SK-N-SH")
-```
+# Scoring Binding
 
 ```{r}
 plotSEM(sc, motif = "AP2B_HUMAN.SK-N-SH", 
@@ -85,15 +61,68 @@ plotSEM(sc, motif = "AP2B_HUMAN.SK-N-SH",
         motifSeq = "GCTTTCAGGC", highlight = 1, hcol = "red")
 ```
 
+# Scoring Variants
+
+## Prepare inputs
+
+First, we will define the variants we want to score. Variants can be supplied to SEMplR as either a `VRanges` or a `GRanges` object. If using `VRanges` alleles must be stored in the `ref` and `alt` parameters. If using `GRanges` the alleles should be stored in seperate metadata columns. 
+
+Insertions and deletions should be specified by an empty character vector in the appropriate allele. 
+
+Optionally, an `id` column can be defined in the object metadata to be used as a unique identifier for each variant.
+
 ```{r}
-plotSemMotifs(sempl_obj, 
-              variant = "chr19:10640062:T>A",
+vr <- VRanges(seqnames = c("chr12", "chr19"),
+              ranges = c(94136009, 10640062), 
+              ref = c("G", "T"), alt = c("C", "A"),
+              id = c("variant1", "variant2"))
+```
+
+## Scoring
+
+The `scoreVariants` function scores each allele of each variant against every SEM provided. From the resulting data object, we can see that we scored 2 variants, the SEM meta data stored in the object has 13 fields, and we have 446 rows in the `scores` results table.
+
+There is a row in the `scores` table for each variant/SEM combination. Here we scored 2 variants x 223 SEMs to get 446 rows. 
+```{r}
+sempl_results <- scoreVariants(x = vr,
+                               sem = sc,
+                               genome=BSgenome.Hsapiens.UCSC.hg38::Hsapiens,
+                               varId = "id")
+
+sempl_results
+```
+The scoring results has 10 columns:
+
+- **varId**: unique id of the variant as defined in the `id` column of the input `GRanges` or `VRanges` object. If not defined, a custom unique identifier is generated in the format [seqname]:[range]:[ref_allele]>[alt_allele]
+- **semId**: the unique identifier of the SEM
+- **refSeq** and **altSeq**: the optimally scored sequence for the reference and alternative alleles respectively
+- **refScore** and **altScore**: the raw (unnormalized) binding affinity score for the reference and alternative alleles respectively
+- **refNorm** and **altNorm**: the normalized binding affinity score for the reference and alternative alleles respectively
+- **refVarIndex** and **altVarIndex**: The position of the frame's starting indeces in the scored sequence
+
+There are accessor functions to isolate each slot of the resulting data object:
+```{r}
+# access the variants slot
+getRanges(sempl_results)
+
+# access the semData slot
+semData(sempl_results)
+
+# access the scores slot
+scores(sempl_results)
+```
+
+## Visualization
+
+```{r}
+plotSemMotifs(sempl_results, 
+              variant = "variant2",
               label = "transcription_factor")
 ```
 
 
 ```{r}
-plotSemVariants(sempl_obj, semId = "TFAP4_HUMAN.HepG2")
+plotSemVariants(sempl_results, sem = "AP2B_HUMAN.SK-N-SH")
 ```
 
 # Enrichment
@@ -155,7 +184,7 @@ plt
 
 # Extras
 
-# Loading SEMs
+## Loading SEMs
 
 First, we create a list of file paths to the .sem files we want to include. We will also load the meta data for each sem in a `data.table` object. If meta data is used, all SEMs must be represented in the meta data table.
 ```{r, eval=FALSE}
