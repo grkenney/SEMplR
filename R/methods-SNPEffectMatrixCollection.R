@@ -39,15 +39,21 @@ SNPEffectMatrixCollection <- function(sems, semData = NULL, semKey = "") {
   SEM_KEY <- .SD <- NULL
   
   # if a single SNPEffectMatrix object, make it a list
-  if ("SNPEffectMatrix" %in% is(sems)) {
+  if (is(sems, "SNPEffectMatrix")) {
     sems <- list(sems)
   }
   
-  # convert semData to data.table
-  semData <- data.table(semData)
-  
   # use semIds for list names
   names(sems) <- lapply(sems, function(x) unlist(x@semId))
+  
+  # must supply a key if supplying semData
+  if (!is.null(semData) & semKey == "") {
+    stop("must provide a semKey if providing semData",
+    " See ?SNPEffectMatrixCollection")
+  }
+  
+  # convert semData to data.table
+  semData <- data.table::data.table(semData)
   
   if (nrow(semData) > 0) {
     # check that semKey is a column in semData
@@ -63,7 +69,8 @@ SNPEffectMatrixCollection <- function(sems, semData = NULL, semKey = "") {
                                   \(x) gsub(".sem", "", x))]
       data.table::setkey(semData, SEM_KEY)
       semKey <- "SEM_KEY"    # update key
-      message("Updating semKey to 'SEM_KEY'.")
+      rlang::inform("Removing .sem suffixes from semKey.")
+      message("formatted key now stored in column 'SEM_KEY'.")
     } else {
       data.table::setkeyv(semData, semKey)
     }
@@ -155,32 +162,16 @@ setMethod("show", "SNPEffectMatrixCollection",
             cat("An object of class SNPEffectMatrixCollection\n")
             num_sems <- length(object@sems)
             
-            if (num_sems > 5) {
-              first2 <- lapply(object@sems[1:2], 
-                               function(x) x@semId) |>
-                unlist()
-              last2 <- lapply(object@sems[(num_sems-1):num_sems], 
-                              function(x) x@semId) |>
-                unlist()
-              sem_id_list <- paste0(paste(first2, collapse = ", "), " ... ", 
-                                    paste(last2, collapse = ", "))
-            } else {
-              sem_id_list <- lapply(object@sems, function(x) x@semId) |>
-                paste0(collapse = ", ")
-            }
+            s <- lapply(object@sems, function(x) x@semId) |>
+              unlist()
+            sem_id_list <- .formatList(s)
             
             cat("sems(",num_sems,"): ", sep = "")
             cat(paste(sem_id_list, collapse = " "))
             
             meta_cols <- names(object@semData)
             n_cols <- length(meta_cols)
-            if (length(meta_cols) > 5) {
-              meta_cols_list <- paste0(c(meta_cols[1:2], " ... ", 
-                                         meta_cols[(n_cols-1):n_cols]), 
-                                       collapse = ", ")
-            } else {
-              meta_cols_list <- paste0(meta_cols, collapse = ", ")
-            }
+            meta_cols_list <- .formatList(meta_cols)
             
             cat("\nsemData(", n_cols, "): ", meta_cols_list, sep = "")
           }

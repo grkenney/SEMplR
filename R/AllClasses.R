@@ -1,3 +1,11 @@
+## Class Unions ----------------------------------------------------------------
+#' Class union for "GRanges-like" objects
+#' @importClassesFrom GenomicRanges GRanges
+#' @importClassesFrom VariantAnnotation VRanges
+#' @noRd
+setClassUnion("GRangesOrVRanges", 
+              c("GRanges", "VRanges"))
+
 
 ## SNP Effect Matrix (SEM) -----------------------------------------------------
 #' https://doi.org/10.1093/bioinformatics/btz612
@@ -53,16 +61,20 @@ setValidity("SNPEffectMatrixCollection", function(object) {
   }
   
   # semKey column must be unique
-  semKeys <- object@semData[, object@semKey]
-  if (length(semKeys) != length(unique(semKeys))) {
-    paste0("Column designated as semKey must be unique. Number of rows (", 
-           length(semKeys), ") != unique keys (", length(unique(semKeys)), ")")
+  if (object@semKey != "") {
+    semKeys <- object@semData[, object@semKey]
+    if (length(semKeys) != length(unique(semKeys))) {
+      paste0("Column designated as semKey must be unique. Number of rows (",
+             length(semKeys), ") != unique keys (", length(unique(semKeys)), ")")
+    } else {
+      TRUE
+    }
   } else {
     TRUE
   }
   
   # number of sems and semData rows must be same length
-  if ((length(object@sems) != nrow(object@semData)) & 
+  if ((length(object@sems) != nrow(object@semData)) &
       nrow(object@semData) != 0) {
     paste0("Length of sems (", length(object@sems) ,
            ") and semData (", nrow(object@semData), ") are not equal")
@@ -82,48 +94,51 @@ setValidity("SNPEffectMatrixCollection", function(object) {
 })
 
 
-## SemplScores class -----------------------------------------------------------
+## SEMplScores class -----------------------------------------------------------
 
-#' Class for storing SEM motif binding calculations for multiple variants
+#' Class for storing SEM motif binding calculations for multiple genomic ranges 
+#' or variants
 #'
-#' @slot variants A `VRanges` object to hold one or more variants
-#' @slot scores A `data.table` object for motif information and binding scores
+#' @slot ranges A `GRanges` or `VRanges` object to hold one or more genomic
+#' ranges
 #' @slot semData A `data.table` object of metadata for the SEMs with one 
 #' row for each SEM
+#' @slot scores A `data.table` object for motif information and binding scores
 #'
 #' @importFrom VariantAnnotation VRanges
 #' @importFrom data.table data.table
 #'
 #' @export
-setClass("SemplScores",
-         slots = c(variants = "VRanges",
+setClass("SEMplScores",
+         slots = c(ranges = "GRangesOrVRanges",
                    semData = "data.table",
                    scores = "data.table"
                    ),
          prototype = list(
-           variants = VariantAnnotation::VRanges(),
+           ranges = VariantAnnotation::VRanges(),
            semData = data.table::data.table(),
            scores = data.table::data.table()
          )
 )
 
 
-setValidity("SemplScores", function(object) {
-  if (nrow(object@scores) > 0) {
-    expected_column_names <- c("varId", "semId",
-                               "refSeq", "altSeq",
-                               "refScore", "altScore",
-                               "refNorm", "altNorm")
-    actual_column_names <- colnames(object@scores)
-    if (sum(expected_column_names %in%
-            actual_column_names) != length(expected_column_names)) {
-      "@scores must contain columns with names: varId, semId, refSeq, altSeq, refScore, altScore, refNorm, altNorm"
-    } else {
-      TRUE
-    }
-  } else {
-    TRUE
-  }
+setValidity("SEMplScores", function(object) {
+  # if (nrow(object@scores) > 0) {
+  #   expected_column_names <- c("varId", "semId",
+  #                              "refSeq", "altSeq",
+  #                              "refScore", "altScore",
+  #                              "refNorm", "altNorm")
+  #   actual_column_names <- colnames(object@scores)
+  #   if (sum(expected_column_names %in%
+  #           actual_column_names) != length(expected_column_names)) {
+  #     "@scores must contain columns with names: varId, semId, refSeq, altSeq, refScore, altScore, refNorm, altNorm"
+  #   } else {
+  #     TRUE
+  #   }
+  # } else {
+  #   TRUE
+  # }
+  TRUE
 })
 
 

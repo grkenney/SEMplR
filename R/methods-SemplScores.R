@@ -1,37 +1,10 @@
-# ---- helper functions ----
-
-# Given a single variant in a VRanges object, construct a unique id from the 
-# position information
-.makeDefaultId <- \(vr) {
-  start_pos <- IRanges::start(IRanges::ranges(vr))
-  end_pos <- IRanges::end(IRanges::ranges(vr))
-  sn <- GenomeInfoDb::seqnames(vr)
-  
-  ref_allele <- as.character(VariantAnnotation::ref(vr))
-  alt_allele <- as.character(VariantAnnotation::alt(vr))
-  
-  if (ref_allele == "") {
-    allele_str <- paste0("ins", alt_allele)
-  } else if (alt_allele == "") {
-    allele_str <- paste0("del", ref_allele)
-  } else {
-    allele_str <- paste0(ref_allele, ">", alt_allele)
-  }
-  
-  pos_str <- ifelse(start_pos == end_pos, 
-                    start_pos, paste0(start_pos, "-", end_pos))
-  
-  vid <- paste0(sn, ":", pos_str, ":", allele_str)
-  return(vid)
-}
-
 # ---- constructor ----
 
-#' SemplScores object and constructor
+#' SEMplScores object and constructor
 #'
-#' Constructs a SemplScores class object.
+#' Constructs a SEMplScores class object.
 #'
-#' @param variants A `VRanges` object to hold one or more variants
+#' @param ranges A `GRanges` or `VRanges` object to hold one or more variants
 #' @param semData A named list of SNPEffectMatrix objects
 #' @param scores (optional) A `data.table` object for motif information and 
 #' binding scores
@@ -40,7 +13,7 @@
 #' @importFrom VariantAnnotation VRanges
 #' @importFrom S4Vectors mcols
 #'
-#' @return a SemplScores object
+#' @return a SEMplScores object
 #' @docType class
 #' @export
 #' 
@@ -53,25 +26,25 @@
 #'                                  ranges = c(94136009, 10640062), 
 #'                                  ref = c("G", "T"), alt = c("C", "A"))
 #' 
-#' SemplScores(variants = vr, semData = semData(sc))
+#' SEMplScores(ranges = vr, semData = semData(sc))
 #' 
-SemplScores <- function(variants=NULL, semData=NULL, scores=NULL) {
-  # if no variants provided, make an empty VRanges object
-  if (all(is.null(variants))) {
-    vr <-  VariantAnnotation::VRanges()
+SEMplScores <- function(ranges=NULL, semData=NULL, scores=NULL) {
+  # if no ranges provided, make an empty VRanges object
+  if (all(is.null(ranges))) {
+    r <-  VariantAnnotation::VRanges()
   } else {
-    vr <- variants
+    r <- ranges
   }
   
-  # if more than one VRange, and there is no id column, make a unique id from
-  # position information
-  if (length(vr) == 0) {
-    S4Vectors::mcols(vr) <- data.frame(id=NA)
-  } else if (!("id" %in% names(S4Vectors::mcols(vr)))) {
-    vid <- lapply(1:length(vr), \(i) .makeDefaultId(vr = vr[i])) |>
-      unlist()
-    S4Vectors::mcols(vr)$id <- vid
-  }
+  # # if more than one VRange, and there is no id column, make a unique id from
+  # # position information
+  # if (length(vr) == 0) {
+  #   S4Vectors::mcols(vr) <- data.frame(id=NA)
+  # } else if (!("id" %in% names(S4Vectors::mcols(vr)))) {
+  #   vid <- lapply(1:length(vr), \(i) .makeVariantId(vr = vr[i])) |>
+  #     unlist()
+  #   S4Vectors::mcols(vr)$id <- vid
+  # }
   
   if (is.null(scores)){
     scores_table <- data.table()
@@ -79,8 +52,12 @@ SemplScores <- function(variants=NULL, semData=NULL, scores=NULL) {
     scores_table <- scores
   }
   
-  new("SemplScores",
-      variants = vr,
+  if (is.null(semData)){
+    semData <- data.table()
+  }
+  
+  new("SEMplScores",
+      ranges = r,
       semData = semData,
       scores = scores_table
   )
@@ -89,10 +66,10 @@ SemplScores <- function(variants=NULL, semData=NULL, scores=NULL) {
 
 # ---- accessors ----
 
-#' Accessor variants slot in a SemplScores object
+#' Access ranges slot in a SEMplScores object
 #' 
-#' @param x a SemplScores object
-#' @rdname variants
+#' @param x a SEMplScores object
+#' @rdname getRanges
 #' @export
 #' 
 #' @examples
@@ -109,14 +86,15 @@ SemplScores <- function(variants=NULL, semData=NULL, scores=NULL) {
 #' # calculate binding propensity
 #' s <- scoreVariants(vr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 #' 
-#' variants(s)
+#' getRanges(s)
 #' 
-setMethod("variants", "SemplScores", 
-          function(x) x@variants)
+setMethod("getRanges", "SEMplScores", 
+          function(x) x@ranges)
 
-#' Accessor semData slot in a SemplScores object
+
+#' Accessor semData slot in a SEMplScores object
 #' 
-#' @param x a SemplScores object
+#' @param x a SEMplScores object
 #' @rdname semData
 #' @export
 #' 
@@ -136,13 +114,13 @@ setMethod("variants", "SemplScores",
 #' 
 #' semData(s)
 #' 
-setMethod("semData", "SemplScores", 
+setMethod("semData", "SEMplScores", 
           function(x) x@semData)
 
 
-#' Accessor scores slot in a SemplScores object
+#' Accessor scores slot in a SEMplScores object
 #' 
-#' @param x a SemplScores object
+#' @param x a SEMplScores object
 #' 
 #' @rdname scores
 #' @keywords internal
@@ -164,10 +142,10 @@ setMethod("semData", "SemplScores",
 #' 
 #' scores(s)
 #' 
-setMethod("scores", "SemplScores", 
+setMethod("scores", "SEMplScores", 
           function(x) x@scores)
 
-setMethod("scores<-", "SemplScores", function(x, value) {
+setMethod("scores<-", "SEMplScores", function(x, value) {
   x@scores <- value
   x
 })
@@ -176,46 +154,31 @@ setMethod("scores<-", "SemplScores", function(x, value) {
 # ---- show ----
 
 
-#' Show method for SemplScores objects
+#' Show method for SEMplScores objects
 #'
 #' Prints information about the number of variants, SEM meta data columns, and
 #' the scoring table if scoreVariants has been run.
 #'
-#' @param object a SemplScores object
+#' @param object a SEMplScores object
 #' 
 #' @rdname show
 #' 
 #' @export
-setMethod("show", "SemplScores",
+setMethod("show", "SEMplScores",
           function(object) {
-            cat("An object of class SemplScores\n")
+            cat("An object of class SEMplScores\n")
             
-            # show variants
-            num_vars <- length(object@variants)
+            # show ranges
+            num_vars <- length(object@ranges)
+            vars_id_list <- .formatList(x = object@ranges$id)
             
-            if (num_vars > 5) {
-              first2 <- object@variants$id[1:2]
-              last2 <- object@variants$id[(num_vars-1):num_vars]
-              vars_id_list <- paste0(paste(first2, collapse = ", "), " ... ", 
-                                     paste(last2, collapse = ", "))
-            } else {
-              vars_id_list <- object@variants$id |>
-                paste0(collapse = ", ")
-            }
-            
-            cat("variants(",num_vars,"): ", sep = "")
+            cat("ranges(",num_vars,"): ", sep = "")
             cat(paste(vars_id_list, collapse = " "))
             
             # show semData
             meta_cols <- names(object@semData)
             n_meta_cols <- length(meta_cols)
-            if (length(meta_cols) > 5) {
-              meta_cols_list <- c(meta_cols[1:2], " ... ",
-                                  meta_cols[(n_meta_cols-1):n_meta_cols]) |>
-                paste0(collapse = ", ")
-            } else {
-              meta_cols_list <- paste0(meta_cols, collapse = ", ")
-            }
+            meta_cols_list <- .formatList(x = meta_cols)
 
             cat("\nsemData(", n_meta_cols, "): ", meta_cols_list, sep = "")
             

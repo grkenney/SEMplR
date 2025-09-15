@@ -25,7 +25,7 @@ viewFrames <- function(s, vid = NULL, sid = NULL, scoreIndex = NULL) {
   } else if (!is.null(scoreIndex)) {
     # check that scoreIndex is within the range of s scores
     if (scoreIndex > nrow(scores(s))) {
-      stop("scoreIndex ", scoreIndex, " out of range in SemplScores object")
+      stop("scoreIndex ", scoreIndex, " out of range in SEMplScores object")
     }
     # get the corresponding sempl scores row
     ss <- scores(s)[scoreIndex]
@@ -37,8 +37,8 @@ viewFrames <- function(s, vid = NULL, sid = NULL, scoreIndex = NULL) {
   }
   
   # get the variant that matches the score index
-  vi <- variants(s)$id == ss$varId
-  v <- variants(s)[vi]
+  vi <- getRanges(s)$id == ss$varId
+  v <- getRanges(s)[vi]
   
   # get the corresponding sem matrix
   motifbp <- nchar(ss$refSeq)

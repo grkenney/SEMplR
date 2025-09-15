@@ -1,19 +1,19 @@
 # ---- SNPEffectMatrix ----
 
-#' @rdname sem
+#' @rdname getSEM
 #' @export
-setGeneric("sem", 
-           function(x) standardGeneric("sem"))
+setGeneric("getSEM", 
+           function(x) standardGeneric("getSEM"))
 
-#' @rdname baseline
+#' @rdname getBaseline
 #' @export
-setGeneric("baseline", 
-           function(x) standardGeneric("baseline"))
+setGeneric("getBaseline", 
+           function(x) standardGeneric("getBaseline"))
 
-#' @rdname semId
+#' @rdname getSEMId
 #' @export
-setGeneric("semId", 
-           function(x) standardGeneric("semId"))
+setGeneric("getSEMId", 
+           function(x) standardGeneric("getSEMId"))
 
 
 # ---- SNPEffectMatrixCollection ----
@@ -31,9 +31,9 @@ setGeneric("semData",
 
 # ---- SemplScores ----
 
-#' @rdname variants
+#' @rdname getRanges
 #' @export
-setGeneric("variants", function(x) standardGeneric("variants"))
+setGeneric("getRanges", function(x) standardGeneric("getRanges"))
 
 #' @rdname scores
 #' @export

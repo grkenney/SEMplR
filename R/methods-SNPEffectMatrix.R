@@ -25,14 +25,12 @@
 #' SNPEffectMatrix(m, baseline = 1, semId = "sem_id")
 #' 
 SNPEffectMatrix <- function(sem, baseline, semId) {
-  .SD <- NULL
-  
   # convert matrix to data.table in case given in another format
   sem <- data.table::as.data.table(sem)
-  
-  # drop first column
-  sem <- sem[, .SD, .SDcols = c("A", "C", "G", "T")]
-  
+
+  # drop columns not names after nucleotides
+  sem <- sem[, c("A", "C", "G", "T")]
+
   # convert baseline to numeric
   baseline <- as.numeric(baseline)
   
@@ -46,7 +44,7 @@ SNPEffectMatrix <- function(sem, baseline, semId) {
 
 # ---- accessors ----
 
-#' Access sem matrix from a SNPEffectMatrix object
+#' Access the SEM from a SNPEffectMatrix object
 #'
 #' @param x SNPEffectMatrix object
 #'
@@ -62,11 +60,11 @@ SNPEffectMatrix <- function(sem, baseline, semId) {
 #' s <- SNPEffectMatrix(df, 1.205, "motif_id")
 #'
 #' ## Access count matrix
-#' sem(s)
+#' getSEM(s)
 #'
-#' @rdname sem
+#' @rdname getSEM
 #' @export
-setMethod("sem", "SNPEffectMatrix", 
+setMethod("getSEM", "SNPEffectMatrix", 
           function(x) x@sem)
 
 
@@ -85,11 +83,11 @@ setMethod("sem", "SNPEffectMatrix",
 #' s <- SNPEffectMatrix(df, 1.205, "motif_id")
 #'
 #' ## Access count matrix
-#' baseline(s)
+#' getBaseline(s)
 #'
-#' @rdname baseline
+#' @rdname getBaseline
 #' @export
-setMethod("baseline", "SNPEffectMatrix", 
+setMethod("getBaseline", "SNPEffectMatrix", 
           function(x) x@baseline)
 
 
@@ -97,7 +95,7 @@ setMethod("baseline", "SNPEffectMatrix",
 #'
 #' @param x SNPEffectMatrix object
 #'
-#' @returns The `character` semId is returned
+#' @returns The `character` id is returned
 #'
 #' @examples
 #' ## Create example SEM
@@ -108,11 +106,11 @@ setMethod("baseline", "SNPEffectMatrix",
 #' s <- SNPEffectMatrix(df, 1.205, "motif_id")
 #'
 #' ## Access count matrix
-#' semId(s)
+#' getSEMId(s)
 #'
-#' @rdname semId
+#' @rdname getSEMId
 #' @export
-setMethod("semId", "SNPEffectMatrix", 
+setMethod("getSEMId", "SNPEffectMatrix", 
           function(x) x@semId)
 
 
