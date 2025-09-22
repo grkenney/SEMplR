@@ -1,7 +1,7 @@
 .getTranscriptRanges <- \(txdb, fg_df, bg_df, standardChroms) {
   columns_to_keep <- c("GENEID", "TXID", "TXNAME")
   # get all transcripts
-  txs <- transcripts(txdb, columns = columns_to_keep)
+  txs <- GenomicFeatures::transcripts(txdb, columns = columns_to_keep)
   
   # get ranges for foreground
   fg_ix <- lapply(fg_df$ENSEMBLTRANS, 
@@ -15,7 +15,8 @@
     unlist()
   bg_ranges <- txs[bg_ix, ]
   
-  organism <- metadata(txdb)[metadata(txdb)$name == "Organism", "value"]
+  organism <- S4Vectors::metadata(txdb)[S4Vectors::metadata(txdb)$name == 
+                                          "Organism", "value"]
   # Restrict to standard chromosomes? Optional but default yes
   if(standardChroms){
     bg_ranges <- GenomeInfoDb::keepStandardChromosomes(bg_ranges,
@@ -40,8 +41,8 @@
   fg_df_in_genes <- fg_df[!is.na(fg_ix), ]
   bg_df_in_genes <- bg_df[!is.na(bg_ix), ]
   
-  fg_ranges <- all_genes[na.omit(fg_ix)] # ignore NAs in indices now
-  bg_ranges <- all_genes[na.omit(bg_ix)] # ignore NAs in indices now
+  fg_ranges <- all_genes[stats::na.omit(fg_ix)] # ignore NAs in indices now
+  bg_ranges <- all_genes[stats::na.omit(bg_ix)] # ignore NAs in indices now
   
   # add metadata
   S4Vectors::mcols(fg_ranges) <- fg_df_in_genes
@@ -142,10 +143,10 @@
       gr_strand <- GenomicRanges::strand(max_width_grs)[1]
       if (as.character(gr_strand) == "+") {
         ix <- which.min(GenomicRanges::start(max_width_grs))
-        return(max_width_grs[gr_i])
+        return(max_width_grs[ix])
       } else {
         ix <- which.max(GenomicRanges::end(max_width_grs))
-        return(max_width_grs[gr_i])
+        return(max_width_grs[ix])
       }
     } else {
       return(max_width_grs)
@@ -226,30 +227,14 @@
 #' 4. Samples background promoter elements matching the foreground
 #'
 #' @param mapped A list as returned by \code{\link{mapIDs}()}, containing
-#'   at least \code{fg_ids}, \code{bg_ids}, \code{so_obj}, \code{orgdb},
-#'   \code{genomeBuild}, and \code{organism}.
+#'   at least \code{fg_ids} and \code{bg_ids}.
+#' @param txdb A TxDb object. 
+#' (e.g. \code{TxDb.Hsapiens.UCSC.hg38.knownGene}).
 #' @param transcript Logical; \code{TRUE} for transcript-level coordinates,
 #'   \code{FALSE} for gene-level.
-#' @param TSS.method Character(1). Method to pick TSS when
-#' \code{transcript=FALSE}:
-#'   \code{"UCSCgene"}, \code{"Ensembl_canonical"}, \code{"commonTSS"},
-#'   \code{"uniqueTSS"}, \code{"fivePrimeTSS"}, or \code{"allTSS"}.
-#' @param bgMethod Character; one of \code{"pool"}, \code{"random"}, or
-#'   \code{"matched"}.
-#' @param n_ratio Numeric; for \code{bgMethod="random"}, number of backgrounds =
-#'   \code{n_ratio * length(foreground)}.
-#' @param bgExcludeFgOverlaps Logical; if \code{TRUE}, drop any background whose
-#'   promoter overlaps a foreground.
-#' @param bgExcludeFgGenes Logical; if \code{TRUE}, drop any background gene
-#'   whose EntrezID is in the foreground.
-#' @param covariates Character vector of covariate names for matching:
-#'   \code{"width"}, \code{"gc"}, \code{"seqnames"} (or \code{"chromosome"}), or
-#'   any user-provided \code{mcols()} column.
-#' @param bgReplace Logical; allow replacement when sampling backgrounds.
-#' @param nrMethod Character; \code{"rejection"}, \code{"nearest"}, or
-#'   \code{"stratified"}.
-#' @param genome A \pkg{genome} object. If \code{NULL} and \code{"gc"} is in
-#'   \code{covariates}, will be auto-resolved.
+#' @param n_ratio Numeric; ratio of ranges to retain in the background set.
+#' The number of background ranges will be equal to \code{n_ratio} multiplied
+#' by the number of foreground ranges.
 #' @param promoterWindow Numeric named vector of lengths:
 #'   \code{c(upstream, downstream)} (default \code{c(300,50)}).
 #' @param standardChroms Logical; restrict to standard chromosomes.
@@ -257,8 +242,6 @@
 #' @param overlapMinGap Numeric; minimum gap when reducing overlaps.
 #' @param onePromoterPerGene Logical; if \code{TRUE}, choose one
 #' promoter per gene.
-#' @param ensdb Optional \code{EnsDb} object; required for
-#'   \code{TSS.method="Ensembl_canonical"}.
 #'
 #' @return A named \code{list} from the final
 #' \code{.defineBackgroundElements()}:
@@ -269,24 +252,22 @@
 #'   else \code{NULL}}
 #'
 #' @examples
+#' library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+#' library(org.Hs.eg.db)
+#' 
+#' txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+#' orgdb <- org.Hs.eg.db
+#' 
 #' my_genes <- c("ENSG00000139618", "ENSG00000157764")
-#' mapping <- buildMappingObject("Homo sapiens")
-#' ids <- mapIDs(mapping = mapping, foreground_ids = my_genes)
-#' filtered <- poolFilter(mapped, geneType="protein-coding")
-#' coords <- getCoordinates(
-#'   filtered,
-#'   transcript     = FALSE,
-#'   TSS.method     = "UCSCgene",
-#'   bgMethod       = "matched",
-#'   n_ratio        = 1,
-#'   covariates     = c("width","gc","chromosome"),
-#'   nrMethod       = "stratified",
-#'   genome         = BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38,
-#'   promoterWindow = c(upstream=300, downstream=50)
-#' )
+#' ids <- mapIDs(orgdb = orgdb, 
+#'               foreground_ids = my_genes, 
+#'               id_type = "ENSEMBL")
+#' filtered <- poolFilter(ids, geneType="protein-coding")
+#' coords <- getCoordinates(mapped = filtered, txdb = txdb)
 #'
 #' @export
 getCoordinates <- function(mapped,
+                           txdb,
                            transcript = FALSE,
                            n_ratio = 1,
                            promoterWindow = c(upstream=300,
@@ -307,7 +288,6 @@ getCoordinates <- function(mapped,
   # unpack
   fg_df       <- mapped$fg_ids
   bg_df       <- mapped$bg_ids
-  transcript  <- mapped$transcript
 
   if (transcript) {
     gr <- .getTranscriptRanges(txdb, fg_df, bg_df, standardChroms)

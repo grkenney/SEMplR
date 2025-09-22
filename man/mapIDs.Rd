@@ -6,9 +6,9 @@
 \usage{
 mapIDs(
   orgdb,
+  id_type,
   foreground_ids,
   background_ids = NULL,
-  id_type,
   threshold = 0.9,
   transcript = FALSE,
   stripVersions = TRUE,
@@ -16,7 +16,15 @@ mapIDs(
 )
 }
 \arguments{
-\item{foreground_ids}{Character vector of input IDs (e.g. ENSG, ENST, NM_*)}
+\item{orgdb}{An OrgDb object. (e.g. \code{org.Hs.eg.db}).}
+
+\item{id_type}{Type of identifier supplied in foreground and background IDs.}
+
+\item{foreground_ids}{Character vector of gene or
+transcript IDs (e.g. Ensembl, RefSeq, gene symbols) to analyze.}
+
+\item{background_ids}{Character vector of gene or transcript
+IDs to use as background set.}
 
 \item{threshold}{Fraction in range 0 to 1; minimum mapping rate to
 accept a keytype without falling back (default 0.9).}
@@ -24,19 +32,12 @@ accept a keytype without falling back (default 0.9).}
 \item{transcript}{Logical; if \code{TRUE}, analyze as transcript-level
 IDs (default \code{FALSE}).}
 
-\item{stripVersions}{Logical; strip trailing ".1", ".2" from IDs
-(default \code{TRUE}).}
+\item{stripVersions}{Logical; strip version suffixes (e.g. ".1") from
+Ensembl/RefSeq IDs.}
 
 \item{inflateThresh}{Fraction in range 0 to 1; if reverse-mapping shows
 excessive, inflation automatically collapse transcripts to genes
 (default 1 ie. 100\%).}
-
-\item{mapping}{A list from \code{buildMappingObject()}, containing:
-\itemize{
-\item \code{so_obj}: the \code{src_organism} object
-\item \code{orgdb}:  the loaded OrgDb package object
-\item \code{organism}, \code{genomeBuild}, \code{txdb}: parameters used
-}}
 }
 \value{
 A named list combining the original \code{mapping} components with:
@@ -55,21 +56,19 @@ Optionally collapses transcript-style inputs to genes when requested or when
 reverse-mapping inflation exceeds a threshold.
 }
 \examples{
-  # Gene Ids
-  mapping <- buildMappingObject("Homo sapiens")
-  ids <- mapIDs(
-    mapping = mapping,
-    foreground_ids = c("ENSG00000139618","ENSG00000157764")
-  )
-  ids
+library(org.Hs.eg.db)
+orgdb <- org.Hs.eg.db
+
+my_genes <- c("ENSG00000139618", "ENSG00000157764")
+ids <- mapIDs(orgdb = orgdb, 
+              foreground_ids = my_genes, 
+              id_type = "ENSEMBL")
   
-  # Transcript Ids
-  mapping <- buildMappingObject("Homo sapiens")
-  ids <- mapIDs(
-    mapping = mapping,
-    foreground_ids = c("ENST00000245479", "ENST00000633194"),
-    transcript = TRUE
-  )
-  ids
+# Transcript Ids
+my_transcripts <- c("ENST00000245479", "ENST00000633194")
+ids <- mapIDs(orgdb = orgdb,
+              foreground_ids = my_transcripts,
+              id_type = "ENSEMBLTRANS",
+              transcript = TRUE)
 
 }

@@ -29,7 +29,6 @@ Imports:
     scales,
     S4Vectors,
     stats,
-    crayon,
     rlang,
     ape,
     ggtree,
@@ -37,8 +36,7 @@ Imports:
     universalmotif,
     Rcpp,
     AnnotationDbi,
-    AnnotationHub,
-    BSgenome
+    GenomicFeatures
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
@@ -49,7 +47,9 @@ Suggests:
     testthat (>= 3.0.0),
     IRanges,
     BSgenome.Hsapiens.UCSC.hg38,
-    BSgenome.Hsapiens.UCSC.hg19
+    BSgenome.Hsapiens.UCSC.hg19,
+    TxDb.Hsapiens.UCSC.hg38.knownGene,
+    org.Hs.eg.db
 VignetteBuilder: knitr
 License: MIT + file LICENSE
 Config/testthat/edition: 3

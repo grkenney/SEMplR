@@ -24,16 +24,17 @@ enrichmentSets(
 )
 }
 \arguments{
-\item{txdb}{Character(1). Name of a \pkg{TxDb} package (e.g.
-\code{"TxDb.Hsapiens.UCSC.hg38.knownGene"}), or \code{"auto"}.}
+\item{txdb}{A TxDb object.
+(e.g. \code{TxDb.Hsapiens.UCSC.hg38.knownGene}).}
+
+\item{orgdb}{An OrgDb object. (e.g. \code{org.Hs.eg.db}).}
 
 \item{id_type}{Type of identifier supplied in foreground and background IDs.}
 
-\item{foreground_ids}{Character vector of user‐supplied gene or
-transcript IDs
-(e.g. Ensembl, RefSeq, gene symbols) to analyze.}
+\item{foreground_ids}{Character vector of gene or
+transcript IDs (e.g. Ensembl, RefSeq, gene symbols) to analyze.}
 
-\item{background_ids}{Character vector of user-supplied gene or transcript
+\item{background_ids}{Character vector of gene or transcript
 IDs to use as background set.}
 
 \item{transcript}{Logical; \code{TRUE} to treat inputs as transcript‐level,
@@ -42,7 +43,7 @@ IDs to use as background set.}
 \item{threshold}{Numeric in range 0 to 1. Min fraction of IDs that must map
 to pick a keytype (default 0.9).}
 
-\item{stripVersions}{Logical; strip ".1", ".2" suffixes from
+\item{stripVersions}{Logical; strip version suffixes (e.g. ".1") from
 Ensembl/RefSeq IDs.}
 
 \item{inflateThresh}{Numeric in range 0 to 1; max allowed transcript:gene
@@ -57,8 +58,9 @@ overlapping promoters.}
 \item{onePromoterPerGene}{Logical; if
 \code{TRUE}, pick only one promoter per gene.}
 
-\item{n_ratio}{Numeric; for \code{bgMethod="random"}, number of bg =
-\code{n_ratio * #foreground}.}
+\item{n_ratio}{Numeric; ratio of ranges to retain in the background set.
+The number of background ranges will be equal to \code{n_ratio} multiplied
+by the number of foreground ranges.}
 
 \item{promoterWindow}{Numeric named vector \code{c(upstream, downstream)};
 promoter flank widths in bp (default \code{c(300,50)}).}
@@ -66,42 +68,6 @@ promoter flank widths in bp (default \code{c(300,50)}).}
 \item{standardChroms}{Logical; restrict to standard chromosomes.}
 
 \item{reduceOverlaps}{Logical; merge overlapping promoter windows.}
-
-\item{organism}{Character(1). Species name (e.g. \code{"Homo sapiens"}).}
-
-\item{genomeBuild}{Character(1). UCSC genome build (e.g. \code{"hg38"}), or
-\code{"auto"} to pick the latest supported build.}
-
-\item{getEnsDb}{Logical; if \code{TRUE}, also load an \code{EnsDb} for
-\code{TSS.method="Ensembl_canonical"}.}
-
-\item{ensdb}{Optional \code{EnsDb} object; used only if
-\code{TSS.method="Ensembl_canonical"}.}
-
-\item{TSS.method}{Character; TSS selection method for gene‐level mode:
-\code{"UCSCgene"}, \code{"Ensembl_canonical"}, \code{"commonTSS"},
-\code{"uniqueTSS"}, \code{"fivePrimeTSS"}, or \code{"allTSS"}.}
-
-\item{bgMethod}{Character; background sampling method: \code{"matched"},
-\code{"pool"}, or \code{"random"}.}
-
-\item{bgExcludeFgOverlaps}{Logical; drop any background overlapping a
-foreground.}
-
-\item{bgExcludeFgGenes}{Logical; drop any background gene present in
-foreground.}
-
-\item{covariates}{Character vector of covariate names for matching:
-\code{"width"}, \code{"gc"}, \code{"chromosome"}, or any custom
-\code{mcols()} column.}
-
-\item{bgReplace}{Logical; allow replacement in sampling (random or matched).}
-
-\item{nrMethod}{Character; \code{"stratified"}, \code{"rejection"}, or
-\code{"nearest"}—passed to matched sampling.}
-
-\item{genome}{Optional \pkg{genome} object; required if \code{"gc"} is in
-\code{covariates} and not otherwise provided.}
 }
 \value{
 A \code{list} containing the output of
@@ -128,26 +94,17 @@ enrichment.  It performs:
 }
 }
 \examples{
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+library(org.Hs.eg.db)
+
+txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+orgdb <- org.Hs.eg.db
+
 my_genes <- c("ENSG00000139618", "ENSG00000157764")
 # Minimal run with defaults:
-results <- enrichmentSets(foreground_ids = my_genes)
-
-my_transcripts <- c("ENST00000245479", "ENST00000633194")
-# Full control:
-results <- enrichmentSets(
-  foreground_ids      = my_transcripts,
-  organism            = "Homo sapiens",
-  genomeBuild         = "hg38",
-  transcript          = TRUE,
-  geneType            = "protein-coding",
-  TSS.method          = "commonTSS",
-  bgMethod            = "matched",
-  covariates          = c("gc","chromosome"),
-  nrMethod            = "stratified",
-  genome = BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38,
-  promoterWindow      = c(upstream=500, downstream=100),
-  reduceOverlaps = FALSE,
-  onePromoterPerGene = FALSE
-)
+results <- enrichmentSets(my_genes, 
+                          txdb = txdb, 
+                          orgdb = orgdb, 
+                          id_type = "ENSEMBL")
 
 }

@@ -100,19 +100,18 @@
 #' Optionally collapses transcript-style inputs to genes when requested or when
 #' reverse-mapping inflation exceeds a threshold.
 #'
-#' @param foreground_ids Character vector of input IDs (e.g. ENSG, ENST, NM_*)
-#' @param mapping        A list from \code{buildMappingObject()}, containing:
-#'   \itemize{
-#'     \item \code{so_obj}: the \code{src_organism} object
-#'     \item \code{orgdb}:  the loaded OrgDb package object
-#'     \item \code{organism}, \code{genomeBuild}, \code{txdb}: parameters used
-#'   }
-#' @param threshold      Fraction in range 0 to 1; minimum mapping rate to 
+#' @param orgdb An OrgDb object. (e.g. \code{org.Hs.eg.db}).
+#' @param id_type Type of identifier supplied in foreground and background IDs.
+#' @param foreground_ids Character vector of gene or
+#' transcript IDs (e.g. Ensembl, RefSeq, gene symbols) to analyze.
+#' @param background_ids Character vector of gene or transcript 
+#' IDs to use as background set.
+#' @param threshold Fraction in range 0 to 1; minimum mapping rate to 
 #' accept a keytype without falling back (default 0.9).
-#' @param transcript     Logical; if \code{TRUE}, analyze as transcript-level 
+#' @param transcript Logical; if \code{TRUE}, analyze as transcript-level 
 #'   IDs (default \code{FALSE}).
-#' @param stripVersions  Logical; strip trailing ".1", ".2" from IDs 
-#' (default \code{TRUE}).
+#' @param stripVersions Logical; strip version suffixes (e.g. ".1") from
+#' Ensembl/RefSeq IDs.
 #' @param inflateThresh  Fraction in range 0 to 1; if reverse-mapping shows 
 #' excessive, inflation automatically collapse transcripts to genes 
 #' (default 1 ie. 100%).
@@ -127,29 +126,27 @@
 #' }
 #'
 #' @examples
-#'   # Gene Ids
-#'   mapping <- buildMappingObject("Homo sapiens")
-#'   ids <- mapIDs(
-#'     mapping = mapping,
-#'     foreground_ids = c("ENSG00000139618","ENSG00000157764")
-#'   )
-#'   ids
+#' library(org.Hs.eg.db)
+#' orgdb <- org.Hs.eg.db
+#' 
+#' my_genes <- c("ENSG00000139618", "ENSG00000157764")
+#' ids <- mapIDs(orgdb = orgdb, 
+#'               foreground_ids = my_genes, 
+#'               id_type = "ENSEMBL")
 #'   
-#'   # Transcript Ids
-#'   mapping <- buildMappingObject("Homo sapiens")
-#'   ids <- mapIDs(
-#'     mapping = mapping,
-#'     foreground_ids = c("ENST00000245479", "ENST00000633194"),
-#'     transcript = TRUE
-#'   )
-#'   ids
+#' # Transcript Ids
+#' my_transcripts <- c("ENST00000245479", "ENST00000633194")
+#' ids <- mapIDs(orgdb = orgdb,
+#'               foreground_ids = my_transcripts,
+#'               id_type = "ENSEMBLTRANS",
+#'               transcript = TRUE)
 #'
 #' @importFrom AnnotationDbi columns keytypes
 #' @export
 mapIDs <- \(orgdb,                
+            id_type,
             foreground_ids,
             background_ids = NULL,
-            id_type,
             threshold = 0.9,     
             transcript = FALSE,   
             stripVersions = TRUE,    
@@ -170,7 +167,7 @@ mapIDs <- \(orgdb,
   if(is.null(background_ids)) {
     rlang::inform("Building background id set...")
     # Otherwise background pool is all records in orgdb
-    background_ids <- keys(orgdb, keytype = id_type)
+    background_ids <- AnnotationDbi::keys(orgdb, keytype = id_type)
     print_msg <- FALSE
   } else {
     rlang::inform("Mapping background ids to ENTREZIDs...")

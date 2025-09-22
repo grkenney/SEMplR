@@ -6,6 +6,7 @@
 \usage{
 getCoordinates(
   mapped,
+  txdb,
   transcript = FALSE,
   n_ratio = 1,
   promoterWindow = c(upstream = 300, downstream = 50),
@@ -17,14 +18,17 @@ getCoordinates(
 }
 \arguments{
 \item{mapped}{A list as returned by \code{\link{mapIDs}()}, containing
-at least \code{fg_ids}, \code{bg_ids}, \code{so_obj}, \code{orgdb},
-\code{genomeBuild}, and \code{organism}.}
+at least \code{fg_ids} and \code{bg_ids}.}
+
+\item{txdb}{A TxDb object.
+(e.g. \code{TxDb.Hsapiens.UCSC.hg38.knownGene}).}
 
 \item{transcript}{Logical; \code{TRUE} for transcript-level coordinates,
 \code{FALSE} for gene-level.}
 
-\item{n_ratio}{Numeric; for \code{bgMethod="random"}, number of backgrounds =
-\code{n_ratio * length(foreground)}.}
+\item{n_ratio}{Numeric; ratio of ranges to retain in the background set.
+The number of background ranges will be equal to \code{n_ratio} multiplied
+by the number of foreground ranges.}
 
 \item{promoterWindow}{Numeric named vector of lengths:
 \code{c(upstream, downstream)} (default \code{c(300,50)}).}
@@ -37,35 +41,6 @@ at least \code{fg_ids}, \code{bg_ids}, \code{so_obj}, \code{orgdb},
 
 \item{onePromoterPerGene}{Logical; if \code{TRUE}, choose one
 promoter per gene.}
-
-\item{TSS.method}{Character(1). Method to pick TSS when
-\code{transcript=FALSE}:
-\code{"UCSCgene"}, \code{"Ensembl_canonical"}, \code{"commonTSS"},
-\code{"uniqueTSS"}, \code{"fivePrimeTSS"}, or \code{"allTSS"}.}
-
-\item{bgMethod}{Character; one of \code{"pool"}, \code{"random"}, or
-\code{"matched"}.}
-
-\item{bgExcludeFgOverlaps}{Logical; if \code{TRUE}, drop any background whose
-promoter overlaps a foreground.}
-
-\item{bgExcludeFgGenes}{Logical; if \code{TRUE}, drop any background gene
-whose EntrezID is in the foreground.}
-
-\item{covariates}{Character vector of covariate names for matching:
-\code{"width"}, \code{"gc"}, \code{"seqnames"} (or \code{"chromosome"}), or
-any user-provided \code{mcols()} column.}
-
-\item{bgReplace}{Logical; allow replacement when sampling backgrounds.}
-
-\item{nrMethod}{Character; \code{"rejection"}, \code{"nearest"}, or
-\code{"stratified"}.}
-
-\item{genome}{A \pkg{genome} object. If \code{NULL} and \code{"gc"} is in
-\code{covariates}, will be auto-resolved.}
-
-\item{ensdb}{Optional \code{EnsDb} object; required for
-\code{TSS.method="Ensembl_canonical"}.}
 }
 \value{
 A named \code{list} from the final
@@ -88,20 +63,17 @@ according to the chosen \code{TSS.method}.
 }
 }
 \examples{
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+library(org.Hs.eg.db)
+
+txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+orgdb <- org.Hs.eg.db
+
 my_genes <- c("ENSG00000139618", "ENSG00000157764")
-mapping <- buildMappingObject("Homo sapiens")
-ids <- mapIDs(mapping = mapping, foreground_ids = my_genes)
-filtered <- poolFilter(mapped, geneType="protein-coding")
-coords <- getCoordinates(
-  filtered,
-  transcript     = FALSE,
-  TSS.method     = "UCSCgene",
-  bgMethod       = "matched",
-  n_ratio        = 1,
-  covariates     = c("width","gc","chromosome"),
-  nrMethod       = "stratified",
-  genome         = BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38,
-  promoterWindow = c(upstream=300, downstream=50)
-)
+ids <- mapIDs(orgdb = orgdb, 
+              foreground_ids = my_genes, 
+              id_type = "ENSEMBL")
+filtered <- poolFilter(ids, geneType="protein-coding")
+coords <- getCoordinates(mapped = filtered, txdb = txdb)
 
 }

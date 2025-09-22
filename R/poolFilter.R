@@ -37,12 +37,18 @@
 #' filtered versions (only rows matching `geneType`, if provided).
 #'
 #' @examples
+#' library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+#' library(org.Hs.eg.db)
+#' 
+#' txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+#' orgdb <- org.Hs.eg.db
+#' 
 #' my_genes <- c("ENSG00000139618", "ENSG00000157764")
-#' mapping  <- buildMappingObject("Homo sapiens")
-#' mapped   <- mapIDs(mapping = mapping, foreground_ids = my_genes)
-#' filtered <- poolFilter(mapped, geneType = "protein-coding")
+#' ids <- mapIDs(orgdb = orgdb, 
+#'               foreground_ids = my_genes, 
+#'               id_type = "ENSEMBL")
+#' filtered <- poolFilter(ids, geneType="protein-coding")
 #'
-#' @importFrom dplyr tbl filter select collect
 #' @keywords internal
 #' @export
 poolFilter <- function(mapped,

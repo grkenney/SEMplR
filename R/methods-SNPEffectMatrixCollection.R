@@ -156,6 +156,8 @@ setMethod("semData", "SNPEffectMatrixCollection",
 #'
 #' @param object a SNPEffectMatrixCollection object
 #' 
+#' @importFrom methods show
+#' 
 #' @rdname show
 setMethod("show", "SNPEffectMatrixCollection",
           function(object) {

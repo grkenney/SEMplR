@@ -119,6 +119,9 @@ setMethod("getSEMId", "SNPEffectMatrix",
 #' show for SNPEffectMatrix
 #' 
 #' @param object SNPEffectMatrix object.
+#' 
+#' @importFrom methods show
+#' 
 #' @rdname SNPEffectMatrix-class
 setMethod("show", "SNPEffectMatrix",
           function(object) {

@@ -161,6 +161,8 @@ setMethod("scores<-", "SEMplScores", function(x, value) {
 #'
 #' @param object a SEMplScores object
 #' 
+#' @importFrom methods show
+#' 
 #' @rdname show
 #' 
 #' @export

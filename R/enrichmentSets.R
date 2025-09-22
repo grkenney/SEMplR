@@ -11,54 +11,31 @@
 #' 3. Promoter coordinate extraction via \code{getCoordinates()}.
 #' 4. Background sampling (pool, random, or matched) within that same call.
 #'
-#' @param foreground_ids Character vector of user‐supplied gene or
-#' transcript IDs
-#'   (e.g. Ensembl, RefSeq, gene symbols) to analyze.
-#' @param background_ids Character vector of user-supplied gene or transcript 
-#' IDs to use as background set.
+#' @param txdb A TxDb object. 
+#' (e.g. \code{TxDb.Hsapiens.UCSC.hg38.knownGene}).
+#' @param orgdb An OrgDb object. (e.g. \code{org.Hs.eg.db}).
 #' @param id_type Type of identifier supplied in foreground and background IDs.
-#' @param organism Character(1). Species name (e.g. \code{"Homo sapiens"}).
-#' @param genomeBuild Character(1). UCSC genome build (e.g. \code{"hg38"}), or
-#'   \code{"auto"} to pick the latest supported build.
-#' @param txdb Character(1). Name of a \pkg{TxDb} package (e.g.
-#'   \code{"TxDb.Hsapiens.UCSC.hg38.knownGene"}), or \code{"auto"}.
-#' @param getEnsDb Logical; if \code{TRUE}, also load an \code{EnsDb} for
-#'   \code{TSS.method="Ensembl_canonical"}.
+#' @param foreground_ids Character vector of gene or
+#' transcript IDs (e.g. Ensembl, RefSeq, gene symbols) to analyze.
+#' @param background_ids Character vector of gene or transcript 
+#' IDs to use as background set.
 #' @param transcript Logical; \code{TRUE} to treat inputs as transcript‐level,
 #'   \code{FALSE} for gene‐level.
 #' @param threshold Numeric in range 0 to 1. Min fraction of IDs that must map 
 #' to pick a keytype (default 0.9).
-#' @param stripVersions Logical; strip ".1", ".2" suffixes from
+#' @param stripVersions Logical; strip version suffixes (e.g. ".1") from
 #' Ensembl/RefSeq IDs.
 #' @param inflateThresh Numeric in range 0 to 1; max allowed transcript:gene 
 #' inflation before auto‐collapsing (default 1).
 #' @param geneType Optional character; biotype filter
 #' (e.g. \code{"protein-coding"}).
-#' @param ensdb Optional \code{EnsDb} object; used only if
-#' \code{TSS.method="Ensembl_canonical"}.
-#' @param TSS.method Character; TSS selection method for gene‐level mode:
-#'   \code{"UCSCgene"}, \code{"Ensembl_canonical"}, \code{"commonTSS"},
-#'   \code{"uniqueTSS"}, \code{"fivePrimeTSS"}, or \code{"allTSS"}.
 #' @param overlapMinGap Numeric; minimum gap when reducing
 #' overlapping promoters.
 #' @param onePromoterPerGene Logical; if
 #' \code{TRUE}, pick only one promoter per gene.
-#' @param bgMethod Character; background sampling method: \code{"matched"},
-#'   \code{"pool"}, or \code{"random"}.
-#' @param n_ratio Numeric; for \code{bgMethod="random"}, number of bg =
-#'   \code{n_ratio * #foreground}.
-#' @param bgExcludeFgOverlaps Logical; drop any background overlapping a
-#' foreground.
-#' @param bgExcludeFgGenes Logical; drop any background gene present in
-#' foreground.
-#' @param covariates Character vector of covariate names for matching:
-#'   \code{"width"}, \code{"gc"}, \code{"chromosome"}, or any custom
-#'   \code{mcols()} column.
-#' @param bgReplace Logical; allow replacement in sampling (random or matched).
-#' @param nrMethod Character; \code{"stratified"}, \code{"rejection"}, or
-#'   \code{"nearest"}—passed to matched sampling.
-#' @param genome Optional \pkg{genome} object; required if \code{"gc"} is in
-#'   \code{covariates} and not otherwise provided.
+#' @param n_ratio Numeric; ratio of ranges to retain in the background set.
+#' The number of background ranges will be equal to \code{n_ratio} multiplied
+#' by the number of foreground ranges.
 #' @param promoterWindow Numeric named vector \code{c(upstream, downstream)};
 #'   promoter flank widths in bp (default \code{c(300,50)}).
 #' @param standardChroms Logical; restrict to standard chromosomes.
@@ -75,27 +52,18 @@
 #'   }
 #'
 #' @examples
+#' library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+#' library(org.Hs.eg.db)
+#' 
+#' txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+#' orgdb <- org.Hs.eg.db
+#' 
 #' my_genes <- c("ENSG00000139618", "ENSG00000157764")
 #' # Minimal run with defaults:
-#' results <- enrichmentSets(foreground_ids = my_genes)
-#'
-#' my_transcripts <- c("ENST00000245479", "ENST00000633194")
-#' # Full control:
-#' results <- enrichmentSets(
-#'   foreground_ids      = my_transcripts,
-#'   organism            = "Homo sapiens",
-#'   genomeBuild         = "hg38",
-#'   transcript          = TRUE,
-#'   geneType            = "protein-coding",
-#'   TSS.method          = "commonTSS",
-#'   bgMethod            = "matched",
-#'   covariates          = c("gc","chromosome"),
-#'   nrMethod            = "stratified",
-#'   genome = BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38,
-#'   promoterWindow      = c(upstream=500, downstream=100),
-#'   reduceOverlaps = FALSE,
-#'   onePromoterPerGene = FALSE
-#' )
+#' results <- enrichmentSets(my_genes, 
+#'                           txdb = txdb, 
+#'                           orgdb = orgdb, 
+#'                           id_type = "ENSEMBL")
 #'
 #' @export
 enrichmentSets <- \(txdb,
@@ -115,9 +83,6 @@ enrichmentSets <- \(txdb,
                                               downstream=50),
                     standardChroms        = TRUE,
                     reduceOverlaps        = TRUE ) {
-
-  # Build the mapping object (cheap metadata + package loads)
-  # mapping <- buildMappingObject(orgdb = orgdb, txdb = txdb)
   
   # Require that orgdb has a GENETYPE column if using geneType param
   if (!is.null(geneType)) {
@@ -153,6 +118,7 @@ enrichmentSets <- \(txdb,
   # Coordinate extraction (lazy until collect, then quick)
   coords <- getCoordinates(
     mapped = filtered,
+    txdb = txdb,
     transcript = transcript,
     n_ratio              = n_ratio,
     promoterWindow       = promoterWindow,
