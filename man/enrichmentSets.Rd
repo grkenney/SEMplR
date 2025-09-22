@@ -5,11 +5,11 @@
 \title{Run the Full Differential‐Expression Motif Enrichment Pipeline}
 \usage{
 enrichmentSets(
-  foreground_ids,
-  background_ids = NULL,
   txdb,
   orgdb,
   id_type,
+  foreground_ids,
+  background_ids = NULL,
   transcript = FALSE,
   threshold = 0.9,
   stripVersions = TRUE,
@@ -24,17 +24,17 @@ enrichmentSets(
 )
 }
 \arguments{
+\item{txdb}{Character(1). Name of a \pkg{TxDb} package (e.g.
+\code{"TxDb.Hsapiens.UCSC.hg38.knownGene"}), or \code{"auto"}.}
+
+\item{id_type}{Type of identifier supplied in foreground and background IDs.}
+
 \item{foreground_ids}{Character vector of user‐supplied gene or
 transcript IDs
 (e.g. Ensembl, RefSeq, gene symbols) to analyze.}
 
 \item{background_ids}{Character vector of user-supplied gene or transcript
 IDs to use as background set.}
-
-\item{txdb}{Character(1). Name of a \pkg{TxDb} package (e.g.
-\code{"TxDb.Hsapiens.UCSC.hg38.knownGene"}), or \code{"auto"}.}
-
-\item{id_type}{Type of identifier supplied in foreground and background IDs.}
 
 \item{transcript}{Logical; \code{TRUE} to treat inputs as transcript‐level,
 \code{FALSE} for gene‐level.}
