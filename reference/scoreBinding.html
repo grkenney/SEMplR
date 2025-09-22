@@ -19,6 +19,7 @@ genomic positions provided"></head><body>
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/SEMplR.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/grkenney/SEMplR/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -42,7 +43,7 @@ genomic positions provided</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">scoreBinding</span><span class="op">(</span><span class="va">x</span>, <span class="va">semList</span>, bs_genome_obj <span class="op">=</span> <span class="cn">NULL</span>, allele <span class="op">=</span> <span class="cn">NULL</span>, seqId <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">scoreBinding</span><span class="op">(</span><span class="va">x</span>, <span class="va">sem</span>, <span class="va">genome</span>, nFlank <span class="op">=</span> <span class="cn">NULL</span>, seqId <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -53,25 +54,14 @@ genomic positions provided</p>
 <dd><p><code>GRanges</code> object or a vector of DNA sequences</p></dd>
 
 
-<dt id="arg-semlist">semList<a class="anchor" aria-label="anchor" href="#arg-semlist"></a></dt>
+<dt id="arg-sem">sem<a class="anchor" aria-label="anchor" href="#arg-sem"></a></dt>
 <dd><p>A <code>SNPEffectMatrix</code> or <code>SNPEffectMatrixCollection</code> object</p></dd>
 
 
-<dt id="arg-bs-genome-obj">bs_genome_obj<a class="anchor" aria-label="anchor" href="#arg-bs-genome-obj"></a></dt>
+<dt id="arg-genome">genome<a class="anchor" aria-label="anchor" href="#arg-genome"></a></dt>
 <dd><p>A <code>BSgenome</code> object for the genome build to use. ie.
 <code><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html" class="external-link">BSgenome.Hsapiens.UCSC.hg19::Hsapiens</a></code>. Required if providing a GRanges
 object. Ignored if providing a vector of sequences.</p></dd>
-
-
-<dt id="arg-allele">allele<a class="anchor" aria-label="anchor" href="#arg-allele"></a></dt>
-<dd><p>Column name in meta data storing allele. Ignored
-if providing a vector of sequences.</p></dd>
-
-
-<dt id="arg-seqid">seqId<a class="anchor" aria-label="anchor" href="#arg-seqid"></a></dt>
-<dd><p>Column in <code>GRanges</code> object to use for unique id. By default, will
-generate an id from the <code>seqnames</code> and <code>ranges.</code> Ignored if not
-providing a <code>GRanges</code> object.</p></dd>
 
 
 <dt id="arg-nflank">nFlank<a class="anchor" aria-label="anchor" href="#arg-nflank"></a></dt>
@@ -79,10 +69,17 @@ providing a <code>GRanges</code> object.</p></dd>
 default will add flank equal to the length of the longest motif. Ignored
 if providing a vector of sequences.</p></dd>
 
+
+<dt id="arg-seqid">seqId<a class="anchor" aria-label="anchor" href="#arg-seqid"></a></dt>
+<dd><p>Column in <code>GRanges</code> object to use for unique id.
+By default, ids will be generated from the <code>seqnames</code> and <code>ranges.</code>
+Ignored if not providing a <code>GRanges</code> object.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a <code>data.table</code> object</p>
+    <p>If a <code>GRanges</code> object is provided, return a <code>SEMplScores</code> object.
+If a list of sequences is provided, just return the scoring table</p>
     </div>
 
     <div class="section level2">
@@ -98,7 +95,10 @@ if providing a vector of sequences.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate binding propensity</span></span></span>
 <span class="r-in"><span><span class="fu">scoreBinding</span><span class="op">(</span><span class="va">gr</span>, <span class="va">sc</span>, <span class="fu">BSgenome.Hsapiens.UCSC.hg19</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html" class="external-link">Hsapiens</a></span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;seqId&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> An object of class SEMplScores</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ranges(1): chr12:94136009</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> semData(13): transcription_factor, ensembl_id ... PWM_source, SEM_KEY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> scores(223):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               seqId                SEM      score  scoreNorm index</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              &lt;char&gt;             &lt;char&gt;      &lt;num&gt;      &lt;num&gt; &lt;int&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1: chr12:94136009 AP2B_HUMAN.SK-N-SH  -1.689754 -0.3068238    15</span>
@@ -112,19 +112,19 @@ if providing a vector of sequences.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 221: chr12:94136009  ZN281_HUMAN.HepG2  -4.347612 -0.9355197     8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 222: chr12:94136009 ZNF18_HUMAN.HEK293  -5.410220 -0.9264060    15</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 223: chr12:94136009   ZSCAN4_secondary -15.439087 -0.9998307    15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   seq                                 fullSeq</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                &lt;char&gt;                                  &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:       GCTTTGAGGC CCGTCAAGGAGAAGGCTTTGAGGCATCTGCTGTTTTGTT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:        TTTGAGGCA CCGTCAAGGAGAAGGCTTTGAGGCATCTGCTGTTTTGTT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:      CTTTGAGGCAT CCGTCAAGGAGAAGGCTTTGAGGCATCTGCTGTTTTGTT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:      CTTTGAGGCAT CCGTCAAGGAGAAGGCTTTGAGGCATCTGCTGTTTTGTT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:      GGCTTTGAGGC CCGTCAAGGAGAAGGCTTTGAGGCATCTGCTGTTTTGTT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 219:        AAGGCTTTG CCGTCAAGGAGAAGGCTTTGAGGCATCTGCTGTTTTGTT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 220:       TGAGGCATCT CCGTCAAGGAGAAGGCTTTGAGGCATCTGCTGTTTTGTT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221:  GGAGAAGGCTTTGAG CCGTCAAGGAGAAGGCTTTGAGGCATCTGCTGTTTTGTT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 222:     GCTTTGAGGCAT CCGTCAAGGAGAAGGCTTTGAGGCATCTGCTGTTTTGTT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 223: GCTTTGAGGCATCTGC CCGTCAAGGAGAAGGCTTTGAGGCATCTGCTGTTTTGTT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   seq</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:       GCTTTGAGGC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:        TTTGAGGCA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:      CTTTGAGGCAT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:      CTTTGAGGCAT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:      GGCTTTGAGGC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 219:        AAGGCTTTG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 220:       TGAGGCATCT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221:  GGAGAAGGCTTTGAG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 222:     GCTTTGAGGCAT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 223: GCTTTGAGGCATCTGC</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
