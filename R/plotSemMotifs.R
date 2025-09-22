@@ -3,18 +3,18 @@
   semId <- varId <- NA
   # check that sem label is in the sem meta data
   if (!(label %in% colnames(semData(s)))) {
-    stop("label not found in colnames(semData(s)).")
+    rlang::abort("label not found in colnames(semData(s)).")
   }
   
   # check that variant is a valid id in s
   if (!(variant %in% scores(s)[, varId])) {
-    stop(paste0("variant not found in SemplScores object. ",
-                variant, " is not in scores(s)[, varId]"))
+    rlang::abort(paste0("variant not found in SemplScores object. ",
+                        variant, " is not in scores(s)[, varId]"))
   }
   
   # check that cols is length 2
   if (length(cols) != 2) {
-    stop("cols must be a vector of length 2")
+    rlang::abort("cols must be a vector of length 2")
   }
 }
 

@@ -22,8 +22,10 @@
 #'
 #' @param mapped    A list returned by `mapIDs()`, containing at least:
 #'   \itemize{
-#'     \item `fg_ids`: data.frame with columns `entrez` and `mappedID` (foreground).
-#'     \item `bg_ids`: data.frame with columns `entrez` and `mappedID` (background).
+#'     \item `fg_ids`: data.frame with columns `entrez` and `mappedID` 
+#'     (foreground).
+#'     \item `bg_ids`: data.frame with columns `entrez` and `mappedID` 
+#'     (background).
 #'     \item `so_obj`: a `src_organism` object for transcript lookups.
 #'     \item `orgdb`:  the loaded OrgDb package object.
 #'     \item `transcript`: logical, whether IDs are transcripts.

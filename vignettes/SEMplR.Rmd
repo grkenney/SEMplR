@@ -29,7 +29,13 @@ library(SEMplR)
 
 # SNP Effect Matrices
 
-SEMplR uses SNP Effect Matrices (SEMs) to score potential motifs. These are matrices contain binding affinity scores and have rows equal to the length of the motif and a column for each nucleotide. SEMs are produced by SEMpl, but a default set of 223 are included with this package in the `sc` data object. A full list of the transcription factors included in this default set can be found [here](https://github.com/grkenney/SEMplR/blob/main/vignettes/sempl_metadata.csv) or by running `semData(sc)`.
+SEMplR uses SNP Effect Matrices (SEMs) to score potential motifs. These are 
+matrices contain binding affinity scores and have rows equal to the length of 
+the motif and a column for each nucleotide. SEMs are produced by SEMpl, but a 
+default set of 223 are included with this package in the `sc` data object. 
+A full list of the transcription factors included in this default set can be 
+found [here](github.com/grkenney/SEMplR/blob/main/vignettes/sempl_metadata.csv) 
+or by running `semData(sc)`.
 
 The default SEM collection can be loaded with:
 
@@ -37,12 +43,14 @@ The default SEM collection can be loaded with:
 data(sc)
 ```
 
-Printing the `SNPEffectMatrixCollection`, we can see that we have 223 SEMs and 13 meta data features for each.
+Printing the `SNPEffectMatrixCollection`, we can see that we have 223 SEMs and 
+13 meta data features for each.
 ```{r}
 sc
 ```
 
-We can access all SEMs in collection the with the function `sems()` or some subset of matrices by specifying a vector of semIds in the `semId` parameter.
+We can access all SEMs in collection the with the function `sems()` or some 
+subset of matrices by specifying a vector of semIds in the `semId` parameter.
 ```{r}
 sems(sc, semId = c("AP2B_HUMAN.SK-N-SH", "ZSCAN4_secondary"))
 ```
@@ -65,11 +73,16 @@ plotSEM(sc, motif = "AP2B_HUMAN.SK-N-SH",
 
 ## Prepare inputs
 
-First, we will define the variants we want to score. Variants can be supplied to SEMplR as either a `VRanges` or a `GRanges` object. If using `VRanges` alleles must be stored in the `ref` and `alt` parameters. If using `GRanges` the alleles should be stored in seperate metadata columns. 
+First, we will define the variants we want to score. Variants can be supplied 
+to SEMplR as either a `VRanges` or a `GRanges` object. If using `VRanges` 
+alleles must be stored in the `ref` and `alt` parameters. If using `GRanges` 
+the alleles should be stored in seperate metadata columns. 
 
-Insertions and deletions should be specified by an empty character vector in the appropriate allele. 
+Insertions and deletions should be specified by an empty character vector in 
+the appropriate allele. 
 
-Optionally, an `id` column can be defined in the object metadata to be used as a unique identifier for each variant.
+Optionally, an `id` column can be defined in the object metadata to be used 
+as a unique identifier for each variant.
 
 ```{r}
 vr <- VRanges(seqnames = c("chr12", "chr19"),
@@ -80,9 +93,13 @@ vr <- VRanges(seqnames = c("chr12", "chr19"),
 
 ## Scoring
 
-The `scoreVariants` function scores each allele of each variant against every SEM provided. From the resulting data object, we can see that we scored 2 variants, the SEM meta data stored in the object has 13 fields, and we have 446 rows in the `scores` results table.
+The `scoreVariants` function scores each allele of each variant against every 
+SEM provided. From the resulting data object, we can see that we scored 2 
+variants, the SEM meta data stored in the object has 13 fields, and we have 
+446 rows in the `scores` results table.
 
-There is a row in the `scores` table for each variant/SEM combination. Here we scored 2 variants x 223 SEMs to get 446 rows. 
+There is a row in the `scores` table for each variant/SEM combination. 
+Here we scored 2 variants x 223 SEMs to get 446 rows. 
 ```{r}
 sempl_results <- scoreVariants(x = vr,
                                sem = sc,
@@ -93,12 +110,23 @@ sempl_results
 ```
 The scoring results has 10 columns:
 
-- **varId**: unique id of the variant as defined in the `id` column of the input `GRanges` or `VRanges` object. If not defined, a custom unique identifier is generated in the format [seqname]:[range]:[ref_allele]>[alt_allele]
+- **varId**: unique id of the variant as defined in the `id` column of the 
+input `GRanges` or `VRanges` object. If not defined, a custom unique identifier 
+is generated in the format [seqname]:[range]:[ref_allele]>[alt_allele]
+
 - **semId**: the unique identifier of the SEM
-- **refSeq** and **altSeq**: the optimally scored sequence for the reference and alternative alleles respectively
-- **refScore** and **altScore**: the raw (unnormalized) binding affinity score for the reference and alternative alleles respectively
-- **refNorm** and **altNorm**: the normalized binding affinity score for the reference and alternative alleles respectively
-- **refVarIndex** and **altVarIndex**: The position of the frame's starting indeces in the scored sequence
+
+- **refSeq** and **altSeq**: the optimally scored sequence for the reference 
+and alternative alleles respectively
+
+- **refScore** and **altScore**: the raw (unnormalized) binding affinity score 
+for the reference and alternative alleles respectively
+
+- **refNorm** and **altNorm**: the normalized binding affinity score for the 
+reference and alternative alleles respectively
+
+- **refVarIndex** and **altVarIndex**: The position of the frame's starting 
+indeces in the scored sequence
 
 There are accessor functions to isolate each slot of the resulting data object:
 ```{r}
@@ -186,7 +214,9 @@ plt
 
 ## Loading SEMs
 
-First, we create a list of file paths to the .sem files we want to include. We will also load the meta data for each sem in a `data.table` object. If meta data is used, all SEMs must be represented in the meta data table.
+First, we create a list of file paths to the .sem files we want to include. 
+We will also load the meta data for each sem in a `data.table` object. 
+If meta data is used, all SEMs must be represented in the meta data table.
 ```{r, eval=FALSE}
 sem_files <- list.files("SEMs/", 
                         pattern = ".sem", full.names = TRUE)
@@ -196,7 +226,10 @@ meta <- data.table::fread(file = metadata_file, sep = ",")
 head(meta)
 ```
 
-We will load the matrix and meta data for all SEMs in a single `SNPEffectMatrixCollection` object. This object has two slots, one containing a named list of the matrices and a second slot containing our meta data table with a key column connecting the meta data to the names of the matrices.
+We will load the matrix and meta data for all SEMs in a single
+`SNPEffectMatrixCollection` object. This object has two slots, one containing 
+a named list of the matrices and a second slot containing our meta data table 
+with a key column connecting the meta data to the names of the matrices.
 ```{r, eval=FALSE}
 sc <- loadSEMCollection(semFiles = sem_files, 
                         semMetaData = meta, 

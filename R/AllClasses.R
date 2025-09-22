@@ -65,7 +65,8 @@ setValidity("SNPEffectMatrixCollection", function(object) {
     semKeys <- object@semData[, object@semKey]
     if (length(semKeys) != length(unique(semKeys))) {
       paste0("Column designated as semKey must be unique. Number of rows (",
-             length(semKeys), ") != unique keys (", length(unique(semKeys)), ")")
+             length(semKeys), ") != unique keys (", 
+             length(unique(semKeys)), ")")
     } else {
       TRUE
     }
@@ -131,7 +132,8 @@ setValidity("SEMplScores", function(object) {
   #   actual_column_names <- colnames(object@scores)
   #   if (sum(expected_column_names %in%
   #           actual_column_names) != length(expected_column_names)) {
-  #     "@scores must contain columns with names: varId, semId, refSeq, altSeq, refScore, altScore, refNorm, altNorm"
+  #     "@scores must contain columns with names: varId, semId, refSeq, altSeq, 
+  # refScore, altScore, refNorm, altNorm"
   #   } else {
   #     TRUE
   #   }

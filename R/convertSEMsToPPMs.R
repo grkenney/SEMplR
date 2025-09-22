@@ -30,8 +30,8 @@ convertSEMsToPPMs <- \(x) {
   } else if (is(x, "list")[1] & is(x[[1]], "SNPEffectMatrix")) {
     ss <- x
   } else {
-    stop("x must be of class SNPEffectMatrixCollection or SNPEffectMatrix or
-         a list of SNPEffectMatrix objects")
+    rlang::abort(paste0("x must be of class SNPEffectMatrixCollection or ",
+                        "SNPEffectMatrix or a list of SNPEffectMatrix objects"))
   }
   
   ppms <- lapply(ss, function(s) .semToPpm(s))

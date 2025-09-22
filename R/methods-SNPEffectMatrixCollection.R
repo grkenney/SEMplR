@@ -48,8 +48,8 @@ SNPEffectMatrixCollection <- function(sems, semData = NULL, semKey = "") {
   
   # must supply a key if supplying semData
   if (!is.null(semData) & semKey == "") {
-    stop("must provide a semKey if providing semData",
-    " See ?SNPEffectMatrixCollection")
+    rlang::abort(paste0("must provide a semKey if providing semData",
+    " See ?SNPEffectMatrixCollection"))
   }
   
   # convert semData to data.table
@@ -58,8 +58,8 @@ SNPEffectMatrixCollection <- function(sems, semData = NULL, semKey = "") {
   if (nrow(semData) > 0) {
     # check that semKey is a column in semData
     if (!(semKey %in% names(semData))) {
-      stop("semKey must be a column in semData \n\t '", semKey, 
-           "' is not in names(semData)")
+      rlang::abort(paste0("semKey must be a column in semData \n\t '", semKey, 
+           "' is not in names(semData)"))
     }
     
     # if semKey column has a ".sem" suffix, remove
@@ -69,8 +69,8 @@ SNPEffectMatrixCollection <- function(sems, semData = NULL, semKey = "") {
                                   \(x) gsub(".sem", "", x))]
       data.table::setkey(semData, SEM_KEY)
       semKey <- "SEM_KEY"    # update key
-      rlang::inform("Removing .sem suffixes from semKey.")
-      message("formatted key now stored in column 'SEM_KEY'.")
+      rlang::inform(paste0("Removing .sem suffixes from semKey. ",
+                           "Formatted key now stored in column 'SEM_KEY'."))
     } else {
       data.table::setkeyv(semData, semKey)
     }

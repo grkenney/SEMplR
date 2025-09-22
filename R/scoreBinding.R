@@ -18,8 +18,9 @@
   if (!(is.vector(x)) & !(is.list(x))) {
     # if it's not a GRanges, error
     if(!is(x, "GRanges")) {
-      stop(is(x)[1], " is not an accepted class for scoreBinding. 
-         x must be a GRanges or VRanges object or vector of DNA sequences")
+      rlang::abort(paste0(
+      is(x)[1], " is not an accepted class for scoreBinding. 
+      x must be a GRanges or VRanges object or vector of DNA sequences"))
     } else {
       return(FALSE)
     }
@@ -28,17 +29,18 @@
   # check that x is a character list
   x_unlist <- x |> unlist()
   if (!(is.character(x_unlist))) {
-    stop(is(x)[1], " is not an accepted class for scoreBinding. 
-         x must be a GRanges or VRanges object or vector of DNA sequences")
+    rlang::abort(paste0(
+    is(x)[1], " is not an accepted class for scoreBinding. 
+    x must be a GRanges or VRanges object or vector of DNA sequences"))
   }
   # check if all elements only contain characters A, C, G, T
   unique_items <- x_unlist |> strsplit(split =  "") |> unlist() |> unique()
   if (!all(unique_items %in% c("A", "C", "G", "T"))) {
     invalid_char <- unique_items[!(unique_items %in% c("A", "C", "G", "T"))]
-    stop("x contains invalid nucleotides: ", 
-         paste(invalid_char, collapse = ", "),
-         ". All characters in x must ",
-         "be 'A', 'C', 'G', or 'T'")
+    rlang::abort(paste0("x contains invalid nucleotides: ", 
+                        paste(invalid_char, collapse = ", "),
+                        ". All characters in x must ",
+                        "be 'A', 'C', 'G', or 'T'"))
   }
   return(TRUE)
 }
@@ -71,13 +73,13 @@
     # make sure ids are unique
     id <- S4Vectors::mcols(x)[, seqId]
     if (length(unique(id)) != length(id)) {
-      stop("entries in the ", seqId, " column are not unique.")
+      rlang::abort(paste0("entries in the ", seqId, " column are not unique."))
     }
   }
   
   # must provide a reference genome if sequences are not given
   if (is.null(genome)) {
-    stop("must specify a genome if providing a GRanges object")
+    rlang::abort("must specify a genome if providing a GRanges object")
   }
   
   # pull the sequence for each range
@@ -125,7 +127,7 @@ scoreBinding <- \(x, sem, genome, nFlank = NULL,
                   seqId = NULL) {
   # make sure nFlank is an integer, if provided
   if (!is.null(nFlank) & !is.numeric(nFlank)) {
-    stop("nFlank must be an integer.")
+    rlang::abort("nFlank must be an integer.")
   } else if (!is.null(nFlank)){
     nFlank <- as.integer(nFlank)
   }

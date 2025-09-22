@@ -33,17 +33,19 @@
       return(SNPEffectMatrixCollection(x))
     } else {
       invalid_class <- is(x[!class_check][1])[1]
-      stop("unable to convert object of class ", invalid_class, 
-           " to class SNPEffectMatrixCollection.\n",
-           "See ?SNPEffectMatrixCollection or use the provided default 'sc'")
+      rlang::abort(paste0(
+        "unable to convert object of class ", invalid_class, 
+        " to class SNPEffectMatrixCollection.\n",
+        "See ?SNPEffectMatrixCollection or use the provided default 'sc'"))
     }
     
   } else if (is(x, "SNPEffectMatrix")) {
     return(SNPEffectMatrixCollection(sems = x))
   } else {
-    stop("unable to convert object of class ", is(x)[1], 
-         " to class SNPEffectMatrixCollection.\n",
-         "See ?SNPEffectMatrixCollection or use the provided default 'sc'")
+    rlang::abort(paste0(
+      "unable to convert object of class ", is(x)[1], 
+      " to class SNPEffectMatrixCollection.\n",
+      "See ?SNPEffectMatrixCollection or use the provided default 'sc'"))
   }
 }
 
@@ -60,8 +62,8 @@
     alt_allele <- as.character(VariantAnnotation::alt(x))
   } else {
     if (is.null(refCol) | is.null(altCol)) {
-      stop("If providing a GRanges object, ",
-           "both refCol and altCol must be defined")
+      rlang::abort(paste0("If providing a GRanges object, ",
+                          "both refCol and altCol must be defined"))
     }
     ref_allele <- as.character(S4Vectors::mcols(x)[, refCol])
     alt_allele <- as.character(S4Vectors::mcols(x)[, altCol])

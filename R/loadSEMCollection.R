@@ -5,18 +5,19 @@
   
   # expect 4 columns
   if (n_cols != 4) {
-    stop(n_cols, " columns detected in file ", semFile, "\n",
+    rlang::abort(paste0(n_cols, " columns detected in file ", semFile, "\n",
          "SEM files must have 4 columns with names:\n",
-         paste0(expected_cols, collapse = ", "))
+         paste0(expected_cols, collapse = ", ")))
   }
   
   # check if columns are nucleotides we expect
   unexpected_cols <- setdiff(colnames(sem), expected_cols)
   
   if (length(unexpected_cols) > 0) {
-    stop(paste0("Unexpected column(s), ", 
-                paste0(unexpected_cols, collapse = ", "),
-    ", detected. \n Columns of SEM file must be 'A', 'C', 'G', 'T'."))
+    rlang::abort(paste0(
+      paste0("Unexpected column(s), ", 
+             paste0(unexpected_cols, collapse = ", "),
+             ", detected. \n Columns of SEM file must be 'A', 'C', 'G', 'T'.")))
   }
 }
 
@@ -33,8 +34,9 @@
       lapply("[[", 2) |>
       unlist()
   } else {
-    stop("No baseline given. Baseline must be specified in semFile header or",
-         " in bl parameter.")
+    rlang::abort(paste0(
+      "No baseline given. Baseline must be specified in semFile header or",
+      " in bl parameter."))
   }
   return(bl)
 }
@@ -108,8 +110,8 @@ loadSEMCollection <- \(semFiles, semMetaData=NULL, semMetaKey="",
                             bl = bls[i]))
   
   if (!is.null(semMetaData) & semMetaKey == "") {
-    stop("If providing semMetaData, must specify a column name linking the meta
-         data to the semIds in semMetaKey")
+    rlang::abort(paste0("If providing semMetaData, must specify a column name ",
+                        " linking the meta data to the semIds in semMetaKey"))
   }
   
   sc <- SNPEffectMatrixCollection(sems = s, 

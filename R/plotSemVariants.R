@@ -4,18 +4,18 @@
   meta_cols <- S4Vectors::mcols(getRanges(s)) |>
     colnames()
   if (!(label %in% meta_cols)) {
-    stop("label not found in S4Vectors::mcols(getRanges(s)).")
+    rlang::abort("label not found in S4Vectors::mcols(getRanges(s)).")
   }
   
   # check that semId is a valid id in s
   if (!(semId %in% scores(s)[, semId])) {
-    stop(paste0("variant not found in SemplScores object. ",
-                semId, " is not in scores(s)[, semId]"))
+    rlang::abort(paste0("variant not found in SemplScores object. ",
+                        semId, " is not in scores(s)[, semId]"))
   }
   
   # check that cols is length 2
   if (length(cols) != 2) {
-    stop("cols must be a vector of length 2")
+    rlang::abort("cols must be a vector of length 2")
   }
 }
 
@@ -77,11 +77,13 @@ plotSemVariants <- function(s, sem, label = "varId",
     geom_point(data = subset(scores_dt, altNorm > 0 & refNorm > 0),
                size = 1,
                color = 'grey') +
-    ggrepel::geom_text_repel(data = subset(scores_dt, altNorm > 0 & refNorm < 0),
+    ggrepel::geom_text_repel(data = subset(scores_dt, 
+                                           altNorm > 0 & refNorm < 0),
                              mapping = aes(label = .data[[label]]),
                              size = 4,
                              color = cols[1]) +
-    ggrepel::geom_text_repel(data = subset(scores_dt, altNorm < 0 & refNorm > 0),
+    ggrepel::geom_text_repel(data = subset(scores_dt, 
+                                           altNorm < 0 & refNorm > 0),
                              mapping = aes(label = .data[[label]]),
                              size = 4,
                              color = cols[2]) +

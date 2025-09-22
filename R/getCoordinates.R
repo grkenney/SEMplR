@@ -101,19 +101,21 @@
 }
 
 
-.reduceGene <- \(foo_gene) {
-  if (length(foo_gene) > 1) {
-    mcol_foo_gene <- S4Vectors::mcols(foo_gene)
-    foo_gene_red <- GenomicRanges::reduce(foo_gene, with.revmap = TRUE)
+# collapse overlapping ranges while preseving meta data
+.reduceGene <- \(gene_ranges) {
+  if (length(gene_ranges) > 1) {
+    mcol_foo_gene <- S4Vectors::mcols(gene_ranges)
+    foo_gene_red <- GenomicRanges::reduce(gene_ranges, with.revmap = TRUE)
     for (cn in colnames(mcol_foo_gene)) {
       S4Vectors::mcols(foo_gene_red)[cn] <-
-        sapply(foo_gene_red$revmap,
-               function(i) paste(unique(mcol_foo_gene[i, cn]), collapse = ", "))
+        vapply(foo_gene_red$revmap,
+               function(i) 
+                 paste(unique(mcol_foo_gene[i, cn]), collapse = ", "), "")
     }
     foo_gene_red$revmap <- NULL
     return(foo_gene_red)
   } else {
-    return(foo_gene)
+    return(gene_ranges)
   }
 }
 
@@ -199,11 +201,11 @@
   n_bg   <- n_ratio * n_fg
   
   if (n_bg > n_pool) {
-    stop(
+    rlang::abort(paste0(
       "Requested ", n_bg, " background regions (",
       n_ratio, "x", n_fg, ") but only ",
       n_pool, " available in the pool."
-    )
+    ))
   }
   
   idx <- sample(

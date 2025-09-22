@@ -29,15 +29,16 @@
 .checkAlleles <- function(x, qs, allele) {
   # check if qs is one of the alleles, if not, throw a warning
   if (!(qs %in% allele)) {
-    warning("Allele '", paste(allele, collapse = "' or '"), 
-            "' does not match reference sequence '", qs, "' in ", x)
+    rlang::warn(paste0("Allele '", paste(allele, collapse = "' or '"), 
+                       "' does not match reference sequence '", qs, "' in ", x))
   }
   
   # stop if more than 2 alleles provided
   if (length(allele) > 2) {
-    stop("allele parameter '", paste(allele, collapse = "', '"), 
-         "' for ", x, " is invalid.\n",
-         " The number of alleles must be 2 or less.")
+    rlang::abort(paste0(
+      "allele parameter '", paste(allele, collapse = "', '"), 
+      "' for ", x, " is invalid.\n",
+      "The number of alleles must be 2 or less."))
   }
 }
 
@@ -83,8 +84,9 @@
   # else if GRanges, use the specified ref and alt col names to get alleles
   if(is(x, "VRanges")) {
     if (!is.null(refCol) | !is.null(altCol)) {
-      message("VRanges object detected, ignoring allele column specifications.",
-              " Alleles will be pulled using ref() and alt() functions.")
+      rlang::inform(paste0(
+        "VRanges object detected, ignoring allele column specifications.",
+        " Alleles will be pulled using ref() and alt() functions."))
     }
     ra <- VariantAnnotation::ref(x) |> as.character()
     aa <- VariantAnnotation::alt(x) |> as.character()
@@ -159,12 +161,12 @@ getRangeSeqs <- function(x, genome, up = 0, down = 0,
                          refCol = NULL, altCol = NULL) {
   # stop if x is not a GRanges or VRanges object
   if ( !(is(x, "GRanges") | is(x, "VRanges")) ) {
-    stop("x must be of class VRanges or GRanges")
+    rlang::abort("x must be of class VRanges or GRanges")
   }
   
   # stop if x is empty
   if (length(x) < 1) {
-    stop("x must contain at least one range")
+    rlang::abort("x must contain at least one range")
   }
   
   a <- .getAllele(x = x, refCol = refCol, altCol = altCol)

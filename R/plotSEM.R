@@ -2,14 +2,15 @@
 .validateMotifInCollection <- \(sem, motif) {
   # motif required if providing a SNPEffectMatrixCollection
   if (is.null(motif)) {
-    stop("must specify the motif to plot if supplying a ",
-         "SNPEffectMatrixCollection")
+    rlang::abort(paste0("must specify the motif to plot if supplying a ",
+                        "SNPEffectMatrixCollection"))
   }
   
   # check that motif given is in collection
   if (!(motif %in% names(sems(sem)))) {
-    stop("provided motif not found in SNPEffectMatrixCollection.",
-    "See the SEM_KEY column in semData(sem) for available motif ids.")
+    rlang::abort(paste0(
+      "provided motif not found in SNPEffectMatrixCollection.",
+      "See the SEM_KEY column in semData(sem) for available motif ids."))
   }
 }
 
@@ -32,7 +33,8 @@
     sem_mtx <- getSEM(sems(sem, semId = motif))
     
   } else {
-    stop("sem must be a SNPEffectMatrix or a SNPEffectMatrixCollection.")
+    rlang::abort(paste0("sem must be a SNPEffectMatrix or a ",
+                        "SNPEffectMatrixCollection."))
   }
   
   return(list(sem_baseline = sem_baseline,
@@ -60,9 +62,10 @@
   # if sequence is provided for plotting, 
   if (!is.null(motifSeq)) {
     if(nchar(motifSeq) != motif_length) {
-      stop(paste0("Number of characters in motifSeq (", nchar(motifSeq), 
-                  ") does not equal the number of rows in the SEM (",
-                  motif_length, ")"))
+      rlang::abort(paste0(
+        paste0("Number of characters in motifSeq (", nchar(motifSeq), 
+               ") does not equal the number of rows in the SEM (",
+               motif_length, ")")))
     }
     mseq <- unlist(strsplit(motifSeq, ""))
     
