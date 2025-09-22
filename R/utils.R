@@ -2,7 +2,7 @@
 .formatList <- function(x) {
   num_items <- length(x)
   if (num_items > 5) {
-    first2 <- x[1:2]
+    first2 <- x[seq_len(2)]
     last2 <- x[(num_items-1):num_items]
     formatted_list <- paste0(paste(first2, collapse = ", "), " ... ", 
                              paste(last2, collapse = ", "))
@@ -35,7 +35,7 @@
       invalid_class <- is(x[!class_check][1])[1]
       stop("unable to convert object of class ", invalid_class, 
            " to class SNPEffectMatrixCollection.\n",
-           "See ?SNPEffectMatrixCollection or use the provided default `sc`")
+           "See ?SNPEffectMatrixCollection or use the provided default 'sc'")
     }
     
   } else if (is(x, "SNPEffectMatrix")) {
@@ -43,7 +43,7 @@
   } else {
     stop("unable to convert object of class ", is(x)[1], 
          " to class SNPEffectMatrixCollection.\n",
-         "See ?SNPEffectMatrixCollection or use the provided default `sc`")
+         "See ?SNPEffectMatrixCollection or use the provided default 'sc'")
   }
 }
 

@@ -94,7 +94,8 @@
     invalid_cols <- c(refCol, altCol) %in% colnames(S4Vectors::mcols(x))
     if( !all(invalid_cols) ){
       invalid_col_names <- colnames(S4Vectors::mcols(x))[!invalid_cols]
-      stop("'", invalid_col_names, "' is not a valid column name in mcols(x)")
+      rlang::abort(paste0("'", invalid_col_names, 
+                          "' is not a valid column name in mcols(x)"))
     }
     
     if (!is.null(refCol)) {

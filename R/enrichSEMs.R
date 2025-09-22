@@ -87,7 +87,7 @@ enrichSEMs <- \(x, sem,
                                            dna_sequences = scramb, 
                                            nFlank = nFlank, 
                                            bl = getBaseline(y),
-                                           seqIds = 1:length(seqs))) |>
+                                           seqIds = seq_along(seqs))) |>
       data.table::rbindlist(idcol = "SEM")
   } else {
     bg <- scoreBinding(x = background, sem = sem, genome = genome) |> 

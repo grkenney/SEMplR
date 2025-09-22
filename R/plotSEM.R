@@ -43,7 +43,7 @@
 # pivot SEM matrix into a long data.table with score, position, and bp columns
 .formatPlotSEMTable <- \(sem_mtx) {
   bp <- rep(c("A", "C", "G", "T"), each=nrow(sem_mtx))
-  motif_pos <- rep(1:nrow(sem_mtx), 4)
+  motif_pos <- rep(seq_len(nrow(sem_mtx)), 4)
   sem_score <- sem_mtx |> 
     unlist()
   
@@ -67,11 +67,11 @@
     mseq <- unlist(strsplit(motifSeq, ""))
     
     # going to plot as white first and then overlay bolded, colored sequence
-    mseq_dt <- data.table(mseq, 1:motif_length, mseq, "white") |> 
+    mseq_dt <- data.table(mseq, seq_len(motif_length), mseq, "white") |> 
       stats::setNames(c("bp", "motif_pos", "mseq", "text_color"))
     
     sem_mtx_long <- merge(sem_mtx_long, mseq_dt, by=c("bp", "motif_pos"), 
-                          all.x=T)
+                          all.x=TRUE)
     
     sem_mtx_long$text_color[is.na(sem_mtx_long$text_color)] <- "#d7dbdd"
     sem_mtx_long$mseq[is.na(sem_mtx_long$mseq)] <- ""

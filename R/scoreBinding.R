@@ -62,9 +62,10 @@
   } else {
     # check that the seqId column exists in the meta data
     if (!(seqId %in% colnames(S4Vectors::mcols(x)))) {
-      stop("'", seqId, "' is not a meta data column. See mcols(x) for ",
-           "the meta data column names or don't specify seqId to generate",
-           "unique ids.")
+      rlang::abort(paste0("'", seqId, 
+                          "' is not a meta data column. See mcols(x) for ",
+                          "the meta data column names or don't specify seqId ",
+                          "to generate unique ids."))
     }
     
     # make sure ids are unique
@@ -158,7 +159,7 @@ scoreBinding <- \(x, sem, genome, nFlank = NULL,
   } else {
     # if sequence list is given, use sequences and apply an integer id
     seqs <- x
-    id <- 1:length(seqs)
+    id <- seq_along(seqs)
     if (is.null(nFlank)) {
       nFlank <- 0
     }

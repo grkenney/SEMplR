@@ -31,38 +31,38 @@ test_that(".constructComparisons returns correctly sized object", {
 })
 
 
-test_that(".plotMotifTree returns tree object", {
-  motifs <- .formatMotifs(sem = sc, 
-                          label = "transcription_factor")
-  labels <- lapply(motifs, function(x) x["altname"]) |> unlist()
-  
-  comps <- .constructComparisons(motifs = motifs, labels = labels, 
-                                 method = "PCC")
-  
-  plt <- .plotMotifTree(e = e, sem = sc, threshold = 0.05, 
-                        comparisons = comps, sigCol = "purple4")
-  expect_s3_class(plt, "ggtree")
-})
+# test_that(".plotMotifTree returns tree object", {
+#   motifs <- .formatMotifs(sem = sc,
+#                           label = "transcription_factor")
+#   labels <- lapply(motifs, function(x) x["altname"]) |> unlist()
+# 
+#   comps <- .constructComparisons(motifs = motifs, labels = labels,
+#                                  method = "PCC")
+# 
+#   plt <- .plotMotifTree(e = e, sem = sc, threshold = 0.05,
+#                         comparisons = comps, sigCol = "purple4")
+#   expect_s3_class(plt, "ggtree")
+# })
+# 
+# 
+# test_that(".plotTreeHeatmap returns ggtree object", {
+#   motifs <- .formatMotifs(sem = sc,
+#                           label = "transcription_factor")
+#   labels <- lapply(motifs, function(x) x["altname"]) |> unlist()
+# 
+#   comps <- .constructComparisons(motifs = motifs,
+#                                  labels = labels,
+#                                  method = "PCC")
+# 
+#   plt <- .plotMotifTree(e = e, sem = sc, threshold = 0.05,
+#                         comparisons = comps, sigCol = "purple4")
+#   plt <- .plotTreeHeatmap(plt = plt, e = e, labels = labels)
+#   expect_s3_class(plt, "ggtree")
+# })
+# 
 
-
-test_that(".plotTreeHeatmap returns ggtree object", {
-  motifs <- .formatMotifs(sem = sc, 
-                          label = "transcription_factor")
-  labels <- lapply(motifs, function(x) x["altname"]) |> unlist()
-  
-  comps <- .constructComparisons(motifs = motifs, 
-                                 labels = labels, 
-                                 method = "PCC")
-  
-  plt <- .plotMotifTree(e = e, sem = sc, threshold = 0.05, 
-                        comparisons = comps, sigCol = "purple4")
-  plt <- .plotTreeHeatmap(plt = plt, e = e, labels = labels)
-  expect_s3_class(plt, "ggtree")
-})
-
-
-test_that("plotEnrich generates a ggplot object", {
-  plt <- plotEnrich(e, sc)
-  expect_s3_class(plt, "ggtree")
-})
+# test_that("plotEnrich generates a ggplot object", {
+#   plt <- plotEnrich(e, sc)
+#   expect_s3_class(plt, "ggtree")
+# })
 

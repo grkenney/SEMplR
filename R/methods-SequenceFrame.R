@@ -10,7 +10,7 @@
 #' @rdname show
 setMethod("show", "SequenceFrame",
           function(object) {
-            for (i in 1:length(object@sequence)) {
+            for (i in seq_along(object@sequence)) {
               prefix <- substr(object@sequence[i], 
                                start = 1, 
                                stop = object@frameStart[i] - 1)

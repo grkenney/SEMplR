@@ -130,7 +130,7 @@ plotSemVariants(sempl_results, sem = "AP2B_HUMAN.SK-N-SH")
 ```{r, eval=FALSE}
 # loading data
 caqtl_file <- "caQTL_variants_overlappingPeaks_LD-r2-0.8_withLead.bed"
-caqtls <- data.table::fread(file = caqtl_file, sep = "\t")[1:1000,]
+caqtls <- data.table::fread(file = caqtl_file, sep = "\t")[seq_len(1000),]
 proxy_ID_split <- strsplit(caqtls$proxy_ID, ":")
 
 # formatting position and alleles

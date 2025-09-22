@@ -1,4 +1,4 @@
-SEM_MATRIX <- t(matrix(1:24, nrow=4)) |> 
+SEM_MATRIX <- t(matrix(seq_len(24), nrow=4)) |> 
   data.table()
 colnames(SEM_MATRIX) <- c("A", "C", "G", "T")
 
@@ -8,15 +8,15 @@ SEM_OBJ <- SNPEffectMatrix(SEM_MATRIX, -0.402088,
   setNames("MA0151.1")
 
 VR <- VRanges(seqnames = "1",
-              ranges = IRanges::IRanges(start = 1:8, end = 1:8),
+              ranges = IRanges::IRanges(start = seq_len(8), end = seq_len(8)),
               ref = c("A", "", "A", "AA", "", "AA", "A", "A"), 
               alt = c("T", "T", "", "", "TT", "TT", "T", "T"))
-VR$id <- 1:8
+VR$id <- seq_len(8)
 
 VR$upstream <- "CCCCCC"
 VR$downstream <- "GGGGGG"
 
-SCORES_DT <- data.table(varId=1:8, 
+SCORES_DT <- data.table(varId=seq_len(8), 
                         semId="MA0151.1", 
                         refSeq="CCCAGG", 
                         altSeq="CCCTGG",

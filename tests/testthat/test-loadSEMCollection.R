@@ -79,7 +79,7 @@ test_that("loadSEMCollection loads first SEM correctly", {
   # write data to file
   tf <- tempfile()
   write.table(x = getSEM(one_sem), file = tf, 
-              sep = "\t", row.names = F)
+              sep = "\t", row.names = FALSE)
 
   sem_col_e <- loadSEMCollection(semFiles = tf, 
                                  semMetaData = one_sem_meta, 
@@ -100,7 +100,7 @@ test_that("loadSEMCollection errors on missing key with metadata", {
   # write data to file
   tf <- tempfile()
   write.table(x = getSEM(one_sem), file = tf, 
-              sep = "\t", row.names = F)
+              sep = "\t", row.names = FALSE)
   
   expect_error(loadSEMCollection(semFiles = tf, 
                                  semMetaData = one_sem_meta, 

@@ -1,14 +1,14 @@
 test_that(".formatList different num of items", {
   # more than 5 items
-  x_a <- .formatList(c(1:10))
+  x_a <- .formatList(c(seq_len(10)))
   expect_equal(x_a, "1, 2 ... 9, 10")
   
   # 5 items
-  x_a <- .formatList(c(1:5))
+  x_a <- .formatList(c(seq_len(5)))
   expect_equal(x_a, "1, 2, 3, 4, 5")
   
   # less than 5 items
-  x_a <- .formatList(c(1:3))
+  x_a <- .formatList(c(seq_len(3)))
   expect_equal(x_a, "1, 2, 3")
 })
 
@@ -87,14 +87,14 @@ test_that(".makeVariantId GRanges input", {
   expect_true(all(cs == 1))
   
   # spot check a few scores
-  expect_equal(stp_a[1:4, 2], 
+  expect_equal(stp_a[seq_len(4), 2], 
                c(A = 0.10733802, 
                  C = 0.08459069, 
                  G = 0.56368717, 
                  `T` = 0.24438412), 
                tolerance = 1e-6)
   
-  expect_equal(stp_a[1:4, 4], 
+  expect_equal(stp_a[seq_len(4), 4], 
                c(A = 0.1785122, 
                  C = 0.3136177, 
                  G = 0.3113809, 
@@ -102,7 +102,7 @@ test_that(".makeVariantId GRanges input", {
                tolerance = 1e-6)
   
   # negative scores are converted to zeros
-  expect_equal(stp_a[1:4, 7], 
+  expect_equal(stp_a[seq_len(4), 7], 
                c(A = 1, 
                  C = 0, 
                  G = 0, 

@@ -12,5 +12,5 @@ test_that("convertSEMsToPPMs handle different input types", {
   expect_no_condition(convertSEMsToPPMs(sems(sc)[[1]]))
   
   # list of SNPEffectMatrices
-  expect_no_condition(convertSEMsToPPMs(sems(sc)[1:2]))
+  expect_no_condition(convertSEMsToPPMs(sems(sc)[seq_len(2)]))
 })

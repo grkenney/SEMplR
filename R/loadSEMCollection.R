@@ -102,7 +102,7 @@
 #' 
 loadSEMCollection <- \(semFiles, semMetaData=NULL, semMetaKey="", 
                        semIds=NULL, bls=NULL) {
-  s <- lapply(1:length(semFiles), 
+  s <- lapply(seq_along(semFiles), 
               \(i) .loadSEM(semFile = semFiles[i],
                             semId = semIds[i],
                             bl = bls[i]))

@@ -7,7 +7,7 @@
                      universalmotif::create_motif(ppms[[i]], 
                                                   name = names(ppms[i])))
   
-  for (i in 1:length(motifs)) {
+  for (i in seq_along(motifs)) {
     motifs[[i]]["altname"] <- semData(sem)[motifs[[i]]["name"], 
                                            .SD, .SDcols = label] |>
       unlist() |>
@@ -98,8 +98,6 @@ plotEnrich <- \(e, sem,
                 method = "WPCC", 
                 threshold = 0.05,
                 sigCol = "purple4") {
-  sm <- NULL
-  
   motifs <- .formatMotifs(sem, label)
   labels <- lapply(motifs, function(x) x["altname"]) |> unlist()
   

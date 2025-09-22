@@ -7,7 +7,7 @@ test_that("getSEM gets the SEM", {
                  ncol = 4, byrow = TRUE) |>
     data.table::as.data.table() |> 
     stats::setNames(c("A", "C", "G", "T"))
-  expect_equal(sm_a[1:2, ], sm_e, tolerance = 1e-5)
+  expect_equal(sm_a[seq_len(2), ], sm_e, tolerance = 1e-5)
 })
 
 
