@@ -19,7 +19,7 @@ float score_seq(Rcpp::NumericMatrix sem,
   return score;
 }
 
-//[[Rcpp::export]]
+
 Rcpp::List score_frames(Rcpp::NumericMatrix sem,
                         Rcpp::StringVector dna_sequence,
                         int first_frame_index,

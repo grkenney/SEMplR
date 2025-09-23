@@ -10,20 +10,6 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// score_frames
-Rcpp::List score_frames(Rcpp::NumericMatrix sem, Rcpp::StringVector dna_sequence, int first_frame_index, int last_frame_index);
-RcppExport SEXP _SEMplR_score_frames(SEXP semSEXP, SEXP dna_sequenceSEXP, SEXP first_frame_indexSEXP, SEXP last_frame_indexSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type sem(semSEXP);
-    Rcpp::traits::input_parameter< Rcpp::StringVector >::type dna_sequence(dna_sequenceSEXP);
-    Rcpp::traits::input_parameter< int >::type first_frame_index(first_frame_indexSEXP);
-    Rcpp::traits::input_parameter< int >::type last_frame_index(last_frame_indexSEXP);
-    rcpp_result_gen = Rcpp::wrap(score_frames(sem, dna_sequence, first_frame_index, last_frame_index));
-    return rcpp_result_gen;
-END_RCPP
-}
 // scoreSequence
 Rcpp::DataFrame scoreSequence(Rcpp::NumericMatrix sem, Rcpp::CharacterVector dna_sequences, int nFlank, float bl, Rcpp::CharacterVector seqIds);
 RcppExport SEXP _SEMplR_scoreSequence(SEXP semSEXP, SEXP dna_sequencesSEXP, SEXP nFlankSEXP, SEXP blSEXP, SEXP seqIdsSEXP) {
@@ -41,7 +27,6 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_SEMplR_score_frames", (DL_FUNC) &_SEMplR_score_frames, 4},
     {"_SEMplR_scoreSequence", (DL_FUNC) &_SEMplR_scoreSequence, 5},
     {NULL, NULL, 0}
 };
