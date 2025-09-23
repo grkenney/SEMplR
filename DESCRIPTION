@@ -34,9 +34,7 @@ Imports:
     ggtree,
     stringi,
     universalmotif,
-    Rcpp,
-    AnnotationDbi,
-    GenomicFeatures
+    Rcpp
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
@@ -47,9 +45,7 @@ Suggests:
     testthat (>= 3.0.0),
     IRanges,
     BSgenome.Hsapiens.UCSC.hg38,
-    BSgenome.Hsapiens.UCSC.hg19,
-    TxDb.Hsapiens.UCSC.hg38.knownGene,
-    org.Hs.eg.db
+    BSgenome.Hsapiens.UCSC.hg19
 VignetteBuilder: knitr
 License: MIT + file LICENSE
 Config/testthat/edition: 3
@@ -57,6 +53,5 @@ Depends: R (>= 4.4.0)
 URL: https://github.com/grkenney/SEMplR, https://grkenney.github.io/SEMplR
 BugReports: https://www.github.com/grkenney/SEMplR/issues
 biocViews: MotifAnnotation, Transcription, SNP, GenomicVariation
-LazyData: true
 LinkingTo: 
     Rcpp
