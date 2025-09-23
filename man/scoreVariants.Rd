@@ -37,9 +37,11 @@ library(VariantAnnotation)
 data(sc)
 
 # create a VRanges object
-x <- VRanges(seqnames = "chr12",
-              ranges = 94136009, 
-              ref = "G", alt = "C")
+x <- VRanges(
+    seqnames = "chr12",
+    ranges = 94136009,
+    ref = "G", alt = "C"
+)
 
 # calculate binding propensity
 scoreVariants(x, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)

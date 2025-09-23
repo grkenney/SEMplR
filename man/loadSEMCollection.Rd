@@ -43,11 +43,15 @@ tf <- tempfile()
 write.table(m, tf, quote = FALSE, sep = "\t", row.names = FALSE)
 
 # build a meta data table
-md <- data.table::data.table(transcription_factor = c("tf1"), 
-                             cell_type = c("HepG2"), 
-                             sem_id = c("sem_id"))
-                             
-loadSEMCollection(tf, semMetaData = md, semIds = "sem_id", 
-                  semMetaKey = "sem_id", bls = 1)
+md <- data.table::data.table(
+    transcription_factor = c("tf1"),
+    cell_type = c("HepG2"),
+    sem_id = c("sem_id")
+)
+
+loadSEMCollection(tf,
+    semMetaData = md, semIds = "sem_id",
+    semMetaKey = "sem_id", bls = 1
+)
 
 }

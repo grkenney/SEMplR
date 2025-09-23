@@ -22,7 +22,7 @@ a SNPEffectMatrixCollection object
 Constructs a SNPEffectMatrixCollection class object.
 }
 \examples{
-# 
+#
 # build two matries for a motif of length 4
 m1 <- matrix(rnorm(16), nrow = 4)
 m2 <- matrix(rnorm(16), nrow = 4)
@@ -34,9 +34,11 @@ s1 <- SNPEffectMatrix(m1, baseline = 1, semId = "sem_id_1")
 s2 <- SNPEffectMatrix(m2, baseline = 1, semId = "sem_id_2")
 
 # build a meta data table
-md <- data.table::data.table(transcription_factor = c("tf1", "tf2"), 
-                             cell_type = c("HepG2", "K562"), 
-                             sem_id = c("sem_id_1", "sem_id_2"))
+md <- data.table::data.table(
+    transcription_factor = c("tf1", "tf2"),
+    cell_type = c("HepG2", "K562"),
+    sem_id = c("sem_id_1", "sem_id_2")
+)
 
 # build a SNPEffectMatrixCollection object
 SNPEffectMatrixCollection(list(s1, s2), semData = md, semKey = "sem_id")

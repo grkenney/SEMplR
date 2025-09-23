@@ -10,7 +10,7 @@
     # check that semId is a valid id in s
     if (!(semId %in% scores(s)[, semId])) {
         rlang::abort(paste0(
-            "variant not found in SemplScores object. ",
+            "variant not found in SEMplScores object. ",
             semId, " is not in scores(s)[, semId]"
         ))
     }
@@ -73,7 +73,7 @@
 
 #' Plot non-alt versus alt binding propensity for a single motif
 #'
-#' @param s a SemplScores object with scores populated
+#' @param s a SEMplScores object with scores populated
 #' @param sem a single character vector matching a semId in the semplObj
 #' @param label column in scores slot of semplObj to use for point labels
 #' @param cols vector of length 2 with colors to use for plotting gained

@@ -19,3 +19,18 @@ sems list as a \code{character}. If column entries have a .sem suffix, a new
 column named SEM_KEY will be created without the .sem suffixes.}
 }}
 
+\examples{
+# build a SEM example matrix
+m <- matrix(rnorm(16), nrow = 4)
+colnames(m) <- c("A", "C", "G", "T")
+
+# build a SNPEffectMatrix object
+sm <- SNPEffectMatrix(sem = m, baseline = 1, semId = "sem_name")
+
+# create a meta data table
+md <- data.table::data.table(tf = "tf_name", sem = "sem_name")
+
+# build a collection with 1 SEM
+SNPEffectMatrixCollection(sems = list(sm), semData = md, semKey = "sem")
+
+}

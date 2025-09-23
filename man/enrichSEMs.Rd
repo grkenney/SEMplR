@@ -30,3 +30,23 @@ a \code{list} of matrices
 Perform a binomial test to determine if SNP Effect Matrices are bound more
 often than expected.
 }
+\examples{
+
+# load SEMs
+data(sc)
+
+# note that this is a small example for demonstration purposes
+# in actual enrichment analyses sets of 100+ ranges are recommended
+
+# create a GRanges object
+gr <- GenomicRanges::GRanges(
+    seqnames = "chr12",
+    ranges = 94136009
+)
+
+# calculate binding propensity
+sb <- scoreBinding(gr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+
+enrichSEMs(sb, sc)
+
+}

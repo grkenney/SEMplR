@@ -13,10 +13,10 @@ vignette: >
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>", 
-  fig.height = 5,
-  fig.width = 5
+    collapse = TRUE,
+    comment = "#>",
+    fig.height = 5,
+    fig.width = 5
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
 ```
@@ -63,10 +63,14 @@ semData(sc)
 # Scoring Binding
 
 ```{r}
-plotSEM(sc, motif = "AP2B_HUMAN.SK-N-SH", 
-        motifSeq = "GCTTTGAGGC", highlight = 1)
-plotSEM(sc, motif = "AP2B_HUMAN.SK-N-SH", 
-        motifSeq = "GCTTTCAGGC", highlight = 1, hcol = "red")
+plotSEM(sc,
+    motif = "AP2B_HUMAN.SK-N-SH",
+    motifSeq = "GCTTTGAGGC", highlight = 1
+)
+plotSEM(sc,
+    motif = "AP2B_HUMAN.SK-N-SH",
+    motifSeq = "GCTTTCAGGC", highlight = 1, hcol = "red"
+)
 ```
 
 # Scoring Variants
@@ -85,10 +89,12 @@ Optionally, an `id` column can be defined in the object metadata to be used
 as a unique identifier for each variant.
 
 ```{r}
-vr <- VRanges(seqnames = c("chr12", "chr19"),
-              ranges = c(94136009, 10640062), 
-              ref = c("G", "T"), alt = c("C", "A"),
-              id = c("variant1", "variant2"))
+vr <- VRanges(
+    seqnames = c("chr12", "chr19"),
+    ranges = c(94136009, 10640062),
+    ref = c("G", "T"), alt = c("C", "A"),
+    id = c("variant1", "variant2")
+)
 ```
 
 ## Scoring
@@ -101,10 +107,12 @@ variants, the SEM meta data stored in the object has 13 fields, and we have
 There is a row in the `scores` table for each variant/SEM combination. 
 Here we scored 2 variants x 223 SEMs to get 446 rows. 
 ```{r}
-sempl_results <- scoreVariants(x = vr,
-                               sem = sc,
-                               genome=BSgenome.Hsapiens.UCSC.hg38::Hsapiens,
-                               varId = "id")
+sempl_results <- scoreVariants(
+    x = vr,
+    sem = sc,
+    genome = BSgenome.Hsapiens.UCSC.hg38::Hsapiens,
+    varId = "id"
+)
 
 sempl_results
 ```
@@ -143,9 +151,10 @@ scores(sempl_results)
 ## Visualization
 
 ```{r}
-plotSemMotifs(sempl_results, 
-              variant = "variant2",
-              label = "transcription_factor")
+plotSemMotifs(sempl_results,
+    variant = "variant2",
+    label = "transcription_factor"
+)
 ```
 
 
@@ -158,7 +167,7 @@ plotSemVariants(sempl_results, sem = "AP2B_HUMAN.SK-N-SH")
 ```{r, eval=FALSE}
 # loading data
 caqtl_file <- "caQTL_variants_overlappingPeaks_LD-r2-0.8_withLead.bed"
-caqtls <- data.table::fread(file = caqtl_file, sep = "\t")[seq_len(1000),]
+caqtls <- data.table::fread(file = caqtl_file, sep = "\t")[seq_len(1000), ]
 proxy_ID_split <- strsplit(caqtls$proxy_ID, ":")
 
 # formatting position and alleles
@@ -168,16 +177,20 @@ ref_allele <- lapply(proxy_ID_split, `[[`, 3) |> unlist()
 alt_allele <- lapply(proxy_ID_split, `[[`, 4) |> unlist()
 
 # building variant annotation obj
-vr_e <- VariantAnnotation::VRanges(seqnames = chr,
-                                 ranges = pos, 
-                                 ref = ref_allele, 
-                                 alt = alt_allele)
+vr_e <- VariantAnnotation::VRanges(
+    seqnames = chr,
+    ranges = pos,
+    ref = ref_allele,
+    alt = alt_allele
+)
 data(sc)
 
 # score variants
-var_scores_e <- scoreVariants(vr = vr_e, 
-                            semList = sc,
-                            bs_genome_obj=BSgenome.Hsapiens.UCSC.hg38::Hsapiens)
+var_scores_e <- scoreVariants(
+    vr = vr_e,
+    semList = sc,
+    bs_genome_obj = BSgenome.Hsapiens.UCSC.hg38::Hsapiens
+)
 
 plotSemVariants(var_scores_e, semId = "MA0151.1")
 ```
@@ -195,13 +208,16 @@ Here, we will test if any of these transcription factors are bound more than
 expected in the reference alleles of this set.
 
 ```{r, eval=FALSE}
-gr_e <- GenomicRanges::GRanges(seqnames = chr,
-                                 ranges = pos, 
-                                 allele = ref_allele)
+gr_e <- GenomicRanges::GRanges(
+    seqnames = chr,
+    ranges = pos,
+    allele = ref_allele
+)
 
-e <- enrichSEMs(x = gr_e, semList = sc, 
-                bs_genome_obj = BSgenome.Hsapiens.UCSC.hg38::Hsapiens)
-
+e <- enrichSEMs(
+    x = gr_e, semList = sc,
+    bs_genome_obj = BSgenome.Hsapiens.UCSC.hg38::Hsapiens
+)
 ```
 
 ```{r, eval=FALSE}
@@ -218,8 +234,9 @@ First, we create a list of file paths to the .sem files we want to include.
 We will also load the meta data for each sem in a `data.table` object. 
 If meta data is used, all SEMs must be represented in the meta data table.
 ```{r, eval=FALSE}
-sem_files <- list.files("SEMs/", 
-                        pattern = ".sem", full.names = TRUE)
+sem_files <- list.files("SEMs/",
+    pattern = ".sem", full.names = TRUE
+)
 metadata_file <- "SEMs/sempl_metadata.csv"
 meta <- data.table::fread(file = metadata_file, sep = ",")
 
@@ -231,9 +248,11 @@ We will load the matrix and meta data for all SEMs in a single
 a named list of the matrices and a second slot containing our meta data table 
 with a key column connecting the meta data to the names of the matrices.
 ```{r, eval=FALSE}
-sc <- loadSEMCollection(semFiles = sem_files, 
-                        semMetaData = meta, 
-                        semMetaKey = "SEM")
+sc <- loadSEMCollection(
+    semFiles = sem_files,
+    semMetaData = meta,
+    semMetaKey = "SEM"
+)
 sc
 ```
 

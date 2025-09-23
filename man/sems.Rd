@@ -26,10 +26,12 @@ Access sems matrix from a SNPEffectMatrixCollection object
 }
 \examples{
 ## Create example SEM
-df <- data.frame(A=c(1, 2, 3),
-                 C=c(1, 2, 3),
-                 G=c(1, 2, 3),
-                 T=c(1, 2, 3))
+df <- data.frame(
+    A = c(1, 2, 3),
+    C = c(1, 2, 3),
+    G = c(1, 2, 3),
+    T = c(1, 2, 3)
+)
 s <- SNPEffectMatrix(df, 1.205, "motif_id")
 sc <- SNPEffectMatrixCollection(s)
 

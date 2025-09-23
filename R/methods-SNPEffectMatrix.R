@@ -15,30 +15,30 @@
 #' @return a SNPEffectMatrix object
 #' @docType class
 #' @export
-#' 
+#'
 #' @examples
 #' # build a matrix for a motif of length 4
 #' m <- matrix(rnorm(16), nrow = 4)
 #' colnames(m) <- c("A", "C", "G", "T")
-#' 
+#'
 #' # build a SNPEffectMatrix object
 #' SNPEffectMatrix(m, baseline = 1, semId = "sem_id")
-#' 
+#'
 SNPEffectMatrix <- function(sem, baseline, semId) {
-  # convert matrix to data.table in case given in another format
-  sem <- data.table::as.data.table(sem)
+    # convert matrix to data.table in case given in another format
+    sem <- data.table::as.data.table(sem)
 
-  # drop columns not names after nucleotides
-  sem <- sem[, c("A", "C", "G", "T")]
+    # drop columns not names after nucleotides
+    sem <- sem[, c("A", "C", "G", "T")]
 
-  # convert baseline to numeric
-  baseline <- as.numeric(baseline)
-  
-  new("SNPEffectMatrix",
-      sem = sem,
-      baseline = baseline,
-      semId = semId
-  )
+    # convert baseline to numeric
+    baseline <- as.numeric(baseline)
+
+    new("SNPEffectMatrix",
+        sem = sem,
+        baseline = baseline,
+        semId = semId
+    )
 }
 
 
@@ -48,24 +48,22 @@ SNPEffectMatrix <- function(sem, baseline, semId) {
 #'
 #' @param x SNPEffectMatrix object
 #'
-#' @returns A position (rows) by nucleic acid (columns) 
+#' @returns A position (rows) by nucleic acid (columns)
 #' `data.table` is returned
-#'
 #' @examples
-#' ## Create example SEM
-#' df <- data.frame(A=c(1, 2, 3),
-#'                  C=c(1, 2, 3),
-#'                  G=c(1, 2, 3),
-#'                  T=c(1, 2, 3))
-#' s <- SNPEffectMatrix(df, 1.205, "motif_id")
-#'
-#' ## Access count matrix
-#' getSEM(s)
+#' # Isolate a single SNPEffectMatrix object from the default 
+#' # SNPEffectMatrixCollection
+#' sm <- sems(sc)[[1]]
+#' 
+#' # Access the matrix
+#' getSEM(sm)
 #'
 #' @rdname getSEM
 #' @export
-setMethod("getSEM", "SNPEffectMatrix", 
-          function(x) x@sem)
+setMethod(
+    "getSEM", "SNPEffectMatrix",
+    function(x) x@sem
+)
 
 
 #' Access baseline from a SNPEffectMatrix object
@@ -75,20 +73,19 @@ setMethod("getSEM", "SNPEffectMatrix",
 #' @returns The `numeric` baseline value is returned
 #'
 #' @examples
-#' ## Create example SEM
-#' df <- data.frame(A=c(1, 2, 3),
-#'                  C=c(1, 2, 3),
-#'                  G=c(1, 2, 3),
-#'                  T=c(1, 2, 3))
-#' s <- SNPEffectMatrix(df, 1.205, "motif_id")
-#'
-#' ## Access count matrix
-#' getBaseline(s)
-#'
+#' # Isolate a single SNPEffectMatrix object from the default 
+#' # SNPEffectMatrixCollection
+#' sm <- sems(sc)[[1]]
+#' 
+#' # Access the baseline
+#' getBaseline(sm)
+#' 
 #' @rdname getBaseline
 #' @export
-setMethod("getBaseline", "SNPEffectMatrix", 
-          function(x) x@baseline)
+setMethod(
+    "getBaseline", "SNPEffectMatrix",
+    function(x) x@baseline
+)
 
 
 #' Access semId from a SNPEffectMatrix object
@@ -98,37 +95,37 @@ setMethod("getBaseline", "SNPEffectMatrix",
 #' @returns The `character` id is returned
 #'
 #' @examples
-#' ## Create example SEM
-#' df <- data.frame(A=c(1, 2, 3),
-#'                  C=c(1, 2, 3),
-#'                  G=c(1, 2, 3),
-#'                  T=c(1, 2, 3))
-#' s <- SNPEffectMatrix(df, 1.205, "motif_id")
-#'
-#' ## Access count matrix
-#' getSEMId(s)
+#' # Isolate a single SNPEffectMatrix object from the default 
+#' # SNPEffectMatrixCollection
+#' sm <- sems(sc)[[1]]
+#' 
+#' # Access the SEM id
+#' getSEMId(sm)
 #'
 #' @rdname getSEMId
 #' @export
-setMethod("getSEMId", "SNPEffectMatrix", 
-          function(x) x@semId)
+setMethod(
+    "getSEMId", "SNPEffectMatrix",
+    function(x) x@semId
+)
 
 
 # ---- show ----
 
 #' show for SNPEffectMatrix
-#' 
+#'
 #' @param object SNPEffectMatrix object.
-#' 
-#' @importFrom methods show
-#' 
+#'
+#' @importFrom methods show 
+#'
 #' @rdname SNPEffectMatrix-class
-setMethod("show", "SNPEffectMatrix",
-          function(object) {
-            cat("An object of class SNPEffectMatrix\n")
-            cat("semId: ", object@semId)
-            cat("\nbaseline: ", object@baseline)
-            cat("\nsem:\n")
-            print(object@sem)
-          }
+setMethod(
+    "show", "SNPEffectMatrix",
+    function(object) {
+        cat("An object of class SNPEffectMatrix\n")
+        cat("semId: ", object@semId)
+        cat("\nbaseline: ", object@baseline)
+        cat("\nsem:\n")
+        print(object@sem)
+    }
 )

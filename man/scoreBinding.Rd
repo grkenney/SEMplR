@@ -33,14 +33,14 @@ Calculate binding propensity for all SEM motifs and
 genomic positions provided
 }
 \examples{
-library(GenomicRanges)
-
 # load SEMs
 data(sc)
 
 # create a GRanges object
-gr <- GenomicRanges::GRanges(seqnames = "chr12",
-              ranges = 94136009)
+gr <- GenomicRanges::GRanges(
+    seqnames = "chr12",
+    ranges = 94136009
+)
 
 # calculate binding propensity
 scoreBinding(gr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)

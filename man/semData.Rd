@@ -31,9 +31,11 @@ library(VariantAnnotation)
 data(sc)
 
 # create a VRanges object
-vr <- VRanges(seqnames = "chr12",
-              ranges = 94136009, 
-              ref = "G", alt = "C")
+vr <- VRanges(
+    seqnames = "chr12",
+    ranges = 94136009,
+    ref = "G", alt = "C"
+)
 
 # calculate binding propensity
 s <- scoreVariants(vr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
@@ -41,10 +43,12 @@ s <- scoreVariants(vr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 semData(s)
 
 ## Create example SEM
-df <- data.frame(A=c(1, 2, 3),
-                 C=c(1, 2, 3),
-                 G=c(1, 2, 3),
-                 T=c(1, 2, 3))
+df <- data.frame(
+    A = c(1, 2, 3),
+    C = c(1, 2, 3),
+    G = c(1, 2, 3),
+    T = c(1, 2, 3)
+)
 sem_data <- data.frame(SEM = "motif_id", TF = "tf_id")
 s <- SNPEffectMatrix(df, 1.205, "motif_id")
 sc <- SNPEffectMatrixCollection(s, semData = sem_data, semKey = "SEM")

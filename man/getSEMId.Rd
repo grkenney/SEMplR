@@ -19,14 +19,11 @@ The \code{character} id is returned
 Access semId from a SNPEffectMatrix object
 }
 \examples{
-## Create example SEM
-df <- data.frame(A=c(1, 2, 3),
-                 C=c(1, 2, 3),
-                 G=c(1, 2, 3),
-                 T=c(1, 2, 3))
-s <- SNPEffectMatrix(df, 1.205, "motif_id")
+# Isolate a single SNPEffectMatrix object from the default 
+# SNPEffectMatrixCollection
+sm <- sems(sc)[[1]]
 
-## Access count matrix
-getSEMId(s)
+# Access the SEM id
+getSEMId(sm)
 
 }

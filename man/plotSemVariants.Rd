@@ -7,7 +7,7 @@
 plotSemVariants(s, sem, label = "varId", cols = c("#F8766D", "dodgerblue2"))
 }
 \arguments{
-\item{s}{a SemplScores object with scores populated}
+\item{s}{a SEMplScores object with scores populated}
 
 \item{sem}{a single character vector matching a semId in the semplObj}
 
@@ -32,9 +32,11 @@ sem <- matrix(rnorm(12), ncol = 4)
 colnames(sem) <- c("A", "C", "G", "T")
 
 # create a VRanges object
-vr <- VRanges(seqnames = "chr12",
-              ranges = 94136009, 
-              ref = "G", alt = "C")
+vr <- VRanges(
+    seqnames = "chr12",
+    ranges = 94136009,
+    ref = "G", alt = "C"
+)
 
 # calculate binding propensity
 s <- scoreVariants(vr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)

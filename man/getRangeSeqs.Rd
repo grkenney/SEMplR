@@ -7,8 +7,8 @@
 getRangeSeqs(x, genome, up = 0, down = 0, refCol = NULL, altCol = NULL)
 }
 \arguments{
-\item{x}{A \code{VRanges} or \code{GRanges} object with one or more variants.
-seqnames and ranges fields are required.}
+\item{x}{A \code{VRanges} or \code{GRanges} object with one or more variants. seqnames
+and ranges fields are required.}
 
 \item{genome}{A \code{BSgenome} object for the genome build to use.}
 
@@ -22,29 +22,32 @@ seqnames and ranges fields are required.}
 }
 \value{
 a \code{x} with added meta data columns. By default, only a "sequence"
-column is added to the meta data. If variant information is supplied, either
-in a \code{VRanges} object or through the "allele" parameter, "ref_seq" and
-"alt_seq" columns are added to the meta data.
+column is added to the meta data. If variant information is supplied,
+either in a \code{VRanges} object or through the "allele" parameter, "ref_seq"
+and "alt_seq" columns are added to the meta data.
 }
 \description{
 Query sequences associated with a given range in a reference genome and
 optionally include nucleotides up and downstream of the range of interest
-sequences. Store
-the results in the metadata of the range object.
+sequences. Store the results in the metadata of the range object.
 }
 \examples{
 # set reference genome
 b <- BSgenome.Hsapiens.UCSC.hg19::Hsapiens
 
 # Query sequnece for a GRanges object
-gr <- GenomicRanges::GRanges(seqnames = "chr12",
-                             ranges = IRanges::IRanges(94136009, 94136019))
+gr <- GenomicRanges::GRanges(
+    seqnames = "chr12",
+    ranges = IRanges::IRanges(94136009, 94136019)
+)
 getRangeSeqs(gr, genome = b)
 
 # Query variant sequences for a VRanges object with 10bp flanks
-vr <- VariantAnnotation::VRanges(seqnames = "chr12",
-                                 ranges = IRanges::IRanges(94136009),
-                                 ref = "G", alt = "C")
+vr <- VariantAnnotation::VRanges(
+    seqnames = "chr12",
+    ranges = IRanges::IRanges(94136009),
+    ref = "G", alt = "C"
+)
 getRangeSeqs(vr, genome = b, up = 10, down = 10)
 
 }

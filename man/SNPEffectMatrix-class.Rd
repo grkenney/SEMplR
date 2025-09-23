@@ -4,11 +4,7 @@
 \name{SNPEffectMatrix-class}
 \alias{SNPEffectMatrix-class}
 \alias{show,SNPEffectMatrix-method}
-\title{https://doi.org/10.1093/bioinformatics/btz612
-A SNP Effect Matrix (SEM) estimates the binding affinity of every possible
-mutation in a particular transcription factor (TF) binding motif
-This class contains three slots: the matrix, the baseline value, and
-a unique id}
+\title{SNP Effect Matrix (SEM)}
 \usage{
 \S4method{show}{SNPEffectMatrix}(object)
 }
@@ -16,13 +12,11 @@ a unique id}
 \item{object}{SNPEffectMatrix object.}
 }
 \description{
-https://doi.org/10.1093/bioinformatics/btz612
 A SNP Effect Matrix (SEM) estimates the binding affinity of every possible
-mutation in a particular transcription factor (TF) binding motif
+mutation in a particular transcription factor (TF) binding motif.
+Read more about SEMs here: https://doi.org/10.1093/bioinformatics/btz612
 This class contains three slots: the matrix, the baseline value, and
 a unique id
-
-show for SNPEffectMatrix
 }
 \section{Slots}{
 
@@ -38,3 +32,11 @@ for a TF}
 \item{\code{semId}}{basename of the sem file}
 }}
 
+\examples{
+# build a SEM example matrix
+m <- matrix(rnorm(16), nrow = 4)
+colnames(m) <- c("A", "C", "G", "T")
+
+SNPEffectMatrix(sem = m, baseline = 1, semId = "sem_id")
+
+}

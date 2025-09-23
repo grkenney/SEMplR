@@ -34,3 +34,23 @@ a \code{ggtree} object
 Generates a cladogram clustered by SNP Effect Matrix similarity and
 a heatmap representing the adjusted p-value of the enrichment.
 }
+\examples{
+# load SEMs
+data(sc)
+
+# note that this is a small example for demonstration purposes
+# in actual enrichment analyses sets of 100+ ranges are recommended
+
+# create a GRanges object
+gr <- GenomicRanges::GRanges(
+    seqnames = "chr12",
+    ranges = 94136009
+)
+
+# calculate binding propensity
+sb <- scoreBinding(gr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+
+e <- enrichSEMs(sb, sc) 
+# plotEnrich(e, sc)
+
+}
