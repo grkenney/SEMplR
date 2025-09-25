@@ -1,5 +1,10 @@
 # Validate SEM format
 .validateSEM <- \(sem, semFile) {
+    # if the first column is row numbers, drop it
+    if (all(sem[, 1] == seq_len(nrow(sem)))) {
+        sem <- sem[, 2:ncol(sem)]
+    }
+
     expected_cols <- c("A", "C", "G", "T")
     n_cols <- length(colnames(sem))
 
