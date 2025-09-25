@@ -49,7 +49,9 @@ a heatmap representing the adjusted p-value of the enrichment.</p>
 <span>  label <span class="op">=</span> <span class="st">"transcription_factor"</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"WPCC"</span>,</span>
 <span>  threshold <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span>  sigCol <span class="op">=</span> <span class="st">"purple4"</span></span>
+<span>  textCols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"darkgrey"</span>, <span class="st">"black"</span><span class="op">)</span>,</span>
+<span>  textCex <span class="op">=</span> <span class="fl">0.7</span>,</span>
+<span>  heatmapCols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"red"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -78,8 +80,18 @@ See ?universalmotif::compare_motifs for options.</p></dd>
 <dd><p>The adjusted p-value threshold for coloring SEMs</p></dd>
 
 
-<dt id="arg-sigcol">sigCol<a class="anchor" aria-label="anchor" href="#arg-sigcol"></a></dt>
-<dd><p>Color to label significant SEM labels</p></dd>
+<dt id="arg-textcols">textCols<a class="anchor" aria-label="anchor" href="#arg-textcols"></a></dt>
+<dd><p>A vector of two colors to label non-significant and
+significant SEMs respectively.</p></dd>
+
+
+<dt id="arg-textcex">textCex<a class="anchor" aria-label="anchor" href="#arg-textcex"></a></dt>
+<dd><p>Text size of SEM labels.</p></dd>
+
+
+<dt id="arg-heatmapcols">heatmapCols<a class="anchor" aria-label="anchor" href="#arg-heatmapcols"></a></dt>
+<dd><p>A vector of two colors to use for the heatmap, ordered
+low to high -log10(padj).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -90,7 +102,7 @@ See ?universalmotif::compare_motifs for options.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># load SEMs</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">SEMC</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># note that this is a small example for demonstration purposes</span></span></span>
 <span class="r-in"><span><span class="co"># in actual enrichment analyses sets of 100+ ranges are recommended</span></span></span>
@@ -102,10 +114,11 @@ See ?universalmotif::compare_motifs for options.</p></dd>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate binding propensity</span></span></span>
-<span class="r-in"><span><span class="va">sb</span> <span class="op">&lt;-</span> <span class="fu"><a href="scoreBinding.html">scoreBinding</a></span><span class="op">(</span><span class="va">gr</span>, <span class="va">sc</span>, <span class="fu">BSgenome.Hsapiens.UCSC.hg19</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html" class="external-link">Hsapiens</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sb</span> <span class="op">&lt;-</span> <span class="fu"><a href="scoreBinding.html">scoreBinding</a></span><span class="op">(</span><span class="va">gr</span>, <span class="va">SEMC</span>, <span class="fu">BSgenome.Hsapiens.UCSC.hg19</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html" class="external-link">Hsapiens</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">e</span> <span class="op">&lt;-</span> <span class="fu"><a href="enrichSEMs.html">enrichSEMs</a></span><span class="op">(</span><span class="va">sb</span>, <span class="va">sc</span><span class="op">)</span> </span></span>
-<span class="r-in"><span><span class="co"># plotEnrich(e, sc)</span></span></span>
+<span class="r-in"><span><span class="va">e</span> <span class="op">&lt;-</span> <span class="fu"><a href="enrichSEMs.html">enrichSEMs</a></span><span class="op">(</span><span class="va">sb</span>, <span class="va">SEMC</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plotEnrich</span><span class="op">(</span><span class="va">e</span>, <span class="va">SEMC</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="plotEnrich-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -114,7 +127,7 @@ See ?universalmotif::compare_motifs for options.</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://github.com/grkenney" class="external-link">Grace Kenney</a>.</p>
+  <p>Developed by <a href="https://github.com/grkenney" class="external-link">Grace Kenney</a>, Douglas Phanstiel, NIH NIGMS, NSF GRFP.</p>
 </div>
 
 <div class="pkgdown-footer-right">

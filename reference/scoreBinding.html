@@ -85,7 +85,7 @@ If a list of sequences is provided, just return the scoring table</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># load SEMs</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">SEMC</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># create a GRanges object</span></span></span>
 <span class="r-in"><span><span class="va">gr</span> <span class="op">&lt;-</span> <span class="fu">GenomicRanges</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html" class="external-link">GRanges</a></span><span class="op">(</span></span></span>
@@ -94,7 +94,7 @@ If a list of sequences is provided, just return the scoring table</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate binding propensity</span></span></span>
-<span class="r-in"><span><span class="fu">scoreBinding</span><span class="op">(</span><span class="va">gr</span>, <span class="va">sc</span>, <span class="fu">BSgenome.Hsapiens.UCSC.hg19</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html" class="external-link">Hsapiens</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">scoreBinding</span><span class="op">(</span><span class="va">gr</span>, <span class="va">SEMC</span>, <span class="fu">BSgenome.Hsapiens.UCSC.hg19</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html" class="external-link">Hsapiens</a></span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> An object of class SEMplScores</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ranges(1): chr12:94136009</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> semData(13): transcription_factor, ensembl_id ... PWM_source, SEM_KEY</span>
@@ -133,7 +133,7 @@ If a list of sequences is provided, just return the scoring table</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://github.com/grkenney" class="external-link">Grace Kenney</a>.</p>
+  <p>Developed by <a href="https://github.com/grkenney" class="external-link">Grace Kenney</a>, Douglas Phanstiel, NIH NIGMS, NSF GRFP.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -65,10 +65,10 @@ where each entry is the probability of a base at each position in the motif.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Load default SEMs</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">SEMC</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># From a SNPEffectMatrixCollection</span></span></span>
-<span class="r-in"><span><span class="fu">convertSEMsToPPMs</span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">convertSEMsToPPMs</span><span class="op">(</span><span class="va">SEMC</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`AP2B_HUMAN.SK-N-SH`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         [,1]        [,2]       [,3]       [,4]      [,5]      [,6]       [,7]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A 0.02082115 0.000000000 0.06043672 0.10093925 0.1896069 0.4878503 0.27678081</span>
@@ -2902,7 +2902,7 @@ where each entry is the probability of a base at each position in the motif.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># From a single SNPEffectMatrix</span></span></span>
-<span class="r-in"><span><span class="fu">convertSEMsToPPMs</span><span class="op">(</span><span class="fu"><a href="sems.html">sems</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"AP2B_HUMAN.SK-N-SH"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">convertSEMsToPPMs</span><span class="op">(</span><span class="fu"><a href="getSEMs.html">getSEMs</a></span><span class="op">(</span><span class="va">SEMC</span>, <span class="st">"AP2B_HUMAN.SK-N-SH"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         [,1]        [,2]       [,3]       [,4]      [,5]      [,6]       [,7]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A 0.02082115 0.000000000 0.06043672 0.10093925 0.1896069 0.4878503 0.27678081</span>
@@ -2923,7 +2923,7 @@ where each entry is the probability of a base at each position in the motif.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://github.com/grkenney" class="external-link">Grace Kenney</a>.</p>
+  <p>Developed by <a href="https://github.com/grkenney" class="external-link">Grace Kenney</a>, Douglas Phanstiel, NIH NIGMS, NSF GRFP.</p>
 </div>
 
 <div class="pkgdown-footer-right">
