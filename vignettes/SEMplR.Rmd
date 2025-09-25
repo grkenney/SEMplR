@@ -11,7 +11,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r knitr_setup, include = FALSE}
 knitr::opts_chunk$set(
     collapse = TRUE,
     comment = "#>",
@@ -32,42 +32,42 @@ library(SEMplR)
 SEMplR uses SNP Effect Matrices (SEMs) to score potential motifs. These are 
 matrices contain binding affinity scores and have rows equal to the length of 
 the motif and a column for each nucleotide. SEMs are produced by SEMpl, but a 
-default set of 223 are included with this package in the `sc` data object. 
+default set of 223 are included with this package in the `SEMC` data object. 
 A full list of the transcription factors included in this default set can be 
 found [here](github.com/grkenney/SEMplR/blob/main/vignettes/sempl_metadata.csv) 
-or by running `semData(sc)`.
+or by running `semData(SEMC)`.
 
 The default SEM collection can be loaded with:
 
-```{r}
-data(sc)
+```{r load_data}
+data(SEMC)
 ```
 
 Printing the `SNPEffectMatrixCollection`, we can see that we have 223 SEMs and 
 13 meta data features for each.
-```{r}
-sc
+```{r display_data}
+SEMC
 ```
 
 We can access all SEMs in collection the with the function `sems()` or some 
 subset of matrices by specifying a vector of semIds in the `semId` parameter.
-```{r}
-sems(sc, semId = c("AP2B_HUMAN.SK-N-SH", "ZSCAN4_secondary"))
+```{r subset_sem_collection}
+getSEMs(SEMC, semId = c("AP2B_HUMAN.SK-N-SH", "ZSCAN4_secondary"))
 ```
 
 We can view the SEM meta data slot with the `semData` function.
-```{r}
-semData(sc)
+```{r view_sem_metadata}
+semData(SEMC)
 ```
 
 # Scoring Binding
 
-```{r}
-plotSEM(sc,
+```{r plot_sem}
+plotSEM(SEMC,
     motif = "AP2B_HUMAN.SK-N-SH",
     motifSeq = "GCTTTGAGGC", highlight = 1
 )
-plotSEM(sc,
+plotSEM(SEMC,
     motif = "AP2B_HUMAN.SK-N-SH",
     motifSeq = "GCTTTCAGGC", highlight = 1, hcol = "red"
 )
@@ -88,7 +88,7 @@ the appropriate allele.
 Optionally, an `id` column can be defined in the object metadata to be used 
 as a unique identifier for each variant.
 
-```{r}
+```{r make_vranges}
 vr <- VRanges(
     seqnames = c("chr12", "chr19"),
     ranges = c(94136009, 10640062),
@@ -106,10 +106,10 @@ variants, the SEM meta data stored in the object has 13 fields, and we have
 
 There is a row in the `scores` table for each variant/SEM combination. 
 Here we scored 2 variants x 223 SEMs to get 446 rows. 
-```{r}
+```{r score_variants}
 sempl_results <- scoreVariants(
     x = vr,
-    sem = sc,
+    sem = SEMC,
     genome = BSgenome.Hsapiens.UCSC.hg38::Hsapiens,
     varId = "id"
 )
@@ -137,7 +137,7 @@ reference and alternative alleles respectively
 indeces in the scored sequence
 
 There are accessor functions to isolate each slot of the resulting data object:
-```{r}
+```{r SEMplScores_accessors}
 # access the variants slot
 getRanges(sempl_results)
 
@@ -150,7 +150,7 @@ scores(sempl_results)
 
 ## Visualization
 
-```{r}
+```{r plotSemMotifs}
 plotSemMotifs(sempl_results,
     variant = "variant2",
     label = "transcription_factor"
@@ -158,13 +158,13 @@ plotSemMotifs(sempl_results,
 ```
 
 
-```{r}
+```{r plotSemVariants}
 plotSemVariants(sempl_results, sem = "AP2B_HUMAN.SK-N-SH")
 ```
 
 # Enrichment
 
-```{r, eval=FALSE}
+```{r caqtl_data, eval=FALSE}
 # loading data
 caqtl_file <- "caQTL_variants_overlappingPeaks_LD-r2-0.8_withLead.bed"
 caqtls <- data.table::fread(file = caqtl_file, sep = "\t")[seq_len(1000), ]
@@ -183,19 +183,19 @@ vr_e <- VariantAnnotation::VRanges(
     ref = ref_allele,
     alt = alt_allele
 )
-data(sc)
+data(SEMC)
 
 # score variants
 var_scores_e <- scoreVariants(
     vr = vr_e,
-    semList = sc,
+    semList = SEMC,
     bs_genome_obj = BSgenome.Hsapiens.UCSC.hg38::Hsapiens
 )
 
 plotSemVariants(var_scores_e, semId = "MA0151.1")
 ```
 
-```{r, eval=FALSE}
+```{r enrich_plotSemMotifs, eval=FALSE}
 plotSemMotifs(var_scores_e, "chr1:906982:C>T", label = "transcription_factor")
 ```
 
@@ -207,7 +207,7 @@ transcription factors are enriched for binding in one allele or the other.
 Here, we will test if any of these transcription factors are bound more than
 expected in the reference alleles of this set.
 
-```{r, eval=FALSE}
+```{r enrich_test, eval=FALSE}
 gr_e <- GenomicRanges::GRanges(
     seqnames = chr,
     ranges = pos,
@@ -215,13 +215,13 @@ gr_e <- GenomicRanges::GRanges(
 )
 
 e <- enrichSEMs(
-    x = gr_e, semList = sc,
+    x = gr_e, semList = SEMC,
     bs_genome_obj = BSgenome.Hsapiens.UCSC.hg38::Hsapiens
 )
 ```
 
-```{r, eval=FALSE}
-plt <- plotEnrich(e, semList = sc)
+```{r plotEnrich, eval=FALSE}
+plt <- plotEnrich(e, semList = SEMC)
 plt
 ```
 
@@ -233,7 +233,7 @@ plt
 First, we create a list of file paths to the .sem files we want to include. 
 We will also load the meta data for each sem in a `data.table` object. 
 If meta data is used, all SEMs must be represented in the meta data table.
-```{r, eval=FALSE}
+```{r load_custom_sems, eval=FALSE}
 sem_files <- list.files("SEMs/",
     pattern = ".sem", full.names = TRUE
 )
@@ -247,7 +247,7 @@ We will load the matrix and meta data for all SEMs in a single
 `SNPEffectMatrixCollection` object. This object has two slots, one containing 
 a named list of the matrices and a second slot containing our meta data table 
 with a key column connecting the meta data to the names of the matrices.
-```{r, eval=FALSE}
+```{r loadSEMCollection, eval=FALSE}
 sc <- loadSEMCollection(
     semFiles = sem_files,
     semMetaData = meta,
@@ -256,7 +256,7 @@ sc <- loadSEMCollection(
 sc
 ```
 
-```{r}
+```{r session_info}
 devtools::session_info()
 ```
 
