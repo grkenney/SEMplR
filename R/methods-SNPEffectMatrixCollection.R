@@ -183,9 +183,9 @@ setMethod(
 #'
 #' @importFrom methods show
 #'
-#' @return NULL
+#' @return An invisible NULL
 #'
-#' @rdname show
+#' @rdname show-SNPEffectMatrixCollection
 setMethod(
     "show", "SNPEffectMatrixCollection",
     function(object) {

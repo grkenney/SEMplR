@@ -112,15 +112,15 @@ setMethod(
 
 # ---- show ----
 
-#' show for SNPEffectMatrix
+#' Show for SNPEffectMatrix
 #'
 #' @param object SNPEffectMatrix object.
 #'
 #' @importFrom methods show
 #'
-#' @return NULL
+#' @return An invisible NULL
 #'
-#' @rdname show
+#' @rdname show-SNPEffectMatrix
 setMethod(
     "show", "SNPEffectMatrix",
     function(object) {

@@ -169,9 +169,9 @@ setMethod("scores<-", "SEMplScores", function(x, value) {
 #'
 #' @importFrom methods show
 #'
-#' @return NULL
+#' @return An invisible NULL
 #'
-#' @rdname show
+#' @rdname show-SEMplScores
 #'
 #' @export
 setMethod(
