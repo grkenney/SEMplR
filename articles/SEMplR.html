@@ -483,20 +483,22 @@ more than expected in the reference alleles of this set.</p>
 <h2 id="extras">Extras<a class="anchor" aria-label="anchor" href="#extras"></a>
 </h2>
 <div class="section level3">
-<h3 id="loading-sems">Loading SEMs<a class="anchor" aria-label="anchor" href="#loading-sems"></a>
+<h3 id="loading-a-custom-set-of-sems">Loading a custom set of SEMs<a class="anchor" aria-label="anchor" href="#loading-a-custom-set-of-sems"></a>
 </h3>
 <p>First, we create a list of file paths to the .sem files we want to
 include. We will also load the meta data for each sem in a
 <code>data.table</code> object. If meta data is used, all SEMs must be
 represented in the meta data table.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sem_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="st">"SEMs/"</span>,</span>
-<span>    pattern <span class="op">=</span> <span class="st">".sem"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">metadata_file</span> <span class="op">&lt;-</span> <span class="st">"SEMs/sempl_metadata.csv"</span></span>
-<span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/fread.html" class="external-link">fread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">metadata_file</span>, sep <span class="op">=</span> <span class="st">","</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># find .sem files</span></span>
+<span><span class="va">sem_folder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"SEMs"</span>, package <span class="op">=</span> <span class="st">"SEMplR"</span><span class="op">)</span></span>
+<span><span class="va">sem_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">sem_folder</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">meta</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># load metadata</span></span>
+<span><span class="va">sempl_metadata_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"sempl_metadata.csv"</span>,</span>
+<span>    package <span class="op">=</span> <span class="st">"SEMplR"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">sempl_metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">sempl_metadata_file</span><span class="op">)</span></span></code></pre></div>
 <p>We will load the matrix and meta data for all SEMs in a single
 <code>SNPEffectMatrixCollection</code> object. This object has two
 slots, one containing a named list of the matrices and a second slot
@@ -505,10 +507,15 @@ data to the names of the matrices.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loadSEMCollection.html">loadSEMCollection</a></span><span class="op">(</span></span>
 <span>    semFiles <span class="op">=</span> <span class="va">sem_files</span>,</span>
-<span>    semMetaData <span class="op">=</span> <span class="va">meta</span>,</span>
+<span>    semMetaData <span class="op">=</span> <span class="va">sempl_metadata</span>,</span>
 <span>    semMetaKey <span class="op">=</span> <span class="st">"SEM"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">sc</span></span></code></pre></div>
+<span><span class="co">#&gt; Removing .sem suffixes from semKey. Formatted key now stored in column</span></span>
+<span><span class="co">#&gt; 'SEM_KEY'.</span></span>
+<span><span class="va">sc</span></span>
+<span><span class="co">#&gt; An object of class SNPEffectMatrixCollection</span></span>
+<span><span class="co">#&gt; SEMs(223): AP2B_HUMAN.SK-N-SH, ARNT_HUMAN.GM12878 ... ZNF18_HUMAN.HEK293, ZSCAN4_secondary</span></span>
+<span><span class="co">#&gt; semData(13): transcription_factor, ensembl_id ... PWM_source, SEM_KEY</span></span></code></pre></div>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://sessioninfo.r-lib.org/reference/session_info.html" class="external-link">session_info</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB; font-weight: bold;">─ Session info ───────────────────────────────────────────────────────────────</span></span></span>
