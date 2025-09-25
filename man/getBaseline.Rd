@@ -19,7 +19,7 @@ The \code{numeric} baseline value is returned
 Access baseline from a SNPEffectMatrix object
 }
 \examples{
-# Isolate a single SNPEffectMatrix object from the default 
+# Isolate a single SNPEffectMatrix object from the default
 # SNPEffectMatrixCollection
 sm <- getSEMs(SEMC)[[1]]
 

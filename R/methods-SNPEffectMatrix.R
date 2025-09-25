@@ -51,10 +51,10 @@ SNPEffectMatrix <- function(sem, baseline, semId) {
 #' @returns A position (rows) by nucleic acid (columns)
 #' `data.table` is returned
 #' @examples
-#' # Isolate a single SNPEffectMatrix object from the default 
+#' # Isolate a single SNPEffectMatrix object from the default
 #' # SNPEffectMatrixCollection
 #' sm <- getSEMs(SEMC)[[1]]
-#' 
+#'
 #' # Access the matrix
 #' getSEM(sm)
 #'
@@ -73,13 +73,13 @@ setMethod(
 #' @returns The `numeric` baseline value is returned
 #'
 #' @examples
-#' # Isolate a single SNPEffectMatrix object from the default 
+#' # Isolate a single SNPEffectMatrix object from the default
 #' # SNPEffectMatrixCollection
 #' sm <- getSEMs(SEMC)[[1]]
-#' 
+#'
 #' # Access the baseline
 #' getBaseline(sm)
-#' 
+#'
 #' @rdname getBaseline
 #' @export
 setMethod(
@@ -95,10 +95,10 @@ setMethod(
 #' @returns The `character` id is returned
 #'
 #' @examples
-#' # Isolate a single SNPEffectMatrix object from the default 
+#' # Isolate a single SNPEffectMatrix object from the default
 #' # SNPEffectMatrixCollection
 #' sm <- getSEMs(SEMC)[[1]]
-#' 
+#'
 #' # Access the SEM id
 #' getSEMId(sm)
 #'
@@ -116,7 +116,7 @@ setMethod(
 #'
 #' @param object SNPEffectMatrix object.
 #'
-#' @importFrom methods show 
+#' @importFrom methods show
 #'
 #' @return NULL
 #'

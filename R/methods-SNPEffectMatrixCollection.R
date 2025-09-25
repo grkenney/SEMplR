@@ -182,7 +182,7 @@ setMethod(
 #' @param object a SNPEffectMatrixCollection object
 #'
 #' @importFrom methods show
-#' 
+#'
 #' @return NULL
 #'
 #' @rdname show

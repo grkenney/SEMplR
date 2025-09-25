@@ -173,8 +173,8 @@
 #' )
 #' getRangeSeqs(vr, genome = b, up = 10, down = 10)
 #'
-getRangeSeqs <- \(x, genome, up = 0, down = 0, refCol = NULL, 
-                altCol = NULL) {
+getRangeSeqs <- \(x, genome, up = 0, down = 0, refCol = NULL,
+    altCol = NULL) {
     # stop if x is not a GRanges or VRanges object
     if (!(is(x, "GRanges") | is(x, "VRanges"))) {
         rlang::abort("x must be of class VRanges or GRanges")

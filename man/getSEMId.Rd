@@ -19,7 +19,7 @@ The \code{character} id is returned
 Access semId from a SNPEffectMatrix object
 }
 \examples{
-# Isolate a single SNPEffectMatrix object from the default 
+# Isolate a single SNPEffectMatrix object from the default
 # SNPEffectMatrixCollection
 sm <- getSEMs(SEMC)[[1]]
 
