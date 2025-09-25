@@ -151,15 +151,15 @@ scores(sempl_results)
 ## Visualization
 
 ```{r plotSemMotifs}
-plotSemMotifs(sempl_results,
+plotSEMMotifs(sempl_results,
     variant = "variant2",
     label = "transcription_factor"
 )
 ```
 
 
-```{r plotSemVariants}
-plotSemVariants(sempl_results, sem = "AP2B_HUMAN.SK-N-SH")
+```{r plotSEMVariants}
+plotSEMVariants(sempl_results, sem = "AP2B_HUMAN.SK-N-SH")
 ```
 
 # Enrichment
@@ -192,11 +192,11 @@ var_scores_e <- scoreVariants(
     bs_genome_obj = BSgenome.Hsapiens.UCSC.hg38::Hsapiens
 )
 
-plotSemVariants(var_scores_e, semId = "MA0151.1")
+plotSEMVariants(var_scores_e, semId = "MA0151.1")
 ```
 
-```{r enrich_plotSemMotifs, eval=FALSE}
-plotSemMotifs(var_scores_e, "chr1:906982:C>T", label = "transcription_factor")
+```{r enrich_plotSEMMotifs, eval=FALSE}
+plotSEMMotifs(var_scores_e, "chr1:906982:C>T", label = "transcription_factor")
 ```
 
 # Binding Enrichment

@@ -107,8 +107,8 @@ TFs change binding with a genetic variant and (2) which variants change the
 binding of a TF.
 
 ```
-plotSemVariants(s, "IKZF1")
-plotSemMotifs(s, "A")
+plotSEMVariants(s, "IKZF1")
+plotSEMMotifs(s, "A")
 ```
 
 Please see more information on these plots and their interpretation in our 

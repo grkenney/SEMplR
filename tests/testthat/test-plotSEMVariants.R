@@ -64,8 +64,8 @@ test_that(".validatePlotSemVariantsInputs errors on invalid input", {
 })
 
 
-test_that("plotSemVariants returns a ggplot object", {
-    plt <- plotSemVariants(
+test_that("plotSEMVariants returns a ggplot object", {
+    plt <- plotSEMVariants(
         s = s,
         sem = "AP2B_HUMAN.SK-N-SH"
     )

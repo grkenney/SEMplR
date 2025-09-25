@@ -1,17 +1,16 @@
 # validate label, variant, and cols parameters
-.validatePlotSemVariantsInputs <- \(s, label, semId, cols) {
+.validatePlotSemMotifsInputs <- \(s, label, variant, cols) {
+    semId <- varId <- NA
     # check that sem label is in the sem meta data
-    meta_cols <- S4Vectors::mcols(getRanges(s)) |>
-        colnames()
-    if (!(label %in% meta_cols)) {
-        rlang::abort("label not found in S4Vectors::mcols(getRanges(s)).")
+    if (!(label %in% colnames(semData(s)))) {
+        rlang::abort("label not found in colnames(semData(s)).")
     }
 
-    # check that semId is a valid id in s
-    if (!(semId %in% scores(s)[, semId])) {
+    # check that variant is a valid id in s
+    if (!(variant %in% scores(s)[, varId])) {
         rlang::abort(paste0(
             "variant not found in SEMplScores object. ",
-            semId, " is not in scores(s)[, semId]"
+            variant, " is not in scores(s)[, varId]"
         ))
     }
 
@@ -22,61 +21,50 @@
 }
 
 
-.createBasePlotSEMVariants <- \(scores_dt, cols, label) {
+.createBasePlotSEMMotifs <- \(dt, cols, label) {
     refNorm <- altNorm <- NULL
     plt <- ggplot2::ggplot(
-        data = scores_dt,
+        data = dt,
         aes(x = refNorm, y = altNorm)
     ) +
         geom_vline(xintercept = 0, linetype = 2, col = "grey") +
         geom_hline(yintercept = 0, linetype = 2, col = "grey") +
         geom_point(
-            data = subset(scores_dt, altNorm < 0 & refNorm < 0),
-            size = 1,
-            color = "grey"
+            data = subset(dt, altNorm < 0 & refNorm < 0),
+            size = 1, color = "grey"
         ) +
         geom_point(
-            data = subset(scores_dt, altNorm > 0 & refNorm < 0),
-            size = 1,
+            data = subset(dt, altNorm > 0 & refNorm < 0), size = 1,
             color = cols[1]
         ) +
         geom_point(
-            data = subset(scores_dt, altNorm < 0 & refNorm > 0),
-            size = 1,
-            color = cols[2]
+            data = subset(dt, altNorm < 0 & refNorm > 0),
+            size = 1, color = cols[2]
         ) +
         geom_point(
-            data = subset(scores_dt, altNorm > 0 & refNorm > 0),
-            size = 1,
-            color = "grey"
+            data = subset(dt, altNorm > 0 & refNorm > 0),
+            size = 1, color = "grey"
         ) +
         ggrepel::geom_text_repel(
-            data = subset(
-                scores_dt,
-                altNorm > 0 & refNorm < 0
-            ),
+            data = subset(dt, altNorm > 0 & refNorm < 0),
             mapping = aes(label = .data[[label]]),
             size = 4,
             color = cols[1]
         ) +
         ggrepel::geom_text_repel(
-            data = subset(
-                scores_dt,
-                altNorm < 0 & refNorm > 0
-            ),
+            data = subset(dt, altNorm < 0 & refNorm > 0),
             mapping = aes(label = .data[[label]]),
-            size = 4,
-            color = cols[2]
+            size = 4, color = cols[2]
         )
     return(plt)
 }
 
 
-#' Plot non-alt versus alt binding propensity for a single motif
+#' Plot non-alt versus alt binding propensity for a single variant
 #'
 #' @param s a SEMplScores object with scores populated
-#' @param sem a single character vector matching a semId in the semplObj
-#' @param label column in scores slot of semplObj to use for point labels
+#' @param variant variant id to plot
+#' @param label column in sem_metadata slot of semplObj to use for point labels
 #' @param cols vector of length 2 with colors to use for plotting gained
 #' and lost motifs respectively
 #'
@@ -105,20 +93,25 @@
 #' # calculate binding propensity
 #' s <- scoreVariants(vr, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 #'
-#' plotSemVariants(s, "IKZF1_HUMAN.GM12878")
+#' plotSEMMotifs(s, "chr12:94136009:G>C", label = "transcription_factor")
 #'
-plotSemVariants <- function(s, sem, label = "varId",
-                            cols = c("#F8766D", "dodgerblue2")) {
-    refNorm <- altNorm <- ix <- semId <- NA
-    .validatePlotSemVariantsInputs <- \(s = s, label = label,
-        semId = sem, cols = cols)
+plotSEMMotifs <- \(s, variant, label = "transcription_factor",
+    cols = c("#F8766D", "dodgerblue2")) {
+    refNorm <- altNorm <- varId <- sem <- NULL
+    .validatePlotSemMotifsInputs(
+        s = s, label = label,
+        variant = variant, cols = cols
+    )
 
-    rlang::inform(paste0("Plotting ", sem, "..."))
-    ix <- sem == scores(s)[, semId]
-    scores_dt <- scores(s)[ix, ]
+    ix <- variant == scores(s)[, varId]
+    dt <- scores(s)[ix, ]
 
-    var_plot <- .createBasePlotSEMVariants(scores_dt, cols, label)
-    var_plot <- var_plot +
+    dt <- merge(dt, semData(s),
+        by.x = "semId", by.y = data.table::key(semData(s))
+    )
+
+    sem_motif_plot <- .createBasePlotSEMMotifs(dt, cols, label)
+    sem_motif_plot <- sem_motif_plot +
         scale_x_continuous(
             breaks = scales::pretty_breaks(),
             limits = \(x) ifelse(abs(x) < 1, c(-1, 1), x)
@@ -138,5 +131,5 @@ plotSemVariants <- function(s, sem, label = "varId",
             axis.text = element_text(size = 15)
         )
 
-    return(var_plot)
+    return(sem_motif_plot)
 }

@@ -61,8 +61,8 @@ test_that(".validatePlotSemMotifsInputs errors on invalid input", {
 })
 
 
-test_that("plotSemMotifs generates a ggplot object", {
-    plt <- plotSemMotifs(
+test_that("plotSEMMotifs generates a ggplot object", {
+    plt <- plotSEMMotifs(
         s = s, variant = "1",
         label = "transcription_factor"
     )
