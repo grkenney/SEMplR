@@ -23,6 +23,7 @@
 
 
 .createBasePlotSEMVariants <- \(scores_dt, cols, label) {
+    refNorm <- altNorm <- NULL
     plt <- ggplot2::ggplot(
         data = scores_dt,
         aes(x = refNorm, y = altNorm)
@@ -88,7 +89,7 @@
 #'
 #' @examples
 #' library(VariantAnnotation)
-#' data(sc)
+#' data(SEMC)
 #'
 #' # create an SNP Effect Matrix (SEM)
 #' sem <- matrix(rnorm(12), ncol = 4)
@@ -102,15 +103,15 @@
 #' )
 #'
 #' # calculate binding propensity
-#' s <- scoreVariants(vr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+#' s <- scoreVariants(vr, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 #'
 #' plotSemVariants(s, "IKZF1_HUMAN.GM12878")
 #'
 plotSemVariants <- function(s, sem, label = "varId",
                             cols = c("#F8766D", "dodgerblue2")) {
     refNorm <- altNorm <- ix <- semId <- NA
-    .validatePlotSemVariantsInputs <- \(s = s, label = label, 
-                                        semId = sem, cols = cols)
+    .validatePlotSemVariantsInputs <- \(s = s, label = label,
+        semId = sem, cols = cols)
 
     rlang::inform(paste0("Plotting ", sem, "..."))
     ix <- sem == scores(s)[, semId]

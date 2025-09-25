@@ -173,7 +173,7 @@ test_that("scoreBinding range scoring", {
     )
     sb_a <- scoreBinding(
         x = x,
-        sem = sems(sc, "MA0099.2_HeLa"),
+        sem = getSEMs(SEMC, "MA0099.2_HeLa"),
         genome = b
     )
     scores_e <- data.table(
@@ -201,7 +201,7 @@ test_that("scoreBinding sequence list scoring", {
     x <- "AGGCTTTGAGGCATC"
     sb_a <- scoreBinding(
         x = x,
-        sem = sems(sc, "MA0099.2_HeLa"),
+        sem = getSEMs(SEMC, "MA0099.2_HeLa"),
         nFlank = 7, seqId = "A"
     )
     sb_e <- data.table(
@@ -221,7 +221,7 @@ test_that("scoreBinding test when flank is shorter than SEM", {
     x <- "TTGAGTCAA"
     sb_a <- scoreBinding(
         x = x,
-        sem = sems(sc, "MA0099.2_HeLa"),
+        sem = getSEMs(SEMC, "MA0099.2_HeLa"),
         nFlank = 1, seqId = "A"
     )
     sb_e <- data.table(
@@ -241,7 +241,7 @@ test_that("scoreBinding test when flank is zero", {
     x <- "TTGAGTCAA"
     sb_a <- scoreBinding(
         x = x,
-        sem = sems(sc, "MA0099.2_HeLa"),
+        sem = getSEMs(SEMC, "MA0099.2_HeLa"),
         nFlank = 0, seqId = "A"
     )
     sb_e <- data.table(
@@ -261,7 +261,7 @@ test_that("scoreBinding test when flank null", {
     x <- "TTGAGTCAA"
     sb_a <- scoreBinding(
         x = x,
-        sem = sems(sc, "MA0099.2_HeLa"),
+        sem = getSEMs(SEMC, "MA0099.2_HeLa"),
         seqId = "A"
     )
     sb_e <- data.table(

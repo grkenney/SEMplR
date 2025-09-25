@@ -7,11 +7,11 @@ test_that("convertSEMsToPPMs errors on invalid input", {
 
 test_that("convertSEMsToPPMs handle different input types", {
     # SNPEffectMatrixCollection
-    expect_no_condition(convertSEMsToPPMs(sc))
+    expect_no_condition(convertSEMsToPPMs(SEMC))
 
     # SNPEffectMatrix
-    expect_no_condition(convertSEMsToPPMs(sems(sc)[[1]]))
+    expect_no_condition(convertSEMsToPPMs(getSEMs(SEMC)[[1]]))
 
     # list of SNPEffectMatrices
-    expect_no_condition(convertSEMsToPPMs(sems(sc)[seq_len(2)]))
+    expect_no_condition(convertSEMsToPPMs(getSEMs(SEMC)[seq_len(2)]))
 })

@@ -79,8 +79,8 @@ test_that(".loadSEM loads sem file", {
 
 
 test_that("loadSEMCollection loads first SEM correctly", {
-    one_sem <- sems(sc)[[1]]
-    one_sem_meta <- semData(sc)[1, ]
+    one_sem <- getSEMs(SEMC)[[1]]
+    one_sem_meta <- semData(SEMC)[1, ]
 
     # write data to file
     tf <- tempfile()
@@ -97,15 +97,15 @@ test_that("loadSEMCollection loads first SEM correctly", {
         bls = one_sem_meta$SEM_baseline
     )
     # check each slot
-    expect_equal(sems(sem_col_e)[[1]], one_sem)
+    expect_equal(getSEMs(sem_col_e)[[1]], one_sem)
     expect_equal(semData(sem_col_e), one_sem_meta)
     expect_equal(sem_col_e@semKey, "SEM_KEY")
 })
 
 
 test_that("loadSEMCollection errors on missing key with metadata", {
-    one_sem <- sems(sc)[[1]]
-    one_sem_meta <- semData(sc)[1, ]
+    one_sem <- getSEMs(SEMC)[[1]]
+    one_sem_meta <- semData(SEMC)[1, ]
 
     # write data to file
     tf <- tempfile()

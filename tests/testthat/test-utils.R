@@ -15,14 +15,14 @@ test_that(".formatList different num of items", {
 
 test_that(".convertToSNPEffectMatrixCollection given collection", {
     expect_s4_class(
-        .convertToSNPEffectMatrixCollection(sc),
+        .convertToSNPEffectMatrixCollection(SEMC),
         "SNPEffectMatrixCollection"
     )
 })
 
 
 test_that(".convertToSNPEffectMatrixCollection given list", {
-    x <- sems(sc)
+    x <- getSEMs(SEMC)
     expect_s4_class(
         .convertToSNPEffectMatrixCollection(x),
         "SNPEffectMatrixCollection"
@@ -31,7 +31,7 @@ test_that(".convertToSNPEffectMatrixCollection given list", {
 
 
 test_that(".convertToSNPEffectMatrixCollection given SNPEffectMatrix", {
-    x <- sems(sc)[[1]]
+    x <- getSEMs(SEMC)[[1]]
     expect_s4_class(
         .convertToSNPEffectMatrixCollection(x),
         "SNPEffectMatrixCollection"
@@ -103,7 +103,7 @@ test_that(".makeVariantId GRanges input", {
 
 
 test_that(".makeVariantId GRanges input", {
-    stp_a <- .semToPpm(sems(sc, "MA0099.2_HeLa"))
+    stp_a <- .semToPpm(getSEMs(SEMC, "MA0099.2_HeLa"))
 
     # make sure rows sum to 1
     cs <- colSums(stp_a) |> round(digits = 5)

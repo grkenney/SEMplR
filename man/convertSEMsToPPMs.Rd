@@ -19,12 +19,12 @@ where each entry is the probability of a base at each position in the motif.
 }
 \examples{
 # Load default SEMs
-data(sc)
+data(SEMC)
 
 # From a SNPEffectMatrixCollection
-convertSEMsToPPMs(sc)
+convertSEMsToPPMs(SEMC)
 
 # From a single SNPEffectMatrix
-convertSEMsToPPMs(sems(sc, "AP2B_HUMAN.SK-N-SH"))
+convertSEMsToPPMs(getSEMs(SEMC, "AP2B_HUMAN.SK-N-SH"))
 
 }

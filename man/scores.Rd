@@ -19,7 +19,7 @@ Accessor scores slot in a SEMplScores object
 library(VariantAnnotation)
 
 # load default SEMs
-data(sc)
+data(SEMC)
 
 # create a VRanges object
 vr <- VRanges(
@@ -29,7 +29,7 @@ vr <- VRanges(
 )
 
 # calculate binding propensity
-s <- scoreVariants(vr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+s <- scoreVariants(vr, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 
 scores(s)
 

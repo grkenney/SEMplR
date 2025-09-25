@@ -89,16 +89,16 @@ test_that("enrichSEMs on 2 sites without specifying background", {
     b <- BSgenome.Hsapiens.UCSC.hg19::Hsapiens
     sb_a <- scoreBinding(
         x = x,
-        sem = sc,
+        sem = SEMC,
         genome = b
     )
     e_a <- enrichSEMs(
-        x = sb_a, sem = sc,
+        x = sb_a, sem = SEMC,
         genome = BSgenome.Hsapiens.UCSC.hg19::Hsapiens
     )
 
     # all SEMs are represented
-    expect_equal(table(e_a$SEM), table(semData(sc)$SEM_KEY))
+    expect_equal(table(e_a$SEM), table(semData(SEMC)$SEM_KEY))
     # n_bound is correct
     expect_equal(sum(e_a$n_bound), 2)
     expect_equal(
@@ -143,23 +143,23 @@ test_that("enrichSEMs on 2 sites with specifying background", {
     # score background seperately to validate results
     sb_bg <- scoreBinding(
         x = bg,
-        sem = sc,
+        sem = SEMC,
         genome = b
     )
 
     sb_a <- scoreBinding(
         x = x,
-        sem = sc,
+        sem = SEMC,
         genome = b
     )
 
     e_a <- enrichSEMs(
-        x = sb_a, sem = sc, background = bg,
+        x = sb_a, sem = SEMC, background = bg,
         genome = BSgenome.Hsapiens.UCSC.hg19::Hsapiens
     )
 
     # all SEMs are represented
-    expect_equal(table(e_a$SEM), table(semData(sc)$SEM_KEY))
+    expect_equal(table(e_a$SEM), table(semData(SEMC)$SEM_KEY))
     # n_bound is correct
     expect_equal(sum(e_a$n_bound), sum(scores(sb_a)$scoreNorm > 0))
     expect_equal(sum(e_a$n_bound), sum(scores(sb_bg)$scoreNorm > 0))

@@ -6,7 +6,7 @@ x <- VRanges(
     id = "1"
 )
 s <- scoreVariants(
-    x = x, sem = sc,
+    x = x, sem = SEMC,
     genome = BSgenome.Hsapiens.UCSC.hg19::Hsapiens,
     varId = "id"
 )

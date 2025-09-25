@@ -9,7 +9,7 @@
     }
 
     # check that motif given is in collection
-    if (!(motif %in% names(sems(sem)))) {
+    if (!(motif %in% names(getSEMs(sem)))) {
         rlang::abort(paste0(
             "provided motif not found in SNPEffectMatrixCollection.",
             "See the SEM_KEY column in semData(sem) for available motif ids."
@@ -33,8 +33,8 @@
         sem_mtx <- getSEM(sem)
     } else if (is(sem, "SNPEffectMatrixCollection")) {
         .validateMotifInCollection(sem, motif)
-        sem_baseline <- getBaseline(sems(sem, semId = motif))
-        sem_mtx <- getSEM(sems(sem, semId = motif))
+        sem_baseline <- getBaseline(getSEMs(sem, semId = motif))
+        sem_mtx <- getSEM(getSEMs(sem, semId = motif))
     } else {
         rlang::abort(paste0(
             "sem must be a SNPEffectMatrix or a ",
@@ -99,6 +99,8 @@
 
 .createBasePlotSEM <- \(sem_mtx_long, sem_mtx, highlight, motif,
     hwidth, hcol, sem_baseline, size) {
+    motif_pos <- sem_score <- NULL
+
     motif_plot <- ggplot2::ggplot(
         sem_mtx_long,
         aes(x = motif_pos, y = sem_score)

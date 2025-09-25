@@ -20,8 +20,8 @@
         # if it's not a GRanges, error
         if (!is(x, "GRanges")) {
             rlang::abort(paste0(
-                is(x)[1], " is not an accepted class for scoreBinding.
-      x must be a GRanges or VRanges object or vector of DNA sequences"
+                is(x)[1], " is not an accepted class for scoreBinding. x ",
+                "must be a GRanges or VRanges object or vector of DNA sequences"
             ))
         } else {
             return(FALSE)
@@ -128,7 +128,7 @@
 #'
 #' @examples
 #' # load SEMs
-#' data(sc)
+#' data(SEMC)
 #'
 #' # create a GRanges object
 #' gr <- GenomicRanges::GRanges(
@@ -137,7 +137,7 @@
 #' )
 #'
 #' # calculate binding propensity
-#' scoreBinding(gr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+#' scoreBinding(gr, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 #'
 scoreBinding <- \(x, sem, genome, nFlank = NULL,
     seqId = NULL) {
@@ -150,20 +150,16 @@ scoreBinding <- \(x, sem, genome, nFlank = NULL,
 
     # determine x input object class/type
     is_sequence_list <- .testIfSequenceList(x)
-
     # convert sem to a collection if it isn't one already
     sem <- .convertToSNPEffectMatrixCollection(x = sem)
 
-    # if a sequence list is not provided, grab the sequences from
-    # the reference genome
+    # if sequence list not provided, grab sequences from the reference genome
     if (!is_sequence_list) {
-        # if the number of flanking sequences is not given, use
-        # the length of the longest SEM
+        # if the nFlank is not given, use length of the longest SEM
         if (is.null(nFlank)) {
-            # Get maximum length of all SEMs
-            nFlank <- lapply(
-                sems(sem), function(x) { nrow(getSEM(x)) }
-            ) |>
+            nFlank <- lapply(getSEMs(sem), function(x) {
+                nrow(getSEM(x))
+            }) |>
                 unlist() |>
                 max()
         }
@@ -187,7 +183,7 @@ scoreBinding <- \(x, sem, genome, nFlank = NULL,
     }
 
     s <- lapply(
-        sems(sem),
+        getSEMs(sem),
         function(y) {
             scoreSequence(
                 sem = as.matrix(getSEM(y)),
@@ -199,15 +195,11 @@ scoreBinding <- \(x, sem, genome, nFlank = NULL,
         }
     )
 
-    # combine nested list of dataframes into a single data.table with a SEM
-    # column
-    s <- s |>
-        data.table::rbindlist(idcol = "SEM")
-
+    # combine nested list of tables into a single data.table with SEM column
+    s <- s |> data.table::rbindlist(idcol = "SEM")
     s <- s[, c("seqId", "SEM", "score", "scoreNorm", "index", "seq")]
 
-    # if working with a GRanges object, return in SEMplScores object,
-    # otherwise, just return the data.frame
+    # if GRanges, return in SEMplScores object, otherwise, return the data.table
     if (!is_sequence_list) {
         ss <- SEMplScores(ranges = x, semData = semData(sem), scores = s)
     } else {

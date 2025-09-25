@@ -29,7 +29,7 @@ test_that("show SEMplScores prints scored object", {
     )
     sb_a <- scoreBinding(
         x = x,
-        sem = sc,
+        sem = SEMC,
         genome = BSgenome.Hsapiens.UCSC.hg19::Hsapiens
     )
     expect_output(print(sb_a), "An object of class SEMplScores")

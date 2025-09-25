@@ -21,7 +21,7 @@ Access baseline from a SNPEffectMatrix object
 \examples{
 # Isolate a single SNPEffectMatrix object from the default 
 # SNPEffectMatrixCollection
-sm <- sems(sc)[[1]]
+sm <- getSEMs(SEMC)[[1]]
 
 # Access the baseline
 getBaseline(sm)

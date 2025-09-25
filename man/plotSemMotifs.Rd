@@ -25,7 +25,7 @@ Plot non-alt versus alt binding propensity for a single variant
 }
 \examples{
 library(VariantAnnotation)
-data(sc)
+data(SEMC)
 
 # create an SNP Effect Matrix (SEM)
 sem <- matrix(rnorm(12), ncol = 4)
@@ -39,7 +39,7 @@ vr <- VRanges(
 )
 
 # calculate binding propensity
-s <- scoreVariants(vr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+s <- scoreVariants(vr, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 
 plotSemMotifs(s, "chr12:94136009:G>C", label = "transcription_factor")
 

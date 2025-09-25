@@ -20,5 +20,16 @@ Useful links:
 \author{
 \strong{Maintainer}: Grace Kenney \email{kenney.grace6@gmail.com} (\href{https://orcid.org/0009-0009-6308-3150}{ORCID})
 
+Authors:
+\itemize{
+  \item Douglas Phanstiel
+}
+
+Other contributors:
+\itemize{
+  \item NIH NIGMS [funder]
+  \item NSF GRFP [funder]
+}
+
 }
 \keyword{internal}

@@ -1,16 +1,16 @@
 test_that(".validateMotifInCollection validates motifs correctly", {
-    expect_no_error(.validateMotifInCollection(sc, "MA0099.2_HeLa"))
-    expect_error(.validateMotifInCollection(sc, NULL),
+    expect_no_error(.validateMotifInCollection(SEMC, "MA0099.2_HeLa"))
+    expect_error(.validateMotifInCollection(SEMC, NULL),
         regexp = "must specify the motif"
     )
-    expect_error(.validateMotifInCollection(sc, "foo"),
+    expect_error(.validateMotifInCollection(SEMC, "foo"),
         regexp = "provided motif not found"
     )
 })
 
 
 test_that(".definePlotSEMParams works for SNPEffectMatrices", {
-    sem_obj <- sems(sc, "MA0099.2_HeLa")
+    sem_obj <- getSEMs(SEMC, "MA0099.2_HeLa")
     params_sem_a <- .definePlotSEMParams(
         sem = sem_obj,
         motif = NULL
@@ -30,8 +30,8 @@ test_that(".definePlotSEMParams works for SNPEffectMatrices", {
 
 
 test_that(".definePlotSEMParams works for SNPEffectMatrixCollections", {
-    sem_obj <- sems(sc, "MA0099.2_HeLa")
-    params_sem_a <- .definePlotSEMParams(sem = sc, motif = "MA0099.2_HeLa")
+    sem_obj <- getSEMs(SEMC, "MA0099.2_HeLa")
+    params_sem_a <- .definePlotSEMParams(sem = SEMC, motif = "MA0099.2_HeLa")
     expect_equal(params_sem_a$sem_baseline, getBaseline(sem_obj))
     expect_equal(params_sem_a$sem_mtx, getSEM(sem_obj))
 })
@@ -52,7 +52,7 @@ test_that(".definePlotSEMParams fails on unexpected sem class", {
 
 
 test_that(".formatPlotSEMTable pivots SEM data", {
-    sem_mtx <- sems(sc, "MA0099.2_HeLa") |>
+    sem_mtx <- getSEMs(SEMC, "MA0099.2_HeLa") |>
         getSEM()
     sem_mtx_long <- .formatPlotSEMTable(sem_mtx)
     # has the correct number of rows
@@ -63,7 +63,7 @@ test_that(".formatPlotSEMTable pivots SEM data", {
 
 
 test_that(".defineNucleotideColors chooses black text when motifSeq is NULL", {
-    sem_mtx <- sems(sc, "MA0099.2_HeLa") |>
+    sem_mtx <- getSEMs(SEMC, "MA0099.2_HeLa") |>
         getSEM()
     sem_mtx_long <- .formatPlotSEMTable(sem_mtx)
 
@@ -80,7 +80,7 @@ test_that(".defineNucleotideColors chooses black text when motifSeq is NULL", {
 
 
 test_that(".defineNucleotideColors fails when incorrect number of bases", {
-    sem_mtx <- sems(sc, "MA0099.2_HeLa") |>
+    sem_mtx <- getSEMs(SEMC, "MA0099.2_HeLa") |>
         getSEM()
     sem_mtx_long <- .formatPlotSEMTable(sem_mtx)
 
@@ -104,7 +104,7 @@ test_that(".defineNucleotideColors fails when incorrect number of bases", {
 
 
 test_that(".defineNucleotideColors gives text_colors for motifSeq", {
-    sem_mtx <- sems(sc, "MA0099.2_HeLa") |>
+    sem_mtx <- getSEMs(SEMC, "MA0099.2_HeLa") |>
         getSEM()
     sem_mtx_long <- .formatPlotSEMTable(sem_mtx)
     res_a <- .defineNucleotideColors(
@@ -140,7 +140,7 @@ test_that(".defineNucleotideColors gives text_colors for motifSeq", {
 
 
 test_that("plotSEM returns a ggplot object", {
-    plt_a <- plotSEM(sc,
+    plt_a <- plotSEM(SEMC,
         motif = "MA0099.2_HeLa",
         motifSeq = "AAAAAAA",
         highlight = 2

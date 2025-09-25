@@ -6,7 +6,7 @@
         unname()
 
     s <- lapply(
-        sems(sem),
+        getSEMs(sem),
         function(y) {
             scoreSequence(
                 sem = as.matrix(getSEM(y)),
@@ -43,7 +43,7 @@
 #' library(VariantAnnotation)
 #'
 #' # load default SEMs
-#' data(sc)
+#' data(SEMC)
 #'
 #' # create a VRanges object
 #' x <- VRanges(
@@ -53,7 +53,7 @@
 #' )
 #'
 #' # calculate binding propensity
-#' scoreVariants(x, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+#' scoreVariants(x, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 #'
 scoreVariants <- \(x, sem, genome,
     refCol = NULL, altCol = NULL,
@@ -64,7 +64,7 @@ scoreVariants <- \(x, sem, genome,
     sem <- .convertToSNPEffectMatrixCollection(sem)
 
     # Get maximum kmer length of all TFs ##
-    nFlank <- lapply(sems(sem), function(x) {
+    nFlank <- lapply(getSEMs(sem), function(x) {
         nrow(getSEM(x))
     }) |>
         unlist() |>

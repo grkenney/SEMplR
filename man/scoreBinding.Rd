@@ -34,7 +34,7 @@ genomic positions provided
 }
 \examples{
 # load SEMs
-data(sc)
+data(SEMC)
 
 # create a GRanges object
 gr <- GenomicRanges::GRanges(
@@ -43,6 +43,6 @@ gr <- GenomicRanges::GRanges(
 )
 
 # calculate binding propensity
-scoreBinding(gr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+scoreBinding(gr, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 
 }

@@ -1,4 +1,5 @@
 .reformatSEMKey <- \(semData, semKey){
+    SEM_KEY <- .SD <- NULL
     semData[, SEM_KEY := lapply(
         semData[, .SD, .SDcols = semKey],
         \(x) gsub(".sem", "", x)
@@ -106,7 +107,7 @@ SNPEffectMatrixCollection <- function(sems, semData = NULL, semKey = "") {
 #'
 #' @param x SNPEffectMatrixCollection object
 #' @param semId optional `character` corresponding to an SEM in the
-#' SNPEffectMatrixCollection object. See semIds with `names(sems(x))`.
+#' SNPEffectMatrixCollection object. See semIds with `names(getSEMs(x))`.
 #' Defaults to returning all SEMs.
 #'
 #' @returns A position (rows) by nucleic acid (columns)
@@ -124,12 +125,12 @@ SNPEffectMatrixCollection <- function(sems, semData = NULL, semKey = "") {
 #' sc <- SNPEffectMatrixCollection(s)
 #'
 #' ## Access count matrix
-#' sems(sc)
+#' getSEMs(sc)
 #'
-#' @rdname sems
+#' @rdname getSEMs
 #' @export
 setMethod(
-    "sems", "SNPEffectMatrixCollection",
+    "getSEMs", "SNPEffectMatrixCollection",
     function(x, semId = NULL) {
         if (is.null(semId)) {
             x@sems
@@ -181,6 +182,8 @@ setMethod(
 #' @param object a SNPEffectMatrixCollection object
 #'
 #' @importFrom methods show
+#' 
+#' @return NULL
 #'
 #' @rdname show
 setMethod(
@@ -193,7 +196,7 @@ setMethod(
             unlist()
         sem_id_list <- .formatList(s)
 
-        cat("sems(", num_sems, "): ", sep = "")
+        cat("SEMs(", num_sems, "): ", sep = "")
         cat(paste(sem_id_list, collapse = " "))
 
         meta_cols <- names(object@semData)

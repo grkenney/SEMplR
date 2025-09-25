@@ -33,7 +33,7 @@ often than expected.
 \examples{
 
 # load SEMs
-data(sc)
+data(SEMC)
 
 # note that this is a small example for demonstration purposes
 # in actual enrichment analyses sets of 100+ ranges are recommended
@@ -45,8 +45,8 @@ gr <- GenomicRanges::GRanges(
 )
 
 # calculate binding propensity
-sb <- scoreBinding(gr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+sb <- scoreBinding(gr, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 
-enrichSEMs(sb, sc)
+enrichSEMs(sb, SEMC)
 
 }

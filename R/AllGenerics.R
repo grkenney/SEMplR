@@ -24,11 +24,11 @@ setGeneric(
 
 # ---- SNPEffectMatrixCollection ----
 
-#' @rdname sems
+#' @rdname getSEMs
 #' @export
 setGeneric(
-    "sems",
-    function(x, semId = NULL) standardGeneric("sems")
+    "getSEMs",
+    function(x, semId = NULL) standardGeneric("getSEMs")
 )
 
 #' @rdname semData

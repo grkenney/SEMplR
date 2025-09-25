@@ -34,7 +34,7 @@ variants provided
 library(VariantAnnotation)
 
 # load default SEMs
-data(sc)
+data(SEMC)
 
 # create a VRanges object
 x <- VRanges(
@@ -44,6 +44,6 @@ x <- VRanges(
 )
 
 # calculate binding propensity
-scoreVariants(x, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+scoreVariants(x, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 
 }

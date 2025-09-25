@@ -22,6 +22,7 @@
 
 
 .createBasePlotSEMMotifs <- \(dt, cols, label) {
+    refNorm <- altNorm <- NULL
     plt <- ggplot2::ggplot(
         data = dt,
         aes(x = refNorm, y = altNorm)
@@ -76,7 +77,7 @@
 #'
 #' @examples
 #' library(VariantAnnotation)
-#' data(sc)
+#' data(SEMC)
 #'
 #' # create an SNP Effect Matrix (SEM)
 #' sem <- matrix(rnorm(12), ncol = 4)
@@ -90,11 +91,11 @@
 #' )
 #'
 #' # calculate binding propensity
-#' s <- scoreVariants(vr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+#' s <- scoreVariants(vr, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 #'
 #' plotSemMotifs(s, "chr12:94136009:G>C", label = "transcription_factor")
 #'
-plotSemMotifs <- \(s, variant, label = "semId",
+plotSemMotifs <- \(s, variant, label = "transcription_factor",
     cols = c("#F8766D", "dodgerblue2")) {
     refNorm <- altNorm <- varId <- sem <- NULL
     .validatePlotSemMotifsInputs(

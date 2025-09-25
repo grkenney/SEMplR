@@ -10,7 +10,9 @@ plotEnrich(
   label = "transcription_factor",
   method = "WPCC",
   threshold = 0.05,
-  sigCol = "purple4"
+  textCols = c("darkgrey", "black"),
+  textCex = 0.7,
+  heatmapCols = c("white", "red")
 )
 }
 \arguments{
@@ -25,7 +27,13 @@ See ?universalmotif::compare_motifs for options.}
 
 \item{threshold}{The adjusted p-value threshold for coloring SEMs}
 
-\item{sigCol}{Color to label significant SEM labels}
+\item{textCols}{A vector of two colors to label non-significant and
+significant SEMs respectively.}
+
+\item{textCex}{Text size of SEM labels.}
+
+\item{heatmapCols}{A vector of two colors to use for the heatmap, ordered
+low to high -log10(padj).}
 }
 \value{
 a \code{ggtree} object
@@ -36,7 +44,7 @@ a heatmap representing the adjusted p-value of the enrichment.
 }
 \examples{
 # load SEMs
-data(sc)
+data(SEMC)
 
 # note that this is a small example for demonstration purposes
 # in actual enrichment analyses sets of 100+ ranges are recommended
@@ -48,9 +56,9 @@ gr <- GenomicRanges::GRanges(
 )
 
 # calculate binding propensity
-sb <- scoreBinding(gr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+sb <- scoreBinding(gr, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 
-e <- enrichSEMs(sb, sc) 
-# plotEnrich(e, sc)
+e <- enrichSEMs(sb, SEMC)
+plotEnrich(e, SEMC)
 
 }

@@ -14,17 +14,17 @@
 #'
 #' @examples
 #' # Load default SEMs
-#' data(sc)
+#' data(SEMC)
 #'
 #' # From a SNPEffectMatrixCollection
-#' convertSEMsToPPMs(sc)
+#' convertSEMsToPPMs(SEMC)
 #'
 #' # From a single SNPEffectMatrix
-#' convertSEMsToPPMs(sems(sc, "AP2B_HUMAN.SK-N-SH"))
+#' convertSEMsToPPMs(getSEMs(SEMC, "AP2B_HUMAN.SK-N-SH"))
 #'
 convertSEMsToPPMs <- \(x) {
     if (is(x, "SNPEffectMatrixCollection")) {
-        ss <- sems(x)
+        ss <- getSEMs(x)
     } else if (is(x, "SNPEffectMatrix")[1]) {
         ss <- list(x)
     } else if (is(x, "list")[1] & is(x[[1]], "SNPEffectMatrix")) {

@@ -13,13 +13,13 @@ x <- GenomicRanges::GRanges(
     )
 )
 b <- BSgenome.Hsapiens.UCSC.hg19::Hsapiens
-sb <- scoreBinding(x = x, sem = sc, genome = b)
-e <- enrichSEMs(x = sb, sem = sc, genome = b)
+sb <- scoreBinding(x = x, sem = SEMC, genome = b)
+e <- enrichSEMs(x = sb, sem = SEMC, genome = b)
 
 
 test_that(".formatMotifs adds correct altname", {
     motifs <- .formatMotifs(
-        sem = sc,
+        sem = SEMC,
         label = "transcription_factor"
     )
     expect_equal(motifs[[1]]["altname"], "TFAP2B")
@@ -31,7 +31,7 @@ test_that(".formatMotifs adds correct altname", {
 
 test_that(".constructComparisons returns correctly sized object", {
     motifs <- .formatMotifs(
-        sem = sc,
+        sem = SEMC,
         label = "transcription_factor"
     )
     labels <- lapply(motifs, function(x) x["altname"]) |> unlist()
@@ -40,42 +40,5 @@ test_that(".constructComparisons returns correctly sized object", {
         motifs = motifs, labels = labels,
         method = "WPCC"
     )
-    expect_s3_class(comps, "phylo")
-    expect_length(comps$edge, 888)
+    expect_s3_class(comps, "hclust")
 })
-
-
-# test_that(".plotMotifTree returns tree object", {
-#   motifs <- .formatMotifs(sem = sc,
-#                           label = "transcription_factor")
-#   labels <- lapply(motifs, function(x) x["altname"]) |> unlist()
-#
-#   comps <- .constructComparisons(motifs = motifs, labels = labels,
-#                                  method = "PCC")
-#
-#   plt <- .plotMotifTree(e = e, sem = sc, threshold = 0.05,
-#                         comparisons = comps, sigCol = "purple4")
-#   expect_s3_class(plt, "ggtree")
-# })
-#
-#
-# test_that(".plotTreeHeatmap returns ggtree object", {
-#   motifs <- .formatMotifs(sem = sc,
-#                           label = "transcription_factor")
-#   labels <- lapply(motifs, function(x) x["altname"]) |> unlist()
-#
-#   comps <- .constructComparisons(motifs = motifs,
-#                                  labels = labels,
-#                                  method = "PCC")
-#
-#   plt <- .plotMotifTree(e = e, sem = sc, threshold = 0.05,
-#                         comparisons = comps, sigCol = "purple4")
-#   plt <- .plotTreeHeatmap(plt = plt, e = e, labels = labels)
-#   expect_s3_class(plt, "ggtree")
-# })
-#
-
-# test_that("plotEnrich generates a ggplot object", {
-#   plt <- plotEnrich(e, sc)
-#   expect_s3_class(plt, "ggtree")
-# })

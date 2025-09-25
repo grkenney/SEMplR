@@ -49,7 +49,7 @@
 
         scramb <- .scrambleSeqs(seqs)
         bg <- lapply(
-            sems(sem),
+            getSEMs(sem),
             function(y) {
                 scoreSequence(
                     sem = as.matrix(getSEM(y)),
@@ -87,13 +87,13 @@
 #' @return a `list` of matrices
 #'
 #' @examples
-#' 
+#'
 #' # load SEMs
-#' data(sc)
+#' data(SEMC)
 #'
 #' # note that this is a small example for demonstration purposes
 #' # in actual enrichment analyses sets of 100+ ranges are recommended
-#' 
+#'
 #' # create a GRanges object
 #' gr <- GenomicRanges::GRanges(
 #'     seqnames = "chr12",
@@ -101,15 +101,15 @@
 #' )
 #'
 #' # calculate binding propensity
-#' sb <- scoreBinding(gr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
-#' 
-#' enrichSEMs(sb, sc)
+#' sb <- scoreBinding(gr, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+#'
+#' enrichSEMs(sb, SEMC)
 #'
 #' @export
 enrichSEMs <- \(x, sem,
     background = NULL, seqs = NULL, nFlank = 0,
     genome = NULL) {
-    sem_names <- sems(sem) |> names()
+    sem_names <- getSEMs(sem) |> names()
 
     bg <- .defineBackground(
         x = x,

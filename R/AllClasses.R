@@ -33,7 +33,7 @@ setClassUnion(
 #' # build a SEM example matrix
 #' m <- matrix(rnorm(16), nrow = 4)
 #' colnames(m) <- c("A", "C", "G", "T")
-#' 
+#'
 #' SNPEffectMatrix(sem = m, baseline = 1, semId = "sem_id")
 #'
 #' @export
@@ -59,13 +59,13 @@ setClass(
 #' # build a SEM example matrix
 #' m <- matrix(rnorm(16), nrow = 4)
 #' colnames(m) <- c("A", "C", "G", "T")
-#' 
+#'
 #' # build a SNPEffectMatrix object
 #' sm <- SNPEffectMatrix(sem = m, baseline = 1, semId = "sem_name")
-#' 
+#'
 #' # create a meta data table
 #' md <- data.table::data.table(tf = "tf_name", sem = "sem_name")
-#' 
+#'
 #' # build a collection with 1 SEM
 #' SNPEffectMatrixCollection(sems = list(sm), semData = md, semKey = "sem")
 #'

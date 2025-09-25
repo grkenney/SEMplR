@@ -3,7 +3,7 @@
 #' A collection of pre-computed SNP Effect Matrix objects to be used for motif
 #' scoring
 #'
-#' @format ## `sc`
+#' @format ## `SEMC`
 #' A SNPEffectMatrixCollection object containing 223 SEMs as SNPEffectMatrix
 #' objects and a data frame with 223 rows and 13 columns containing meta data:
 #' \describe{
@@ -24,4 +24,4 @@
 #'   ...
 #' }
 #' @source <>
-"sc"
+"SEMC"

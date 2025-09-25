@@ -53,7 +53,7 @@ SNPEffectMatrix <- function(sem, baseline, semId) {
 #' @examples
 #' # Isolate a single SNPEffectMatrix object from the default 
 #' # SNPEffectMatrixCollection
-#' sm <- sems(sc)[[1]]
+#' sm <- getSEMs(SEMC)[[1]]
 #' 
 #' # Access the matrix
 #' getSEM(sm)
@@ -75,7 +75,7 @@ setMethod(
 #' @examples
 #' # Isolate a single SNPEffectMatrix object from the default 
 #' # SNPEffectMatrixCollection
-#' sm <- sems(sc)[[1]]
+#' sm <- getSEMs(SEMC)[[1]]
 #' 
 #' # Access the baseline
 #' getBaseline(sm)
@@ -97,7 +97,7 @@ setMethod(
 #' @examples
 #' # Isolate a single SNPEffectMatrix object from the default 
 #' # SNPEffectMatrixCollection
-#' sm <- sems(sc)[[1]]
+#' sm <- getSEMs(SEMC)[[1]]
 #' 
 #' # Access the SEM id
 #' getSEMId(sm)
@@ -118,7 +118,9 @@ setMethod(
 #'
 #' @importFrom methods show 
 #'
-#' @rdname SNPEffectMatrix-class
+#' @return NULL
+#'
+#' @rdname show
 setMethod(
     "show", "SNPEffectMatrix",
     function(object) {

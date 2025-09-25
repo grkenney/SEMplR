@@ -12,6 +12,9 @@ getRanges(x)
 \arguments{
 \item{x}{a SEMplScores object}
 }
+\value{
+A GRanges or VRanges object
+}
 \description{
 Access ranges slot in a SEMplScores object
 }
@@ -19,7 +22,7 @@ Access ranges slot in a SEMplScores object
 library(VariantAnnotation)
 
 # load default SEMs
-data(sc)
+data(SEMC)
 
 # create a VRanges object
 vr <- VRanges(
@@ -29,7 +32,7 @@ vr <- VRanges(
 )
 
 # calculate binding propensity
-s <- scoreVariants(vr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+s <- scoreVariants(vr, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 
 getRanges(s)
 
