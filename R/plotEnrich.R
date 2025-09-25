@@ -1,7 +1,7 @@
 # convert SEM to Motif
 .formatMotifs <- \(sem, label) {
     .SD <- NULL
-    ppms <- convertSEMsToPPMs(sems(sem))
+    ppms <- convertSEMsToPPMs(getSEMs(sem))
     motifs <- lapply(
         seq_along(ppms),
         function(i) {
@@ -35,60 +35,101 @@
     comparisons <- 1 - comparisons
     comparisons <- stats::as.dist(comparisons)
 
-    comparisons <- ape::as.phylo(stats::hclust(comparisons))
+    comparisons <- stats::hclust(comparisons)
     return(comparisons)
 }
 
 
-# construct phylogenetic tree of motif similarity
-.plotMotifTree <- \(e, sem, threshold, comparisons, sigCol) {
-    sm <- NA
-    # identify significant motifs
-    sig_motifs <- e$SEM[e$padj <= threshold]
+.circlizePlot <- \(em, sem, comps, ds, col_fun, label, sigIds, sigCols) {
+    .SD <- NULL
+    dend <- stats::as.dendrogram(comps)
 
-    # store TF names for significant motifs for labeling
-    sm_tf <- unlist(semData(sem)[sig_motifs, "transcription_factor"])
-    comparisons <- ggtree::groupOTU(comparisons,
-        sm_tf,
-        group_name = "sm"
+    padjs <- data.frame(padj = em$padj)
+    rownames(padjs) <- em[, .SD, .SDcols = label] |> unlist()
+    column_od <- comps$order
+    ordered_mtx <- as.matrix(padjs[column_od, 1])
+    rownames(ordered_mtx) <- rownames(padjs)[comps$order]
+
+    ordered_text_cols <- lapply(
+        rownames(ordered_mtx),
+        function(x) {
+            ifelse(x %in% sigIds,
+                sigCols[2], sigCols[1]
+            )
+        }
+    ) |>
+        unlist()
+
+    circlize::circos.clear()
+
+    circlize::circos.heatmap(ordered_mtx,
+        col = col_fun,
+        rownames.side = "outside",
+        cluster = FALSE, clustering.method = NULL,
+        track.height = 0.04,
+        dend.callback = function(dend, m, si) {
+            dendsort::dendsort(dend)
+        }, rownames.col = ordered_text_cols
     )
 
-    tree <- ggtree::ggtree(comparisons, layout = "fan") +
-        theme(legend.position = "", legend.title = element_blank()) +
-        theme(plot.margin = margin(10, 10, 10, 100)) +
-        ggtree::geom_tiplab(aes(colour = sm),
-            as_ylab = FALSE,
-            size = 1.5,
-            offset = .05
-        ) +
-        scale_color_manual(values = c("grey", sigCol), guide = "none")
-    return(tree)
+    graphics::par(new = TRUE)
+    circlize::circos.trackPlotRegion(
+        ylim = c(0, 1),
+        bg.border = NA,
+        track.height = min(ds) * 0.11 / 1.02,
+        panel.fun = function(x, y) {
+            circlize::circos.dendrogram(
+                dend = dend,
+                facing = "outside",
+                max_height = 1
+            )
+        }
+    )
+    circlize::circos.clear()
+    return()
 }
 
 
-# add heatmap to ggtree object
-.plotTreeHeatmap <- \(plt, e, labels) {
-    heatmapData <- e[, "padj"] |> as.data.frame()
-    colnames(heatmapData) <- "-log10(padj)"
-    rownames(heatmapData) <- labels
 
-    plt <- ggtree::gheatmap(plt, -log10(heatmapData),
-        offset = -0.014,
-        width = 0.12, colnames = FALSE,
-        font.size = 2.5
+.addLegend <- \(em, sem, comps, heatmapCols, label, sigIds, sigCols, textCex) {
+    graphics::plot.new()
+    circle_size <- grid::unit(1, "snpc") # snpc unit gives you a square region
+
+    grid::pushViewport(grid::viewport(
+        x = 0, y = 0.5, width = circle_size,
+        height = circle_size,
+        just = c("left", "center")
+    ))
+    graphics::par(
+        omi = gridBase::gridOMI(), new = TRUE,
+        cex = textCex, mar = c(0, 0, 0, 0)
     )
-    # add the scale bar
-    plt <- plt +
-        theme(
-            legend.position = "bottom",
-            legend.title = element_text(color = "black"),
-            legend.title.position = "top"
-        ) +
-        scale_fill_viridis_c(
-            na.value = "white", direction = -1,
-            name = "-log10(padj)"
-        )
-    return(plt)
+    ds <- grDevices::dev.size()
+
+    col_fun <- circlize::colorRamp2(c(-2, 2), heatmapCols)
+    .circlizePlot(
+        em = em, sem = sem, comps = comps,
+        ds = ds, col_fun = col_fun,
+        label = label,
+        sigIds = sigIds, sigCols = sigCols
+    )
+    grid::upViewport()
+
+    lgd <- ComplexHeatmap::Legend(
+        title = "Adj. P-value", col_fun = col_fun,
+        title_gp = grid::gpar(fontsize = 8),
+        labels_gp = grid::gpar(fontsize = 8),
+        direction = "horizontal"
+    )
+
+    lgd_list <- ComplexHeatmap::packLegend(lgd,
+        max_height = unit(0.9 * ds[2], "inch")
+    )
+    ComplexHeatmap::draw(lgd_list,
+        x = circle_size * 0.95,
+        y = circle_size * 0.95,
+        just = c("center", "top")
+    )
 }
 
 
@@ -103,17 +144,23 @@
 #' @param method Method to use for SEM comparison.
 #' See ?universalmotif::compare_motifs for options.
 #' @param threshold The adjusted p-value threshold for coloring SEMs
-#' @param sigCol Color to label significant SEM labels
+#' @param textCols A vector of two colors to label non-significant and
+#' significant SEMs respectively.
+#' @param textCex Text size of SEM labels.
+#' @param heatmapCols A vector of two colors to use for the heatmap, ordered
+#' low to high -log10(padj).
 #'
 #' @return a `ggtree` object
 #'
+#' @importFrom circlize circos.trackPlotRegion
+#'
 #' @examples
 #' # load SEMs
-#' data(sc)
+#' data(SEMC)
 #'
 #' # note that this is a small example for demonstration purposes
 #' # in actual enrichment analyses sets of 100+ ranges are recommended
-#' 
+#'
 #' # create a GRanges object
 #' gr <- GenomicRanges::GRanges(
 #'     seqnames = "chr12",
@@ -121,28 +168,42 @@
 #' )
 #'
 #' # calculate binding propensity
-#' sb <- scoreBinding(gr, sc, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
-#' 
-#' e <- enrichSEMs(sb, sc) 
-#' # plotEnrich(e, sc)
+#' sb <- scoreBinding(gr, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
+#'
+#' e <- enrichSEMs(sb, SEMC)
+#' plotEnrich(e, SEMC)
+#'
+#' @return NULL
 #'
 #' @export
 plotEnrich <- \(e, sem,
     label = "transcription_factor",
     method = "WPCC",
     threshold = 0.05,
-    sigCol = "purple4") {
+    textCols = c("darkgrey", "black"),
+    textCex = 0.7,
+    heatmapCols = c("white", "red")) {
+    .SD <- SEM_KEY <- NULL
+
+    em <- merge(semData(sem), e, by.x = "SEM_KEY", by.y = "SEM")
+
     motifs <- .formatMotifs(sem, label)
     labels <- lapply(motifs, function(x) x["altname"]) |> unlist()
 
-    comparisons <- .constructComparisons(motifs, labels, method = method)
-
-    plt <- .plotMotifTree(
-        e = e, sem = sem, threshold = threshold,
-        comparisons = comparisons, sigCol = sigCol
+    comparisons <- .constructComparisons(
+        motifs = motifs,
+        labels = labels,
+        method = method
     )
 
-    plt <- .plotTreeHeatmap(plt = plt, e = e, labels = labels)
+    sigIds <- em[, .SD, .SDcols = label][which(em$padj <= threshold)] |>
+        unlist() |>
+        unname()
 
-    return(plt)
+    .addLegend(
+        em = em, sem = sem,
+        comps = comparisons, heatmapCols = heatmapCols,
+        label = label,
+        sigIds = sigIds, sigCols = textCols, textCex = textCex
+    )
 }
