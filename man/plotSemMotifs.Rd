@@ -4,7 +4,12 @@
 \alias{plotSemMotifs}
 \title{Plot non-alt versus alt binding propensity for a single variant}
 \usage{
-plotSemMotifs(s, variant, label = "semId", cols = c("#F8766D", "dodgerblue2"))
+plotSemMotifs(
+  s,
+  variant,
+  label = "transcription_factor",
+  cols = c("#F8766D", "dodgerblue2")
+)
 }
 \arguments{
 \item{s}{a SEMplScores object with scores populated}
