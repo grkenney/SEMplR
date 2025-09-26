@@ -16,7 +16,7 @@ test_that(".validatePlotSemVariantsInputs errors on invalid input", {
     expect_no_error(.validatePlotSemVariantsInputs(
         s = s,
         label = "id",
-        semId = "MA0099.2_HeLa",
+        semId = "JUN",
         cols = c("red", "blue")
     ))
 
@@ -25,7 +25,7 @@ test_that(".validatePlotSemVariantsInputs errors on invalid input", {
         .validatePlotSemVariantsInputs(
             s = s,
             label = "foo",
-            semId = "MA0099.2_HeLa",
+            semId = "JUN",
             cols = c("red", "blue")
         ),
         regexp = "label not found"
@@ -47,7 +47,7 @@ test_that(".validatePlotSemVariantsInputs errors on invalid input", {
         .validatePlotSemVariantsInputs(
             s = s,
             label = "id",
-            semId = "MA0099.2_HeLa",
+            semId = "JUN",
             cols = c("red")
         ),
         regexp = "cols must be a vector of length 2"
@@ -56,7 +56,7 @@ test_that(".validatePlotSemVariantsInputs errors on invalid input", {
         .validatePlotSemVariantsInputs(
             s = s,
             label = "id",
-            semId = "MA0099.2_HeLa",
+            semId = "JUN",
             cols = c("red", "blue", "green")
         ),
         regexp = "cols must be a vector of length 2"
@@ -67,7 +67,7 @@ test_that(".validatePlotSemVariantsInputs errors on invalid input", {
 test_that("plotSEMVariants returns a ggplot object", {
     plt <- plotSEMVariants(
         s = s,
-        sem = "AP2B_HUMAN.SK-N-SH"
+        sem = "JUN"
     )
     expect_s3_class(plt, "gg")
 })

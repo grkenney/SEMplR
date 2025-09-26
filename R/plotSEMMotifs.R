@@ -21,7 +21,7 @@
 }
 
 
-.createBasePlotSEMMotifs <- \(dt, cols, label) {
+.createBasePlotSEMMotifs <- \(dt, cols, label, labsize, ptsize) {
     refNorm <- altNorm <- NULL
     plt <- ggplot2::ggplot(
         data = dt,
@@ -31,30 +31,30 @@
         geom_hline(yintercept = 0, linetype = 2, col = "grey") +
         geom_point(
             data = subset(dt, altNorm < 0 & refNorm < 0),
-            size = 1, color = "grey"
+            size = ptsize, color = "grey"
         ) +
         geom_point(
-            data = subset(dt, altNorm > 0 & refNorm < 0), size = 1,
-            color = cols[1]
+            data = subset(dt, altNorm > 0 & refNorm < 0),
+            size = ptsize, color = cols[1]
         ) +
         geom_point(
             data = subset(dt, altNorm < 0 & refNorm > 0),
-            size = 1, color = cols[2]
+            size = ptsize, color = cols[2]
         ) +
         geom_point(
             data = subset(dt, altNorm > 0 & refNorm > 0),
-            size = 1, color = "grey"
+            size = ptsize, color = "grey"
         ) +
         ggrepel::geom_text_repel(
             data = subset(dt, altNorm > 0 & refNorm < 0),
             mapping = aes(label = .data[[label]]),
-            size = 4,
+            size = labsize,
             color = cols[1]
         ) +
         ggrepel::geom_text_repel(
             data = subset(dt, altNorm < 0 & refNorm > 0),
             mapping = aes(label = .data[[label]]),
-            size = 4, color = cols[2]
+            size = labsize, color = cols[2]
         )
     return(plt)
 }
@@ -65,8 +65,10 @@
 #' @param s a SEMplScores object with scores populated
 #' @param variant variant id to plot
 #' @param label column in sem_metadata slot of semplObj to use for point labels
+#' @param labsize numeric size of the point labels
 #' @param cols vector of length 2 with colors to use for plotting gained
 #' and lost motifs respectively
+#' @param ptsize numeric size of the ggplot points
 #'
 #' @import ggplot2
 #'
@@ -78,10 +80,6 @@
 #' @examples
 #' library(VariantAnnotation)
 #' data(SEMC)
-#'
-#' # create an SNP Effect Matrix (SEM)
-#' sem <- matrix(rnorm(12), ncol = 4)
-#' colnames(sem) <- c("A", "C", "G", "T")
 #'
 #' # create a VRanges object
 #' vr <- VRanges(
@@ -95,9 +93,9 @@
 #'
 #' plotSEMMotifs(s, "chr12:94136009:G>C", label = "transcription_factor")
 #'
-plotSEMMotifs <- \(s, variant, label = "transcription_factor",
-    cols = c("#F8766D", "dodgerblue2")) {
-    refNorm <- altNorm <- varId <- sem <- NULL
+plotSEMMotifs <- \(s, variant, label = "transcription_factor", labsize = 4,
+    cols = c("#F8766D", "dodgerblue2"), ptsize = 1) {
+    refNorm <- altNorm <- varId <- sem <- .SD <- NULL
     .validatePlotSemMotifsInputs(
         s = s, label = label,
         variant = variant, cols = cols
@@ -106,11 +104,17 @@ plotSEMMotifs <- \(s, variant, label = "transcription_factor",
     ix <- variant == scores(s)[, varId]
     dt <- scores(s)[ix, ]
 
+    dt_key <- data.table::key(semData(s))
     dt <- merge(dt, semData(s),
         by.x = "semId", by.y = data.table::key(semData(s))
     )
 
-    sem_motif_plot <- .createBasePlotSEMMotifs(dt, cols, label)
+    # restore key column if not 'semId'
+    if (dt_key != "semId") {
+        dt <- cbind(dt, semData(s)[, .SD, .SDcols = dt_key])
+    }
+
+    sem_motif_plot <- .createBasePlotSEMMotifs(dt, cols, label, labsize, ptsize)
     sem_motif_plot <- sem_motif_plot +
         scale_x_continuous(
             breaks = scales::pretty_breaks(),

@@ -64,7 +64,7 @@
 # define colors to plot nucleotides
 # adds hseq and text_color columns to sem_mtx_long for the sequence to highlight
 # and the color to plot each nucleotide
-.defineNucleotideColors <- \(sem_mtx_long, motifSeq) {
+.defineNucleotideColors <- \(sem_mtx_long, motifSeq, cols) {
     motif_length <- max(sem_mtx_long$motif_pos)
     # if sequence is provided for plotting,
     if (!is.null(motifSeq)) {
@@ -88,7 +88,7 @@
             all.x = TRUE
         )
 
-        sem_mtx_long$text_color[is.na(sem_mtx_long$text_color)] <- "#d7dbdd"
+        sem_mtx_long$text_color[is.na(sem_mtx_long$text_color)] <- cols[1]
         sem_mtx_long$mseq[is.na(sem_mtx_long$mseq)] <- ""
     } else {
         sem_mtx_long$text_color <- "black"
@@ -97,8 +97,8 @@
 }
 
 
-.createBasePlotSEM <- \(sem_mtx_long, sem_mtx, highlight, motif,
-    hwidth, hcol, sem_baseline, size) {
+.createBasePlotSEM <- \(sem_mtx_long, sem_mtx, hindex, motif,
+    hwidth, hcol, halpha, sem_baseline, size, lcol, lwidth) {
     motif_pos <- sem_score <- NULL
 
     motif_plot <- ggplot2::ggplot(
@@ -107,19 +107,19 @@
     ) +
         theme_classic()
 
-    if (!is.null(highlight)) {
+    if (!is.null(hindex)) {
         motif_plot <- motif_plot + geom_vline(
-            xintercept = highlight,
+            xintercept = hindex,
             linewidth = hwidth,
-            col = hcol, alpha = 0.1
+            col = hcol, alpha = halpha
         )
     }
 
     motif_plot <- motif_plot +
-        geom_hline(yintercept = 0, color = "#eaeaea", linewidth = 1) +
+        geom_hline(yintercept = 0, color = lcol, linewidth = lwidth) +
         geom_hline(
             yintercept = sem_baseline, linetype = "dashed",
-            color = "#eaeaea", linewidth = 1
+            color = lcol, linewidth = lwidth
         ) +
         geom_text(aes(label = sem_mtx_long$bp),
             size = size,
@@ -143,10 +143,15 @@
 #' this parameter is ignored and the SNPEffectMatrix's semId is used for
 #' plotting.
 #' @param motifSeq Character sequence to color on plot
-#' @param highlight Index of variant location on reference
-#' @param hcol Color of motifSeq bases
-#' @param hwidth Width of highlight bar
+#' @param cols A vector of two colors to color the nucleotides not included
+#' and included in the provided motifSeq respectively
 #' @param size Font size of nucleotides in plot
+#' @param hindex Index of nucleotide to highlight in the motifSeq
+#' @param hcol The color of the vertical highlight bar
+#' @param halpha The alpha transparency of the vertical highlight bar
+#' @param hwidth Width of highlight bar
+#' @param lcol Color of the horizongtal endogenous and background binding lines
+#' @param lwidth Width of the horizontal endogenous and background binding lines
 #'
 #' @import ggplot2
 #'
@@ -156,23 +161,23 @@
 #'
 #' @examples
 #' library(VariantAnnotation)
+#' data(SEMC)
 #'
-#' # create an SNP Effect Matrix (SEM)
-#' sem <- matrix(rnorm(12), ncol = 4)
-#' colnames(sem) <- c("A", "C", "G", "T")
+#' # Given a SNPEffectMatrix Collection
+#' plotSEM(SEMC, motif = "JUN")
 #'
-#' # create a list of SNPEffectMatrix objects
-#' s <- SNPEffectMatrix(sem, baseline = -1, semId = "sem_id")
-#'
-#' # plot the motif
-#' plotSEM(s, getSEMId(s))
+#' # Given a single SNPEffectMatrix
+#' sem <- getSEMs(SEMC, "JUN")
+#' plotSEM(sem)
 #'
 #' # color by sequence
-#' plotSEM(s, getSEMId(s), motifSeq = "ACT", highlight = 2)
+#' plotSEM(sem, motifSeq = "TGAGTCA", hindex = 2)
 plotSEM <- function(sem, motif = NULL,
-                    motifSeq = NULL, highlight = NULL,
-                    hcol = "dodgerblue", hwidth = 15,
-                    size = 7) {
+                    motifSeq = NULL,
+                    cols = c("lightgrey", "dodgerblue"), size = 7,
+                    hindex = NULL, hcol = "dodgerblue", halpha = 0.1,
+                    hwidth = 15,
+                    lcol = "#d7dbdd", lwidth = 1) {
     alt <- ref <- motif_pos <- mseq <- .SD <-
         semId <- sem_score <- sm <- varId <- NA
 
@@ -184,13 +189,14 @@ plotSEM <- function(sem, motif = NULL,
 
     sem_mtx_long <- .defineNucleotideColors(
         sem_mtx_long = sem_mtx_long,
-        motifSeq = motifSeq
+        motifSeq = motifSeq,
+        cols = cols
     )
 
     motif_plot <- .createBasePlotSEM(
         sem_mtx_long, sem_mtx,
-        highlight, motif, hwidth, hcol,
-        sem_baseline, size
+        hindex, motif, hwidth, hcol, halpha,
+        sem_baseline, size, lcol, lwidth
     )
 
 
@@ -198,7 +204,7 @@ plotSEM <- function(sem, motif = NULL,
         motif_plot <- motif_plot +
             geom_text(aes(label = mseq),
                 size = size,
-                col = hcol, fontface = "bold"
+                col = cols[2], fontface = "bold"
             )
     }
 

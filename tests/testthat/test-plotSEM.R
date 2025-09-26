@@ -1,5 +1,5 @@
 test_that(".validateMotifInCollection validates motifs correctly", {
-    expect_no_error(.validateMotifInCollection(SEMC, "MA0099.2_HeLa"))
+    expect_no_error(.validateMotifInCollection(SEMC, "JUN"))
     expect_error(.validateMotifInCollection(SEMC, NULL),
         regexp = "must specify the motif"
     )
@@ -10,7 +10,7 @@ test_that(".validateMotifInCollection validates motifs correctly", {
 
 
 test_that(".definePlotSEMParams works for SNPEffectMatrices", {
-    sem_obj <- getSEMs(SEMC, "MA0099.2_HeLa")
+    sem_obj <- getSEMs(SEMC, "JUN")
     params_sem_a <- .definePlotSEMParams(
         sem = sem_obj,
         motif = NULL
@@ -19,19 +19,19 @@ test_that(".definePlotSEMParams works for SNPEffectMatrices", {
 
     params_sem_a <- .definePlotSEMParams(
         sem = sem_obj,
-        motif = "MA0099.2"
+        motif = "JUN"
     ) # with motif
     expect_equal(params_sem_a$sem_baseline, getBaseline(sem_obj))
     expect_equal(params_sem_a$sem_mtx, getSEM(sem_obj))
-    expect_message(.definePlotSEMParams(sem = sem_obj, motif = "MA0099.2"),
+    expect_message(.definePlotSEMParams(sem = sem_obj, motif = "JUN"),
         regexp = "motif ignored"
     )
 })
 
 
 test_that(".definePlotSEMParams works for SNPEffectMatrixCollections", {
-    sem_obj <- getSEMs(SEMC, "MA0099.2_HeLa")
-    params_sem_a <- .definePlotSEMParams(sem = SEMC, motif = "MA0099.2_HeLa")
+    sem_obj <- getSEMs(SEMC, "JUN")
+    params_sem_a <- .definePlotSEMParams(sem = SEMC, motif = "JUN")
     expect_equal(params_sem_a$sem_baseline, getBaseline(sem_obj))
     expect_equal(params_sem_a$sem_mtx, getSEM(sem_obj))
 })
@@ -52,7 +52,7 @@ test_that(".definePlotSEMParams fails on unexpected sem class", {
 
 
 test_that(".formatPlotSEMTable pivots SEM data", {
-    sem_mtx <- getSEMs(SEMC, "MA0099.2_HeLa") |>
+    sem_mtx <- getSEMs(SEMC, "JUN") |>
         getSEM()
     sem_mtx_long <- .formatPlotSEMTable(sem_mtx)
     # has the correct number of rows
@@ -63,7 +63,7 @@ test_that(".formatPlotSEMTable pivots SEM data", {
 
 
 test_that(".defineNucleotideColors chooses black text when motifSeq is NULL", {
-    sem_mtx <- getSEMs(SEMC, "MA0099.2_HeLa") |>
+    sem_mtx <- getSEMs(SEMC, "JUN") |>
         getSEM()
     sem_mtx_long <- .formatPlotSEMTable(sem_mtx)
 
@@ -80,7 +80,7 @@ test_that(".defineNucleotideColors chooses black text when motifSeq is NULL", {
 
 
 test_that(".defineNucleotideColors fails when incorrect number of bases", {
-    sem_mtx <- getSEMs(SEMC, "MA0099.2_HeLa") |>
+    sem_mtx <- getSEMs(SEMC, "JUN") |>
         getSEM()
     sem_mtx_long <- .formatPlotSEMTable(sem_mtx)
 
@@ -104,12 +104,12 @@ test_that(".defineNucleotideColors fails when incorrect number of bases", {
 
 
 test_that(".defineNucleotideColors gives text_colors for motifSeq", {
-    sem_mtx <- getSEMs(SEMC, "MA0099.2_HeLa") |>
+    sem_mtx <- getSEMs(SEMC, "JUN") |>
         getSEM()
     sem_mtx_long <- .formatPlotSEMTable(sem_mtx)
     res_a <- .defineNucleotideColors(
         sem_mtx_long = sem_mtx_long,
-        motifSeq = "AAAAAAA"
+        motifSeq = "AAAAAAA", cols = c("lightgrey", "dodgerblue")
     )
     # make sure we have a mseq and text_color column added
     expect_equal(colnames(res_a), c(
@@ -124,7 +124,7 @@ test_that(".defineNucleotideColors gives text_colors for motifSeq", {
     # all other nucleotides should be "#d7dbdd" (grey)
     expect_equal(
         res_a$text_color[res_a$bp != "A"],
-        rep("#d7dbdd", 21)
+        rep("lightgrey", 21)
     )
     # mseq is A when bp is A
     expect_equal(
@@ -141,9 +141,9 @@ test_that(".defineNucleotideColors gives text_colors for motifSeq", {
 
 test_that("plotSEM returns a ggplot object", {
     plt_a <- plotSEM(SEMC,
-        motif = "MA0099.2_HeLa",
+        motif = "JUN",
         motifSeq = "AAAAAAA",
-        highlight = 2
+        hindex = 2
     )
     expect_s3_class(plt_a, "gg")
 })

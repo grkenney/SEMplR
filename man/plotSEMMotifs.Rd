@@ -8,7 +8,9 @@ plotSEMMotifs(
   s,
   variant,
   label = "transcription_factor",
-  cols = c("#F8766D", "dodgerblue2")
+  labsize = 4,
+  cols = c("#F8766D", "dodgerblue2"),
+  ptsize = 1
 )
 }
 \arguments{
@@ -18,8 +20,12 @@ plotSEMMotifs(
 
 \item{label}{column in sem_metadata slot of semplObj to use for point labels}
 
+\item{labsize}{numeric size of the point labels}
+
 \item{cols}{vector of length 2 with colors to use for plotting gained
 and lost motifs respectively}
+
+\item{ptsize}{numeric size of the ggplot points}
 }
 \value{
 a \code{ggplot} scatter plot of non-alt binding propensity versus alt
@@ -31,10 +37,6 @@ Plot non-alt versus alt binding propensity for a single variant
 \examples{
 library(VariantAnnotation)
 data(SEMC)
-
-# create an SNP Effect Matrix (SEM)
-sem <- matrix(rnorm(12), ncol = 4)
-colnames(sem) <- c("A", "C", "G", "T")
 
 # create a VRanges object
 vr <- VRanges(

@@ -12,7 +12,8 @@ plotEnrich(
   threshold = 0.05,
   textCols = c("darkgrey", "black"),
   textCex = 0.7,
-  heatmapCols = c("white", "red")
+  heatmapCols = c("white", "red"),
+  pvalRange = c(0, 20)
 )
 }
 \arguments{
@@ -33,14 +34,18 @@ significant SEMs respectively.}
 \item{textCex}{Text size of SEM labels.}
 
 \item{heatmapCols}{A vector of two colors to use for the heatmap, ordered
-low to high -log10(padj).}
+low to high \code{-log10(padj)}.}
+
+\item{pvalRange}{A vector of 2 numerics to use as the scale range for the
+heatmap of \code{-log10(padj)}.}
 }
 \value{
 a \code{ggtree} object
 }
 \description{
-Generates a cladogram clustered by SNP Effect Matrix similarity and
-a heatmap representing the adjusted p-value of the enrichment.
+Generates a circular dendrogram, clustering SNP Effect Matrices on
+similarity and a heatmap representing the -log10 transformed
+adjusted p-value of a SEMplR enrichment.
 }
 \examples{
 # load SEMs

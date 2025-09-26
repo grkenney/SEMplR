@@ -25,6 +25,6 @@ data(SEMC)
 convertSEMsToPPMs(SEMC)
 
 # From a single SNPEffectMatrix
-convertSEMsToPPMs(getSEMs(SEMC, "AP2B_HUMAN.SK-N-SH"))
+convertSEMsToPPMs(getSEMs(SEMC, "JUN"))
 
 }

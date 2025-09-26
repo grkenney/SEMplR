@@ -1,5 +1,5 @@
 test_that("getSEM gets the SEM", {
-    s <- getSEMs(SEMC, "MA0099.2_HeLa")
+    s <- getSEMs(SEMC, "JUN")
     sm_a <- getSEM(s)
     # spot check first two positions
     sm_e <- matrix(
@@ -16,7 +16,7 @@ test_that("getSEM gets the SEM", {
 
 
 test_that("getBaseline gets the SEM baseline", {
-    s <- getSEMs(SEMC, "MA0099.2_HeLa")
+    s <- getSEMs(SEMC, "JUN")
     expect_equal(getBaseline(s), -0.933424,
         tolerance = 1e-5
     )
@@ -24,8 +24,8 @@ test_that("getBaseline gets the SEM baseline", {
 
 
 test_that("getSEMId gets the SEM Id", {
-    s <- getSEMs(SEMC, "MA0099.2_HeLa")
-    expect_equal(getSEMId(s), "MA0099.2_HeLa")
+    s <- getSEMs(SEMC, "JUN")
+    expect_equal(getSEMId(s), "JUN")
 })
 
 

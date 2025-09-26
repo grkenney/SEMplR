@@ -34,8 +34,7 @@ test_that("show SEMplScores prints scored object", {
     )
     expect_output(print(sb_a), "An object of class SEMplScores")
     expect_output(print(sb_a), "ranges\\(1\\): chr12:94136009")
-    sem_data_str <- "semData\\(13\\): transcription_factor, ensembl_id ... "
+    sem_data_str <- "semData\\(12\\): transcription_factor, ensembl_id ... "
     expect_output(print(sb_a), sem_data_str)
     expect_output(print(sb_a), "scores\\(223\\):")
-    expect_output(print(sb_a), "seqId                SEM")
 })

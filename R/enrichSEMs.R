@@ -43,6 +43,10 @@
 # define the background set if not provided
 .defineBackground <- \(x, sem, background, seqs, nFlank, genome) {
     if (is.null(background)) {
+        rlang::inform(paste0(
+            "Building background set (this may take several ",
+            "minutes) ..."
+        ))
         if (is(x, "SEMplScores")) {
             seqs <- getRanges(x)$sequence
         }
@@ -75,9 +79,10 @@
 #'
 #' @param x The scoring table produced by `scoreBinding`
 #' @param sem A `SNPEffectMatrix` or `SNPEffectMatrixCollection` object
-#' @param background A list of DNA sequences to use for background. The length
-#' of each sequence must match the length of sequences in `x`. By default, will
-#' scramble the provided sequences.
+#' @param background A `GRanges` object or a list of DNA sequences to use as a 
+#' background set for the binomial test. The length of each sequence must match 
+#' the length of sequences in `x`. By default, will scramble the provided 
+#' sequences.
 #' @param seqs The sequences scored in `scoreBinding`
 #' @param nFlank Number of flanking nucleotides added to the sequences. Defaults
 #' to the length of the longest motif. If no flanks were added (ie, sequences
@@ -111,6 +116,21 @@ enrichSEMs <- \(x, sem,
     genome = NULL) {
     sem_names <- getSEMs(sem) |> names()
 
+    if (is(x, "data.table") &
+        all(c(
+            "seqId", "SEM", "score",
+            "scoreNorm", "index", "seq"
+        ) %in% colnames(x))) {
+        x_scores <- x
+    } else if (is(x, "SEMplScores")) {
+        x_scores <- scores(x)
+    } else {
+        rlang::abort(paste0(
+            "x must be the score table resulting from ",
+            "scoreBinding or a SEMplScores object"
+        ))
+    }
+
     bg <- .defineBackground(
         x = x,
         sem = sem,
@@ -120,7 +140,6 @@ enrichSEMs <- \(x, sem,
         genome = genome
     )
 
-    x_scores <- scores(x)
     result <- lapply(
         seq_along(sem_names),
         \(i) .binomSEMEnrich(
@@ -132,5 +151,5 @@ enrichSEMs <- \(x, sem,
         data.table::rbindlist()
 
     result$padj <- stats::p.adjust(result$pvalue, method = "BH")
-    return(result)
+    return(result[, c("SEM", "pvalue", "padj", "n_bound", "n_bound_bg")])
 }

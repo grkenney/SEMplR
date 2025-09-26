@@ -22,7 +22,7 @@
 }
 
 
-.createBasePlotSEMVariants <- \(scores_dt, cols, label) {
+.createBasePlotSEMVariants <- \(scores_dt, cols, label, labsize, ptsize) {
     refNorm <- altNorm <- NULL
     plt <- ggplot2::ggplot(
         data = scores_dt,
@@ -32,22 +32,22 @@
         geom_hline(yintercept = 0, linetype = 2, col = "grey") +
         geom_point(
             data = subset(scores_dt, altNorm < 0 & refNorm < 0),
-            size = 1,
+            size = ptsize,
             color = "grey"
         ) +
         geom_point(
             data = subset(scores_dt, altNorm > 0 & refNorm < 0),
-            size = 1,
+            size = ptsize,
             color = cols[1]
         ) +
         geom_point(
             data = subset(scores_dt, altNorm < 0 & refNorm > 0),
-            size = 1,
+            size = ptsize,
             color = cols[2]
         ) +
         geom_point(
             data = subset(scores_dt, altNorm > 0 & refNorm > 0),
-            size = 1,
+            size = ptsize,
             color = "grey"
         ) +
         ggrepel::geom_text_repel(
@@ -56,7 +56,7 @@
                 altNorm > 0 & refNorm < 0
             ),
             mapping = aes(label = .data[[label]]),
-            size = 4,
+            size = labsize,
             color = cols[1]
         ) +
         ggrepel::geom_text_repel(
@@ -65,7 +65,7 @@
                 altNorm < 0 & refNorm > 0
             ),
             mapping = aes(label = .data[[label]]),
-            size = 4,
+            size = labsize,
             color = cols[2]
         )
     return(plt)
@@ -77,8 +77,10 @@
 #' @param s a SEMplScores object with scores populated
 #' @param sem a single character vector matching a semId in the semplObj
 #' @param label column in scores slot of semplObj to use for point labels
+#' @param labsize numeric size of the point labels
 #' @param cols vector of length 2 with colors to use for plotting gained
 #' and lost motifs respectively
+#' @param ptsize numeric size of the ggplot points
 #'
 #' @import ggplot2
 #'
@@ -90,10 +92,6 @@
 #' @examples
 #' library(VariantAnnotation)
 #' data(SEMC)
-#'
-#' # create an SNP Effect Matrix (SEM)
-#' sem <- matrix(rnorm(12), ncol = 4)
-#' colnames(sem) <- c("A", "C", "G", "T")
 #'
 #' # create a VRanges object
 #' vr <- VRanges(
@@ -107,8 +105,8 @@
 #'
 #' plotSEMVariants(s, "IKZF1_HUMAN.GM12878")
 #'
-plotSEMVariants <- function(s, sem, label = "varId",
-                            cols = c("#F8766D", "dodgerblue2")) {
+plotSEMVariants <- function(s, sem, label = "varId", labsize = 4,
+                            cols = c("#F8766D", "dodgerblue2"), ptsize = 1) {
     refNorm <- altNorm <- ix <- semId <- NA
     .validatePlotSemVariantsInputs <- \(s = s, label = label,
         semId = sem, cols = cols)
@@ -117,7 +115,10 @@ plotSEMVariants <- function(s, sem, label = "varId",
     ix <- sem == scores(s)[, semId]
     scores_dt <- scores(s)[ix, ]
 
-    var_plot <- .createBasePlotSEMVariants(scores_dt, cols, label)
+    var_plot <- .createBasePlotSEMVariants(
+        scores_dt, cols, label,
+        labsize, ptsize
+    )
     var_plot <- var_plot +
         scale_x_continuous(
             breaks = scales::pretty_breaks(),

@@ -173,12 +173,12 @@ test_that("scoreBinding range scoring", {
     )
     sb_a <- scoreBinding(
         x = x,
-        sem = getSEMs(SEMC, "MA0099.2_HeLa"),
+        sem = getSEMs(SEMC, "JUN"),
         genome = b
     )
     scores_e <- data.table(
         seqId = "chr12:94136009",
-        SEM = "MA0099.2_HeLa",
+        SEM = "JUN",
         score = -0.96313179,
         scoreNorm = -0.02038131,
         index = 7,
@@ -201,12 +201,12 @@ test_that("scoreBinding sequence list scoring", {
     x <- "AGGCTTTGAGGCATC"
     sb_a <- scoreBinding(
         x = x,
-        sem = getSEMs(SEMC, "MA0099.2_HeLa"),
+        sem = getSEMs(SEMC, "JUN"),
         nFlank = 7, seqId = "A"
     )
     sb_e <- data.table(
         seqId = "1",
-        SEM = "MA0099.2_HeLa",
+        SEM = "JUN",
         score = -0.96313179,
         scoreNorm = -0.02038131,
         index = 7,
@@ -221,12 +221,12 @@ test_that("scoreBinding test when flank is shorter than SEM", {
     x <- "TTGAGTCAA"
     sb_a <- scoreBinding(
         x = x,
-        sem = getSEMs(SEMC, "MA0099.2_HeLa"),
+        sem = getSEMs(SEMC, "JUN"),
         nFlank = 1, seqId = "A"
     )
     sb_e <- data.table(
         seqId = "1",
-        SEM = "MA0099.2_HeLa",
+        SEM = "JUN",
         score = 0.0100808,
         scoreNorm = 0.9231947,
         index = 2,
@@ -241,12 +241,12 @@ test_that("scoreBinding test when flank is zero", {
     x <- "TTGAGTCAA"
     sb_a <- scoreBinding(
         x = x,
-        sem = getSEMs(SEMC, "MA0099.2_HeLa"),
+        sem = getSEMs(SEMC, "JUN"),
         nFlank = 0, seqId = "A"
     )
     sb_e <- data.table(
         seqId = "1",
-        SEM = "MA0099.2_HeLa",
+        SEM = "JUN",
         score = 0.0100808,
         scoreNorm = 0.9231947,
         index = 2,
@@ -261,12 +261,12 @@ test_that("scoreBinding test when flank null", {
     x <- "TTGAGTCAA"
     sb_a <- scoreBinding(
         x = x,
-        sem = getSEMs(SEMC, "MA0099.2_HeLa"),
+        sem = getSEMs(SEMC, "JUN"),
         seqId = "A"
     )
     sb_e <- data.table(
         seqId = "1",
-        SEM = "MA0099.2_HeLa",
+        SEM = "JUN",
         score = 0.0100808,
         scoreNorm = 0.9231947,
         index = 2,

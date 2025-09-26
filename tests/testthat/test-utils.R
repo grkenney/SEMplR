@@ -103,7 +103,7 @@ test_that(".makeVariantId GRanges input", {
 
 
 test_that(".makeVariantId GRanges input", {
-    stp_a <- .semToPpm(getSEMs(SEMC, "MA0099.2_HeLa"))
+    stp_a <- .semToPpm(getSEMs(SEMC, "JUN"))
 
     # make sure rows sum to 1
     cs <- colSums(stp_a) |> round(digits = 5)

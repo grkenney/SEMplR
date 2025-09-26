@@ -80,7 +80,7 @@ test_that(".loadSEM loads sem file", {
 
 test_that("loadSEMCollection loads first SEM correctly", {
     one_sem <- getSEMs(SEMC)[[1]]
-    one_sem_meta <- semData(SEMC)[1, ]
+    one_sem_meta <- semData(SEMC)[transcription_factor == getSEMId(one_sem)]
 
     # write data to file
     tf <- tempfile()
@@ -92,14 +92,14 @@ test_that("loadSEMCollection loads first SEM correctly", {
     sem_col_e <- loadSEMCollection(
         semFiles = tf,
         semMetaData = one_sem_meta,
-        semMetaKey = "SEM_KEY",
-        semIds = one_sem_meta$SEM_KEY,
+        semMetaKey = "transcription_factor",
+        semIds = one_sem_meta$transcription_factor,
         bls = one_sem_meta$SEM_baseline
     )
     # check each slot
     expect_equal(getSEMs(sem_col_e)[[1]], one_sem)
     expect_equal(semData(sem_col_e), one_sem_meta)
-    expect_equal(sem_col_e@semKey, "SEM_KEY")
+    expect_equal(sem_col_e@semKey, "transcription_factor")
 })
 
 

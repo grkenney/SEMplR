@@ -23,9 +23,9 @@ test_that(".formatMotifs adds correct altname", {
         label = "transcription_factor"
     )
     expect_equal(motifs[[1]]["altname"], "TFAP2B")
-    expect_equal(motifs[[1]]["name"], "AP2B_HUMAN.SK-N-SH")
+    expect_equal(motifs[[1]]["name"], "TFAP2B")
     expect_equal(motifs[[100]]["altname"], "GATA1")
-    expect_equal(motifs[[100]]["name"], "M00347")
+    expect_equal(motifs[[100]]["name"], "GATA1")
 })
 
 

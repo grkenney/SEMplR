@@ -8,10 +8,14 @@ plotSEM(
   sem,
   motif = NULL,
   motifSeq = NULL,
-  highlight = NULL,
+  cols = c("lightgrey", "dodgerblue"),
+  size = 7,
+  hindex = NULL,
   hcol = "dodgerblue",
+  halpha = 0.1,
   hwidth = 15,
-  size = 7
+  lcol = "#d7dbdd",
+  lwidth = 1
 )
 }
 \arguments{
@@ -24,13 +28,22 @@ plotting.}
 
 \item{motifSeq}{Character sequence to color on plot}
 
-\item{highlight}{Index of variant location on reference}
+\item{cols}{A vector of two colors to color the nucleotides not included
+and included in the provided motifSeq respectively}
 
-\item{hcol}{Color of motifSeq bases}
+\item{size}{Font size of nucleotides in plot}
+
+\item{hindex}{Index of nucleotide to highlight in the motifSeq}
+
+\item{hcol}{The color of the vertical highlight bar}
+
+\item{halpha}{The alpha transparency of the vertical highlight bar}
 
 \item{hwidth}{Width of highlight bar}
 
-\item{size}{Font size of nucleotides in plot}
+\item{lcol}{Color of the horizongtal endogenous and background binding lines}
+
+\item{lwidth}{Width of the horizontal endogenous and background binding lines}
 }
 \value{
 a \code{ggplot} with sem scores for each nucleic acid per position
@@ -40,17 +53,15 @@ Plot SEM scores for each nucleic acid in each position of the motif
 }
 \examples{
 library(VariantAnnotation)
+data(SEMC)
 
-# create an SNP Effect Matrix (SEM)
-sem <- matrix(rnorm(12), ncol = 4)
-colnames(sem) <- c("A", "C", "G", "T")
+# Given a SNPEffectMatrix Collection
+plotSEM(SEMC, motif = "JUN")
 
-# create a list of SNPEffectMatrix objects
-s <- SNPEffectMatrix(sem, baseline = -1, semId = "sem_id")
-
-# plot the motif
-plotSEM(s, getSEMId(s))
+# Given a single SNPEffectMatrix
+sem <- getSEMs(SEMC, "JUN")
+plotSEM(sem)
 
 # color by sequence
-plotSEM(s, getSEMId(s), motifSeq = "ACT", highlight = 2)
+plotSEM(sem, motifSeq = "TGAGTCA", hindex = 2)
 }

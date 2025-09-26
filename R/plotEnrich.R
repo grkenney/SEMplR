@@ -44,11 +44,13 @@
     .SD <- NULL
     dend <- stats::as.dendrogram(comps)
 
-    padjs <- data.frame(padj = em$padj)
+    padjs <- data.frame(padj = -log10(em$padj))
     rownames(padjs) <- em[, .SD, .SDcols = label] |> unlist()
+
     column_od <- comps$order
-    ordered_mtx <- as.matrix(padjs[column_od, 1])
-    rownames(ordered_mtx) <- rownames(padjs)[comps$order]
+    labels_od <- comps$labels[comps$order]
+    ordered_mtx <- as.matrix(padjs[labels_od, 1])
+    rownames(ordered_mtx) <- labels_od
 
     ordered_text_cols <- lapply(
         rownames(ordered_mtx),
@@ -91,7 +93,8 @@
 
 
 
-.addLegend <- \(em, sem, comps, heatmapCols, label, sigIds, sigCols, textCex) {
+.addLegend <- \(em, sem, comps, heatmapCols, label, sigIds, sigCols,
+    textCex, pvalRange) {
     graphics::plot.new()
     circle_size <- grid::unit(1, "snpc") # snpc unit gives you a square region
 
@@ -106,7 +109,7 @@
     )
     ds <- grDevices::dev.size()
 
-    col_fun <- circlize::colorRamp2(c(-2, 2), heatmapCols)
+    col_fun <- circlize::colorRamp2(pvalRange, heatmapCols)
     .circlizePlot(
         em = em, sem = sem, comps = comps,
         ds = ds, col_fun = col_fun,
@@ -116,7 +119,7 @@
     grid::upViewport()
 
     lgd <- ComplexHeatmap::Legend(
-        title = "Adj. P-value", col_fun = col_fun,
+        title = "-log10(Adj. P-value)", col_fun = col_fun,
         title_gp = grid::gpar(fontsize = 8),
         labels_gp = grid::gpar(fontsize = 8),
         direction = "horizontal"
@@ -135,8 +138,9 @@
 
 #' Plot the results of `enrichSEMs`
 #'
-#' Generates a cladogram clustered by SNP Effect Matrix similarity and
-#' a heatmap representing the adjusted p-value of the enrichment.
+#' Generates a circular dendrogram, clustering SNP Effect Matrices on
+#'  similarity and a heatmap representing the -log10 transformed
+#'  adjusted p-value of a SEMplR enrichment.
 #'
 #' @param e The resulting data.table from `enrichSEMs`
 #' @param sem A `SNPEffectMatrixCollection` object
@@ -148,7 +152,9 @@
 #' significant SEMs respectively.
 #' @param textCex Text size of SEM labels.
 #' @param heatmapCols A vector of two colors to use for the heatmap, ordered
-#' low to high -log10(padj).
+#' low to high `-log10(padj)`.
+#' @param pvalRange A vector of 2 numerics to use as the scale range for the
+#' heatmap of `-log10(padj)`.
 #'
 #' @return a `ggtree` object
 #'
@@ -182,10 +188,13 @@ plotEnrich <- \(e, sem,
     threshold = 0.05,
     textCols = c("darkgrey", "black"),
     textCex = 0.7,
-    heatmapCols = c("white", "red")) {
-    .SD <- SEM_KEY <- NULL
+    heatmapCols = c("white", "red"),
+    pvalRange = c(0, 20)) {
+    .SD <- NULL
 
-    em <- merge(semData(sem), e, by.x = "SEM_KEY", by.y = "SEM")
+    sk <- semData(sem) |> data.table::key()
+
+    em <- merge(semData(sem), e, by.x = sk, by.y = "SEM")
 
     motifs <- .formatMotifs(sem, label)
     labels <- lapply(motifs, function(x) x["altname"]) |> unlist()
@@ -204,6 +213,7 @@ plotEnrich <- \(e, sem,
         em = em, sem = sem,
         comps = comparisons, heatmapCols = heatmapCols,
         label = label,
-        sigIds = sigIds, sigCols = textCols, textCex = textCex
+        sigIds = sigIds, sigCols = textCols, textCex = textCex,
+        pvalRange = pvalRange
     )
 }

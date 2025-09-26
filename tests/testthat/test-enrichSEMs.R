@@ -98,12 +98,12 @@ test_that("enrichSEMs on 2 sites without specifying background", {
     )
 
     # all SEMs are represented
-    expect_equal(table(e_a$SEM), table(semData(SEMC)$SEM_KEY))
+    expect_equal(table(e_a$SEM), table(semData(SEMC)$transcription_factor))
     # n_bound is correct
     expect_equal(sum(e_a$n_bound), 2)
     expect_equal(
         e_a[e_a$n_bound > 0, ]$SEM,
-        c("IKZF1_HUMAN.GM12878", "ZNF18_HUMAN.HEK293")
+        c("IKZF1", "ZNF18")
     )
     expect_equal(
         e_a[e_a$n_bound > 0, ]$n_bound,
@@ -159,14 +159,14 @@ test_that("enrichSEMs on 2 sites with specifying background", {
     )
 
     # all SEMs are represented
-    expect_equal(table(e_a$SEM), table(semData(SEMC)$SEM_KEY))
+    expect_equal(table(e_a$SEM), table(semData(SEMC)$transcription_factor))
     # n_bound is correct
     expect_equal(sum(e_a$n_bound), sum(scores(sb_a)$scoreNorm > 0))
     expect_equal(sum(e_a$n_bound), sum(scores(sb_bg)$scoreNorm > 0))
 
     expect_equal(
         e_a[e_a$n_bound > 0, ]$SEM,
-        c("IKZF1_HUMAN.GM12878", "ZNF18_HUMAN.HEK293")
+        c("IKZF1", "ZNF18")
     )
     expect_equal(
         e_a[e_a$n_bound > 0, ]$n_bound,
@@ -175,7 +175,7 @@ test_that("enrichSEMs on 2 sites with specifying background", {
 
     expect_equal(
         e_a[e_a$n_bound_bg > 0, ]$SEM,
-        c("IKZF1_HUMAN.GM12878", "M00967")
+        c("IKZF1", "HNF4A:NR2F2")
     )
     expect_equal(
         e_a[e_a$n_bound_bg > 0, ]$n_bound_bg,

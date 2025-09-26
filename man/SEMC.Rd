@@ -23,7 +23,6 @@ objects and a data frame with 223 rows and 13 columns containing meta data:
 \item{dnase_ENCODE_accession}{ENCODE accession for DNase data used
 in SEMpl}
 \item{PWM_source}{Position weighted matrix source}
-\item{SEM_KEY}{SEM id, used as data table key}
 ...
 }
 }

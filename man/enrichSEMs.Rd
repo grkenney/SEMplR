@@ -11,9 +11,10 @@ enrichSEMs(x, sem, background = NULL, seqs = NULL, nFlank = 0, genome = NULL)
 
 \item{sem}{A \code{SNPEffectMatrix} or \code{SNPEffectMatrixCollection} object}
 
-\item{background}{A list of DNA sequences to use for background. The length
-of each sequence must match the length of sequences in \code{x}. By default, will
-scramble the provided sequences.}
+\item{background}{A \code{GRanges} object or a list of DNA sequences to use as a
+background set for the binomial test. The length of each sequence must match
+the length of sequences in \code{x}. By default, will scramble the provided
+sequences.}
 
 \item{seqs}{The sequences scored in \code{scoreBinding}}
 

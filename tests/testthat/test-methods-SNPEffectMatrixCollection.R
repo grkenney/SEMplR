@@ -23,14 +23,20 @@ test_that("SNPEffectMatrixCollection remakes default SEMs collection", {
     semc_a <- SNPEffectMatrixCollection(
         sems = getSEMs(SEMC),
         semData = semData(SEMC),
-        semKey = "SEM"
+        semKey = "transcription_factor"
     )
     expect_equal(semc_a, SEMC)
+
+    m1 <- matrix(rnorm(16), nrow = 4)
+    colnames(m1) <- c("A", "C", "G", "T")
+    sem_list <- list(SNPEffectMatrix(sem = m1, baseline = 1, semId = "m1"))
+
+    meta_data <- data.table::data.table(tf = "tf1", sem = "m1.sem")
     expect_message(
         SNPEffectMatrixCollection(
-            sems = getSEMs(SEMC),
-            semData = semData(SEMC),
-            semKey = "SEM"
+            sems = sem_list,
+            semData = meta_data,
+            semKey = "sem"
         ),
         regexp = "Removing .sem suffixes from semKey."
     )
@@ -40,7 +46,7 @@ test_that("SNPEffectMatrixCollection remakes default SEMs collection", {
 test_that("SNPEffectMatrixCollection makes collection without .sem suffix", {
     meta_dt <- data.table::data.table(
         transcription_factor = "TFAP2B",
-        SEM = "AP2B_HUMAN.SK-N-SH"
+        SEM = "TFAP2B"
     )
     semc_a <- SNPEffectMatrixCollection(
         sems = getSEMs(SEMC)[[1]],
@@ -66,11 +72,11 @@ test_that("sems pulls correct data types and lengths", {
     expect_length(sems_a, 223)
 
     # pulling a single SEM by name
-    sems_a <- getSEMs(SEMC, "ZSCAN4_secondary")
+    sems_a <- getSEMs(SEMC, "ZSCAN4")
     expect_s4_class(sems_a, "SNPEffectMatrix")
 
     # pulling multiple SEMs by name
-    sems_a <- getSEMs(SEMC, c("ZNF18_HUMAN.HEK293", "ZSCAN4_secondary"))
+    sems_a <- getSEMs(SEMC, c("ZNF18", "ZSCAN4"))
     expect_type(sems_a, "list")
     expect_length(sems_a, 2)
 })
@@ -78,6 +84,6 @@ test_that("sems pulls correct data types and lengths", {
 
 test_that("show SNPEffectMatrixCollection collection", {
     expect_output(print(SEMC), "An object of class SNPEffectMatrixCollection")
-    expect_output(print(SEMC), "SEMs\\(223\\): AP2B_HUMAN.SK-N-SH, ")
-    expect_output(print(SEMC), "semData\\(13\\): transcription_factor, ")
+    expect_output(print(SEMC), "SEMs\\(223\\): TFAP2B, ARNT")
+    expect_output(print(SEMC), "semData\\(12\\): transcription_factor, ")
 })
