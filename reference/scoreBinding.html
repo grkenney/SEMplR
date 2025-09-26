@@ -97,34 +97,21 @@ If a list of sequences is provided, just return the scoring table</p>
 <span class="r-in"><span><span class="fu">scoreBinding</span><span class="op">(</span><span class="va">gr</span>, <span class="va">SEMC</span>, <span class="fu">BSgenome.Hsapiens.UCSC.hg19</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html" class="external-link">Hsapiens</a></span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> An object of class SEMplScores</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ranges(1): chr12:94136009</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> semData(13): transcription_factor, ensembl_id ... PWM_source, SEM_KEY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> semData(12): transcription_factor, ensembl_id ... dnase_ENCODE_accession, PWM_source</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> scores(223):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               seqId                SEM      score  scoreNorm index</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              &lt;char&gt;             &lt;char&gt;      &lt;num&gt;      &lt;num&gt; &lt;int&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1: chr12:94136009 AP2B_HUMAN.SK-N-SH  -1.689754 -0.3068238    15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2: chr12:94136009 ARNT_HUMAN.GM12878  -6.892799 -0.9693833    17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3: chr12:94136009    ATF1_HUMAN.K562  -7.079925 -0.9420095    16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4: chr12:94136009   ATF2_HUMAN.HepG2  -4.890126 -0.9098440    16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5: chr12:94136009   ATF3_HUMAN.HepG2  -8.605675 -0.9885365    14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 219: chr12:94136009  ZBT7A_HUMAN.HepG2  -1.859506 -0.6349682    12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 220: chr12:94136009    ZFX_HUMAN.HepG2  -1.459472 -0.5682106    19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221: chr12:94136009  ZN281_HUMAN.HepG2  -4.347612 -0.9355197     8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 222: chr12:94136009 ZNF18_HUMAN.HEK293  -5.410220 -0.9264060    15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 223: chr12:94136009   ZSCAN4_secondary -15.439087 -0.9998307    15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   seq</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:       GCTTTGAGGC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:        TTTGAGGCA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:      CTTTGAGGCAT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:      CTTTGAGGCAT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:      GGCTTTGAGGC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 219:        AAGGCTTTG</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 220:       TGAGGCATCT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221:  GGAGAAGGCTTTGAG</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 222:     GCTTTGAGGCAT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 223: GCTTTGAGGCATCTGC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               seqId    SEM      score  scoreNorm index              seq</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              &lt;char&gt; &lt;char&gt;      &lt;num&gt;      &lt;num&gt; &lt;int&gt;           &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1: chr12:94136009 TFAP2B  -1.689754 -0.3068238    15       GCTTTGAGGC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2: chr12:94136009   ARNT  -6.892799 -0.9693833    17        TTTGAGGCA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3: chr12:94136009   ATF1  -7.079925 -0.9420095    16      CTTTGAGGCAT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4: chr12:94136009   ATF2  -4.890126 -0.9098440    16      CTTTGAGGCAT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5: chr12:94136009   ATF3  -8.605675 -0.9885365    14      GGCTTTGAGGC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 219: chr12:94136009 ZBTB7A  -1.859506 -0.6349682    12        AAGGCTTTG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 220: chr12:94136009    ZFX  -1.459472 -0.5682106    19       TGAGGCATCT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221: chr12:94136009 ZNF281  -4.347612 -0.9355197     8  GGAGAAGGCTTTGAG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 222: chr12:94136009  ZNF18  -5.410220 -0.9264060    15     GCTTTGAGGCAT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 223: chr12:94136009 ZSCAN4 -15.439087 -0.9998307    15 GCTTTGAGGCATCTGC</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

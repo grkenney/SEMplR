@@ -100,33 +100,33 @@ alternative (alt) allele. Ignored if providing a VRanges object.</p></dd>
 <span class="r-in"><span><span class="fu">scoreVariants</span><span class="op">(</span><span class="va">x</span>, <span class="va">SEMC</span>, <span class="fu">BSgenome.Hsapiens.UCSC.hg19</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html" class="external-link">Hsapiens</a></span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> An object of class SEMplScores</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ranges(1): chr12:94136009:G&gt;C</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> semData(13): transcription_factor, ensembl_id ... PWM_source, SEM_KEY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> semData(12): transcription_factor, ensembl_id ... dnase_ENCODE_accession, PWM_source</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> scores(223):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   varId              semId           refSeq           altSeq</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  &lt;char&gt;             &lt;char&gt;           &lt;char&gt;           &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1: chr12:94136009:G&gt;C AP2B_HUMAN.SK-N-SH       GCTTTGAGGC       GCTTTCAGGC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2: chr12:94136009:G&gt;C ARNT_HUMAN.GM12878        TTTGAGGCA        TTTCAGGCA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3: chr12:94136009:G&gt;C    ATF1_HUMAN.K562      CTTTGAGGCAT      TTCAGGCATCT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4: chr12:94136009:G&gt;C   ATF2_HUMAN.HepG2      CTTTGAGGCAT      CTTTCAGGCAT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5: chr12:94136009:G&gt;C   ATF3_HUMAN.HepG2      GGCTTTGAGGC      TTTCAGGCATC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 219: chr12:94136009:G&gt;C  ZBT7A_HUMAN.HepG2        AAGGCTTTG        AAGGCTTTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 220: chr12:94136009:G&gt;C    ZFX_HUMAN.HepG2       TGAGGCATCT       TCAGGCATCT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221: chr12:94136009:G&gt;C  ZN281_HUMAN.HepG2  GGAGAAGGCTTTGAG  AAGGAGAAGGCTTTC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 222: chr12:94136009:G&gt;C ZNF18_HUMAN.HEK293     GCTTTGAGGCAT     GGCTTTCAGGCA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 223: chr12:94136009:G&gt;C   ZSCAN4_secondary GCTTTGAGGCATCTGC GCTTTCAGGCATCTGC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   varId          semId           refSeq           altSeq</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  &lt;char&gt;         &lt;char&gt;           &lt;char&gt;           &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1: chr12:94136009:G&gt;C            AHR      TTTGAGGCATC      TTCAGGCATCT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2: chr12:94136009:G&gt;C AHR:ARNT:HIF1A        GGCTTTGAG        GGCTTTCAG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3: chr12:94136009:G&gt;C         ARID3A           TTTGAG           TTCAGG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4: chr12:94136009:G&gt;C           ARNT        TTTGAGGCA        TTTCAGGCA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5: chr12:94136009:G&gt;C          ARNTL      GAGGCATCTGC      TTCAGGCATCT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 219: chr12:94136009:G&gt;C            ZFX       TGAGGCATCT       TCAGGCATCT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 220: chr12:94136009:G&gt;C          ZNF18     GCTTTGAGGCAT     GGCTTTCAGGCA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221: chr12:94136009:G&gt;C         ZNF217         AGGCTTTG         AGGCTTTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 222: chr12:94136009:G&gt;C         ZNF281  GGAGAAGGCTTTGAG  AAGGAGAAGGCTTTC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 223: chr12:94136009:G&gt;C         ZSCAN4 GCTTTGAGGCATCTGC GCTTTCAGGCATCTGC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        refScore   altScore    refNorm    altNorm refVarIndex altVarIndex</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           &lt;num&gt;      &lt;num&gt;      &lt;num&gt;      &lt;num&gt;       &lt;int&gt;       &lt;int&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:  -1.689754  -1.994456 -0.3068238 -0.4387980          15          15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:  -6.892799  -4.947151 -0.9693833 -0.8820613          17          17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:  -7.079925  -7.978780 -0.9420095 -0.9688990          16          18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:  -4.890126  -4.983040 -0.9098440 -0.9154673          16          16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:  -8.605675  -8.098832 -0.9885365 -0.9837111          14          17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:  -1.495324  -1.393158 -0.4349553 -0.3934902          17          18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:  -1.304220  -1.308236 -0.3888573 -0.3905561          14          14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:  -1.400445  -1.428525 -0.4994304 -0.5090790          17          18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:  -6.892799  -4.947151 -0.9693833 -0.8820613          17          17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:  -5.810051  -4.861625 -0.9460537 -0.8958962          20          18</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 219:  -1.859506  -1.607344 -0.6349682 -0.5652506          12          12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 220:  -1.459472  -1.478959 -0.5682106 -0.5740037          19          19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221:  -4.347612  -4.740351 -0.9355197 -0.9508865           8           6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 222:  -5.410220  -7.107575 -0.9264060 -0.9773072          15          14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 219:  -1.459472  -1.478959 -0.5682106 -0.5740037          19          19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 220:  -5.410220  -7.107575 -0.9264060 -0.9773072          15          14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221:  -1.661981  -1.523076 -0.5654352 -0.5215141          13          13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 222:  -4.347612  -4.740351 -0.9355197 -0.9508865           8           6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 223: -15.439087 -13.002975 -0.9998307 -0.9990837          15          15</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

@@ -63,6 +63,8 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">VariantAnnotation</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/GenomicRanges" class="external-link">GenomicRanges</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">BSgenome.Hsapiens.UCSC.hg19</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/grkenney/SEMplR" class="external-link">SEMplR</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="snp-effect-matrices">SNP Effect Matrices<a class="anchor" aria-label="anchor" href="#snp-effect-matrices"></a>
@@ -74,141 +76,386 @@ produced by SEMpl, but a default set of 223 are included with this
 package in the <code>SEMC</code> data object. A full list of the
 transcription factors included in this default set can be found <a href="github.com/grkenney/SEMplR/blob/main/vignettes/sempl_metadata.csv">here</a>
 or by running <code>semData(SEMC)</code>.</p>
-<p>The default SEM collection can be loaded with:</p>
+<p>SEMs are stored inside a <code>SNPEffectMatrix</code> object and sets
+of SEMs are stored in a <code>SNPEffectMatrixCollection</code>. The
+default collection can be loaded with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">SEMC</span><span class="op">)</span></span></code></pre></div>
 <p>Printing the <code>SNPEffectMatrixCollection</code>, we can see that
-we have 223 SEMs and 13 meta data features for each.</p>
+this object has 2 slots. The first holds the
+<code>SNPEffectMatrix</code> objects with the matrices and baseline
+information for each motif. The second slots holds meta data for each
+SEM. This object contains 223 SEMs and 12 meta data features for
+each.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">SEMC</span></span>
 <span><span class="co">#&gt; An object of class SNPEffectMatrixCollection</span></span>
-<span><span class="co">#&gt; SEMs(223): AP2B_HUMAN.SK-N-SH, ARNT_HUMAN.GM12878 ... ZNF18_HUMAN.HEK293, ZSCAN4_secondary</span></span>
-<span><span class="co">#&gt; semData(13): transcription_factor, ensembl_id ... PWM_source, SEM_KEY</span></span></code></pre></div>
-<p>We can access all SEMs in collection the with the function
-<code>sems()</code> or some subset of matrices by specifying a vector of
-semIds in the <code>semId</code> parameter.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/getSEMs.html">getSEMs</a></span><span class="op">(</span><span class="va">SEMC</span>, semId <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AP2B_HUMAN.SK-N-SH"</span>, <span class="st">"ZSCAN4_secondary"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $`AP2B_HUMAN.SK-N-SH`</span></span>
-<span><span class="co">#&gt; An object of class SNPEffectMatrix</span></span>
-<span><span class="co">#&gt; semId:  AP2B_HUMAN.SK-N-SH</span></span>
-<span><span class="co">#&gt; baseline:  -1.161048</span></span>
-<span><span class="co">#&gt; sem:</span></span>
-<span><span class="co">#&gt;             A         C         G         T</span></span>
-<span><span class="co">#&gt;         &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;</span></span>
-<span><span class="co">#&gt;  1: -1.093659 -0.228215 -0.035353 -0.949757</span></span>
-<span><span class="co">#&gt;  2: -1.198571  0.019236 -1.057251 -1.145949</span></span>
-<span><span class="co">#&gt;  3: -1.021307  0.008023 -1.273623 -0.746918</span></span>
-<span><span class="co">#&gt;  4: -0.808380 -0.281746 -0.849156  0.093359</span></span>
-<span><span class="co">#&gt;  5: -0.319849 -0.071797 -0.058358 -0.085237</span></span>
-<span><span class="co">#&gt;  6:  0.119797 -0.640756 -0.336054 -0.787809</span></span>
-<span><span class="co">#&gt;  7: -0.496324 -1.111405  0.034943 -0.894114</span></span>
-<span><span class="co">#&gt;  8: -1.069881 -1.178852  0.005380 -1.079589</span></span>
-<span><span class="co">#&gt;  9: -0.957910 -0.095025 -0.061232 -1.025970</span></span>
-<span><span class="co">#&gt; 10: -0.147762 -0.046611 -0.308033 -0.113474</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $ZSCAN4_secondary</span></span>
-<span><span class="co">#&gt; An object of class SNPEffectMatrix</span></span>
-<span><span class="co">#&gt; semId:  ZSCAN4_secondary</span></span>
-<span><span class="co">#&gt; baseline:  -2.911018</span></span>
-<span><span class="co">#&gt; sem:</span></span>
-<span><span class="co">#&gt;             A          C         G        T</span></span>
-<span><span class="co">#&gt;         &lt;num&gt;      &lt;num&gt;     &lt;num&gt;    &lt;num&gt;</span></span>
-<span><span class="co">#&gt;  1:  0.339681 -1.6258400 -0.852570 -1.40307</span></span>
-<span><span class="co">#&gt;  2: -1.858890  0.2245480 -1.803160 -1.10145</span></span>
-<span><span class="co">#&gt;  3:  0.259177 -1.8665800 -0.744934 -1.62341</span></span>
-<span><span class="co">#&gt;  4: -2.077230  0.1970890 -1.971940 -1.21187</span></span>
-<span><span class="co">#&gt;  5:  0.198878 -2.2059500 -0.760569 -1.76139</span></span>
-<span><span class="co">#&gt;  6: -2.321170  0.1354730 -2.300640 -1.39237</span></span>
-<span><span class="co">#&gt;  7:  0.157553 -2.4685400 -0.741112 -1.84194</span></span>
-<span><span class="co">#&gt;  8: -2.482910  0.0893564 -2.406690 -1.56081</span></span>
-<span><span class="co">#&gt;  9:  0.136749 -2.4335100 -0.704496 -1.94128</span></span>
-<span><span class="co">#&gt; 10: -2.352060  0.1257340 -2.211630 -1.60719</span></span>
-<span><span class="co">#&gt; 11:  0.187489 -2.1923800 -0.641008 -1.76197</span></span>
-<span><span class="co">#&gt; 12: -2.109030  0.1677660 -1.974360 -1.51917</span></span>
-<span><span class="co">#&gt; 13:  0.240220 -1.9354700 -0.655348 -1.54698</span></span>
-<span><span class="co">#&gt; 14: -1.748380  0.2142480 -1.693530 -1.38530</span></span>
-<span><span class="co">#&gt; 15:  0.289375 -1.6708800 -0.698449 -1.42560</span></span>
-<span><span class="co">#&gt; 16: -1.483480  0.2650430 -1.541780 -1.31953</span></span></code></pre></div>
+<span><span class="co">#&gt; SEMs(223): TFAP2B, ARNT ... ZNF18, ZSCAN4</span></span>
+<span><span class="co">#&gt; semData(12): transcription_factor, ensembl_id ... dnase_ENCODE_accession, PWM_source</span></span></code></pre></div>
 <p>We can view the SEM meta data slot with the <code>semData</code>
 function.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/semData.html">semData</a></span><span class="op">(</span><span class="va">SEMC</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Key: &lt;SEM_KEY&gt;</span></span>
-<span><span class="co">#&gt;      transcription_factor      ensembl_id ebi_complex_ac uniprot_ac</span></span>
-<span><span class="co">#&gt;                    &lt;char&gt;          &lt;char&gt;         &lt;char&gt;     &lt;char&gt;</span></span>
-<span><span class="co">#&gt;   1:               TFAP2B ENSG00000008196                    Q92481</span></span>
-<span><span class="co">#&gt;   2:                 ARNT ENSG00000143437                    P27540</span></span>
-<span><span class="co">#&gt;   3:                 ATF1 ENSG00000123268                    P18846</span></span>
-<span><span class="co">#&gt;   4:                 ATF2 ENSG00000115966                    P15336</span></span>
-<span><span class="co">#&gt;   5:                 ATF3 ENSG00000162772                    P18847</span></span>
-<span><span class="co">#&gt;  ---                                                               </span></span>
-<span><span class="co">#&gt; 219:               ZBTB7A ENSG00000178951                    O95365</span></span>
-<span><span class="co">#&gt; 220:                  ZFX ENSG00000005889                    P17010</span></span>
-<span><span class="co">#&gt; 221:               ZNF281 ENSG00000162702                    Q9Y2X9</span></span>
-<span><span class="co">#&gt; 222:                ZNF18 ENSG00000154957                    P17022</span></span>
-<span><span class="co">#&gt; 223:               ZSCAN4 ENSG00000180532                    Q8NAM6</span></span>
-<span><span class="co">#&gt;                     PWM_id                    SEM SEM_baseline cell_type</span></span>
-<span><span class="co">#&gt;                     &lt;char&gt;                 &lt;char&gt;        &lt;num&gt;    &lt;char&gt;</span></span>
-<span><span class="co">#&gt;   1:  AP2B_HUMAN.H11MO.0.B AP2B_HUMAN.SK-N-SH.sem   -1.1610478   SK-N-SH</span></span>
-<span><span class="co">#&gt;   2:  ARNT_HUMAN.H11MO.0.B ARNT_HUMAN.GM12878.sem   -1.8632604   GM12878</span></span>
-<span><span class="co">#&gt;   3:  ATF1_HUMAN.H11MO.0.B    ATF1_HUMAN.K562.sem   -2.9718855      K562</span></span>
-<span><span class="co">#&gt;   4:  ATF2_HUMAN.H11MO.0.B   ATF2_HUMAN.HepG2.sem   -1.4186930     HepG2</span></span>
-<span><span class="co">#&gt;   5:  ATF3_HUMAN.H11MO.0.A   ATF3_HUMAN.HepG2.sem   -2.1588687     HepG2</span></span>
-<span><span class="co">#&gt;  ---                                                                    </span></span>
-<span><span class="co">#&gt; 219: ZBT7A_HUMAN.H11MO.0.A  ZBT7A_HUMAN.HepG2.sem   -0.4056000     HepG2</span></span>
-<span><span class="co">#&gt; 220:   ZFX_HUMAN.H11MO.0.A    ZFX_HUMAN.HepG2.sem   -0.2478717     HepG2</span></span>
-<span><span class="co">#&gt; 221: ZN281_HUMAN.H11MO.0.A  ZN281_HUMAN.HepG2.sem   -0.3926150     HepG2</span></span>
-<span><span class="co">#&gt; 222: ZNF18_HUMAN.H11MO.0.C ZNF18_HUMAN.HEK293.sem   -1.6459529    HEK293</span></span>
-<span><span class="co">#&gt; 223:  Zscan4_pwm_secondary   ZSCAN4_secondary.sem   -2.9110180    HEK293</span></span>
-<span><span class="co">#&gt;      neg_log10_pval chip_ENCODE_accession dnase_ENCODE_accession  PWM_source</span></span>
-<span><span class="co">#&gt;               &lt;num&gt;                &lt;char&gt;                 &lt;char&gt;      &lt;char&gt;</span></span>
-<span><span class="co">#&gt;   1:       6.476702           ENCFF303ORH            ENCFF752OZB HOCOMOCOv11</span></span>
-<span><span class="co">#&gt;   2:      12.081160           ENCFF538DNI            ENCFF759OLD HOCOMOCOv11</span></span>
-<span><span class="co">#&gt;   3:      56.056680           ENCFF885JPB            ENCFF274YGF HOCOMOCOv11</span></span>
-<span><span class="co">#&gt;   4:      27.821210           ENCFF899JAX            ENCFF897NME HOCOMOCOv11</span></span>
-<span><span class="co">#&gt;   5:      14.618530           ENCFF197JBM            ENCFF897NME HOCOMOCOv11</span></span>
-<span><span class="co">#&gt;  ---                                                                        </span></span>
-<span><span class="co">#&gt; 219:       3.684286           ENCFF439DRT            ENCFF897NME HOCOMOCOv11</span></span>
-<span><span class="co">#&gt; 220:       3.443155           ENCFF329DCV            ENCFF897NME HOCOMOCOv11</span></span>
-<span><span class="co">#&gt; 221:       3.428189           ENCFF948PYK            ENCFF897NME HOCOMOCOv11</span></span>
-<span><span class="co">#&gt; 222:       3.793244           ENCFF888BHA            ENCFF285OXK HOCOMOCOv11</span></span>
-<span><span class="co">#&gt; 223:      11.973690           ENCFF485WHZ            ENCFF910QHN    UNIPROBE</span></span>
-<span><span class="co">#&gt;                 SEM_KEY</span></span>
-<span><span class="co">#&gt;                  &lt;char&gt;</span></span>
-<span><span class="co">#&gt;   1: AP2B_HUMAN.SK-N-SH</span></span>
-<span><span class="co">#&gt;   2: ARNT_HUMAN.GM12878</span></span>
-<span><span class="co">#&gt;   3:    ATF1_HUMAN.K562</span></span>
-<span><span class="co">#&gt;   4:   ATF2_HUMAN.HepG2</span></span>
-<span><span class="co">#&gt;   5:   ATF3_HUMAN.HepG2</span></span>
-<span><span class="co">#&gt;  ---                   </span></span>
-<span><span class="co">#&gt; 219:  ZBT7A_HUMAN.HepG2</span></span>
-<span><span class="co">#&gt; 220:    ZFX_HUMAN.HepG2</span></span>
-<span><span class="co">#&gt; 221:  ZN281_HUMAN.HepG2</span></span>
-<span><span class="co">#&gt; 222: ZNF18_HUMAN.HEK293</span></span>
-<span><span class="co">#&gt; 223:   ZSCAN4_secondary</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;transcription_factor&gt;</span></span>
+<span><span class="co">#&gt;      transcription_factor                                      ensembl_id</span></span>
+<span><span class="co">#&gt;                    &lt;char&gt;                                          &lt;char&gt;</span></span>
+<span><span class="co">#&gt;   1:                  AHR                                 ENSG00000106546</span></span>
+<span><span class="co">#&gt;   2:       AHR:ARNT:HIF1A ENSG00000106546;ENSG00000143437;ENSG00000100644</span></span>
+<span><span class="co">#&gt;   3:               ARID3A                                 ENSG00000116017</span></span>
+<span><span class="co">#&gt;   4:                 ARNT                                 ENSG00000143437</span></span>
+<span><span class="co">#&gt;   5:                ARNTL                                 ENSG00000133794</span></span>
+<span><span class="co">#&gt;  ---                                                                     </span></span>
+<span><span class="co">#&gt; 219:                  ZFX                                 ENSG00000005889</span></span>
+<span><span class="co">#&gt; 220:                ZNF18                                 ENSG00000154957</span></span>
+<span><span class="co">#&gt; 221:               ZNF217                                 ENSG00000171940</span></span>
+<span><span class="co">#&gt; 222:               ZNF281                                 ENSG00000162702</span></span>
+<span><span class="co">#&gt; 223:               ZSCAN4                                 ENSG00000180532</span></span>
+<span><span class="co">#&gt;      ebi_complex_ac           uniprot_ac                PWM_id</span></span>
+<span><span class="co">#&gt;              &lt;char&gt;               &lt;char&gt;                &lt;char&gt;</span></span>
+<span><span class="co">#&gt;   1:                              P35869                M00778</span></span>
+<span><span class="co">#&gt;   2:                P35869;P27540;Q16665                M00976</span></span>
+<span><span class="co">#&gt;   3:                              Q99856              MA0151.1</span></span>
+<span><span class="co">#&gt;   4:                              P27540  ARNT_HUMAN.H11MO.0.B</span></span>
+<span><span class="co">#&gt;   5:                              O00327 BMAL1_HUMAN.H11MO.0.A</span></span>
+<span><span class="co">#&gt;  ---                                                          </span></span>
+<span><span class="co">#&gt; 219:                              P17010   ZFX_HUMAN.H11MO.0.A</span></span>
+<span><span class="co">#&gt; 220:                              P17022 ZNF18_HUMAN.H11MO.0.C</span></span>
+<span><span class="co">#&gt; 221:                              O75362                M01306</span></span>
+<span><span class="co">#&gt; 222:                              Q9Y2X9 ZN281_HUMAN.H11MO.0.A</span></span>
+<span><span class="co">#&gt; 223:                              Q8NAM6  Zscan4_pwm_secondary</span></span>
+<span><span class="co">#&gt;                         SEM SEM_baseline cell_type neg_log10_pval</span></span>
+<span><span class="co">#&gt;                      &lt;char&gt;        &lt;num&gt;    &lt;char&gt;          &lt;num&gt;</span></span>
+<span><span class="co">#&gt;   1:             M00778.sem   -0.6717610     HepG2      18.350950</span></span>
+<span><span class="co">#&gt;   2:             M00976.sem   -0.5938010     HepG2      14.290190</span></span>
+<span><span class="co">#&gt;   3:           MA0151.1.sem   -0.4020880     HepG2       2.980258</span></span>
+<span><span class="co">#&gt;   4: ARNT_HUMAN.GM12878.sem   -1.8632604   GM12878      12.081160</span></span>
+<span><span class="co">#&gt;   5:  BMAL1_HUMAN.HepG2.sem   -1.5977194     HepG2      20.220840</span></span>
+<span><span class="co">#&gt;  ---                                                             </span></span>
+<span><span class="co">#&gt; 219:    ZFX_HUMAN.HepG2.sem   -0.2478717     HepG2       3.443155</span></span>
+<span><span class="co">#&gt; 220: ZNF18_HUMAN.HEK293.sem   -1.6459529    HEK293       3.793244</span></span>
+<span><span class="co">#&gt; 221:             M01306.sem   -0.4596240   GM12878       2.843803</span></span>
+<span><span class="co">#&gt; 222:  ZN281_HUMAN.HepG2.sem   -0.3926150     HepG2       3.428189</span></span>
+<span><span class="co">#&gt; 223:   ZSCAN4_secondary.sem   -2.9110180    HEK293      11.973690</span></span>
+<span><span class="co">#&gt;      chip_ENCODE_accession dnase_ENCODE_accession  PWM_source</span></span>
+<span><span class="co">#&gt;                     &lt;char&gt;                 &lt;char&gt;      &lt;char&gt;</span></span>
+<span><span class="co">#&gt;   1:           ENCFF242PUG            ENCFF001UVU    TRANSFAC</span></span>
+<span><span class="co">#&gt;   2:           ENCFF242PUG            ENCFF001UVU    TRANSFAC</span></span>
+<span><span class="co">#&gt;   3:           ENCFF460WFF            ENCFF001UVU      JASPAR</span></span>
+<span><span class="co">#&gt;   4:           ENCFF538DNI            ENCFF759OLD HOCOMOCOv11</span></span>
+<span><span class="co">#&gt;   5:           ENCFF363NHH            ENCFF897NME HOCOMOCOv11</span></span>
+<span><span class="co">#&gt;  ---                                                         </span></span>
+<span><span class="co">#&gt; 219:           ENCFF329DCV            ENCFF897NME HOCOMOCOv11</span></span>
+<span><span class="co">#&gt; 220:           ENCFF888BHA            ENCFF285OXK HOCOMOCOv11</span></span>
+<span><span class="co">#&gt; 221:           ENCFF807UJN            ENCFF097LEF    TRANSFAC</span></span>
+<span><span class="co">#&gt; 222:           ENCFF948PYK            ENCFF897NME HOCOMOCOv11</span></span>
+<span><span class="co">#&gt; 223:           ENCFF485WHZ            ENCFF910QHN    UNIPROBE</span></span></code></pre></div>
+<p>We can access all SEMs in the collection the with the function
+<code><a href="../reference/getSEMs.html">getSEMs()</a></code> or some subset of motifs by specifying a vector
+of semIds in the <code>semId</code> parameter. All semIds can be viewed
+in the <code>transctiption_factor</code> column of the meta data. The
+resulting <code>SNPEffectMatrix</code> object contains the semId, the
+baseline value used for normalization, and the SEM that SEMplR will use
+to score binding affinity.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/getSEMs.html">getSEMs</a></span><span class="op">(</span><span class="va">SEMC</span>, semId <span class="op">=</span> <span class="st">"JUN"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; An object of class SNPEffectMatrix</span></span>
+<span><span class="co">#&gt; semId:  JUN</span></span>
+<span><span class="co">#&gt; baseline:  -0.933424</span></span>
+<span><span class="co">#&gt; sem:</span></span>
+<span><span class="co">#&gt;            A          C          G          T</span></span>
+<span><span class="co">#&gt;        &lt;num&gt;      &lt;num&gt;      &lt;num&gt;      &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1: -0.985316 -1.2757100 -1.3195100  0.0000000</span></span>
+<span><span class="co">#&gt; 2: -0.697860 -0.7446700  0.0162566 -0.4440620</span></span>
+<span><span class="co">#&gt; 3:  0.000000 -1.0239300 -1.1553300 -0.9076800</span></span>
+<span><span class="co">#&gt; 4: -0.386240 -0.0771875 -0.0818006 -0.3410950</span></span>
+<span><span class="co">#&gt; 5: -0.857635 -1.1799200 -0.9421760  0.0310366</span></span>
+<span><span class="co">#&gt; 6: -0.437828  0.0445882 -0.8110000 -0.6691400</span></span>
+<span><span class="co">#&gt; 7:  0.000000 -1.2758200 -1.2047200 -0.9583980</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="scoring-binding">Scoring Binding<a class="anchor" aria-label="anchor" href="#scoring-binding"></a>
 </h2>
+<div class="section level3">
+<h3 id="prepare-inputs">Prepare Inputs<a class="anchor" aria-label="anchor" href="#prepare-inputs"></a>
+</h3>
+<p>To calculate binding affinity for a given loci in the genome, we
+first make a <code>GRanges</code> object for that location. In this
+example, we will score a location on chromosome 12 of the human
+genome.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSEM.html">plotSEM</a></span><span class="op">(</span><span class="va">SEMC</span>,</span>
-<span>    motif <span class="op">=</span> <span class="st">"AP2B_HUMAN.SK-N-SH"</span>,</span>
-<span>    motifSeq <span class="op">=</span> <span class="st">"GCTTTGAGGC"</span>, highlight <span class="op">=</span> <span class="fl">1</span></span>
+<code class="sourceCode R"><span><span class="co"># create a GRanges object</span></span>
+<span><span class="va">gr</span> <span class="op">&lt;-</span> <span class="fu">GenomicRanges</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html" class="external-link">GRanges</a></span><span class="op">(</span></span>
+<span>    seqnames <span class="op">=</span> <span class="st">"chr12"</span>,</span>
+<span>    ranges <span class="op">=</span> <span class="fl">94136009</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="SEMplR_files/figure-html/plot_sem-1.png" width="480"></p>
+</div>
+<div class="section level3">
+<h3 id="scoring">Scoring<a class="anchor" aria-label="anchor" href="#scoring"></a>
+</h3>
+<p>This <code>GRanges</code> object is passed to the
+<code><a href="../reference/scoreBinding.html">scoreBinding()</a></code> function along with the collection of SEMs
+and a BSgenome object.</p>
+<p>Optionally, a <code>nFlank</code> parameter can be specified to
+dictate the number of nucleotides to flank each side of the sequence for
+the supplied position. By default, the number of nucleotides added will
+be the minimum number necessary to score the longest SEM.</p>
+<p>A <code>seqId</code> parameter may also be used to specify a meta
+data column in the <code>GRanges</code> object to use as a unique
+identifier. Otherwise, a unique identifier will be created from
+positional information.</p>
+<p>The resulting data object is a <code>SEMplScores</code> object that
+stores information about the scored range and its associated sequence,
+the SEM meta data, and scoring information.</p>
+<p>Please see the (Scoring method)[#scoring-method] section below for
+details on how sequences are scored with SEMs.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSEM.html">plotSEM</a></span><span class="op">(</span><span class="va">SEMC</span>,</span>
-<span>    motif <span class="op">=</span> <span class="st">"AP2B_HUMAN.SK-N-SH"</span>,</span>
-<span>    motifSeq <span class="op">=</span> <span class="st">"GCTTTCAGGC"</span>, highlight <span class="op">=</span> <span class="fl">1</span>, hcol <span class="op">=</span> <span class="st">"red"</span></span>
+<code class="sourceCode R"><span><span class="co"># calculate binding propensity</span></span>
+<span><span class="va">sb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scoreBinding.html">scoreBinding</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">gr</span>, sem <span class="op">=</span> <span class="va">SEMC</span>, genome <span class="op">=</span> <span class="va">Hsapiens</span><span class="op">)</span></span>
+<span><span class="va">sb</span></span>
+<span><span class="co">#&gt; An object of class SEMplScores</span></span>
+<span><span class="co">#&gt; ranges(1): chr12:94136009</span></span>
+<span><span class="co">#&gt; semData(12): transcription_factor, ensembl_id ... dnase_ENCODE_accession, PWM_source</span></span>
+<span><span class="co">#&gt; scores(223):</span></span>
+<span><span class="co">#&gt;               seqId    SEM      score  scoreNorm index              seq</span></span>
+<span><span class="co">#&gt;              &lt;char&gt; &lt;char&gt;      &lt;num&gt;      &lt;num&gt; &lt;int&gt;           &lt;char&gt;</span></span>
+<span><span class="co">#&gt;   1: chr12:94136009 TFAP2B  -1.689754 -0.3068238    15       GCTTTGAGGC</span></span>
+<span><span class="co">#&gt;   2: chr12:94136009   ARNT  -6.892799 -0.9693833    17        TTTGAGGCA</span></span>
+<span><span class="co">#&gt;   3: chr12:94136009   ATF1  -7.079925 -0.9420095    16      CTTTGAGGCAT</span></span>
+<span><span class="co">#&gt;   4: chr12:94136009   ATF2  -4.890126 -0.9098440    16      CTTTGAGGCAT</span></span>
+<span><span class="co">#&gt;   5: chr12:94136009   ATF3  -8.605675 -0.9885365    14      GGCTTTGAGGC</span></span>
+<span><span class="co">#&gt;  ---                                                                   </span></span>
+<span><span class="co">#&gt; 219: chr12:94136009 ZBTB7A  -1.859506 -0.6349682    12        AAGGCTTTG</span></span>
+<span><span class="co">#&gt; 220: chr12:94136009    ZFX  -1.459472 -0.5682106    19       TGAGGCATCT</span></span>
+<span><span class="co">#&gt; 221: chr12:94136009 ZNF281  -4.347612 -0.9355197     8  GGAGAAGGCTTTGAG</span></span>
+<span><span class="co">#&gt; 222: chr12:94136009  ZNF18  -5.410220 -0.9264060    15     GCTTTGAGGCAT</span></span>
+<span><span class="co">#&gt; 223: chr12:94136009 ZSCAN4 -15.439087 -0.9998307    15 GCTTTGAGGCATCTGC</span></span></code></pre></div>
+<p>We can access this scores table with the <code><a href="../reference/scores.html">scores()</a></code>
+function and see that we have a row for each variant and SEM
+combination. The scoring results has 6 columns:</p>
+<ul>
+<li><p><strong>varId</strong>: unique id of the variant as defined in
+the <code>id</code> column of the input <code>GRanges</code> or
+<code>VRanges</code> object. If not defined, in the <code>seqId</code>
+parameter of the <code>scoreBinding</code> function, a custom unique
+identifier is generated in the format [seqname]:[range]</p></li>
+<li><p><strong>semId</strong>: the unique identifier of the SEM</p></li>
+<li><p><strong>score</strong>: the raw (unnormalized) binding affinity
+score for the reference and alternative alleles respectively</p></li>
+<li><p><strong>scoreNorm</strong> : the normalized binding affinity
+score for the reference and alternative alleles respectively. More
+positive scores predict TF binding and more ngative scores predict no TF
+binding.</p></li>
+<li><p><strong>index</strong>: The position of the optimally scored
+sequence in the scored sequence.</p></li>
+<li><p><strong>seq</strong>: the optimally scored sequence for the
+reference and alternative alleles respectively</p></li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/scores.html">scores</a></span><span class="op">(</span><span class="va">sb</span><span class="op">)</span></span>
+<span><span class="co">#&gt;               seqId    SEM      score  scoreNorm index              seq</span></span>
+<span><span class="co">#&gt;              &lt;char&gt; &lt;char&gt;      &lt;num&gt;      &lt;num&gt; &lt;int&gt;           &lt;char&gt;</span></span>
+<span><span class="co">#&gt;   1: chr12:94136009 TFAP2B  -1.689754 -0.3068238    15       GCTTTGAGGC</span></span>
+<span><span class="co">#&gt;   2: chr12:94136009   ARNT  -6.892799 -0.9693833    17        TTTGAGGCA</span></span>
+<span><span class="co">#&gt;   3: chr12:94136009   ATF1  -7.079925 -0.9420095    16      CTTTGAGGCAT</span></span>
+<span><span class="co">#&gt;   4: chr12:94136009   ATF2  -4.890126 -0.9098440    16      CTTTGAGGCAT</span></span>
+<span><span class="co">#&gt;   5: chr12:94136009   ATF3  -8.605675 -0.9885365    14      GGCTTTGAGGC</span></span>
+<span><span class="co">#&gt;  ---                                                                   </span></span>
+<span><span class="co">#&gt; 219: chr12:94136009 ZBTB7A  -1.859506 -0.6349682    12        AAGGCTTTG</span></span>
+<span><span class="co">#&gt; 220: chr12:94136009    ZFX  -1.459472 -0.5682106    19       TGAGGCATCT</span></span>
+<span><span class="co">#&gt; 221: chr12:94136009 ZNF281  -4.347612 -0.9355197     8  GGAGAAGGCTTTGAG</span></span>
+<span><span class="co">#&gt; 222: chr12:94136009  ZNF18  -5.410220 -0.9264060    15     GCTTTGAGGCAT</span></span>
+<span><span class="co">#&gt; 223: chr12:94136009 ZSCAN4 -15.439087 -0.9998307    15 GCTTTGAGGCATCTGC</span></span></code></pre></div>
+<p>We can subset these scores to just see results for the JUN motif and
+we see that the normalized score, in the scoreNorm column, is
+negative.</p>
+<p>We can visualize this sequence on the SEM score for each nucleotide
+position and see which nucleotides are contributing to this negative
+score.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># subset JUN score</span></span>
+<span><span class="va">jun_score</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scores.html">scores</a></span><span class="op">(</span><span class="va">sb</span><span class="op">)</span><span class="op">[</span><span class="va">SEM</span> <span class="op">==</span> <span class="st">"JUN"</span><span class="op">]</span></span>
+<span><span class="va">jun_score</span></span>
+<span><span class="co">#&gt;             seqId    SEM      score   scoreNorm index     seq</span></span>
+<span><span class="co">#&gt;            &lt;char&gt; &lt;char&gt;      &lt;num&gt;       &lt;num&gt; &lt;int&gt;  &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1: chr12:94136009    JUN -0.9631318 -0.02038131    19 TGAGGCA</span></span>
+<span></span>
+<span><span class="co"># plot the JUN motif with the scored sequence</span></span>
+<span><span class="fu"><a href="../reference/plotSEM.html">plotSEM</a></span><span class="op">(</span><span class="va">SEMC</span>,</span>
+<span>    motif <span class="op">=</span> <span class="st">"JUN"</span>,</span>
+<span>    motifSeq <span class="op">=</span> <span class="va">jun_score</span><span class="op">$</span><span class="va">seq</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="SEMplR_files/figure-html/plot_sem-2.png" width="480"></p>
+<p><img src="SEMplR_files/figure-html/plot_sem-1.png" width="384"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="enrichment">Enrichment<a class="anchor" aria-label="anchor" href="#enrichment"></a>
+</h2>
+<p>When scoring large sets of loci, you can also use SEMplR to predict
+if some transcription factors are enriched for binding, bound more than
+expected, within the loci of interest.</p>
+<p>Here, we will demonstrate this analysis with simulated data. We will
+generate and score a set of 1000 sequences. 200 of which will be
+generated using the JUN SEM to generate likely binding sequences. The
+remaining 800 sequences will be completely random.</p>
+<div class="section level3">
+<h3 id="prepare-inputs-1">Prepare Inputs<a class="anchor" aria-label="anchor" href="#prepare-inputs-1"></a>
+</h3>
+<p>Expand the section below to see the code used to generate these
+sequences.</p>
+<details><summary>
+See code used to generate simulated sequences
+</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># create random sequences weighted by ppm probabilities</span></span>
+<span><span class="va">simulatePPMSeqs</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">ppm</span>, <span class="va">nSeqs</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">ppm_t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">ppm</span><span class="op">)</span></span>
+<span>    <span class="va">position_samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">ppm_t</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>        <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>            <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">ppm_t</span><span class="op">)</span>,</span>
+<span>                size <span class="op">=</span> <span class="va">nSeqs</span>,</span>
+<span>                replace <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                prob <span class="op">=</span> <span class="va">ppm_t</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span></span>
+<span>            <span class="op">)</span></span>
+<span>        <span class="op">}</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">rand_pwm_seq_mtx</span> <span class="op">&lt;-</span> <span class="va">position_samples</span> <span class="op">|&gt;</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>ncol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">ppm_t</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="va">nSeqs</span><span class="op">)</span></span>
+<span>    <span class="va">rand_pwm_seqs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span></span>
+<span>        <span class="va">rand_pwm_seq_mtx</span>, <span class="fl">1</span>,</span>
+<span>        <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">x</span>, collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">rand_pwm_seqs</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># generate DNA sequences</span></span>
+<span><span class="va">simulateRandSeqs</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">seqLength</span>, <span class="va">nSeqs</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">bps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"C"</span>, <span class="st">"G"</span>, <span class="st">"T"</span><span class="op">)</span></span>
+<span>    <span class="va">seqs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">bps</span>,</span>
+<span>        replace <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>        size <span class="op">=</span> <span class="va">seqLength</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>        <span class="fu">stringi</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stringi/man/stri_join.html" class="external-link">stri_c</a></span><span class="op">(</span>collapse <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">nSeqs</span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">seqs</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ppm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/convertSEMsToPPMs.html">convertSEMsToPPMs</a></span><span class="op">(</span><span class="fu"><a href="../reference/getSEMs.html">getSEMs</a></span><span class="op">(</span><span class="va">SEMC</span>, <span class="st">"JUN"</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co"># simulate sequences from the JUN PPM</span></span>
+<span><span class="va">sim_seqs</span> <span class="op">&lt;-</span> <span class="fu">simulatePPMSeqs</span><span class="op">(</span>ppm <span class="op">=</span> <span class="va">ppm</span>, nSeqs <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<span><span class="co"># add flanks to the simulated sequences to make them 3x the length of the motif</span></span>
+<span><span class="va">sim_seqs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
+<span>    <span class="va">sim_seqs</span>,</span>
+<span>    <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
+<span>            <span class="fu">simulateRandSeqs</span><span class="op">(</span>seqLength <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">ppm</span><span class="op">)</span><span class="op">)</span>, <span class="va">x</span>,</span>
+<span>            <span class="fu">simulateRandSeqs</span><span class="op">(</span>seqLength <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">ppm</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># generate random DNA sequences</span></span>
+<span><span class="va">rand_seqs</span> <span class="op">&lt;-</span> <span class="fu">simulateRandSeqs</span><span class="op">(</span>seqLength <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">ppm</span><span class="op">)</span> <span class="op">*</span> <span class="fl">3</span>, nSeqs <span class="op">=</span> <span class="fl">800</span><span class="op">)</span></span></code></pre></div>
+</details>
+</div>
+<div class="section level3">
+<h3 id="scoring-1">Scoring<a class="anchor" aria-label="anchor" href="#scoring-1"></a>
+</h3>
+<p>We have two vectors of sequences, <code>sim_seqs</code> and
+<code>rand_seqs</code>. They contain 200 and 800 sequences respectively.
+All sequences are 21 nucleotides in length.</p>
+<p>We will combine all sequences into a single vector and pass this
+vector of sequences to <code>scoreBinding</code>. Because we did not
+pass positional/range information, this function will now only return
+the scoring table.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># combine all sequences into a single vector</span></span>
+<span><span class="va">all_seqs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sim_seqs</span>, <span class="va">rand_seqs</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scoreBinding.html">scoreBinding</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="va">all_seqs</span>,</span>
+<span>    sem <span class="op">=</span> <span class="va">SEMC</span>, genome <span class="op">=</span> <span class="fu">BSgenome.Hsapiens.UCSC.hg19</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html" class="external-link">Hsapiens</a></span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">sb</span></span>
+<span><span class="co">#&gt;          seqId    SEM      score  scoreNorm index              seq</span></span>
+<span><span class="co">#&gt;         &lt;char&gt; &lt;char&gt;      &lt;num&gt;      &lt;num&gt; &lt;int&gt;           &lt;char&gt;</span></span>
+<span><span class="co">#&gt;      1:      1 TFAP2B  -2.160351 -0.4997585     5       GCATGAGACA</span></span>
+<span><span class="co">#&gt;      2:      2 TFAP2B  -2.973604 -0.7153140    12       TCATGAGACC</span></span>
+<span><span class="co">#&gt;      3:      3 TFAP2B  -3.292712 -0.7718055     9       GACTAATGAT</span></span>
+<span><span class="co">#&gt;      4:      4 TFAP2B  -3.402059 -0.7884620     9       GATTAACGCT</span></span>
+<span><span class="co">#&gt;      5:      5 TFAP2B  -3.564211 -0.8109504     5       GCATGAATAA</span></span>
+<span><span class="co">#&gt;     ---                                                           </span></span>
+<span><span class="co">#&gt; 222996:    996 ZSCAN4 -15.105340 -0.9997866     3 AAGTCAACAAGTCCAG</span></span>
+<span><span class="co">#&gt; 222997:    997 ZSCAN4 -13.120222 -0.9991553     5 AAGACTGCAAACAATC</span></span>
+<span><span class="co">#&gt; 222998:    998 ZSCAN4 -16.617743 -0.9999252     4 ATTTGCGAAGGGCTTC</span></span>
+<span><span class="co">#&gt; 222999:    999 ZSCAN4 -16.417904 -0.9999141     1 CTGTAGATCTCAGCAC</span></span>
+<span><span class="co">#&gt; 223000:   1000 ZSCAN4 -17.994440 -0.9999712     5 CAGATCGGTTAGATGC</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="test-for-enrichment">Test for Enrichment<a class="anchor" aria-label="anchor" href="#test-for-enrichment"></a>
+</h3>
+<p>The results of <code>scoreBinding</code> can be passed directly to
+the <code>enrichSEMs</code> function along with our collection of SEMs,
+and the sequences we scored.</p>
+<p>Optionally, we can provide a background set of sequences or ranges
+for this analysis. If none is provided, <code>enrichSEMs</code> will
+scramble the scored sequences provided to use as a background.</p>
+<p><code>enrichSEMs</code> performs a binomal test to determine if any
+of the transcription factors scored are bound more than expected by
+chance.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">e</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichSEMs.html">enrichSEMs</a></span><span class="op">(</span><span class="va">sb</span>, sem <span class="op">=</span> <span class="va">SEMC</span>, seqs <span class="op">=</span> <span class="va">all_seqs</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Building background set (this may take several minutes) ...</span></span>
+<span></span>
+<span><span class="co"># order the results by adjusted pvalue</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">e</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">padj</span>, decreasing <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;       SEM       pvalue         padj n_bound n_bound_bg</span></span>
+<span><span class="co">#&gt;    &lt;char&gt;        &lt;num&gt;        &lt;num&gt;   &lt;int&gt;      &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1:    JUN 1.521416e-99 3.392757e-97     159         16</span></span>
+<span><span class="co">#&gt; 2:  FOSL1 2.805619e-68 3.128265e-66      69          2</span></span>
+<span><span class="co">#&gt; 3:   JUND 2.010221e-40 1.494264e-38      42          1</span></span>
+<span><span class="co">#&gt; 4:   JUNB 6.994487e-28 3.899427e-26      26          0</span></span>
+<span><span class="co">#&gt; 5:  FOSL2 2.767490e-22 1.234301e-20      22          0</span></span>
+<span><span class="co">#&gt; 6: ZNF217 1.806509e-16 6.714191e-15      56         14</span></span></code></pre></div>
+<p>The resulting columns contain the p-value from the binomal test, the
+Benjamini &amp; Hochberg ajusted p-value, and the number of sequences
+where each TF was predicted to be bound in the foreground set (n_bound)
+and the background set (n_bound_bg).</p>
+</div>
+<div class="section level3">
+<h3 id="visualization">Visualization<a class="anchor" aria-label="anchor" href="#visualization"></a>
+</h3>
+<p>While JUN was the top significant SEM of our enrichment analysis,
+there are also several other significant SEMs. Because some motif
+sequences can be very similar, this is not unexpected.</p>
+<p>SEMplR’s <code>plotEnrich</code> function takes this motif
+relatedness into account when visualizing these enrichment results. SEMs
+are clustered by similarity and plotted on a dendrogram so similar
+motifs are plotted near eachother.</p>
+<p>The heatmap plots the -log10 adjusted pvalue of the binomial test (
+-log10(padj) ) and the TFs are colored according to an adjusted pvalue
+threshold.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotEnrich.html">plotEnrich</a></span><span class="op">(</span><span class="va">e</span>, sem <span class="op">=</span> <span class="va">SEMC</span>,</span>
+<span>    threshold <span class="op">=</span> <span class="fl">0.05</span>, method <span class="op">=</span> <span class="st">"WPCC"</span>,</span>
+<span>    pvalRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="SEMplR_files/figure-html/plotEnrich-1.png" width="384"></p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="scoring-variants">Scoring Variants<a class="anchor" aria-label="anchor" href="#scoring-variants"></a>
 </h2>
+<p>SEMplR also provides functionality for scoring variants, comparing TF
+binding between alleles, and helping identify TFs whose binding is
+gained or lost with genetic variation.</p>
 <div class="section level3">
-<h3 id="prepare-inputs">Prepare inputs<a class="anchor" aria-label="anchor" href="#prepare-inputs"></a>
+<h3 id="prepare-inputs-2">Prepare Inputs<a class="anchor" aria-label="anchor" href="#prepare-inputs-2"></a>
 </h3>
 <p>First, we will define the variants we want to score. Variants can be
 supplied to SEMplR as either a <code>VRanges</code> or a
@@ -220,7 +467,7 @@ metadata columns.</p>
 vector in the appropriate allele.</p>
 <p>Optionally, an <code>id</code> column can be defined in the object
 metadata to be used as a unique identifier for each variant.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/VariantAnnotation/man/VRanges-class.html" class="external-link">VRanges</a></span><span class="op">(</span></span>
 <span>    seqnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chr12"</span>, <span class="st">"chr19"</span><span class="op">)</span>,</span>
 <span>    ranges <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">94136009</span>, <span class="fl">10640062</span><span class="op">)</span>,</span>
@@ -229,7 +476,7 @@ metadata to be used as a unique identifier for each variant.</p>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="scoring">Scoring<a class="anchor" aria-label="anchor" href="#scoring"></a>
+<h3 id="scoring-2">Scoring<a class="anchor" aria-label="anchor" href="#scoring-2"></a>
 </h3>
 <p>The <code>scoreVariants</code> function scores each allele of each
 variant against every SEM provided. From the resulting data object, we
@@ -238,7 +485,7 @@ object has 13 fields, and we have 446 rows in the <code>scores</code>
 results table.</p>
 <p>There is a row in the <code>scores</code> table for each variant/SEM
 combination. Here we scored 2 variants x 223 SEMs to get 446 rows.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sempl_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scoreVariants.html">scoreVariants</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="va">vr</span>,</span>
 <span>    sem <span class="op">=</span> <span class="va">SEMC</span>,</span>
@@ -251,35 +498,36 @@ combination. Here we scored 2 variants x 223 SEMs to get 446 rows.</p>
 <span><span class="va">sempl_results</span></span>
 <span><span class="co">#&gt; An object of class SEMplScores</span></span>
 <span><span class="co">#&gt; ranges(2): variant1, variant2</span></span>
-<span><span class="co">#&gt; semData(13): transcription_factor, ensembl_id ... PWM_source, SEM_KEY</span></span>
+<span><span class="co">#&gt; semData(12): transcription_factor, ensembl_id ... dnase_ENCODE_accession, PWM_source</span></span>
 <span><span class="co">#&gt; scores(446):</span></span>
-<span><span class="co">#&gt;         varId              semId           refSeq           altSeq   refScore</span></span>
-<span><span class="co">#&gt;        &lt;char&gt;             &lt;char&gt;           &lt;char&gt;           &lt;char&gt;      &lt;num&gt;</span></span>
-<span><span class="co">#&gt;   1: variant1 AP2B_HUMAN.SK-N-SH       GTTTAACAAT       TCTTTAACAA  -5.287583</span></span>
-<span><span class="co">#&gt;   2: variant1 ARNT_HUMAN.GM12878        TTGTTTAAC        TGTTGTTCT  -5.048425</span></span>
-<span><span class="co">#&gt;   3: variant1    ATF1_HUMAN.K562      ACTTGTTGTTG      CTTTAACAATA  -7.736531</span></span>
-<span><span class="co">#&gt;   4: variant1   ATF2_HUMAN.HepG2      CTTGTTGTTGT      CTTGTTGTTCT  -5.049124</span></span>
-<span><span class="co">#&gt;   5: variant1   ATF3_HUMAN.HepG2      TGTTGTTTAAC      TGTTCTTTAAC  -9.214165</span></span>
-<span><span class="co">#&gt;  ---                                                                         </span></span>
-<span><span class="co">#&gt; 442: variant2  ZBT7A_HUMAN.HepG2        TTTAATCCT        TATAATCCT  -2.821984</span></span>
-<span><span class="co">#&gt; 443: variant2    ZFX_HUMAN.HepG2       TTAATCCTCT       ATAATCCTCT  -1.407772</span></span>
-<span><span class="co">#&gt; 444: variant2  ZN281_HUMAN.HepG2  CTTGGGCAAATTATT  CTTGGGCAAATTATA  -5.109413</span></span>
-<span><span class="co">#&gt; 445: variant2 ZNF18_HUMAN.HEK293     TATTTAATCCTC     TATATAATCCTC  -6.516790</span></span>
-<span><span class="co">#&gt; 446: variant2   ZSCAN4_secondary TCTTGGGCAAATTATT TTATATAATCCTCTAA -17.314249</span></span>
-<span><span class="co">#&gt;        altScore    refNorm    altNorm refVarIndex altVarIndex</span></span>
-<span><span class="co">#&gt;           &lt;num&gt;      &lt;num&gt;      &lt;num&gt;       &lt;int&gt;       &lt;int&gt;</span></span>
-<span><span class="co">#&gt;   1:  -4.330368 -0.9427482 -0.8888423          20          19</span></span>
-<span><span class="co">#&gt;   2:  -5.948900 -0.8900564 -0.9411021          18          13</span></span>
-<span><span class="co">#&gt;   3:  -8.123991 -0.9632126 -0.9718770          10          20</span></span>
-<span><span class="co">#&gt;   4:  -5.397180 -0.9192521 -0.9365610          11          11</span></span>
-<span><span class="co">#&gt;   5:  -9.785488 -0.9924813 -0.9949399          16          16</span></span>
-<span><span class="co">#&gt;  ---                                                         </span></span>
-<span><span class="co">#&gt; 442:  -2.502507 -0.8126749 -0.7662411          19          19</span></span>
-<span><span class="co">#&gt; 443:  -1.508060 -0.5524565 -0.5825105          20          20</span></span>
-<span><span class="co">#&gt; 444:  -5.061910 -0.9619721 -0.9606991           6           6</span></span>
-<span><span class="co">#&gt; 445:  -6.314741 -0.9658232 -0.9606853          17          17</span></span>
-<span><span class="co">#&gt; 446: -17.018032 -0.9999538 -0.9999433           5          16</span></span></code></pre></div>
-<p>The scoring results has 10 columns:</p>
+<span><span class="co">#&gt;         varId          semId           refSeq           altSeq    refScore</span></span>
+<span><span class="co">#&gt;        &lt;char&gt;         &lt;char&gt;           &lt;char&gt;           &lt;char&gt;       &lt;num&gt;</span></span>
+<span><span class="co">#&gt;   1: variant1            AHR      GTTGTTTAACA      TGTTCTTTAAC  -1.2300844</span></span>
+<span><span class="co">#&gt;   2: variant1 AHR:ARNT:HIF1A        TGTTTAACA        TTCTTTAAC  -1.3623427</span></span>
+<span><span class="co">#&gt;   3: variant1         ARID3A           GTTTAA           TTCTTT  -0.8912875</span></span>
+<span><span class="co">#&gt;   4: variant1           ARNT        TTGTTTAAC        TGTTGTTCT  -5.0484252</span></span>
+<span><span class="co">#&gt;   5: variant1          ARNTL      TTGTTGTTGTT      TTGTTGTTCTT  -6.8156452</span></span>
+<span><span class="co">#&gt;  ---                                                                      </span></span>
+<span><span class="co">#&gt; 442: variant2            ZFX       TTAATCCTCT       ATAATCCTCT  -1.4077719</span></span>
+<span><span class="co">#&gt; 443: variant2          ZNF18     TATTTAATCCTC     TATATAATCCTC  -6.5167904</span></span>
+<span><span class="co">#&gt; 444: variant2         ZNF217         AATTATTT         AATTATAT  -0.7999384</span></span>
+<span><span class="co">#&gt; 445: variant2         ZNF281  CTTGGGCAAATTATT  CTTGGGCAAATTATA  -5.1094131</span></span>
+<span><span class="co">#&gt; 446: variant2         ZSCAN4 TCTTGGGCAAATTATT TTATATAATCCTCTAA -17.3142490</span></span>
+<span><span class="co">#&gt;         altScore    refNorm    altNorm refVarIndex altVarIndex</span></span>
+<span><span class="co">#&gt;            &lt;num&gt;      &lt;num&gt;      &lt;num&gt;       &lt;int&gt;       &lt;int&gt;</span></span>
+<span><span class="co">#&gt;   1:  -1.6478822 -0.3209091 -0.4916554          17          16</span></span>
+<span><span class="co">#&gt;   2:  -1.3507801 -0.4129895 -0.4082659          19          18</span></span>
+<span><span class="co">#&gt;   3:  -0.6537551 -0.2875797 -0.1600747          20          18</span></span>
+<span><span class="co">#&gt;   4:  -5.9488997 -0.8900564 -0.9411021          18          13</span></span>
+<span><span class="co">#&gt;   5:  -6.8512893 -0.9731312 -0.9737869          12          12</span></span>
+<span><span class="co">#&gt;  ---                                                          </span></span>
+<span><span class="co">#&gt; 442:  -1.5080600 -0.5524565 -0.5825105          20          20</span></span>
+<span><span class="co">#&gt; 443:  -6.3147411 -0.9658232 -0.9606853          17          17</span></span>
+<span><span class="co">#&gt; 444:  -0.6601427 -0.2101308 -0.1297624          14          14</span></span>
+<span><span class="co">#&gt; 445:  -5.0619102 -0.9619721 -0.9606991           6           6</span></span>
+<span><span class="co">#&gt; 446: -17.0180321 -0.9999538 -0.9999433           5          16</span></span></code></pre></div>
+<p>Similar to the scoring table produced by <code>scoreBinding</code>,
+<code>scoreVariants</code> produces a table with 10 columns:</p>
 <ul>
 <li><p><strong>varId</strong>: unique id of the variant as defined in
 the <code>id</code> column of the input <code>GRanges</code> or
@@ -295,201 +543,100 @@ respectively</p></li>
 alleles respectively</p></li>
 <li><p><strong>refNorm</strong> and <strong>altNorm</strong>: the
 normalized binding affinity score for the reference and alternative
-alleles respectively</p></li>
+alleles respectively. More positive scores predict TF binding and more
+negative scores predict no TF binding.</p></li>
 <li><p><strong>refVarIndex</strong> and <strong>altVarIndex</strong>:
 The position of the frame’s starting indeces in the scored
 sequence</p></li>
 </ul>
 <p>There are accessor functions to isolate each slot of the resulting
 data object:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># access the variants slot</span></span>
 <span><span class="fu"><a href="../reference/getRanges.html">getRanges</a></span><span class="op">(</span><span class="va">sempl_results</span><span class="op">)</span></span>
-<span><span class="co">#&gt; VRanges object with 2 ranges and 3 metadata columns:</span></span>
-<span><span class="co">#&gt;       seqnames    ranges strand         ref              alt     totalDepth</span></span>
-<span><span class="co">#&gt;          &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; &lt;character&gt; &lt;characterOrRle&gt; &lt;integerOrRle&gt;</span></span>
-<span><span class="co">#&gt;   [1]    chr12  94136009      *           G                C           &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;   [2]    chr19  10640062      *           T                A           &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;             refDepth       altDepth   sampleNames softFilterMatrix |</span></span>
-<span><span class="co">#&gt;       &lt;integerOrRle&gt; &lt;integerOrRle&gt; &lt;factorOrRle&gt;         &lt;matrix&gt; |</span></span>
-<span><span class="co">#&gt;   [1]           &lt;NA&gt;           &lt;NA&gt;          &lt;NA&gt;                  |</span></span>
-<span><span class="co">#&gt;   [2]           &lt;NA&gt;           &lt;NA&gt;          &lt;NA&gt;                  |</span></span>
-<span><span class="co">#&gt;                id                ref_seq                alt_seq</span></span>
-<span><span class="co">#&gt;       &lt;character&gt;            &lt;character&gt;            &lt;character&gt;</span></span>
-<span><span class="co">#&gt;   [1]    variant1 CTAATAAATACTTGTTGTTG.. CTAATAAATACTTGTTGTTC..</span></span>
-<span><span class="co">#&gt;   [2]    variant2 GTAATCTTGGGCAAATTATT.. GTAATCTTGGGCAAATTATA..</span></span>
-<span><span class="co">#&gt;   -------</span></span>
-<span><span class="co">#&gt;   seqinfo: 2 sequences from an unspecified genome; no seqlengths</span></span>
-<span><span class="co">#&gt;   hardFilters: NULL</span></span>
 <span></span>
 <span><span class="co"># access the semData slot</span></span>
 <span><span class="fu"><a href="../reference/semData.html">semData</a></span><span class="op">(</span><span class="va">sempl_results</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Key: &lt;SEM_KEY&gt;</span></span>
-<span><span class="co">#&gt;      transcription_factor      ensembl_id ebi_complex_ac uniprot_ac</span></span>
-<span><span class="co">#&gt;                    &lt;char&gt;          &lt;char&gt;         &lt;char&gt;     &lt;char&gt;</span></span>
-<span><span class="co">#&gt;   1:               TFAP2B ENSG00000008196                    Q92481</span></span>
-<span><span class="co">#&gt;   2:                 ARNT ENSG00000143437                    P27540</span></span>
-<span><span class="co">#&gt;   3:                 ATF1 ENSG00000123268                    P18846</span></span>
-<span><span class="co">#&gt;   4:                 ATF2 ENSG00000115966                    P15336</span></span>
-<span><span class="co">#&gt;   5:                 ATF3 ENSG00000162772                    P18847</span></span>
-<span><span class="co">#&gt;  ---                                                               </span></span>
-<span><span class="co">#&gt; 219:               ZBTB7A ENSG00000178951                    O95365</span></span>
-<span><span class="co">#&gt; 220:                  ZFX ENSG00000005889                    P17010</span></span>
-<span><span class="co">#&gt; 221:               ZNF281 ENSG00000162702                    Q9Y2X9</span></span>
-<span><span class="co">#&gt; 222:                ZNF18 ENSG00000154957                    P17022</span></span>
-<span><span class="co">#&gt; 223:               ZSCAN4 ENSG00000180532                    Q8NAM6</span></span>
-<span><span class="co">#&gt;                     PWM_id                    SEM SEM_baseline cell_type</span></span>
-<span><span class="co">#&gt;                     &lt;char&gt;                 &lt;char&gt;        &lt;num&gt;    &lt;char&gt;</span></span>
-<span><span class="co">#&gt;   1:  AP2B_HUMAN.H11MO.0.B AP2B_HUMAN.SK-N-SH.sem   -1.1610478   SK-N-SH</span></span>
-<span><span class="co">#&gt;   2:  ARNT_HUMAN.H11MO.0.B ARNT_HUMAN.GM12878.sem   -1.8632604   GM12878</span></span>
-<span><span class="co">#&gt;   3:  ATF1_HUMAN.H11MO.0.B    ATF1_HUMAN.K562.sem   -2.9718855      K562</span></span>
-<span><span class="co">#&gt;   4:  ATF2_HUMAN.H11MO.0.B   ATF2_HUMAN.HepG2.sem   -1.4186930     HepG2</span></span>
-<span><span class="co">#&gt;   5:  ATF3_HUMAN.H11MO.0.A   ATF3_HUMAN.HepG2.sem   -2.1588687     HepG2</span></span>
-<span><span class="co">#&gt;  ---                                                                    </span></span>
-<span><span class="co">#&gt; 219: ZBT7A_HUMAN.H11MO.0.A  ZBT7A_HUMAN.HepG2.sem   -0.4056000     HepG2</span></span>
-<span><span class="co">#&gt; 220:   ZFX_HUMAN.H11MO.0.A    ZFX_HUMAN.HepG2.sem   -0.2478717     HepG2</span></span>
-<span><span class="co">#&gt; 221: ZN281_HUMAN.H11MO.0.A  ZN281_HUMAN.HepG2.sem   -0.3926150     HepG2</span></span>
-<span><span class="co">#&gt; 222: ZNF18_HUMAN.H11MO.0.C ZNF18_HUMAN.HEK293.sem   -1.6459529    HEK293</span></span>
-<span><span class="co">#&gt; 223:  Zscan4_pwm_secondary   ZSCAN4_secondary.sem   -2.9110180    HEK293</span></span>
-<span><span class="co">#&gt;      neg_log10_pval chip_ENCODE_accession dnase_ENCODE_accession  PWM_source</span></span>
-<span><span class="co">#&gt;               &lt;num&gt;                &lt;char&gt;                 &lt;char&gt;      &lt;char&gt;</span></span>
-<span><span class="co">#&gt;   1:       6.476702           ENCFF303ORH            ENCFF752OZB HOCOMOCOv11</span></span>
-<span><span class="co">#&gt;   2:      12.081160           ENCFF538DNI            ENCFF759OLD HOCOMOCOv11</span></span>
-<span><span class="co">#&gt;   3:      56.056680           ENCFF885JPB            ENCFF274YGF HOCOMOCOv11</span></span>
-<span><span class="co">#&gt;   4:      27.821210           ENCFF899JAX            ENCFF897NME HOCOMOCOv11</span></span>
-<span><span class="co">#&gt;   5:      14.618530           ENCFF197JBM            ENCFF897NME HOCOMOCOv11</span></span>
-<span><span class="co">#&gt;  ---                                                                        </span></span>
-<span><span class="co">#&gt; 219:       3.684286           ENCFF439DRT            ENCFF897NME HOCOMOCOv11</span></span>
-<span><span class="co">#&gt; 220:       3.443155           ENCFF329DCV            ENCFF897NME HOCOMOCOv11</span></span>
-<span><span class="co">#&gt; 221:       3.428189           ENCFF948PYK            ENCFF897NME HOCOMOCOv11</span></span>
-<span><span class="co">#&gt; 222:       3.793244           ENCFF888BHA            ENCFF285OXK HOCOMOCOv11</span></span>
-<span><span class="co">#&gt; 223:      11.973690           ENCFF485WHZ            ENCFF910QHN    UNIPROBE</span></span>
-<span><span class="co">#&gt;                 SEM_KEY</span></span>
-<span><span class="co">#&gt;                  &lt;char&gt;</span></span>
-<span><span class="co">#&gt;   1: AP2B_HUMAN.SK-N-SH</span></span>
-<span><span class="co">#&gt;   2: ARNT_HUMAN.GM12878</span></span>
-<span><span class="co">#&gt;   3:    ATF1_HUMAN.K562</span></span>
-<span><span class="co">#&gt;   4:   ATF2_HUMAN.HepG2</span></span>
-<span><span class="co">#&gt;   5:   ATF3_HUMAN.HepG2</span></span>
-<span><span class="co">#&gt;  ---                   </span></span>
-<span><span class="co">#&gt; 219:  ZBT7A_HUMAN.HepG2</span></span>
-<span><span class="co">#&gt; 220:    ZFX_HUMAN.HepG2</span></span>
-<span><span class="co">#&gt; 221:  ZN281_HUMAN.HepG2</span></span>
-<span><span class="co">#&gt; 222: ZNF18_HUMAN.HEK293</span></span>
-<span><span class="co">#&gt; 223:   ZSCAN4_secondary</span></span>
 <span></span>
 <span><span class="co"># access the scores slot</span></span>
-<span><span class="fu"><a href="../reference/scores.html">scores</a></span><span class="op">(</span><span class="va">sempl_results</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         varId              semId           refSeq           altSeq   refScore</span></span>
-<span><span class="co">#&gt;        &lt;char&gt;             &lt;char&gt;           &lt;char&gt;           &lt;char&gt;      &lt;num&gt;</span></span>
-<span><span class="co">#&gt;   1: variant1 AP2B_HUMAN.SK-N-SH       GTTTAACAAT       TCTTTAACAA  -5.287583</span></span>
-<span><span class="co">#&gt;   2: variant1 ARNT_HUMAN.GM12878        TTGTTTAAC        TGTTGTTCT  -5.048425</span></span>
-<span><span class="co">#&gt;   3: variant1    ATF1_HUMAN.K562      ACTTGTTGTTG      CTTTAACAATA  -7.736531</span></span>
-<span><span class="co">#&gt;   4: variant1   ATF2_HUMAN.HepG2      CTTGTTGTTGT      CTTGTTGTTCT  -5.049124</span></span>
-<span><span class="co">#&gt;   5: variant1   ATF3_HUMAN.HepG2      TGTTGTTTAAC      TGTTCTTTAAC  -9.214165</span></span>
-<span><span class="co">#&gt;  ---                                                                         </span></span>
-<span><span class="co">#&gt; 442: variant2  ZBT7A_HUMAN.HepG2        TTTAATCCT        TATAATCCT  -2.821984</span></span>
-<span><span class="co">#&gt; 443: variant2    ZFX_HUMAN.HepG2       TTAATCCTCT       ATAATCCTCT  -1.407772</span></span>
-<span><span class="co">#&gt; 444: variant2  ZN281_HUMAN.HepG2  CTTGGGCAAATTATT  CTTGGGCAAATTATA  -5.109413</span></span>
-<span><span class="co">#&gt; 445: variant2 ZNF18_HUMAN.HEK293     TATTTAATCCTC     TATATAATCCTC  -6.516790</span></span>
-<span><span class="co">#&gt; 446: variant2   ZSCAN4_secondary TCTTGGGCAAATTATT TTATATAATCCTCTAA -17.314249</span></span>
-<span><span class="co">#&gt;        altScore    refNorm    altNorm refVarIndex altVarIndex</span></span>
-<span><span class="co">#&gt;           &lt;num&gt;      &lt;num&gt;      &lt;num&gt;       &lt;int&gt;       &lt;int&gt;</span></span>
-<span><span class="co">#&gt;   1:  -4.330368 -0.9427482 -0.8888423          20          19</span></span>
-<span><span class="co">#&gt;   2:  -5.948900 -0.8900564 -0.9411021          18          13</span></span>
-<span><span class="co">#&gt;   3:  -8.123991 -0.9632126 -0.9718770          10          20</span></span>
-<span><span class="co">#&gt;   4:  -5.397180 -0.9192521 -0.9365610          11          11</span></span>
-<span><span class="co">#&gt;   5:  -9.785488 -0.9924813 -0.9949399          16          16</span></span>
-<span><span class="co">#&gt;  ---                                                         </span></span>
-<span><span class="co">#&gt; 442:  -2.502507 -0.8126749 -0.7662411          19          19</span></span>
-<span><span class="co">#&gt; 443:  -1.508060 -0.5524565 -0.5825105          20          20</span></span>
-<span><span class="co">#&gt; 444:  -5.061910 -0.9619721 -0.9606991           6           6</span></span>
-<span><span class="co">#&gt; 445:  -6.314741 -0.9658232 -0.9606853          17          17</span></span>
-<span><span class="co">#&gt; 446: -17.018032 -0.9999538 -0.9999433           5          16</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/scores.html">scores</a></span><span class="op">(</span><span class="va">sempl_results</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="visualization">Visualization<a class="anchor" aria-label="anchor" href="#visualization"></a>
+<h3 id="visualization-1">Visualization<a class="anchor" aria-label="anchor" href="#visualization-1"></a>
 </h3>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSEMMotifs.html">plotSEMMotifs</a></span><span class="op">(</span><span class="va">sempl_results</span>,</span>
+<p>SEMplR provides two visualization functions for
+<code>scoreVariants</code> results.</p>
+<p>The first function, <code>plotSEMMotifs</code> plots all SEM scores
+for a given variant.</p>
+<p>Here, we can see that both HLF and CEBPG are predicted to be bound in
+the alt allele of variant2, but no the ref allele.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSEMMotifs.html">plotSEMMotifs</a></span><span class="op">(</span></span>
+<span>    s <span class="op">=</span> <span class="va">sempl_results</span>,</span>
 <span>    variant <span class="op">=</span> <span class="st">"variant2"</span>,</span>
 <span>    label <span class="op">=</span> <span class="st">"transcription_factor"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="SEMplR_files/figure-html/plotSemMotifs-1.png" width="480"></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSEMVariants.html">plotSEMVariants</a></span><span class="op">(</span><span class="va">sempl_results</span>, sem <span class="op">=</span> <span class="st">"AP2B_HUMAN.SK-N-SH"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="SEMplR_files/figure-html/plotSEMVariants-1.png" width="480"></p>
+<p><img src="SEMplR_files/figure-html/plotSemMotifs-1.png" width="384"></p>
+<p>The second function, <code>plotSEMVariants</code> plots the scores
+for all variants for a given SEM.</p>
+<p>Here, we can see that it’s variant2 where the mutation from the ref
+to the alt allele creates the potential for a gained TF binding
+site.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSEMVariants.html">plotSEMVariants</a></span><span class="op">(</span><span class="va">sempl_results</span>, sem <span class="op">=</span> <span class="st">"HLF"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="SEMplR_files/figure-html/plotSEMVariants-1.png" width="384"></p>
 </div>
-</div>
-<div class="section level2">
-<h2 id="enrichment">Enrichment<a class="anchor" aria-label="anchor" href="#enrichment"></a>
-</h2>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># loading data</span></span>
-<span><span class="va">caqtl_file</span> <span class="op">&lt;-</span> <span class="st">"caQTL_variants_overlappingPeaks_LD-r2-0.8_withLead.bed"</span></span>
-<span><span class="va">caqtls</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/fread.html" class="external-link">fread</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">caqtl_file</span>, sep <span class="op">=</span> <span class="st">"\t"</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span>, <span class="op">]</span></span>
-<span><span class="va">proxy_ID_split</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="va">caqtls</span><span class="op">$</span><span class="va">proxy_ID</span>, <span class="st">":"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># formatting position and alleles</span></span>
-<span><span class="va">chr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">proxy_ID_split</span>, <span class="va">`[[`</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">proxy_ID_split</span>, <span class="va">`[[`</span>, <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">ref_allele</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">proxy_ID_split</span>, <span class="va">`[[`</span>, <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">alt_allele</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">proxy_ID_split</span>, <span class="va">`[[`</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># building variant annotation obj</span></span>
-<span><span class="va">vr_e</span> <span class="op">&lt;-</span> <span class="fu">VariantAnnotation</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/VariantAnnotation/man/VRanges-class.html" class="external-link">VRanges</a></span><span class="op">(</span></span>
-<span>    seqnames <span class="op">=</span> <span class="va">chr</span>,</span>
-<span>    ranges <span class="op">=</span> <span class="va">pos</span>,</span>
-<span>    ref <span class="op">=</span> <span class="va">ref_allele</span>,</span>
-<span>    alt <span class="op">=</span> <span class="va">alt_allele</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">SEMC</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># score variants</span></span>
-<span><span class="va">var_scores_e</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scoreVariants.html">scoreVariants</a></span><span class="op">(</span></span>
-<span>    vr <span class="op">=</span> <span class="va">vr_e</span>,</span>
-<span>    semList <span class="op">=</span> <span class="va">SEMC</span>,</span>
-<span>    bs_genome_obj <span class="op">=</span> <span class="fu">BSgenome.Hsapiens.UCSC.hg38</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg38/man/package.html" class="external-link">Hsapiens</a></span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/plotSEMVariants.html">plotSEMVariants</a></span><span class="op">(</span><span class="va">var_scores_e</span>, semId <span class="op">=</span> <span class="st">"MA0151.1"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSEMMotifs.html">plotSEMMotifs</a></span><span class="op">(</span><span class="va">var_scores_e</span>, <span class="st">"chr1:906982:C&gt;T"</span>, label <span class="op">=</span> <span class="st">"transcription_factor"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="binding-enrichment">Binding Enrichment<a class="anchor" aria-label="anchor" href="#binding-enrichment"></a>
-</h2>
-<p>Given this is a large set of variants, we might want to check if some
-transcription factors are enriched for binding in one allele or the
-other.</p>
-<p>Here, we will test if any of these transcription factors are bound
-more than expected in the reference alleles of this set.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gr_e</span> <span class="op">&lt;-</span> <span class="fu">GenomicRanges</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html" class="external-link">GRanges</a></span><span class="op">(</span></span>
-<span>    seqnames <span class="op">=</span> <span class="va">chr</span>,</span>
-<span>    ranges <span class="op">=</span> <span class="va">pos</span>,</span>
-<span>    allele <span class="op">=</span> <span class="va">ref_allele</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">e</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichSEMs.html">enrichSEMs</a></span><span class="op">(</span></span>
-<span>    x <span class="op">=</span> <span class="va">gr_e</span>, semList <span class="op">=</span> <span class="va">SEMC</span>,</span>
-<span>    bs_genome_obj <span class="op">=</span> <span class="fu">BSgenome.Hsapiens.UCSC.hg38</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg38/man/package.html" class="external-link">Hsapiens</a></span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">plt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plotEnrich.html">plotEnrich</a></span><span class="op">(</span><span class="va">e</span>, semList <span class="op">=</span> <span class="va">SEMC</span><span class="op">)</span></span>
-<span><span class="va">plt</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="extras">Extras<a class="anchor" aria-label="anchor" href="#extras"></a>
 </h2>
 <div class="section level3">
+<h3 id="scoring-method">Scoring Method<a class="anchor" aria-label="anchor" href="#scoring-method"></a>
+</h3>
+<div class="section level4">
+<h4 id="sequence-preparation">Sequence preparation<a class="anchor" aria-label="anchor" href="#sequence-preparation"></a>
+</h4>
+<p>Both the <code>scoreBinding</code> and <code>scoreVariants</code>
+functions use the same scoring method. If given genome ranges, as
+<code>GRanges</code> or <code>VRanges</code> objects, sequences for
+those ranges are acquired from the provided <code>BSgenome</code>
+object. Flanks are added to either end of this sequence equal to the
+<code>nFlank</code> parameter provided by the user, otherwise, the
+length of the flanks are equal to the longest SEM (number of rows).</p>
+</div>
+<div class="section level4">
+<h4 id="scoring-3">Scoring<a class="anchor" aria-label="anchor" href="#scoring-3"></a>
+</h4>
+<p>SEMplR attempts to find the optimal binding location of the
+associated transcription factor by scoring every frame that includes at
+least one nucleotide of the provided range. If no flanks were added
+(<code>nFlank = 0</code>) then SEMplR will find the optimal binding site
+within the provided region.</p>
+<p>SEMs are log transformed matrices, and therefore can be added per
+base at each position to generate a binding affinity score (stored in
+the <code>score</code> column of the scores table). These scores are
+normalized to the baselines produced by the SEMpl commandline tool and
+the normalized scores are stored in the <code>scoreNorm</code> field.
+These normalized scores should be used for further analysis.</p>
+<p>The optimal binding site is defined as the site with the highest
+normalized score.</p>
+<p>In general, more positive scores predict TF binding and negative
+scores predict no TF binding.</p>
+</div>
+</div>
+<div class="section level3">
 <h3 id="loading-a-custom-set-of-sems">Loading a custom set of SEMs<a class="anchor" aria-label="anchor" href="#loading-a-custom-set-of-sems"></a>
 </h3>
+<p>The <code>SEMC</code> data object is provided with this package with
+a default set of 223 SEMs. While we think this set may be sufficient for
+many analyses, SEMplR also supports generation of new
+<code>SNPEffectMatrixCollection</code>s should you want to generate a
+custom set of SEMs with the SEMpl command line tool.</p>
 <p>First, we create a list of file paths to the .sem files we want to
 include. We will also load the meta data for each sem in a
 <code>data.table</code> object. If meta data is used, all SEMs must be
 represented in the meta data table.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># find .sem files</span></span>
 <span><span class="va">sem_folder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"SEMs"</span>, package <span class="op">=</span> <span class="st">"SEMplR"</span><span class="op">)</span></span>
 <span><span class="va">sem_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">sem_folder</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -504,19 +651,25 @@ represented in the meta data table.</p>
 slots, one containing a named list of the matrices and a second slot
 containing our meta data table with a key column connecting the meta
 data to the names of the matrices.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
+<span>    <span class="va">sem_files</span>,</span>
+<span>    <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">sempl_metadata</span><span class="op">$</span><span class="va">SEM</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/path.html" class="external-link">basename</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">sem_ids</span> <span class="op">&lt;-</span> <span class="va">sempl_metadata</span><span class="op">$</span><span class="va">transcription_factor</span><span class="op">[</span><span class="va">ix</span><span class="op">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loadSEMCollection.html">loadSEMCollection</a></span><span class="op">(</span></span>
 <span>    semFiles <span class="op">=</span> <span class="va">sem_files</span>,</span>
 <span>    semMetaData <span class="op">=</span> <span class="va">sempl_metadata</span>,</span>
-<span>    semMetaKey <span class="op">=</span> <span class="st">"SEM"</span></span>
+<span>    semMetaKey <span class="op">=</span> <span class="st">"transcription_factor"</span>,</span>
+<span>    semIds <span class="op">=</span> <span class="va">sem_ids</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Removing .sem suffixes from semKey. Formatted key now stored in column</span></span>
-<span><span class="co">#&gt; 'SEM_KEY'.</span></span>
 <span><span class="va">sc</span></span>
 <span><span class="co">#&gt; An object of class SNPEffectMatrixCollection</span></span>
-<span><span class="co">#&gt; SEMs(223): AP2B_HUMAN.SK-N-SH, ARNT_HUMAN.GM12878 ... ZNF18_HUMAN.HEK293, ZSCAN4_secondary</span></span>
-<span><span class="co">#&gt; semData(13): transcription_factor, ensembl_id ... PWM_source, SEM_KEY</span></span></code></pre></div>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<span><span class="co">#&gt; SEMs(223): TFAP2B, ARNT ... ZNF18, ZSCAN4</span></span>
+<span><span class="co">#&gt; semData(12): transcription_factor, ensembl_id ... dnase_ENCODE_accession, PWM_source</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://sessioninfo.r-lib.org/reference/session_info.html" class="external-link">session_info</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB; font-weight: bold;">─ Session info ───────────────────────────────────────────────────────────────</span></span></span>
 <span><span class="co">#&gt;  <span style="color: #555555; font-style: italic;">setting </span> <span style="color: #555555; font-style: italic;">value</span></span></span>
@@ -528,7 +681,7 @@ data to the names of the matrices.</p>
 <span><span class="co">#&gt;  collate  en_US.UTF-8</span></span>
 <span><span class="co">#&gt;  ctype    en_US.UTF-8</span></span>
 <span><span class="co">#&gt;  tz       UTC</span></span>
-<span><span class="co">#&gt;  date     2025-09-25</span></span>
+<span><span class="co">#&gt;  date     2025-09-26</span></span>
 <span><span class="co">#&gt;  pandoc   3.8 @ /usr/bin/ (via rmarkdown)</span></span>
 <span><span class="co">#&gt;  quarto   1.7.32 @ /usr/local/bin/quarto</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -538,21 +691,25 @@ data to the names of the matrices.</p>
 <span><span class="co">#&gt;  AnnotationDbi                 1.70.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  Biobase                     * 2.68.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  BiocGenerics                * 0.54.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  BiocIO                        1.18.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  BiocIO                      * 1.18.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  BiocParallel                  1.42.2    <span style="color: #555555;">2025-09-14</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
 <span><span class="co">#&gt;  Biostrings                  * 2.76.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  bit                           4.6.0     <span style="color: #555555;">2025-03-06</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  bit64                         4.6.0-1   <span style="color: #555555;">2025-01-16</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  bitops                        1.0-9     <span style="color: #555555;">2024-10-03</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  blob                          1.2.4     <span style="color: #555555;">2023-03-17</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  BSgenome                      1.76.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  BSgenome                    * 1.76.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  BSgenome.Hsapiens.UCSC.hg19 * 1.4.3     <span style="color: #555555;">2025-05-24</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
 <span><span class="co">#&gt;  BSgenome.Hsapiens.UCSC.hg38   1.4.5     <span style="color: #555555;">2025-05-24</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
 <span><span class="co">#&gt;  bslib                         0.9.0     <span style="color: #555555;">2025-01-30</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  cachem                        1.1.0     <span style="color: #555555;">2024-05-16</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  circlize                      0.4.16    <span style="color: #555555;">2024-02-20</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  cli                           3.6.5     <span style="color: #555555;">2025-04-23</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  clue                          0.3-66    <span style="color: #555555;">2024-11-13</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  cluster                       2.1.8.1   <span style="color: #555555;">2025-03-12</span> <span style="color: #555555;">[3]</span> <span style="color: #555555;">CRAN (R 4.5.1)</span></span></span>
 <span><span class="co">#&gt;  codetools                     0.2-20    <span style="color: #555555;">2024-03-31</span> <span style="color: #555555;">[3]</span> <span style="color: #555555;">CRAN (R 4.5.1)</span></span></span>
 <span><span class="co">#&gt;  colorspace                    2.1-2     <span style="color: #555555;">2025-09-22</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  ComplexHeatmap                2.24.1    <span style="color: #555555;">2025-06-25</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
 <span><span class="co">#&gt;  crayon                        1.5.3     <span style="color: #555555;">2024-06-20</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  curl                          7.0.0     <span style="color: #555555;">2025-08-19</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  data.table                    1.17.8    <span style="color: #555555;">2025-07-10</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
@@ -561,11 +718,13 @@ data to the names of the matrices.</p>
 <span><span class="co">#&gt;  desc                          1.4.3     <span style="color: #555555;">2023-12-10</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  devtools                      2.4.5     <span style="color: #555555;">2022-10-11</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  digest                        0.6.37    <span style="color: #555555;">2024-08-19</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  doParallel                    1.0.17    <span style="color: #555555;">2022-02-07</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  dplyr                         1.1.4     <span style="color: #555555;">2023-11-17</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  ellipsis                      0.3.2     <span style="color: #555555;">2021-04-29</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  evaluate                      1.0.5     <span style="color: #555555;">2025-08-27</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  farver                        2.1.2     <span style="color: #555555;">2024-05-13</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  fastmap                       1.2.0     <span style="color: #555555;">2024-05-15</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  foreach                       1.5.2     <span style="color: #555555;">2022-02-02</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  fs                            1.6.6     <span style="color: #555555;">2025-04-12</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  generics                    * 0.1.4     <span style="color: #555555;">2025-05-09</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  GenomeInfoDb                * 1.44.3    <span style="color: #555555;">2025-09-21</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
@@ -573,16 +732,19 @@ data to the names of the matrices.</p>
 <span><span class="co">#&gt;  GenomicAlignments             1.44.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  GenomicFeatures               1.60.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  GenomicRanges               * 1.60.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  GetoptLong                    1.0.5     <span style="color: #555555;">2020-12-15</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  ggplot2                       4.0.0     <span style="color: #555555;">2025-09-11</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  ggrepel                       0.9.6     <span style="color: #555555;">2024-09-07</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  GlobalOptions                 0.1.2     <span style="color: #555555;">2020-06-10</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  glue                          1.8.0     <span style="color: #555555;">2024-09-30</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  gridBase                      0.4-7     <span style="color: #555555;">2014-02-24</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  gtable                        0.3.6     <span style="color: #555555;">2024-10-25</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  htmltools                     0.5.8.1   <span style="color: #555555;">2024-04-04</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  htmlwidgets                   1.6.4     <span style="color: #555555;">2023-12-06</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  httpuv                        1.6.16    <span style="color: #555555;">2025-04-16</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  httr                          1.4.7     <span style="color: #555555;">2023-08-15</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  IRanges                     * 2.42.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  iterators                     1.0.14    <span style="color: #555555;">2022-02-05</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  jquerylib                     0.1.4     <span style="color: #555555;">2021-04-26</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  jsonlite                      2.0.0     <span style="color: #555555;">2025-03-27</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  KEGGREST                      1.48.1    <span style="color: #555555;">2025-06-22</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
@@ -592,6 +754,7 @@ data to the names of the matrices.</p>
 <span><span class="co">#&gt;  lattice                       0.22-7    <span style="color: #555555;">2025-04-02</span> <span style="color: #555555;">[3]</span> <span style="color: #555555;">CRAN (R 4.5.1)</span></span></span>
 <span><span class="co">#&gt;  lifecycle                     1.0.4     <span style="color: #555555;">2023-11-07</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  magrittr                      2.0.4     <span style="color: #555555;">2025-09-12</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  MASS                          7.3-65    <span style="color: #555555;">2025-02-28</span> <span style="color: #555555;">[3]</span> <span style="color: #555555;">CRAN (R 4.5.1)</span></span></span>
 <span><span class="co">#&gt;  Matrix                        1.7-4     <span style="color: #555555;">2025-08-28</span> <span style="color: #555555;">[3]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  MatrixGenerics              * 1.20.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  matrixStats                 * 1.5.0     <span style="color: #555555;">2025-01-07</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
@@ -619,23 +782,25 @@ data to the names of the matrices.</p>
 <span><span class="co">#&gt;  rmarkdown                     2.29      <span style="color: #555555;">2024-11-04</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  Rsamtools                   * 2.24.1    <span style="color: #555555;">2025-09-07</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
 <span><span class="co">#&gt;  RSQLite                       2.4.3     <span style="color: #555555;">2025-08-20</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  rtracklayer                   1.68.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  rtracklayer                 * 1.68.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  S4Arrays                      1.8.1     <span style="color: #555555;">2025-06-01</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
 <span><span class="co">#&gt;  S4Vectors                   * 0.46.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  S7                            0.2.0     <span style="color: #555555;">2024-11-07</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  sass                          0.4.10    <span style="color: #555555;">2025-04-11</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  scales                        1.4.0     <span style="color: #555555;">2025-04-24</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  SEMplR                      * 0.99.0    <span style="color: #555555;">2025-09-25</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
+<span><span class="co">#&gt;  SEMplR                      * 0.99.0    <span style="color: #555555;">2025-09-26</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
 <span><span class="co">#&gt;  sessioninfo                   1.2.3     <span style="color: #555555;">2025-02-05</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  shape                         1.4.6.1   <span style="color: #555555;">2024-02-23</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  shiny                         1.11.1    <span style="color: #555555;">2025-07-03</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  SparseArray                   1.8.1     <span style="color: #555555;">2025-07-23</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  stringi                       1.8.7     <span style="color: #555555;">2025-03-27</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  SummarizedExperiment        * 1.38.1    <span style="color: #555555;">2025-04-30</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  systemfonts                   1.2.3     <span style="color: #555555;">2025-04-30</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  textshaping                   1.0.3     <span style="color: #555555;">2025-09-02</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  tibble                        3.3.0     <span style="color: #555555;">2025-06-08</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  tidyselect                    1.2.1     <span style="color: #555555;">2024-03-11</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  UCSC.utils                    1.4.0     <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  universalmotif                1.26.2    <span style="color: #555555;">2025-04-23</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  urlchecker                    1.0.1     <span style="color: #555555;">2021-11-30</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  usethis                       3.2.1     <span style="color: #555555;">2025-09-06</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  VariantAnnotation           * 1.54.1    <span style="color: #555555;">2025-05-11</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.0)</span></span></span>

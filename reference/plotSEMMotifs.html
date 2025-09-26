@@ -44,7 +44,9 @@
 <span>  <span class="va">s</span>,</span>
 <span>  <span class="va">variant</span>,</span>
 <span>  label <span class="op">=</span> <span class="st">"transcription_factor"</span>,</span>
-<span>  cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#F8766D"</span>, <span class="st">"dodgerblue2"</span><span class="op">)</span></span>
+<span>  labsize <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#F8766D"</span>, <span class="st">"dodgerblue2"</span><span class="op">)</span>,</span>
+<span>  ptsize <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -64,9 +66,17 @@
 <dd><p>column in sem_metadata slot of semplObj to use for point labels</p></dd>
 
 
+<dt id="arg-labsize">labsize<a class="anchor" aria-label="anchor" href="#arg-labsize"></a></dt>
+<dd><p>numeric size of the point labels</p></dd>
+
+
 <dt id="arg-cols">cols<a class="anchor" aria-label="anchor" href="#arg-cols"></a></dt>
 <dd><p>vector of length 2 with colors to use for plotting gained
 and lost motifs respectively</p></dd>
+
+
+<dt id="arg-ptsize">ptsize<a class="anchor" aria-label="anchor" href="#arg-ptsize"></a></dt>
+<dd><p>numeric size of the ggplot points</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -79,10 +89,6 @@ binding propensity</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">VariantAnnotation</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">SEMC</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># create an SNP Effect Matrix (SEM)</span></span></span>
-<span class="r-in"><span><span class="va">sem</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">12</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">sem</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"C"</span>, <span class="st">"G"</span>, <span class="st">"T"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># create a VRanges object</span></span></span>
 <span class="r-in"><span><span class="va">vr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/VariantAnnotation/man/VRanges-class.html" class="external-link">VRanges</a></span><span class="op">(</span></span></span>

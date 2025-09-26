@@ -44,10 +44,14 @@
 <span>  <span class="va">sem</span>,</span>
 <span>  motif <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  motifSeq <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  highlight <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lightgrey"</span>, <span class="st">"dodgerblue"</span><span class="op">)</span>,</span>
+<span>  size <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>  hindex <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  hcol <span class="op">=</span> <span class="st">"dodgerblue"</span>,</span>
+<span>  halpha <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  hwidth <span class="op">=</span> <span class="fl">15</span>,</span>
-<span>  size <span class="op">=</span> <span class="fl">7</span></span>
+<span>  lcol <span class="op">=</span> <span class="st">"#d7dbdd"</span>,</span>
+<span>  lwidth <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -70,20 +74,37 @@ plotting.</p></dd>
 <dd><p>Character sequence to color on plot</p></dd>
 
 
-<dt id="arg-highlight">highlight<a class="anchor" aria-label="anchor" href="#arg-highlight"></a></dt>
-<dd><p>Index of variant location on reference</p></dd>
+<dt id="arg-cols">cols<a class="anchor" aria-label="anchor" href="#arg-cols"></a></dt>
+<dd><p>A vector of two colors to color the nucleotides not included
+and included in the provided motifSeq respectively</p></dd>
+
+
+<dt id="arg-size">size<a class="anchor" aria-label="anchor" href="#arg-size"></a></dt>
+<dd><p>Font size of nucleotides in plot</p></dd>
+
+
+<dt id="arg-hindex">hindex<a class="anchor" aria-label="anchor" href="#arg-hindex"></a></dt>
+<dd><p>Index of nucleotide to highlight in the motifSeq</p></dd>
 
 
 <dt id="arg-hcol">hcol<a class="anchor" aria-label="anchor" href="#arg-hcol"></a></dt>
-<dd><p>Color of motifSeq bases</p></dd>
+<dd><p>The color of the vertical highlight bar</p></dd>
+
+
+<dt id="arg-halpha">halpha<a class="anchor" aria-label="anchor" href="#arg-halpha"></a></dt>
+<dd><p>The alpha transparency of the vertical highlight bar</p></dd>
 
 
 <dt id="arg-hwidth">hwidth<a class="anchor" aria-label="anchor" href="#arg-hwidth"></a></dt>
 <dd><p>Width of highlight bar</p></dd>
 
 
-<dt id="arg-size">size<a class="anchor" aria-label="anchor" href="#arg-size"></a></dt>
-<dd><p>Font size of nucleotides in plot</p></dd>
+<dt id="arg-lcol">lcol<a class="anchor" aria-label="anchor" href="#arg-lcol"></a></dt>
+<dd><p>Color of the horizongtal endogenous and background binding lines</p></dd>
+
+
+<dt id="arg-lwidth">lwidth<a class="anchor" aria-label="anchor" href="#arg-lwidth"></a></dt>
+<dd><p>Width of the horizontal endogenous and background binding lines</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -94,23 +115,20 @@ plotting.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">VariantAnnotation</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">SEMC</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># create an SNP Effect Matrix (SEM)</span></span></span>
-<span class="r-in"><span><span class="va">sem</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">12</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">sem</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"C"</span>, <span class="st">"G"</span>, <span class="st">"T"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># create a list of SNPEffectMatrix objects</span></span></span>
-<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="SNPEffectMatrix.html">SNPEffectMatrix</a></span><span class="op">(</span><span class="va">sem</span>, baseline <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, semId <span class="op">=</span> <span class="st">"sem_id"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># plot the motif</span></span></span>
-<span class="r-in"><span><span class="fu">plotSEM</span><span class="op">(</span><span class="va">s</span>, <span class="fu"><a href="getSEMId.html">getSEMId</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> motif ignored because SNPEffectMatrix object given. See motif argument description in ?plotSEM.</span>
+<span class="r-in"><span><span class="co"># Given a SNPEffectMatrix Collection</span></span></span>
+<span class="r-in"><span><span class="fu">plotSEM</span><span class="op">(</span><span class="va">SEMC</span>, motif <span class="op">=</span> <span class="st">"JUN"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotSEM-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># color by sequence</span></span></span>
-<span class="r-in"><span><span class="fu">plotSEM</span><span class="op">(</span><span class="va">s</span>, <span class="fu"><a href="getSEMId.html">getSEMId</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span>, motifSeq <span class="op">=</span> <span class="st">"ACT"</span>, highlight <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> motif ignored because SNPEffectMatrix object given. See motif argument description in ?plotSEM.</span>
+<span class="r-in"><span><span class="co"># Given a single SNPEffectMatrix</span></span></span>
+<span class="r-in"><span><span class="va">sem</span> <span class="op">&lt;-</span> <span class="fu"><a href="getSEMs.html">getSEMs</a></span><span class="op">(</span><span class="va">SEMC</span>, <span class="st">"JUN"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plotSEM</span><span class="op">(</span><span class="va">sem</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plotSEM-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># color by sequence</span></span></span>
+<span class="r-in"><span><span class="fu">plotSEM</span><span class="op">(</span><span class="va">sem</span>, motifSeq <span class="op">=</span> <span class="st">"TGAGTCA"</span>, hindex <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="plotSEM-3.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

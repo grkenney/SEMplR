@@ -83,59 +83,59 @@ Access semData from a SNPEffectMatrixCollection object"></head><body>
 <span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="scoreVariants.html">scoreVariants</a></span><span class="op">(</span><span class="va">vr</span>, <span class="va">SEMC</span>, <span class="fu">BSgenome.Hsapiens.UCSC.hg19</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html" class="external-link">Hsapiens</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">semData</span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;SEM_KEY&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      transcription_factor      ensembl_id ebi_complex_ac uniprot_ac</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    &lt;char&gt;          &lt;char&gt;         &lt;char&gt;     &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:               TFAP2B ENSG00000008196                    Q92481</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                 ARNT ENSG00000143437                    P27540</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                 ATF1 ENSG00000123268                    P18846</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                 ATF2 ENSG00000115966                    P15336</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                 ATF3 ENSG00000162772                    P18847</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 219:               ZBTB7A ENSG00000178951                    O95365</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 220:                  ZFX ENSG00000005889                    P17010</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221:               ZNF281 ENSG00000162702                    Q9Y2X9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 222:                ZNF18 ENSG00000154957                    P17022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 223:               ZSCAN4 ENSG00000180532                    Q8NAM6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     PWM_id                    SEM SEM_baseline cell_type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     &lt;char&gt;                 &lt;char&gt;        &lt;num&gt;    &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:  AP2B_HUMAN.H11MO.0.B AP2B_HUMAN.SK-N-SH.sem   -1.1610478   SK-N-SH</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:  ARNT_HUMAN.H11MO.0.B ARNT_HUMAN.GM12878.sem   -1.8632604   GM12878</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:  ATF1_HUMAN.H11MO.0.B    ATF1_HUMAN.K562.sem   -2.9718855      K562</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:  ATF2_HUMAN.H11MO.0.B   ATF2_HUMAN.HepG2.sem   -1.4186930     HepG2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:  ATF3_HUMAN.H11MO.0.A   ATF3_HUMAN.HepG2.sem   -2.1588687     HepG2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 219: ZBT7A_HUMAN.H11MO.0.A  ZBT7A_HUMAN.HepG2.sem   -0.4056000     HepG2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 220:   ZFX_HUMAN.H11MO.0.A    ZFX_HUMAN.HepG2.sem   -0.2478717     HepG2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221: ZN281_HUMAN.H11MO.0.A  ZN281_HUMAN.HepG2.sem   -0.3926150     HepG2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 222: ZNF18_HUMAN.H11MO.0.C ZNF18_HUMAN.HEK293.sem   -1.6459529    HEK293</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 223:  Zscan4_pwm_secondary   ZSCAN4_secondary.sem   -2.9110180    HEK293</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      neg_log10_pval chip_ENCODE_accession dnase_ENCODE_accession  PWM_source</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               &lt;num&gt;                &lt;char&gt;                 &lt;char&gt;      &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:       6.476702           ENCFF303ORH            ENCFF752OZB HOCOMOCOv11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:      12.081160           ENCFF538DNI            ENCFF759OLD HOCOMOCOv11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:      56.056680           ENCFF885JPB            ENCFF274YGF HOCOMOCOv11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:      27.821210           ENCFF899JAX            ENCFF897NME HOCOMOCOv11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:      14.618530           ENCFF197JBM            ENCFF897NME HOCOMOCOv11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 219:       3.684286           ENCFF439DRT            ENCFF897NME HOCOMOCOv11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 220:       3.443155           ENCFF329DCV            ENCFF897NME HOCOMOCOv11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221:       3.428189           ENCFF948PYK            ENCFF897NME HOCOMOCOv11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 222:       3.793244           ENCFF888BHA            ENCFF285OXK HOCOMOCOv11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 223:      11.973690           ENCFF485WHZ            ENCFF910QHN    UNIPROBE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 SEM_KEY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1: AP2B_HUMAN.SK-N-SH</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2: ARNT_HUMAN.GM12878</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    ATF1_HUMAN.K562</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   ATF2_HUMAN.HepG2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   ATF3_HUMAN.HepG2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 219:  ZBT7A_HUMAN.HepG2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 220:    ZFX_HUMAN.HepG2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221:  ZN281_HUMAN.HepG2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 222: ZNF18_HUMAN.HEK293</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 223:   ZSCAN4_secondary</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;transcription_factor&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      transcription_factor                                      ensembl_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    &lt;char&gt;                                          &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                  AHR                                 ENSG00000106546</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:       AHR:ARNT:HIF1A ENSG00000106546;ENSG00000143437;ENSG00000100644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:               ARID3A                                 ENSG00000116017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                 ARNT                                 ENSG00000143437</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                ARNTL                                 ENSG00000133794</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 219:                  ZFX                                 ENSG00000005889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 220:                ZNF18                                 ENSG00000154957</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221:               ZNF217                                 ENSG00000171940</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 222:               ZNF281                                 ENSG00000162702</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 223:               ZSCAN4                                 ENSG00000180532</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ebi_complex_ac           uniprot_ac                PWM_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              &lt;char&gt;               &lt;char&gt;                &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:                              P35869                M00778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:                P35869;P27540;Q16665                M00976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:                              Q99856              MA0151.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                              P27540  ARNT_HUMAN.H11MO.0.B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                              O00327 BMAL1_HUMAN.H11MO.0.A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 219:                              P17010   ZFX_HUMAN.H11MO.0.A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 220:                              P17022 ZNF18_HUMAN.H11MO.0.C</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221:                              O75362                M01306</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 222:                              Q9Y2X9 ZN281_HUMAN.H11MO.0.A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 223:                              Q8NAM6  Zscan4_pwm_secondary</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         SEM SEM_baseline cell_type neg_log10_pval</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      &lt;char&gt;        &lt;num&gt;    &lt;char&gt;          &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:             M00778.sem   -0.6717610     HepG2      18.350950</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:             M00976.sem   -0.5938010     HepG2      14.290190</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:           MA0151.1.sem   -0.4020880     HepG2       2.980258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4: ARNT_HUMAN.GM12878.sem   -1.8632604   GM12878      12.081160</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:  BMAL1_HUMAN.HepG2.sem   -1.5977194     HepG2      20.220840</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 219:    ZFX_HUMAN.HepG2.sem   -0.2478717     HepG2       3.443155</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 220: ZNF18_HUMAN.HEK293.sem   -1.6459529    HEK293       3.793244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221:             M01306.sem   -0.4596240   GM12878       2.843803</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 222:  ZN281_HUMAN.HepG2.sem   -0.3926150     HepG2       3.428189</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 223:   ZSCAN4_secondary.sem   -2.9110180    HEK293      11.973690</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      chip_ENCODE_accession dnase_ENCODE_accession  PWM_source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     &lt;char&gt;                 &lt;char&gt;      &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:           ENCFF242PUG            ENCFF001UVU    TRANSFAC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:           ENCFF242PUG            ENCFF001UVU    TRANSFAC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:           ENCFF460WFF            ENCFF001UVU      JASPAR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:           ENCFF538DNI            ENCFF759OLD HOCOMOCOv11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:           ENCFF363NHH            ENCFF897NME HOCOMOCOv11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 219:           ENCFF329DCV            ENCFF897NME HOCOMOCOv11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 220:           ENCFF888BHA            ENCFF285OXK HOCOMOCOv11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221:           ENCFF807UJN            ENCFF097LEF    TRANSFAC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 222:           ENCFF948PYK            ENCFF897NME HOCOMOCOv11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 223:           ENCFF485WHZ            ENCFF910QHN    UNIPROBE</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Create example SEM</span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>

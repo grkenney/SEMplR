@@ -59,9 +59,10 @@ often than expected.</p>
 
 
 <dt id="arg-background">background<a class="anchor" aria-label="anchor" href="#arg-background"></a></dt>
-<dd><p>A list of DNA sequences to use for background. The length
-of each sequence must match the length of sequences in <code>x</code>. By default, will
-scramble the provided sequences.</p></dd>
+<dd><p>A <code>GRanges</code> object or a list of DNA sequences to use as a
+background set for the binomial test. The length of each sequence must match
+the length of sequences in <code>x</code>. By default, will scramble the provided
+sequences.</p></dd>
 
 
 <dt id="arg-seqs">seqs<a class="anchor" aria-label="anchor" href="#arg-seqs"></a></dt>
@@ -102,19 +103,20 @@ were scored rather than a <code>GRanges</code>), use <code>nFlank = 0</code>.</p
 <span class="r-in"><span><span class="va">sb</span> <span class="op">&lt;-</span> <span class="fu"><a href="scoreBinding.html">scoreBinding</a></span><span class="op">(</span><span class="va">gr</span>, <span class="va">SEMC</span>, <span class="fu">BSgenome.Hsapiens.UCSC.hg19</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html" class="external-link">Hsapiens</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">enrichSEMs</span><span class="op">(</span><span class="va">sb</span>, <span class="va">SEMC</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     SEM pvalue n_bound n_bound_bg  padj</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  &lt;char&gt;  &lt;num&gt;   &lt;int&gt;      &lt;int&gt; &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1: AP2B_HUMAN.SK-N-SH      1       0          0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2: ARNT_HUMAN.GM12878      1       0          0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:    ATF1_HUMAN.K562      1       0          0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   ATF2_HUMAN.HepG2      1       0          0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   ATF3_HUMAN.HepG2      1       0          0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 219:  ZBT7A_HUMAN.HepG2      1       0          0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 220:    ZFX_HUMAN.HepG2      1       0          0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221:  ZN281_HUMAN.HepG2      1       0          0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 222: ZNF18_HUMAN.HEK293      1       0          0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 223:   ZSCAN4_secondary      1       0          0     1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Building background set (this may take several minutes) ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         SEM pvalue  padj n_bound n_bound_bg</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;char&gt;  &lt;num&gt; &lt;num&gt;   &lt;int&gt;      &lt;int&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1: TFAP2B      1     1       0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:   ARNT      1     1       0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:   ATF1      1     1       0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:   ATF2      1     1       0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:   ATF3      1     1       0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 219: ZBTB7A      1     1       0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 220:    ZFX      1     1       0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221: ZNF281      1     1       0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 222:  ZNF18      1     1       0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 223: ZSCAN4      1     1       0          0</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
