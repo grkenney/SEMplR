@@ -15,14 +15,16 @@ vignette: >
 knitr::opts_chunk$set(
     collapse = TRUE,
     comment = "#>",
-    fig.height = 5,
-    fig.width = 5
+    fig.height = 4,
+    fig.width = 4
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
 ```{r load_libraries, message=FALSE}
 library(VariantAnnotation)
+library(GenomicRanges)
+library(BSgenome.Hsapiens.UCSC.hg19)
 library(SEMplR)
 ```
 
@@ -37,22 +39,20 @@ A full list of the transcription factors included in this default set can be
 found [here](github.com/grkenney/SEMplR/blob/main/vignettes/sempl_metadata.csv) 
 or by running `semData(SEMC)`.
 
-The default SEM collection can be loaded with:
+SEMs are stored inside a `SNPEffectMatrix` object and sets of SEMs are stored 
+in a `SNPEffectMatrixCollection`. 
+The default collection can be loaded with:
 
 ```{r load_data}
 data(SEMC)
 ```
 
-Printing the `SNPEffectMatrixCollection`, we can see that we have 223 SEMs and 
-13 meta data features for each.
+Printing the `SNPEffectMatrixCollection`, we can see that this object has 2
+slots. The first holds the `SNPEffectMatrix` objects with the matrices and
+baseline information for each motif. The second slots holds meta data for each
+SEM. This object contains 223 SEMs and 12 meta data features for each.
 ```{r display_data}
 SEMC
-```
-
-We can access all SEMs in collection the with the function `sems()` or some 
-subset of matrices by specifying a vector of semIds in the `semId` parameter.
-```{r subset_sem_collection}
-getSEMs(SEMC, semId = c("AP2B_HUMAN.SK-N-SH", "ZSCAN4_secondary"))
 ```
 
 We can view the SEM meta data slot with the `semData` function.
@@ -60,22 +60,261 @@ We can view the SEM meta data slot with the `semData` function.
 semData(SEMC)
 ```
 
+We can access all SEMs in the collection the with the function `getSEMs()` 
+or some subset of motifs by specifying a vector of semIds in the `semId` 
+parameter. All semIds can be viewed in the `transctiption_factor` column
+of the meta data. The resulting `SNPEffectMatrix` object contains the 
+semId, the baseline value used for normalization, and the SEM that SEMplR
+will use to score binding affinity.
+```{r subset_sem_collection}
+getSEMs(SEMC, semId = "JUN")
+```
+
 # Scoring Binding
 
-```{r plot_sem}
-plotSEM(SEMC,
-    motif = "AP2B_HUMAN.SK-N-SH",
-    motifSeq = "GCTTTGAGGC", highlight = 1
-)
-plotSEM(SEMC,
-    motif = "AP2B_HUMAN.SK-N-SH",
-    motifSeq = "GCTTTCAGGC", highlight = 1, hcol = "red"
+## Prepare Inputs
+
+To calculate binding affinity for a given loci in the genome, we first make a 
+`GRanges` object for that location. In this example, we will score a location 
+on chromosome 12 of the human genome. 
+
+```{r inputs_scoreBinding}
+# create a GRanges object
+gr <- GenomicRanges::GRanges(
+    seqnames = "chr12",
+    ranges = 94136009
 )
 ```
 
+## Scoring
+
+This `GRanges` object is passed to the `scoreBinding()` function along with the 
+collection of SEMs and a BSgenome object. 
+
+Optionally, a `nFlank` parameter can be specified to dictate the number of 
+nucleotides to flank each side of the sequence for the supplied position. 
+By default, the number of nucleotides added will be the minimum number 
+necessary to score the longest SEM.
+
+A `seqId` parameter may also be used to specify a meta data column in the
+`GRanges` object to use as a unique identifier. Otherwise, a unique identifier
+will be created from positional information.
+
+The resulting data object is a `SEMplScores` object that stores information
+about the scored range and its associated sequence, the SEM meta data, and
+scoring information. 
+
+Please see the (Scoring method)[#scoring-method] section below for details on 
+how sequences are scored with SEMs.
+
+```{r scoreBinding}
+# calculate binding propensity
+sb <- scoreBinding(x = gr, sem = SEMC, genome = Hsapiens)
+sb
+```
+
+We can access this scores table with the `scores()` function and 
+see that we have a row for each variant and SEM combination. The scoring 
+results has 6 columns:
+
+- **varId**: unique id of the variant as defined in the `id` column of the 
+input `GRanges` or `VRanges` object. If not defined, in the `seqId` parameter
+of the `scoreBinding` function, a custom unique identifier 
+is generated in the format [seqname]:[range]
+
+- **semId**: the unique identifier of the SEM
+
+- **score**: the raw (unnormalized) binding affinity score 
+for the reference and alternative alleles respectively
+
+- **scoreNorm** : the normalized binding affinity score for the 
+reference and alternative alleles respectively. More positive scores predict
+TF binding and more ngative scores predict no TF binding.
+
+- **index**: The position of the optimally scored sequence in the scored 
+sequence.
+
+- **seq**: the optimally scored sequence for the reference 
+and alternative alleles respectively
+
+```{r scores_accessor}
+scores(sb)
+```
+
+We can subset these scores to just see results for the JUN motif and we see that
+the normalized score, in the scoreNorm column, is negative.
+
+We can visualize this sequence on the SEM score for each nucleotide position 
+and see which nucleotides are contributing to this negative score.
+
+```{r plot_sem}
+# subset JUN score
+jun_score <- scores(sb)[SEM == "JUN"]
+jun_score
+
+# plot the JUN motif with the scored sequence
+plotSEM(SEMC,
+    motif = "JUN",
+    motifSeq = jun_score$seq
+)
+```
+
+# Enrichment
+
+When scoring large sets of loci, you can also use SEMplR to predict if some
+transcription factors are enriched for binding, bound more than expected, 
+within the loci of interest.
+
+Here, we will demonstrate this analysis with simulated data. We will generate
+and score a set of 1000 sequences. 200 of which will be generated using the 
+JUN SEM to generate likely binding sequences. The remaining 800 sequences
+will be completely random.
+
+## Prepare Inputs
+
+Expand the section below to see the code used to generate these sequences.
+
+<details>
+<summary>See code used to generate simulated sequences</summary>
+
+```{r simulation_functions}
+# create random sequences weighted by ppm probabilities
+simulatePPMSeqs <- function(ppm, nSeqs) {
+    ppm_t <- t(ppm)
+    position_samples <- lapply(
+        seq_len(nrow(ppm_t)),
+        function(i) {
+            sample(colnames(ppm_t),
+                size = nSeqs,
+                replace = TRUE,
+                prob = ppm_t[i, ]
+            )
+        }
+    )
+
+    rand_pwm_seq_mtx <- position_samples |>
+        unlist() |>
+        matrix(ncol = nrow(ppm_t), nrow = nSeqs)
+    rand_pwm_seqs <- apply(
+        rand_pwm_seq_mtx, 1,
+        function(x) paste0(x, collapse = "")
+    )
+
+    return(rand_pwm_seqs)
+}
+
+
+# generate DNA sequences
+simulateRandSeqs <- function(seqLength, nSeqs = 1) {
+    bps <- c("A", "C", "G", "T")
+    seqs <- sample(bps,
+        replace = TRUE,
+        size = seqLength
+    ) |>
+        stringi::stri_c(collapse = "") |>
+        replicate(n = nSeqs)
+    return(seqs)
+}
+```
+
+
+```{r build_enrich_scenario}
+ppm <- convertSEMsToPPMs(getSEMs(SEMC, "JUN"))[[1]]
+
+# simulate sequences from the JUN PPM
+sim_seqs <- simulatePPMSeqs(ppm = ppm, nSeqs = 200)
+# add flanks to the simulated sequences to make them 3x the length of the motif
+sim_seqs <- lapply(
+    sim_seqs,
+    function(x) {
+        paste0(
+            simulateRandSeqs(seqLength = ncol(ppm)), x,
+            simulateRandSeqs(seqLength = ncol(ppm))
+        )
+    }
+) |>
+    unlist()
+
+# generate random DNA sequences
+rand_seqs <- simulateRandSeqs(seqLength = ncol(ppm) * 3, nSeqs = 800)
+```
+
+</details>
+
+## Scoring
+
+We have two vectors of sequences, `sim_seqs` and `rand_seqs`. They contain
+200 and 800 sequences respectively. All sequences are 21 nucleotides in length.
+
+We will combine all sequences into a single vector and pass this vector of
+sequences to `scoreBinding`. Because we did not pass positional/range 
+information, this function will now only return the scoring table.
+
+```{r scoring_for_enrich_test}
+# combine all sequences into a single vector
+all_seqs <- c(sim_seqs, rand_seqs)
+
+sb <- scoreBinding(
+    x = all_seqs,
+    sem = SEMC, genome = BSgenome.Hsapiens.UCSC.hg19::Hsapiens
+)
+sb
+```
+
+
+## Test for Enrichment
+
+The results of `scoreBinding` can be passed directly to the `enrichSEMs` 
+function along with our collection of SEMs, and the sequences we scored.
+
+Optionally, we can provide a background set of sequences or ranges for this
+analysis. If none is provided, `enrichSEMs` will scramble the scored sequences
+provided to use as a background.
+
+`enrichSEMs` performs a binomal test to determine if any of the transcription
+factors scored are bound more than expected by chance. 
+
+```{r enrichSEMs}
+e <- enrichSEMs(sb, sem = SEMC, seqs = all_seqs)
+
+# order the results by adjusted pvalue
+head(e[order(padj, decreasing = FALSE)])
+```
+
+The resulting columns contain the p-value from the binomal test, the 
+Benjamini & Hochberg ajusted p-value, and the number of sequences where
+each TF was predicted to be bound in the foreground set (n_bound) and the
+background set (n_bound_bg).
+
+## Visualization
+
+While JUN was the top significant SEM of our enrichment analysis, there are
+also several other significant SEMs. Because some motif sequences can be very 
+similar, this is not unexpected.
+
+SEMplR's `plotEnrich` function takes this motif relatedness into account 
+when visualizing these enrichment results. SEMs are clustered by similarity
+and plotted on a dendrogram so similar motifs are plotted near eachother.
+
+The heatmap plots the -log10 adjusted pvalue of the binomial test 
+( -log10(padj) ) and the TFs are colored according to an adjusted
+pvalue threshold.
+
+```{r plotEnrich}
+plotEnrich(e, sem = SEMC,
+    threshold = 0.05, method = "WPCC",
+    pvalRange = c(0, 50)
+)
+```
+
+
 # Scoring Variants
 
-## Prepare inputs
+SEMplR also provides functionality for scoring variants, comparing TF
+binding between alleles, and helping identify TFs whose binding is gained
+or lost with genetic variation.
+
+## Prepare Inputs
 
 First, we will define the variants we want to score. Variants can be supplied 
 to SEMplR as either a `VRanges` or a `GRanges` object. If using `VRanges` 
@@ -116,7 +355,8 @@ sempl_results <- scoreVariants(
 
 sempl_results
 ```
-The scoring results has 10 columns:
+Similar to the scoring table produced by `scoreBinding`,
+`scoreVariants` produces a table with 10 columns:
 
 - **varId**: unique id of the variant as defined in the `id` column of the 
 input `GRanges` or `VRanges` object. If not defined, a custom unique identifier 
@@ -131,13 +371,14 @@ and alternative alleles respectively
 for the reference and alternative alleles respectively
 
 - **refNorm** and **altNorm**: the normalized binding affinity score for the 
-reference and alternative alleles respectively
+reference and alternative alleles respectively. More positive scores predict
+TF binding and more negative scores predict no TF binding.
 
 - **refVarIndex** and **altVarIndex**: The position of the frame's starting 
 indeces in the scored sequence
 
 There are accessor functions to isolate each slot of the resulting data object:
-```{r SEMplScores_accessors}
+```{r SEMplScores_accessors, eval = FALSE}
 # access the variants slot
 getRanges(sempl_results)
 
@@ -150,85 +391,70 @@ scores(sempl_results)
 
 ## Visualization
 
+SEMplR provides two visualization functions for `scoreVariants` results.
+
+The first function, `plotSEMMotifs` plots all SEM scores for a given variant.
+
+Here, we can see that both HLF and CEBPG are predicted to be bound in the
+alt allele of variant2, but no the ref allele.
+
 ```{r plotSemMotifs}
-plotSEMMotifs(sempl_results,
+plotSEMMotifs(
+    s = sempl_results,
     variant = "variant2",
     label = "transcription_factor"
 )
 ```
 
+The second function, `plotSEMVariants` plots the scores for all variants
+for a given SEM.
+
+Here, we can see that it's variant2 where the mutation from the ref to
+the alt allele creates the potential for a gained TF binding site.
 
 ```{r plotSEMVariants}
-plotSEMVariants(sempl_results, sem = "AP2B_HUMAN.SK-N-SH")
+plotSEMVariants(sempl_results, sem = "HLF")
 ```
-
-# Enrichment
-
-```{r caqtl_data, eval=FALSE}
-# loading data
-caqtl_file <- "caQTL_variants_overlappingPeaks_LD-r2-0.8_withLead.bed"
-caqtls <- data.table::fread(file = caqtl_file, sep = "\t")[seq_len(1000), ]
-proxy_ID_split <- strsplit(caqtls$proxy_ID, ":")
-
-# formatting position and alleles
-chr <- lapply(proxy_ID_split, `[[`, 1) |> unlist()
-pos <- lapply(proxy_ID_split, `[[`, 2) |> unlist()
-ref_allele <- lapply(proxy_ID_split, `[[`, 3) |> unlist()
-alt_allele <- lapply(proxy_ID_split, `[[`, 4) |> unlist()
-
-# building variant annotation obj
-vr_e <- VariantAnnotation::VRanges(
-    seqnames = chr,
-    ranges = pos,
-    ref = ref_allele,
-    alt = alt_allele
-)
-data(SEMC)
-
-# score variants
-var_scores_e <- scoreVariants(
-    vr = vr_e,
-    semList = SEMC,
-    bs_genome_obj = BSgenome.Hsapiens.UCSC.hg38::Hsapiens
-)
-
-plotSEMVariants(var_scores_e, semId = "MA0151.1")
-```
-
-```{r enrich_plotSEMMotifs, eval=FALSE}
-plotSEMMotifs(var_scores_e, "chr1:906982:C>T", label = "transcription_factor")
-```
-
-# Binding Enrichment
-
-Given this is a large set of variants, we might want to check if some 
-transcription factors are enriched for binding in one allele or the other.
-
-Here, we will test if any of these transcription factors are bound more than
-expected in the reference alleles of this set.
-
-```{r enrich_test, eval=FALSE}
-gr_e <- GenomicRanges::GRanges(
-    seqnames = chr,
-    ranges = pos,
-    allele = ref_allele
-)
-
-e <- enrichSEMs(
-    x = gr_e, semList = SEMC,
-    bs_genome_obj = BSgenome.Hsapiens.UCSC.hg38::Hsapiens
-)
-```
-
-```{r plotEnrich, eval=FALSE}
-plt <- plotEnrich(e, semList = SEMC)
-plt
-```
-
 
 # Extras
 
+## Scoring Method
+
+### Sequence preparation
+
+Both the `scoreBinding` and `scoreVariants` functions use the same scoring 
+method. If given genome ranges, as `GRanges` or `VRanges` objects, sequences
+for those ranges are acquired from the provided `BSgenome` object. Flanks
+are added to either end of this sequence equal to the `nFlank` parameter 
+provided by the user, otherwise, the length of the flanks are equal to the
+longest SEM (number of rows). 
+
+### Scoring
+
+SEMplR attempts to find the optimal binding location of the associated 
+transcription factor by scoring every frame that includes at least one 
+nucleotide of the provided range. If no flanks were added (`nFlank = 0`) then
+SEMplR will find the optimal binding site within the provided region.
+
+SEMs are log transformed matrices, and therefore can be added per base at 
+each position to generate a binding affinity score (stored in the `score`
+column of the scores table). These scores are normalized to the baselines
+produced by the SEMpl commandline tool and the normalized scores are stored
+in the `scoreNorm` field. These normalized scores should be used for further
+analysis.
+
+The optimal binding site is defined as the site with the highest normalized
+score.
+
+In general, more positive scores predict TF binding and negative scores predict
+no TF binding.
+
 ## Loading a custom set of SEMs
+
+The `SEMC` data object is provided with this package with a default set of 223
+SEMs. While we think this set may be sufficient for many analyses, SEMplR also
+supports generation of new `SNPEffectMatrixCollection`s should you want to 
+generate a custom set of SEMs with the SEMpl command line tool.
 
 First, we create a list of file paths to the .sem files we want to include. 
 We will also load the meta data for each sem in a `data.table` object. 
@@ -252,11 +478,22 @@ a named list of the matrices and a second slot containing our meta data table
 with a key column connecting the meta data to the names of the matrices.
 
 
+```{r format_meta_data}
+ix <- lapply(
+    sem_files,
+    function(x) which(sempl_metadata$SEM == basename(x))
+) |>
+    unlist()
+sem_ids <- sempl_metadata$transcription_factor[ix]
+```
+
+
 ```{r loadSEMCollection}
 sc <- loadSEMCollection(
     semFiles = sem_files,
     semMetaData = sempl_metadata,
-    semMetaKey = "SEM"
+    semMetaKey = "transcription_factor",
+    semIds = sem_ids
 )
 sc
 ```
