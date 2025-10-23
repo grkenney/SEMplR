@@ -29,7 +29,8 @@ enrichmentSets(
 
 \item{orgdb}{An OrgDb object. (e.g. \code{org.Hs.eg.db}).}
 
-\item{id_type}{Type of identifier supplied in foreground and background IDs.}
+\item{id_type}{Type of identifier supplied in foreground and background IDs.
+See the \code{keytypes(orgdb)} for available id type options for each genome.}
 
 \item{foreground_ids}{Character vector of gene or
 transcript IDs (e.g. Ensembl, RefSeq, gene symbols) to analyze.}
@@ -76,8 +77,6 @@ A \code{list} containing the output of
 \item{backgroundElements}{\code{GRanges} of sampled background promoters}
 \item{foregroundElements}{\code{GRanges} of foreground promoters}
 \item{backgroundUniverse}{\code{GRanges} of the pruned promoter pool}
-\item{matchObject}{\code{MatchedGRanges} if \code{bgMethod="matched"},
-else \code{NULL}}
 }
 }
 \description{
@@ -86,11 +85,10 @@ user‐provided IDs from a differential expression analysis and returns
 promoter regions plus matched background sets for downstream motif
 enrichment.  It performs:
 \enumerate{
-\item ID mapping via \code{buildMappingObject()} and
-\code{mapIDs()}.
+\item ID mapping via \code{mapIDs()}.
 \item Optional biotype filtering via \code{poolFilter()}.
 \item Promoter coordinate extraction via \code{getCoordinates()}.
-\item Background sampling (pool, random, or matched) within that same call.
+\item Background sampling within that same call.
 }
 }
 \examples{

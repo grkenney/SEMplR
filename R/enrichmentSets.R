@@ -5,16 +5,16 @@
 #' user‐provided IDs from a differential expression analysis and returns
 #' promoter regions plus matched background sets for downstream motif
 #' enrichment.  It performs:
-#' 1. ID mapping via \code{buildMappingObject()} and
-#'    \code{mapIDs()}.
+#' 1. ID mapping via \code{mapIDs()}.
 #' 2. Optional biotype filtering via \code{poolFilter()}.
 #' 3. Promoter coordinate extraction via \code{getCoordinates()}.
-#' 4. Background sampling (pool, random, or matched) within that same call.
+#' 4. Background sampling within that same call.
 #'
 #' @param txdb A TxDb object. 
 #' (e.g. \code{TxDb.Hsapiens.UCSC.hg38.knownGene}).
 #' @param orgdb An OrgDb object. (e.g. \code{org.Hs.eg.db}).
 #' @param id_type Type of identifier supplied in foreground and background IDs.
+#' See the `keytypes(orgdb)` for available id type options for each genome.
 #' @param foreground_ids Character vector of gene or
 #' transcript IDs (e.g. Ensembl, RefSeq, gene symbols) to analyze.
 #' @param background_ids Character vector of gene or transcript 
@@ -47,8 +47,6 @@
 #'     \item{backgroundElements}{\code{GRanges} of sampled background promoters}
 #'     \item{foregroundElements}{\code{GRanges} of foreground promoters}
 #'     \item{backgroundUniverse}{\code{GRanges} of the pruned promoter pool}
-#'     \item{matchObject}{\code{MatchedGRanges} if \code{bgMethod="matched"},
-#'       else \code{NULL}}
 #'   }
 #'
 #' @examples

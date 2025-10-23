@@ -168,7 +168,12 @@ within the loci of interest.
 Here, we will demonstrate this analysis with simulated data. We will generate
 and score a set of 1000 sequences. 200 of which will be generated using the 
 JUN SEM to generate likely binding sequences. The remaining 800 sequences
-will be completely random.
+will be completely random. 
+
+We also include assistance in conducting this analysis on gene promoters. See
+the (Enrichment in Promoters)[#enrichment-in-promoters] section for more
+information.
+
 
 ## Prepare Inputs
 
@@ -305,6 +310,68 @@ plotEnrich(e, sem = SEMC,
     threshold = 0.05, method = "WPCC",
     pvalRange = c(0, 50)
 )
+```
+
+
+## Enrichment in Promoters
+
+One potential application of `enrichSEMs` is predicting TF(s) responsible for
+observed differential gene expression between two biological conditions. 
+Given gene sets of interest (e.g. upregulated genes) and a background set
+(e.g. all expressed genes), we could try to predict there are TFs enriched
+for binding the promoters of the genes of interest; providing supporting
+evidence for a mechanism where the differential expression is driven by
+differences in TF activity.
+
+The getCoordinates function extracts promoter sequences and tests for predicted binding site enrichment in foreground sets using enrichmentSets. Significant enrichment of TF binding in the promoters of upregulated genes can provide mechanistic insight into gene expression changes.
+
+To aid in this analysis, we have provided a helper function, `enrichmentSets`,
+to pull genomic ranges of gene promoter and, optionally, background sets given
+gene or transcript ids. Below is a minimal example to illustrate this function.
+In practice, gene ids of interest could be supplied to `enrichmentSets` to
+generate GRanges objects that can be directly supplied to `enrichSEMs`.
+
+```{r}
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+library(BSgenome.Hsapiens.UCSC.hg38)
+library(org.Hs.eg.db)
+
+txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+orgdb <- org.Hs.eg.db
+
+genes_oi <- c("ENSG00000139618", "ENSG00000157764")
+background_genes <- c("ENSG00000111640", "ENSG00000075624", "ENSG00000165704")
+
+result <- enrichmentSets(foreground_ids = genes_oi, 
+                         background_ids = background_genes,
+                          txdb = txdb, 
+                          orgdb = orgdb, 
+                          id_type = "ENSEMBL")
+result
+```
+
+The result of `enrichmentSets` is a named list of 3 GRanges objects.
+The "foregroundElements" entry includes the promoter ranges for all genes that
+were sucessfully identified in the genome.
+The "backgroundElements" entry is a randomly selected set of promoter
+regions from the background set provided. The "backgroundUniverse" entry 
+represents all of the background elements that were sucessfully mapped and 
+sampled from. If a background set is not provided 
+to `enrichmentSets`, one will be randomly selected from the promoters in the
+genome not included in the gene set of interest.
+
+To calculate enrichment for these promoters, we would first score the foreground
+ranges with `scoreBinding`. Then we can provide the foreground scores and 
+just the background ranges to `enrichSEMs`. While the example above is trivial,
+the enrichment steps would look like this:
+
+```
+sb <- scoreBinding(
+    x = result$foregroundElements,
+    sem = SEMC, genome = BSgenome.Hsapiens.UCSC.hg38::Hsapiens
+)
+e <- enrichSEMs(sb, sem = SEMC, background = result$backgroundElements,
+                genome = BSgenome.Hsapiens.UCSC.hg38::Hsapiens)
 ```
 
 
