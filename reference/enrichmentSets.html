@@ -3,21 +3,19 @@
 user‐provided IDs from a differential expression analysis and returns
 promoter regions plus matched background sets for downstream motif
 enrichment.  It performs:
-ID mapping via buildMappingObject() and
-mapIDs().
+ID mapping via mapIDs().
 Optional biotype filtering via poolFilter().
 Promoter coordinate extraction via getCoordinates().
-Background sampling (pool, random, or matched) within that same call.
+Background sampling within that same call.
 
 "><meta property="og:description" content="enrichmentSets() is a one‐stop wrapper that takes a vector of
 user‐provided IDs from a differential expression analysis and returns
 promoter regions plus matched background sets for downstream motif
 enrichment.  It performs:
-ID mapping via buildMappingObject() and
-mapIDs().
+ID mapping via mapIDs().
 Optional biotype filtering via poolFilter().
 Promoter coordinate extraction via getCoordinates().
-Background sampling (pool, random, or matched) within that same call.
+Background sampling within that same call.
 
 "></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -58,11 +56,10 @@ Background sampling (pool, random, or matched) within that same call.
     <p><code>enrichmentSets()</code> is a one‐stop wrapper that takes a vector of
 user‐provided IDs from a differential expression analysis and returns
 promoter regions plus matched background sets for downstream motif
-enrichment.  It performs:</p><ol><li><p>ID mapping via <code>buildMappingObject()</code> and
-<code><a href="mapIDs.html">mapIDs()</a></code>.</p></li>
+enrichment.  It performs:</p><ol><li><p>ID mapping via <code><a href="mapIDs.html">mapIDs()</a></code>.</p></li>
 <li><p>Optional biotype filtering via <code><a href="poolFilter.html">poolFilter()</a></code>.</p></li>
 <li><p>Promoter coordinate extraction via <code><a href="getCoordinates.html">getCoordinates()</a></code>.</p></li>
-<li><p>Background sampling (pool, random, or matched) within that same call.</p></li>
+<li><p>Background sampling within that same call.</p></li>
 </ol></div>
 
     <div class="section level2">
@@ -101,7 +98,8 @@ enrichment.  It performs:</p><ol><li><p>ID mapping via <code>buildMappingObject(
 
 
 <dt id="arg-id-type">id_type<a class="anchor" aria-label="anchor" href="#arg-id-type"></a></dt>
-<dd><p>Type of identifier supplied in foreground and background IDs.</p></dd>
+<dd><p>Type of identifier supplied in foreground and background IDs.
+See the <code>keytypes(orgdb)</code> for available id type options for each genome.</p></dd>
 
 
 <dt id="arg-foreground-ids">foreground_ids<a class="anchor" aria-label="anchor" href="#arg-foreground-ids"></a></dt>
@@ -179,10 +177,6 @@ promoter flank widths in bp (default <code>c(300,50)</code>).</p></dd>
 
 <dt>backgroundUniverse</dt>
 <dd><p><code>GRanges</code> of the pruned promoter pool</p></dd>
-
-<dt>matchObject</dt>
-<dd><p><code>MatchedGRanges</code> if <code>bgMethod="matched"</code>,
-else <code>NULL</code></p></dd>
 
 
 </dl></div>
