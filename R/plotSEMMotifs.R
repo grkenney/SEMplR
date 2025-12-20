@@ -1,5 +1,5 @@
 # validate label, variant, and cols parameters
-.validatePlotSemMotifsInputs <- \(s, label, variant, cols) {
+.validatePlotSemMotifsInputs <- function(s, label, variant, cols) {
     semId <- varId <- NA
     # check that sem label is in the sem meta data
     if (!(label %in% colnames(semData(s)))) {
@@ -21,7 +21,7 @@
 }
 
 
-.createBasePlotSEMMotifs <- \(dt, cols, label, labsize, ptsize) {
+.createBasePlotSEMMotifs <- function(dt, cols, label, labsize, ptsize) {
     refNorm <- altNorm <- NULL
     plt <- ggplot2::ggplot(
         data = dt,
@@ -93,8 +93,9 @@
 #'
 #' plotSEMMotifs(s, "chr12:94136009:G>C", label = "transcription_factor")
 #'
-plotSEMMotifs <- \(s, variant, label = "transcription_factor", labsize = 4,
-    cols = c("#F8766D", "dodgerblue2"), ptsize = 1) {
+plotSEMMotifs <- function(s, variant, label = "transcription_factor",
+                          labsize = 4,
+                          cols = c("#F8766D", "dodgerblue2"), ptsize = 1) {
     refNorm <- altNorm <- varId <- sem <- .SD <- NULL
     .validatePlotSemMotifsInputs(
         s = s, label = label,
@@ -118,11 +119,11 @@ plotSEMMotifs <- \(s, variant, label = "transcription_factor", labsize = 4,
     sem_motif_plot <- sem_motif_plot +
         scale_x_continuous(
             breaks = scales::pretty_breaks(),
-            limits = \(x) ifelse(abs(x) < 1, c(-1, 1), x)
+            limits = function(x) ifelse(abs(x) < 1, c(-1, 1), x)
         ) +
         scale_y_continuous(
             breaks = scales::pretty_breaks(),
-            limits = \(x) ifelse(abs(x) < 1, c(-1, 1), x)
+            limits = function(x) ifelse(abs(x) < 1, c(-1, 1), x)
         ) +
         labs(
             x = "ref binding propensity",

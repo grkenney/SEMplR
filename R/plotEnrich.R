@@ -1,5 +1,5 @@
 # convert SEM to Motif
-.formatMotifs <- \(sem, label) {
+.formatMotifs <- function(sem, label) {
     .SD <- NULL
     ppms <- convertSEMsToPPMs(getSEMs(sem))
     motifs <- lapply(
@@ -24,7 +24,7 @@
 
 
 # construct a matrix comparing similarity of each motif
-.constructComparisons <- \(motifs, labels, method) {
+.constructComparisons <- function(motifs, labels, method) {
     comparisons <- universalmotif::compare_motifs(motifs,
         method = method,
         min.mean.ic = 0
@@ -40,7 +40,7 @@
 }
 
 
-.circlizePlot <- \(em, sem, comps, ds, col_fun, label, sigIds, sigCols) {
+.circlizePlot <- function(em, sem, comps, ds, col_fun, label, sigIds, sigCols) {
     .SD <- NULL
     dend <- stats::as.dendrogram(comps)
 
@@ -92,9 +92,10 @@
 }
 
 
-
-.addLegend <- \(em, sem, comps, heatmapCols, label, sigIds, sigCols,
-    textCex, pvalRange) {
+.addLegend <- function(
+  em, sem, comps, heatmapCols, label, sigIds, sigCols,
+  textCex, pvalRange
+) {
     graphics::plot.new()
     circle_size <- grid::unit(1, "snpc") # snpc unit gives you a square region
 
@@ -182,14 +183,16 @@
 #' @return NULL
 #'
 #' @export
-plotEnrich <- \(e, sem,
-    label = "transcription_factor",
-    method = "WPCC",
-    threshold = 0.05,
-    textCols = c("darkgrey", "black"),
-    textCex = 0.7,
-    heatmapCols = c("white", "red"),
-    pvalRange = c(0, 20)) {
+plotEnrich <- function(
+  e, sem,
+  label = "transcription_factor",
+  method = "WPCC",
+  threshold = 0.05,
+  textCols = c("darkgrey", "black"),
+  textCex = 0.7,
+  heatmapCols = c("white", "red"),
+  pvalRange = c(0, 20)
+) {
     .SD <- NULL
 
     sk <- semData(sem) |> data.table::key()

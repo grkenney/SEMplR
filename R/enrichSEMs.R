@@ -10,7 +10,7 @@
 
 # perform a binomial test on sem scores versus a scores from a background for a
 # single sem
-.binomSEMEnrich <- \(xs, bg, semName) {
+.binomSEMEnrich <- function(xs, bg, semName) {
     xs_sem <- xs[xs$SEM == semName, ]
     bg_sem <- bg[bg$SEM == semName, ]
 
@@ -41,7 +41,7 @@
 
 
 # define the background set if not provided
-.defineBackground <- \(x, sem, background, seqs, nFlank, genome) {
+.defineBackground <- function(x, sem, background, seqs, nFlank, genome) {
     if (is.null(background)) {
         rlang::inform(paste0(
             "Building background set (this may take several ",
@@ -79,9 +79,9 @@
 #'
 #' @param x The scoring table produced by `scoreBinding`
 #' @param sem A `SNPEffectMatrix` or `SNPEffectMatrixCollection` object
-#' @param background A `GRanges` object or a list of DNA sequences to use as a 
-#' background set for the binomial test. The length of each sequence must match 
-#' the length of sequences in `x`. By default, will scramble the provided 
+#' @param background A `GRanges` object or a list of DNA sequences to use as a
+#' background set for the binomial test. The length of each sequence must match
+#' the length of sequences in `x`. By default, will scramble the provided
 #' sequences.
 #' @param seqs The sequences scored in `scoreBinding`
 #' @param nFlank Number of flanking nucleotides added to the sequences. Defaults
@@ -111,9 +111,9 @@
 #' enrichSEMs(sb, SEMC)
 #'
 #' @export
-enrichSEMs <- \(x, sem,
-    background = NULL, seqs = NULL, nFlank = 0,
-    genome = NULL) {
+enrichSEMs <- function(x, sem,
+                        background = NULL, seqs = NULL, nFlank = 0,
+                        genome = NULL) {
     sem_names <- getSEMs(sem) |> names()
 
     if (is(x, "data.table") &
@@ -142,11 +142,13 @@ enrichSEMs <- \(x, sem,
 
     result <- lapply(
         seq_along(sem_names),
-        \(i) .binomSEMEnrich(
-            xs = x_scores,
-            bg = bg,
-            semName = sem_names[i]
-        )
+        function(i) {
+            .binomSEMEnrich(
+                xs = x_scores,
+                bg = bg,
+                semName = sem_names[i]
+            )
+        }
     ) |>
         data.table::rbindlist()
 

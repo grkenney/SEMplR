@@ -22,7 +22,7 @@
 #' # From a single SNPEffectMatrix
 #' convertSEMsToPPMs(getSEMs(SEMC, "JUN"))
 #'
-convertSEMsToPPMs <- \(x) {
+convertSEMsToPPMs <- function(x) {
     if (is(x, "SNPEffectMatrixCollection")) {
         ss <- getSEMs(x)
     } else if (is(x, "SNPEffectMatrix")[1]) {

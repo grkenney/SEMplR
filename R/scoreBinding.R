@@ -1,6 +1,6 @@
 # given a GRanges object, x, build a position identifier string of format
 # seqname:position
-.makePositionId <- \(x) {
+.makePositionId <- function(x) {
     start_pos <- IRanges::start(IRanges::ranges(x))
     end_pos <- IRanges::end(IRanges::ranges(x))
     sn <- GenomeInfoDb::seqnames(x)
@@ -14,7 +14,7 @@
 
 
 # test if x is a list or vector of characters that resembles DNA
-.testIfSequenceList <- \(x) {
+.testIfSequenceList <- function(x) {
     # if is neither a vector or a list, it's not collection of DNA seqs
     if (!(is.vector(x)) & !(is.list(x))) {
         # if it's not a GRanges, error
@@ -61,7 +61,7 @@
 # nFlank: integer for number of flanking nucleotides to pull
 # seqId: column name in x to use as unique id.
 # allele: allele column name
-.prepRangeMetadata <- \(x, sem, genome, nFlank, seqId) {
+.prepRangeMetadata <- function(x, sem, genome, nFlank, seqId) {
     # generate a unique sequence id if one is not provided
     if (is.null(seqId)) {
         id <- lapply(
@@ -139,8 +139,8 @@
 #' # calculate binding propensity
 #' scoreBinding(gr, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 #'
-scoreBinding <- \(x, sem, genome, nFlank = NULL,
-    seqId = NULL) {
+scoreBinding <- function(x, sem, genome, 
+                        nFlank = NULL, seqId = NULL) {
     # make sure nFlank is an integer, if provided
     if (!is.null(nFlank) & !is.numeric(nFlank)) {
         rlang::abort("nFlank must be an integer.")

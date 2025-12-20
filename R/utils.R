@@ -57,7 +57,7 @@
 
 # Given a single VRange or GRange, construct a unique id from the
 # position and allele information
-.makeVariantId <- \(x, refCol = NULL, altCol = NULL) {
+.makeVariantId <- function(x, refCol = NULL, altCol = NULL) {
     start_pos <- IRanges::start(IRanges::ranges(x))
     end_pos <- IRanges::end(IRanges::ranges(x))
     sn <- GenomeInfoDb::seqnames(x)
@@ -94,7 +94,7 @@
 
 
 # convert a SNP Effect Matrix to a Position Probability Matrix
-.semToPpm <- \(s) {
+.semToPpm <- function(s) {
     # normalize matrix
     norm_score <- apply(
         getSEM(s), 1,

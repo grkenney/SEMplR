@@ -306,7 +306,8 @@ The heatmap plots the -log10 adjusted pvalue of the binomial test
 pvalue threshold.
 
 ```{r plotEnrich}
-plotEnrich(e, sem = SEMC,
+plotEnrich(e,
+    sem = SEMC,
     threshold = 0.05, method = "WPCC",
     pvalRange = c(0, 50)
 )
@@ -323,7 +324,10 @@ for binding the promoters of the genes of interest; providing supporting
 evidence for a mechanism where the differential expression is driven by
 differences in TF activity.
 
-The getCoordinates function extracts promoter sequences and tests for predicted binding site enrichment in foreground sets using enrichmentSets. Significant enrichment of TF binding in the promoters of upregulated genes can provide mechanistic insight into gene expression changes.
+The getCoordinates function extracts promoter sequences and tests for predicted
+binding site enrichment in foreground sets using enrichmentSets. Significant
+enrichment of TF binding in the promoters of upregulated genes can provide
+mechanistic insight into gene expression changes.
 
 To aid in this analysis, we have provided a helper function, `enrichmentSets`,
 to pull genomic ranges of gene promoter and, optionally, background sets given
@@ -331,7 +335,7 @@ gene or transcript ids. Below is a minimal example to illustrate this function.
 In practice, gene ids of interest could be supplied to `enrichmentSets` to
 generate GRanges objects that can be directly supplied to `enrichSEMs`.
 
-```{r}
+```{r promoter_enrichment}
 library(TxDb.Hsapiens.UCSC.hg38.knownGene)
 library(BSgenome.Hsapiens.UCSC.hg38)
 library(org.Hs.eg.db)
@@ -342,11 +346,13 @@ orgdb <- org.Hs.eg.db
 genes_oi <- c("ENSG00000139618", "ENSG00000157764")
 background_genes <- c("ENSG00000111640", "ENSG00000075624", "ENSG00000165704")
 
-result <- enrichmentSets(foreground_ids = genes_oi, 
-                         background_ids = background_genes,
-                          txdb = txdb, 
-                          orgdb = orgdb, 
-                          id_type = "ENSEMBL")
+result <- enrichmentSets(
+    foreground_ids = genes_oi,
+    background_ids = background_genes,
+    txdb = txdb,
+    orgdb = orgdb,
+    id_type = "ENSEMBL"
+)
 result
 ```
 

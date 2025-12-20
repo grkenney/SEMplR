@@ -1,39 +1,37 @@
 # Validate SEM format
-.validateSEM <- \(sem, semFile) {
-    # if the first column is row numbers, drop it
-    if (all(sem[, 1] == seq_len(nrow(sem)))) {
-        sem <- sem[, 2:ncol(sem)]
-    }
-
+.validateSEM <- function(sem, semFile) {
+    ..expected_cols <- NA
     expected_cols <- c("A", "C", "G", "T")
-    n_cols <- length(colnames(sem))
 
-    # expect 4 columns
-    if (n_cols != 4) {
-        rlang::abort(paste0(
-            n_cols, " columns detected in file ", semFile, "\n",
-            "SEM files must have 4 columns with names:\n",
-            paste0(expected_cols, collapse = ", ")
+    # check that all nucleotides are represented in columns of SEM
+    if (!all(expected_cols %in% colnames(sem))) {
+        rlang::abort(c(
+            paste0(
+                semFile, " does not contain all expected nucleotide columns"
+            ),
+            "i" = "SEM files must have 4 columns with names: 'A', 'C', 'G', 'T'"
         ))
     }
 
-    # check if columns are nucleotides we expect
-    unexpected_cols <- setdiff(colnames(sem), expected_cols)
-
-    if (length(unexpected_cols) > 0) {
-        rlang::abort(paste0(
+    # check that each nucleotide only has one column
+    if (sum(colnames(sem) %in% expected_cols) > 4) {
+        rlang::abort(c(
             paste0(
-                "Unexpected column(s), ",
-                paste0(unexpected_cols, collapse = ", "),
-                ", detected. \n Columns of SEM file must be 'A', 'C', 'G', 'T'."
+                semFile, " has more than one column for one or more nucleotides"
+            ),
+            "i" = paste0(
+                "Each nucleotide ('A', 'C', 'G', 'T')",
+                "must have only one column"
             )
         ))
     }
+
+    return(sem[, ..expected_cols])
 }
 
 
 # Extract the baseline from file header if not explicitly stated
-.extractBaseline <- \(semFile) {
+.extractBaseline <- function(semFile) {
     # if bl param is null and baseline is in header, use header baseline
     # if bl is null and baseline is not in header, stop
     # else, use bl param as baseline by default
@@ -61,10 +59,10 @@
 # bl: baseline value for the SEM. Overrides baseline specified
 # in semFile header.
 # delim: delimiter of the SEM file
-.loadSEM <- \(semFile, semId = NULL, bl = NULL, delim = "\t") {
+.loadSEM <- function(semFile, semId = NULL, bl = NULL, delim = "\t") {
     s <- data.table::fread(file = semFile, sep = delim)
 
-    .validateSEM(s, semFile)
+    s <- .validateSEM(s, semFile)
 
     # if no semId given, use the basename of the file
     if (is.null(semId)) {
@@ -117,15 +115,19 @@
 #'     semMetaKey = "sem_id", bls = 1
 #' )
 #'
-loadSEMCollection <- \(semFiles, semMetaData = NULL, semMetaKey = "",
-    semIds = NULL, bls = NULL) {
+loadSEMCollection <- function(
+  semFiles, semMetaData = NULL, semMetaKey = "",
+  semIds = NULL, bls = NULL
+) {
     s <- lapply(
         seq_along(semFiles),
-        \(i) .loadSEM(
-            semFile = semFiles[i],
-            semId = semIds[i],
-            bl = bls[i]
-        )
+        function(i) {
+            .loadSEM(
+                semFile = semFiles[i],
+                semId = semIds[i],
+                bl = bls[i]
+            )
+        }
     )
 
     if (!is.null(semMetaData) & semMetaKey == "") {

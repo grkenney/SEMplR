@@ -1,5 +1,5 @@
 # make sure motif is not null and that provided motif id is in the collection
-.validateMotifInCollection <- \(sem, motif) {
+.validateMotifInCollection <- function(sem, motif) {
     # motif required if providing a SNPEffectMatrixCollection
     if (is.null(motif)) {
         rlang::abort(paste0(
@@ -21,7 +21,7 @@
 # validate that sem is a SNPEffectMatrix object or a SNPEffectMatrixCollection
 # and that the motif id provided is valid
 # define the baseline and matrix for the SEM
-.definePlotSEMParams <- \(sem, motif) {
+.definePlotSEMParams <- function(sem, motif) {
     if (is(sem, "SNPEffectMatrix")) {
         if (!is.null(motif)) {
             message(
@@ -50,7 +50,7 @@
 
 
 # pivot SEM matrix into a long data.table with score, position, and bp columns
-.formatPlotSEMTable <- \(sem_mtx) {
+.formatPlotSEMTable <- function(sem_mtx) {
     bp <- rep(c("A", "C", "G", "T"), each = nrow(sem_mtx))
     motif_pos <- rep(seq_len(nrow(sem_mtx)), 4)
     sem_score <- sem_mtx |>
@@ -64,7 +64,7 @@
 # define colors to plot nucleotides
 # adds hseq and text_color columns to sem_mtx_long for the sequence to highlight
 # and the color to plot each nucleotide
-.defineNucleotideColors <- \(sem_mtx_long, motifSeq, cols) {
+.defineNucleotideColors <- function(sem_mtx_long, motifSeq, cols) {
     motif_length <- max(sem_mtx_long$motif_pos)
     # if sequence is provided for plotting,
     if (!is.null(motifSeq)) {
@@ -97,8 +97,10 @@
 }
 
 
-.createBasePlotSEM <- \(sem_mtx_long, sem_mtx, hindex, motif,
-    hwidth, hcol, halpha, sem_baseline, size, lcol, lwidth) {
+.createBasePlotSEM <- function(
+  sem_mtx_long, sem_mtx, hindex, motif,
+  hwidth, hcol, halpha, sem_baseline, size, lcol, lwidth
+) {
     motif_pos <- sem_score <- NULL
 
     motif_plot <- ggplot2::ggplot(

@@ -1,8 +1,8 @@
-.reformatSEMKey <- \(semData, semKey){
+.reformatSEMKey <- function(semData, semKey) {
     SEM_KEY <- .SD <- NULL
     semData[, SEM_KEY := lapply(
         semData[, .SD, .SDcols = semKey],
-        \(x) gsub(".sem", "", x)
+        function(x) gsub(".sem", "", x)
     )]
     data.table::setkey(semData, SEM_KEY)
     rlang::inform(paste0(

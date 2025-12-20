@@ -3,15 +3,23 @@ test_that(".validateSEM fails on invalid input", {
     m <- matrix(rnorm(12), nrow = 4)
     colnames(m) <- c("A", "C", "G")
     expect_error(.validateSEM(m, "someFile.tsv"),
-        regexp = "3 columns detected in file someFile.tsv"
+        regexp = "someFile.tsv does not contain all expected nucleotide columns"
     )
 
-    # unexpected column
-    m <- matrix(rnorm(16), nrow = 4)
-    colnames(m) <- c("A", "C", "G", "N")
+    m <- matrix(rnorm(20), nrow = 4)
+    colnames(m) <- c("A", "C", "G", "T", "T")
     expect_error(.validateSEM(m, "someFile.tsv"),
-        regexp = "Unexpected column\\(s\\)"
+        regexp = "more than one column for one or more nucleotides"
     )
+})
+
+
+test_that(".validateSEM ignores unexpected column", {
+    # unexpected column
+    m <- matrix(rnorm(20), nrow = 4)
+    colnames(m) <- c("A", "C", "G", "T", "N")
+    sem <- .validateSEM(data.table::data.table(m), "someFile.tsv")
+    expect_equal(colnames(sem), c("A", "C", "G", "T"))
 })
 
 
@@ -104,8 +112,8 @@ test_that("loadSEMCollection loads first SEM correctly", {
 
 
 test_that("loadSEMCollection errors on missing key with metadata", {
-    one_sem <- getSEMs(SEMC)[[1]]
-    one_sem_meta <- semData(SEMC)[1, ]
+    one_sem <- getSEMs(SEMC, "CTCF")
+    one_sem_meta <- semData(SEMC)[transcription_factor == "CTCF"]
 
     # write data to file
     tf <- tempfile()

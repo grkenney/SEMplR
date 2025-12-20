@@ -10,22 +10,22 @@
 #' 3. Promoter coordinate extraction via \code{getCoordinates()}.
 #' 4. Background sampling within that same call.
 #'
-#' @param txdb A TxDb object. 
+#' @param txdb A TxDb object.
 #' (e.g. \code{TxDb.Hsapiens.UCSC.hg38.knownGene}).
 #' @param orgdb An OrgDb object. (e.g. \code{org.Hs.eg.db}).
 #' @param id_type Type of identifier supplied in foreground and background IDs.
 #' See the `keytypes(orgdb)` for available id type options for each genome.
 #' @param foreground_ids Character vector of gene or
 #' transcript IDs (e.g. Ensembl, RefSeq, gene symbols) to analyze.
-#' @param background_ids Character vector of gene or transcript 
+#' @param background_ids Character vector of gene or transcript
 #' IDs to use as background set.
 #' @param transcript Logical; \code{TRUE} to treat inputs as transcript‐level,
 #'   \code{FALSE} for gene‐level.
-#' @param threshold Numeric in range 0 to 1. Min fraction of IDs that must map 
+#' @param threshold Numeric in range 0 to 1. Min fraction of IDs that must map
 #' to pick a keytype (default 0.9).
 #' @param stripVersions Logical; strip version suffixes (e.g. ".1") from
 #' Ensembl/RefSeq IDs.
-#' @param inflateThresh Numeric in range 0 to 1; max allowed transcript:gene 
+#' @param inflateThresh Numeric in range 0 to 1; max allowed transcript:gene
 #' inflation before auto‐collapsing (default 1).
 #' @param geneType Optional character; biotype filter
 #' (e.g. \code{"protein-coding"}).
@@ -52,82 +52,75 @@
 #' @examples
 #' library(TxDb.Hsapiens.UCSC.hg38.knownGene)
 #' library(org.Hs.eg.db)
-#' 
+#'
 #' txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 #' orgdb <- org.Hs.eg.db
-#' 
+#'
 #' my_genes <- c("ENSG00000139618", "ENSG00000157764")
 #' # Minimal run with defaults:
-#' results <- enrichmentSets(my_genes, 
-#'                           txdb = txdb, 
-#'                           orgdb = orgdb, 
-#'                           id_type = "ENSEMBL")
+#' results <- enrichmentSets(my_genes,
+#'     txdb = txdb,
+#'     orgdb = orgdb,
+#'     id_type = "ENSEMBL"
+#' )
 #'
 #' @export
-enrichmentSets <- \(txdb,
-                    orgdb,
-                    id_type,
-                    foreground_ids,
-                    background_ids = NULL,
-                    transcript            = FALSE,
-                    threshold             = 0.9,
-                    stripVersions         = TRUE,
-                    inflateThresh         = 1,
-                    geneType              = NULL,
-                    overlapMinGap         = 0,
-                    onePromoterPerGene    = FALSE,
-                    n_ratio               = 1,
-                    promoterWindow        = c(upstream=300,
-                                              downstream=50),
-                    standardChroms        = TRUE,
-                    reduceOverlaps        = TRUE ) {
-  
-  # Require that orgdb has a GENETYPE column if using geneType param
-  if (!is.null(geneType)) {
-    od_cols <- AnnotationDbi::columns(orgdb)
-    if (!"GENETYPE" %in% od_cols) {
-      rlang::abort(paste0(
-        "Your OrgDb (", orgdb,
-        ") does not contain a 'GENETYPE' column;\n",
-        "cannot apply geneType filter '", geneType, "'.\n",
-        "Please omit geneType or choose a supported species OrgDb."
-      ))
+enrichmentSets <- function(txdb, orgdb, id_type, foreground_ids,
+    background_ids = NULL,
+    transcript = FALSE,
+    threshold = 0.9,
+    stripVersions = TRUE,
+    inflateThresh = 1,
+    geneType = NULL,
+    overlapMinGap = 0,
+    onePromoterPerGene = FALSE,
+    n_ratio = 1,
+    promoterWindow = c(upstream = 300, downstream = 50),
+    standardChroms = TRUE,
+    reduceOverlaps = TRUE) {
+    # Require that orgdb has a GENETYPE column if using geneType param
+    if (!is.null(geneType)) {
+        od_cols <- AnnotationDbi::columns(orgdb)
+        if (!"GENETYPE" %in% od_cols) {
+            rlang::abort(paste0(
+                "Your OrgDb (", orgdb,
+                ") does not contain a 'GENETYPE' column;\n",
+                "cannot apply geneType filter '", geneType, "'.\n",
+                "Please omit geneType or choose a supported species OrgDb."
+            ))
+        }
     }
-  }
-  
-  # Map the user's IDs — a bit heavier, but now we know geneType is valid
-  mapped <- mapIDs(
-    orgdb = orgdb,
-    foreground_ids = foreground_ids,
-    background_ids = background_ids,
-    id_type = id_type,
-    threshold = threshold,
-    transcript = transcript,
-    stripVersions = stripVersions,
-    inflateThresh = inflateThresh
-  )
 
-  # Pool‐level filtering
-  filtered <- poolFilter(
-    mapped    = mapped,
-    geneType  = geneType
-  )
+    # Map the user's IDs — a bit heavier, but now we know geneType is valid
+    mapped <- mapIDs(
+        orgdb = orgdb,
+        foreground_ids = foreground_ids,
+        background_ids = background_ids,
+        id_type = id_type,
+        threshold = threshold,
+        transcript = transcript,
+        stripVersions = stripVersions,
+        inflateThresh = inflateThresh
+    )
 
-  # Coordinate extraction (lazy until collect, then quick)
-  coords <- getCoordinates(
-    mapped = filtered,
-    txdb = txdb,
-    transcript = transcript,
-    n_ratio              = n_ratio,
-    promoterWindow       = promoterWindow,
-    standardChroms       = standardChroms,
-    reduceOverlaps       = reduceOverlaps,
-    overlapMinGap        = overlapMinGap,
-    onePromoterPerGene   = onePromoterPerGene)
+    # Pool‐level filtering
+    filtered <- poolFilter(
+        mapped    = mapped,
+        geneType  = geneType
+    )
 
-  return(coords)
+    # Coordinate extraction (lazy until collect, then quick)
+    coords <- getCoordinates(
+        mapped = filtered,
+        txdb = txdb,
+        transcript = transcript,
+        n_ratio = n_ratio,
+        promoterWindow = promoterWindow,
+        standardChroms = standardChroms,
+        reduceOverlaps = reduceOverlaps,
+        overlapMinGap = overlapMinGap,
+        onePromoterPerGene = onePromoterPerGene
+    )
 
+    return(coords)
 }
-
-
-

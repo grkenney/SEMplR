@@ -1,4 +1,4 @@
-.scoreAllele <- \(x, sem, prefix, alleleCol, nFlank, id) {
+.scoreAllele <- function(x, sem, prefix, alleleCol, nFlank, id) {
     score_col_suffixes <- c("Score", "Norm", "VarIndex", "Seq")
     score_cols <- paste0(prefix, score_col_suffixes)
     ds <- S4Vectors::mcols(x[, alleleCol]) |>
@@ -55,9 +55,9 @@
 #' # calculate binding propensity
 #' scoreVariants(x, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 #'
-scoreVariants <- \(x, sem, genome,
+scoreVariants <- function(x, sem, genome,
     refCol = NULL, altCol = NULL,
-    varId = NULL) {
+    varId = NULL ) {
     riskNorm <- riskSeq <- nonRiskNorm <- nonRiskSeq <- NULL
 
     # Convert sem to a collection if it isn't one already

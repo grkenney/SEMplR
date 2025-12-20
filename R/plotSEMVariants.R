@@ -1,5 +1,5 @@
 # validate label, variant, and cols parameters
-.validatePlotSemVariantsInputs <- \(s, label, semId, cols) {
+.validatePlotSemVariantsInputs <- function(s, label, semId, cols) {
     # check that sem label is in the sem meta data
     meta_cols <- S4Vectors::mcols(getRanges(s)) |>
         colnames()
@@ -22,7 +22,8 @@
 }
 
 
-.createBasePlotSEMVariants <- \(scores_dt, cols, label, labsize, ptsize) {
+.createBasePlotSEMVariants <- function(scores_dt, cols, label,
+                                       labsize, ptsize) {
     refNorm <- altNorm <- NULL
     plt <- ggplot2::ggplot(
         data = scores_dt,
@@ -108,10 +109,10 @@
 plotSEMVariants <- function(s, sem, label = "varId", labsize = 4,
                             cols = c("#F8766D", "dodgerblue2"), ptsize = 1) {
     refNorm <- altNorm <- ix <- semId <- NA
-    .validatePlotSemVariantsInputs <- \(s = s, label = label,
-        semId = sem, cols = cols)
-
-    rlang::inform(paste0("Plotting ", sem, "..."))
+    .validatePlotSemVariantsInputs <- function(s = s, label = label,
+                                                semId = sem, cols = cols) {
+        rlang::inform(paste0("Plotting ", sem, "..."))
+    }
     ix <- sem == scores(s)[, semId]
     scores_dt <- scores(s)[ix, ]
 
@@ -122,11 +123,11 @@ plotSEMVariants <- function(s, sem, label = "varId", labsize = 4,
     var_plot <- var_plot +
         scale_x_continuous(
             breaks = scales::pretty_breaks(),
-            limits = \(x) ifelse(abs(x) < 1, c(-1, 1), x)
+            limits = function(x) ifelse(abs(x) < 1, c(-1, 1), x)
         ) +
         scale_y_continuous(
             breaks = scales::pretty_breaks(),
-            limits = \(x) ifelse(abs(x) < 1, c(-1, 1), x)
+            limits = function(x) ifelse(abs(x) < 1, c(-1, 1), x)
         ) +
         labs(
             x = "ref binding propensity",
