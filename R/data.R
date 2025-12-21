@@ -22,5 +22,5 @@
 #'   \item{PWM_source}{Position weighted matrix source}
 #'   ...
 #' }
-#' @source <>
+#' @source \url{https://github.com/Boyle-Lab/SEMpl}
 "SEMC"
