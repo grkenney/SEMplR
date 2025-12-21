@@ -5,10 +5,6 @@
 - [`SEMC`](https://grkenney.github.io/SEMplR/reference/SEMC.md) :
   Default SNP Effect Matrix Data Collection
 
-- [`SEMplScores-class`](https://grkenney.github.io/SEMplR/reference/SEMplScores-class.md)
-  : Class for storing SEM motif binding calculations for multiple
-  genomic ranges or variants
-
 - [`SEMplScores()`](https://grkenney.github.io/SEMplR/reference/SEMplScores.md)
   : SEMplScores object and constructor
 

@@ -1,8 +1,8 @@
 # SEMplR Vignette
 
 ``` r
+
 library(VariantAnnotation)
-#> Warning: package 'GenomicRanges' was built under R version 4.5.2
 library(GenomicRanges)
 library(BSgenome.Hsapiens.UCSC.hg19)
 library(SEMplR)
@@ -24,6 +24,7 @@ stored in a `SNPEffectMatrixCollection`. The default collection can be
 loaded with:
 
 ``` r
+
 data(SEMC)
 ```
 
@@ -34,6 +35,7 @@ meta data for each SEM. This object contains 223 SEMs and 12 meta data
 features for each.
 
 ``` r
+
 SEMC
 #> An object of class SNPEffectMatrixCollection
 #> SEMs(223): TFAP2B, ARNT ... ZNF18, ZSCAN4
@@ -43,6 +45,7 @@ SEMC
 We can view the SEM meta data slot with the `semData` function.
 
 ``` r
+
 semData(SEMC)
 #> Key: <transcription_factor>
 #>      transcription_factor                                      ensembl_id
@@ -108,6 +111,7 @@ semId, the baseline value used for normalization, and the SEM that
 SEMplR will use to score binding affinity.
 
 ``` r
+
 getSEMs(SEMC, semId = "JUN")
 #> An object of class SNPEffectMatrix
 #> semId:  JUN
@@ -133,6 +137,7 @@ make a `GRanges` object for that location. In this example, we will
 score a location on chromosome 12 of the human genome.
 
 ``` r
+
 # create a GRanges object
 gr <- GenomicRanges::GRanges(
     seqnames = "chr12",
@@ -163,6 +168,7 @@ Please see the (Scoring method)\[#scoring-method\] section below for
 details on how sequences are scored with SEMs.
 
 ``` r
+
 # calculate binding propensity
 sb <- scoreBinding(x = gr, sem = SEMC, genome = Hsapiens)
 sb
@@ -211,6 +217,7 @@ combination. The scoring results has 6 columns:
   alternative alleles respectively
 
 ``` r
+
 scores(sb)
 #>               seqId    SEM      score  scoreNorm index              seq
 #>              <char> <char>      <num>      <num> <int>           <char>
@@ -235,6 +242,7 @@ position and see which nucleotides are contributing to this negative
 score.
 
 ``` r
+
 # subset JUN score
 jun_score <- scores(sb)[SEM == "JUN"]
 jun_score
@@ -274,6 +282,7 @@ sequences.
 See code used to generate simulated sequences
 
 ``` r
+
 # create random sequences weighted by ppm probabilities
 simulatePPMSeqs <- function(ppm, nSeqs) {
     ppm_t <- t(ppm)
@@ -314,6 +323,7 @@ simulateRandSeqs <- function(seqLength, nSeqs = 1) {
 ```
 
 ``` r
+
 ppm <- convertSEMsToPPMs(getSEMs(SEMC, "JUN"))[[1]]
 
 # simulate sequences from the JUN PPM
@@ -345,6 +355,7 @@ of sequences to `scoreBinding`. Because we did not pass positional/range
 information, this function will now only return the scoring table.
 
 ``` r
+
 # combine all sequences into a single vector
 all_seqs <- c(sim_seqs, rand_seqs)
 
@@ -381,6 +392,7 @@ scored sequences provided to use as a background.
 transcription factors scored are bound more than expected by chance.
 
 ``` r
+
 e <- enrichSEMs(sb, sem = SEMC, seqs = all_seqs)
 #> Building background set (this may take several minutes) ...
 
@@ -417,6 +429,7 @@ The heatmap plots the -log10 adjusted pvalue of the binomial test (
 threshold.
 
 ``` r
+
 plotEnrich(e,
     sem = SEMC,
     threshold = 0.05, method = "WPCC",
@@ -450,12 +463,11 @@ interest could be supplied to `enrichmentSets` to generate GRanges
 objects that can be directly supplied to `enrichSEMs`.
 
 ``` r
+
 library(TxDb.Hsapiens.UCSC.hg38.knownGene)
 #> Loading required package: GenomicFeatures
 #> Loading required package: AnnotationDbi
 library(BSgenome.Hsapiens.UCSC.hg38)
-#> Loading required package: GenomeInfoDb
-#> Warning: package 'GenomeInfoDb' was built under R version 4.5.2
 #> 
 #> Attaching package: 'BSgenome.Hsapiens.UCSC.hg38'
 #> The following object is masked from 'package:BSgenome.Hsapiens.UCSC.hg19':
@@ -575,6 +587,7 @@ Optionally, an `id` column can be defined in the object metadata to be
 used as a unique identifier for each variant.
 
 ``` r
+
 vr <- VRanges(
     seqnames = c("chr12", "chr19"),
     ranges = c(94136009, 10640062),
@@ -594,6 +607,7 @@ There is a row in the `scores` table for each variant/SEM combination.
 Here we scored 2 variants x 223 SEMs to get 446 rows.
 
 ``` r
+
 sempl_results <- scoreVariants(
     x = vr,
     sem = SEMC,
@@ -664,6 +678,7 @@ There are accessor functions to isolate each slot of the resulting data
 object:
 
 ``` r
+
 # access the variants slot
 getRanges(sempl_results)
 
@@ -685,6 +700,7 @@ Here, we can see that both HLF and CEBPG are predicted to be bound in
 the alt allele of variant2, but no the ref allele.
 
 ``` r
+
 plotSEMMotifs(
     s = sempl_results,
     variant = "variant2",
@@ -701,6 +717,7 @@ Here, we can see that it’s variant2 where the mutation from the ref to
 the alt allele creates the potential for a gained TF binding site.
 
 ``` r
+
 plotSEMVariants(sempl_results, sem = "HLF")
 ```
 
@@ -754,6 +771,7 @@ object. If meta data is used, all SEMs must be represented in the meta
 data table.
 
 ``` r
+
 # find .sem files
 sem_folder <- system.file("extdata", "SEMs", package = "SEMplR")
 sem_files <- list.files(sem_folder, full.names = TRUE)
@@ -772,6 +790,7 @@ meta data table with a key column connecting the meta data to the names
 of the matrices.
 
 ``` r
+
 ix <- lapply(
     sem_files,
     function(x) which(sempl_metadata$SEM == basename(x))
@@ -781,12 +800,682 @@ sem_ids <- sempl_metadata$transcription_factor[ix]
 ```
 
 ``` r
+
 sc <- loadSEMCollection(
     semFiles = sem_files,
     semMetaData = sempl_metadata,
     semMetaKey = "transcription_factor",
     semIds = sem_ids
 )
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
+#> Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and
+#> '..expected_cols' exist in calling scope. Please remove the '..expected_cols'
+#> variable in calling scope for clarity.
 sc
 #> An object of class SNPEffectMatrixCollection
 #> SEMs(223): TFAP2B, ARNT ... ZNF18, ZSCAN4
@@ -794,148 +1483,146 @@ sc
 ```
 
 ``` r
+
 devtools::session_info()
 #> ─ Session info ───────────────────────────────────────────────────────────────
 #>  setting  value
-#>  version  R version 4.5.1 (2025-06-13)
-#>  os       macOS Ventura 13.7.8
-#>  system   aarch64, darwin20
+#>  version  R version 4.5.2 (2025-10-31)
+#>  os       Ubuntu 24.04.3 LTS
+#>  system   x86_64, linux-gnu
 #>  ui       X11
 #>  language en
 #>  collate  en_US.UTF-8
 #>  ctype    en_US.UTF-8
-#>  tz       America/New_York
+#>  tz       UTC
 #>  date     2025-12-21
-#>  pandoc   3.6.3 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/aarch64/ (via rmarkdown)
-#>  quarto   1.7.32 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/quarto
+#>  pandoc   3.8.2.1 @ /usr/bin/ (via rmarkdown)
+#>  quarto   1.7.32 @ /usr/local/bin/quarto
 #> 
 #> ─ Packages ───────────────────────────────────────────────────────────────────
 #>  package                           * version   date (UTC) lib source
-#>  abind                               1.4-8     2024-09-12 [1] CRAN (R 4.5.0)
-#>  AnnotationDbi                     * 1.72.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  Biobase                           * 2.70.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  BiocGenerics                      * 0.56.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  BiocIO                            * 1.20.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  BiocManager                         1.30.27   2025-11-14 [1] CRAN (R 4.5.2)
-#>  BiocParallel                        1.44.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  BiocStyle                         * 2.38.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  Biostrings                        * 2.78.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  bit                                 4.6.0     2025-03-06 [1] CRAN (R 4.5.0)
-#>  bit64                               4.6.0-1   2025-01-16 [1] CRAN (R 4.5.0)
-#>  bitops                              1.0-9     2024-10-03 [1] CRAN (R 4.5.0)
-#>  blob                                1.2.4     2023-03-17 [1] CRAN (R 4.5.0)
-#>  bookdown                            0.46      2025-12-05 [1] CRAN (R 4.5.2)
-#>  BSgenome                          * 1.78.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  BSgenome.Hsapiens.UCSC.hg19       * 1.4.3     2025-09-23 [1] Bioconductor
-#>  BSgenome.Hsapiens.UCSC.hg38       * 1.4.5     2025-09-23 [1] Bioconductor
-#>  bslib                               0.9.0     2025-01-30 [1] CRAN (R 4.5.0)
-#>  cachem                              1.1.0     2024-05-16 [1] CRAN (R 4.5.0)
-#>  cigarillo                           1.0.0     2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  circlize                            0.4.17    2025-12-08 [1] CRAN (R 4.5.2)
-#>  cli                                 3.6.5     2025-04-23 [1] CRAN (R 4.5.0)
-#>  clue                                0.3-66    2024-11-13 [1] CRAN (R 4.5.0)
-#>  cluster                             2.1.8.1   2025-03-12 [1] CRAN (R 4.5.1)
-#>  codetools                           0.2-20    2024-03-31 [1] CRAN (R 4.5.1)
-#>  colorspace                          2.1-2     2025-09-22 [1] CRAN (R 4.5.0)
-#>  ComplexHeatmap                      2.26.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  crayon                              1.5.3     2024-06-20 [1] CRAN (R 4.5.0)
-#>  curl                                7.0.0     2025-08-19 [1] CRAN (R 4.5.0)
-#>  data.table                          1.17.8    2025-07-10 [1] CRAN (R 4.5.0)
-#>  DBI                                 1.2.3     2024-06-02 [1] CRAN (R 4.5.0)
-#>  DelayedArray                        0.36.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  desc                                1.4.3     2023-12-10 [1] CRAN (R 4.5.0)
-#>  devtools                            2.4.6     2025-10-03 [1] CRAN (R 4.5.0)
-#>  digest                              0.6.39    2025-11-19 [1] CRAN (R 4.5.2)
-#>  doParallel                          1.0.17    2022-02-07 [1] CRAN (R 4.5.0)
-#>  dplyr                               1.1.4     2023-11-17 [1] CRAN (R 4.5.0)
-#>  ellipsis                            0.3.2     2021-04-29 [1] CRAN (R 4.5.0)
-#>  evaluate                            1.0.5     2025-08-27 [1] CRAN (R 4.5.0)
-#>  farver                              2.1.2     2024-05-13 [1] CRAN (R 4.5.0)
-#>  fastmap                             1.2.0     2024-05-15 [1] CRAN (R 4.5.0)
-#>  foreach                             1.5.2     2022-02-02 [1] CRAN (R 4.5.0)
-#>  fs                                  1.6.6     2025-04-12 [1] CRAN (R 4.5.0)
-#>  generics                          * 0.1.4     2025-05-09 [1] CRAN (R 4.5.0)
-#>  GenomeInfoDb                      * 1.46.2    2025-12-08 [1] Bioconductor 3.22 (R 4.5.2)
-#>  GenomicAlignments                   1.46.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  GenomicFeatures                   * 1.62.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  GenomicRanges                     * 1.62.1    2025-12-08 [1] Bioconductor 3.22 (R 4.5.2)
-#>  GetoptLong                          1.1.0     2025-11-28 [1] CRAN (R 4.5.2)
-#>  ggplot2                             4.0.1     2025-11-14 [1] CRAN (R 4.5.2)
-#>  ggrepel                             0.9.6     2024-09-07 [1] CRAN (R 4.5.0)
-#>  GlobalOptions                       0.1.3     2025-11-28 [1] CRAN (R 4.5.2)
-#>  glue                                1.8.0     2024-09-30 [1] CRAN (R 4.5.0)
-#>  gridBase                            0.4-7     2014-02-24 [1] CRAN (R 4.5.0)
-#>  gtable                              0.3.6     2024-10-25 [1] CRAN (R 4.5.0)
-#>  htmltools                           0.5.9     2025-12-04 [1] CRAN (R 4.5.2)
-#>  htmlwidgets                         1.6.4     2023-12-06 [1] CRAN (R 4.5.0)
-#>  httr                                1.4.7     2023-08-15 [1] CRAN (R 4.5.0)
-#>  IRanges                           * 2.44.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  iterators                           1.0.14    2022-02-05 [1] CRAN (R 4.5.0)
-#>  jquerylib                           0.1.4     2021-04-26 [1] CRAN (R 4.5.0)
-#>  jsonlite                            2.0.0     2025-03-27 [1] CRAN (R 4.5.0)
-#>  KEGGREST                            1.50.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  knitr                               1.51      2025-12-20 [1] CRAN (R 4.5.1)
-#>  labeling                            0.4.3     2023-08-29 [1] CRAN (R 4.5.0)
-#>  lattice                             0.22-7    2025-04-02 [1] CRAN (R 4.5.1)
-#>  lifecycle                           1.0.4     2023-11-07 [1] CRAN (R 4.5.0)
-#>  magrittr                            2.0.4     2025-09-12 [1] CRAN (R 4.5.0)
-#>  MASS                                7.3-65    2025-02-28 [1] CRAN (R 4.5.1)
-#>  Matrix                              1.7-4     2025-08-28 [1] CRAN (R 4.5.0)
-#>  MatrixGenerics                    * 1.22.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  matrixStats                       * 1.5.0     2025-01-07 [1] CRAN (R 4.5.0)
-#>  memoise                             2.0.1     2021-11-26 [1] CRAN (R 4.5.0)
-#>  org.Hs.eg.db                      * 3.22.0    2025-10-22 [1] Bioconductor
-#>  otel                                0.2.0     2025-08-29 [1] CRAN (R 4.5.0)
-#>  pillar                              1.11.1    2025-09-17 [1] CRAN (R 4.5.0)
-#>  pkgbuild                            1.4.8     2025-05-26 [1] CRAN (R 4.5.0)
-#>  pkgconfig                           2.0.3     2019-09-22 [1] CRAN (R 4.5.0)
-#>  pkgdown                             2.2.0     2025-11-06 [1] CRAN (R 4.5.0)
-#>  pkgload                             1.4.1     2025-09-23 [1] CRAN (R 4.5.0)
-#>  png                                 0.1-8     2022-11-29 [1] CRAN (R 4.5.0)
-#>  purrr                               1.2.0     2025-11-04 [1] CRAN (R 4.5.0)
-#>  R6                                  2.6.1     2025-02-15 [1] CRAN (R 4.5.0)
-#>  ragg                                1.5.0     2025-09-02 [1] CRAN (R 4.5.0)
-#>  RColorBrewer                        1.1-3     2022-04-03 [1] CRAN (R 4.5.0)
-#>  Rcpp                                1.1.0     2025-07-02 [1] CRAN (R 4.5.0)
-#>  RCurl                               1.98-1.17 2025-03-22 [1] CRAN (R 4.5.0)
-#>  remotes                             2.5.0     2024-03-17 [1] CRAN (R 4.5.0)
-#>  restfulr                            0.0.16    2025-06-27 [1] CRAN (R 4.5.0)
-#>  rjson                               0.2.23    2024-09-16 [1] CRAN (R 4.5.0)
-#>  rlang                               1.1.6     2025-04-11 [1] CRAN (R 4.5.0)
-#>  rmarkdown                           2.30      2025-09-28 [1] CRAN (R 4.5.0)
-#>  Rsamtools                         * 2.26.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  RSQLite                             2.4.5     2025-11-30 [1] CRAN (R 4.5.2)
-#>  rstudioapi                          0.17.1    2024-10-22 [1] CRAN (R 4.5.0)
-#>  rtracklayer                       * 1.70.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  S4Arrays                            1.10.1    2025-12-08 [1] Bioconductor 3.22 (R 4.5.2)
-#>  S4Vectors                         * 0.48.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  S7                                  0.2.1     2025-11-14 [1] CRAN (R 4.5.2)
-#>  sass                                0.4.10    2025-04-11 [1] CRAN (R 4.5.0)
-#>  scales                              1.4.0     2025-04-24 [1] CRAN (R 4.5.0)
-#>  SEMplR                            * 0.99.0    2025-10-23 [1] Bioconductor
-#>  Seqinfo                           * 1.0.0     2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  sessioninfo                         1.2.3     2025-02-05 [1] CRAN (R 4.5.0)
-#>  shape                               1.4.6.1   2024-02-23 [1] CRAN (R 4.5.0)
-#>  SparseArray                         1.10.6    2025-12-08 [1] Bioconductor 3.22 (R 4.5.2)
-#>  stringi                             1.8.7     2025-03-27 [1] CRAN (R 4.5.0)
-#>  SummarizedExperiment              * 1.40.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  systemfonts                         1.3.1     2025-10-01 [1] CRAN (R 4.5.0)
-#>  textshaping                         1.0.4     2025-10-10 [1] CRAN (R 4.5.0)
-#>  tibble                              3.3.0     2025-06-08 [1] CRAN (R 4.5.0)
-#>  tidyselect                          1.2.1     2024-03-11 [1] CRAN (R 4.5.0)
-#>  TxDb.Hsapiens.UCSC.hg38.knownGene * 3.22.0    2025-10-22 [1] Bioconductor
-#>  UCSC.utils                          1.6.1     2025-12-11 [1] Bioconductor 3.22 (R 4.5.2)
-#>  universalmotif                      1.28.0    2025-10-30 [1] Bioconductor 3.22 (R 4.5.1)
-#>  usethis                             3.2.1     2025-09-06 [1] CRAN (R 4.5.0)
-#>  VariantAnnotation                 * 1.56.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  vctrs                               0.6.5     2023-12-01 [1] CRAN (R 4.5.0)
-#>  withr                               3.0.2     2024-10-28 [1] CRAN (R 4.5.0)
-#>  xfun                                0.55      2025-12-16 [1] CRAN (R 4.5.2)
-#>  XML                                 3.99-0.20 2025-11-08 [1] CRAN (R 4.5.0)
-#>  XVector                           * 0.50.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.1)
-#>  yaml                                2.3.12    2025-12-10 [1] CRAN (R 4.5.2)
+#>  abind                               1.4-8     2024-09-12 [1] RSPM (R 4.5.0)
+#>  AnnotationDbi                     * 1.70.0    2025-04-15 [1] Bioconductor 3.21 (R 4.5.1)
+#>  Biobase                           * 2.68.0    2025-04-15 [1] Bioconductor 3.21 (R 4.5.1)
+#>  BiocGenerics                      * 0.54.1    2025-10-12 [1] Bioconductor 3.21 (R 4.5.1)
+#>  BiocIO                            * 1.18.0    2025-04-15 [1] Bioconductor 3.21 (R 4.5.1)
+#>  BiocParallel                        1.42.2    2025-09-14 [1] Bioconductor 3.21 (R 4.5.1)
+#>  Biostrings                        * 2.76.0    2025-04-15 [1] Bioconductor 3.21 (R 4.5.1)
+#>  bit                                 4.6.0     2025-03-06 [1] RSPM (R 4.5.0)
+#>  bit64                               4.6.0-1   2025-01-16 [1] RSPM (R 4.5.0)
+#>  bitops                              1.0-9     2024-10-03 [1] RSPM (R 4.5.0)
+#>  blob                                1.2.4     2023-03-17 [1] RSPM (R 4.5.0)
+#>  BSgenome                          * 1.76.0    2025-04-15 [1] Bioconductor 3.21 (R 4.5.1)
+#>  BSgenome.Hsapiens.UCSC.hg19       * 1.4.3     2025-10-31 [1] Bioconductor
+#>  BSgenome.Hsapiens.UCSC.hg38       * 1.4.5     2025-10-31 [1] Bioconductor
+#>  bslib                               0.9.0     2025-01-30 [2] RSPM (R 4.5.0)
+#>  cachem                              1.1.0     2024-05-16 [2] RSPM (R 4.5.0)
+#>  circlize                            0.4.17    2025-12-08 [1] RSPM (R 4.5.0)
+#>  cli                                 3.6.5     2025-04-23 [2] RSPM (R 4.5.0)
+#>  clue                                0.3-66    2024-11-13 [1] RSPM (R 4.5.0)
+#>  cluster                             2.1.8.1   2025-03-12 [3] CRAN (R 4.5.2)
+#>  codetools                           0.2-20    2024-03-31 [3] CRAN (R 4.5.2)
+#>  colorspace                          2.1-2     2025-09-22 [1] RSPM (R 4.5.0)
+#>  ComplexHeatmap                      2.24.1    2025-06-25 [1] Bioconductor 3.21 (R 4.5.1)
+#>  crayon                              1.5.3     2024-06-20 [2] RSPM (R 4.5.0)
+#>  curl                                7.0.0     2025-08-19 [2] RSPM (R 4.5.0)
+#>  data.table                          1.17.8    2025-07-10 [1] RSPM (R 4.5.0)
+#>  DBI                                 1.2.3     2024-06-02 [1] RSPM (R 4.5.0)
+#>  DelayedArray                        0.34.1    2025-04-17 [1] Bioconductor 3.21 (R 4.5.1)
+#>  desc                                1.4.3     2023-12-10 [2] RSPM (R 4.5.0)
+#>  devtools                            2.4.6     2025-10-03 [2] RSPM (R 4.5.0)
+#>  digest                              0.6.39    2025-11-19 [2] RSPM (R 4.5.0)
+#>  doParallel                          1.0.17    2022-02-07 [1] RSPM (R 4.5.0)
+#>  dplyr                               1.1.4     2023-11-17 [1] RSPM (R 4.5.0)
+#>  ellipsis                            0.3.2     2021-04-29 [2] RSPM (R 4.5.0)
+#>  evaluate                            1.0.5     2025-08-27 [2] RSPM (R 4.5.0)
+#>  farver                              2.1.2     2024-05-13 [1] RSPM (R 4.5.0)
+#>  fastmap                             1.2.0     2024-05-15 [2] RSPM (R 4.5.0)
+#>  foreach                             1.5.2     2022-02-02 [1] RSPM (R 4.5.0)
+#>  fs                                  1.6.6     2025-04-12 [2] RSPM (R 4.5.0)
+#>  generics                          * 0.1.4     2025-05-09 [1] RSPM (R 4.5.0)
+#>  GenomeInfoDb                      * 1.44.3    2025-09-21 [1] Bioconductor 3.21 (R 4.5.1)
+#>  GenomeInfoDbData                    1.2.14    2025-10-31 [1] Bioconductor
+#>  GenomicAlignments                   1.44.0    2025-04-15 [1] Bioconductor 3.21 (R 4.5.1)
+#>  GenomicFeatures                   * 1.60.0    2025-04-15 [1] Bioconductor 3.21 (R 4.5.1)
+#>  GenomicRanges                     * 1.60.0    2025-04-15 [1] Bioconductor 3.21 (R 4.5.1)
+#>  GetoptLong                          1.1.0     2025-11-28 [1] RSPM (R 4.5.0)
+#>  ggplot2                             4.0.1     2025-11-14 [1] RSPM (R 4.5.0)
+#>  ggrepel                             0.9.6     2024-09-07 [1] RSPM (R 4.5.0)
+#>  GlobalOptions                       0.1.3     2025-11-28 [1] RSPM (R 4.5.0)
+#>  glue                                1.8.0     2024-09-30 [2] RSPM (R 4.5.0)
+#>  gridBase                            0.4-7     2014-02-24 [1] RSPM (R 4.5.0)
+#>  gtable                              0.3.6     2024-10-25 [1] RSPM (R 4.5.0)
+#>  htmltools                           0.5.9     2025-12-04 [2] RSPM (R 4.5.0)
+#>  htmlwidgets                         1.6.4     2023-12-06 [2] RSPM (R 4.5.0)
+#>  httr                                1.4.7     2023-08-15 [1] RSPM (R 4.5.0)
+#>  IRanges                           * 2.42.0    2025-04-15 [1] Bioconductor 3.21 (R 4.5.1)
+#>  iterators                           1.0.14    2022-02-05 [1] RSPM (R 4.5.0)
+#>  jquerylib                           0.1.4     2021-04-26 [2] RSPM (R 4.5.0)
+#>  jsonlite                            2.0.0     2025-03-27 [2] RSPM (R 4.5.0)
+#>  KEGGREST                            1.48.1    2025-06-22 [1] Bioconductor 3.21 (R 4.5.1)
+#>  knitr                               1.51      2025-12-20 [2] RSPM (R 4.5.0)
+#>  labeling                            0.4.3     2023-08-29 [1] RSPM (R 4.5.0)
+#>  lattice                             0.22-7    2025-04-02 [3] CRAN (R 4.5.2)
+#>  lifecycle                           1.0.4     2023-11-07 [2] RSPM (R 4.5.0)
+#>  magrittr                            2.0.4     2025-09-12 [2] RSPM (R 4.5.0)
+#>  MASS                                7.3-65    2025-02-28 [3] CRAN (R 4.5.2)
+#>  Matrix                              1.7-4     2025-08-28 [3] CRAN (R 4.5.2)
+#>  MatrixGenerics                    * 1.20.0    2025-04-15 [1] Bioconductor 3.21 (R 4.5.1)
+#>  matrixStats                       * 1.5.0     2025-01-07 [1] RSPM (R 4.5.0)
+#>  memoise                             2.0.1     2021-11-26 [2] RSPM (R 4.5.0)
+#>  org.Hs.eg.db                      * 3.21.0    2025-10-31 [1] Bioconductor
+#>  otel                                0.2.0     2025-08-29 [2] RSPM (R 4.5.0)
+#>  pillar                              1.11.1    2025-09-17 [2] RSPM (R 4.5.0)
+#>  pkgbuild                            1.4.8     2025-05-26 [2] RSPM (R 4.5.0)
+#>  pkgconfig                           2.0.3     2019-09-22 [2] RSPM (R 4.5.0)
+#>  pkgdown                             2.2.0     2025-11-06 [2] RSPM (R 4.5.0)
+#>  pkgload                             1.4.1     2025-09-23 [2] RSPM (R 4.5.0)
+#>  png                                 0.1-8     2022-11-29 [1] RSPM (R 4.5.0)
+#>  purrr                               1.2.0     2025-11-04 [2] RSPM (R 4.5.0)
+#>  R6                                  2.6.1     2025-02-15 [2] RSPM (R 4.5.0)
+#>  ragg                                1.5.0     2025-09-02 [2] RSPM (R 4.5.0)
+#>  RColorBrewer                        1.1-3     2022-04-03 [1] RSPM (R 4.5.0)
+#>  Rcpp                                1.1.0     2025-07-02 [2] RSPM (R 4.5.2)
+#>  RCurl                               1.98-1.17 2025-03-22 [1] RSPM (R 4.5.0)
+#>  remotes                             2.5.0     2024-03-17 [1] RSPM (R 4.5.0)
+#>  restfulr                            0.0.16    2025-06-27 [1] RSPM (R 4.5.1)
+#>  rjson                               0.2.23    2024-09-16 [1] RSPM (R 4.5.0)
+#>  rlang                               1.1.6     2025-04-11 [2] RSPM (R 4.5.0)
+#>  rmarkdown                           2.30      2025-09-28 [2] RSPM (R 4.5.0)
+#>  Rsamtools                         * 2.24.1    2025-09-07 [1] Bioconductor 3.21 (R 4.5.1)
+#>  RSQLite                             2.4.5     2025-11-30 [1] RSPM (R 4.5.0)
+#>  rtracklayer                       * 1.68.0    2025-04-15 [1] Bioconductor 3.21 (R 4.5.1)
+#>  S4Arrays                            1.8.1     2025-06-01 [1] Bioconductor 3.21 (R 4.5.1)
+#>  S4Vectors                         * 0.46.0    2025-04-15 [1] Bioconductor 3.21 (R 4.5.1)
+#>  S7                                  0.2.1     2025-11-14 [1] RSPM (R 4.5.0)
+#>  sass                                0.4.10    2025-04-11 [2] RSPM (R 4.5.0)
+#>  scales                              1.4.0     2025-04-24 [1] RSPM (R 4.5.0)
+#>  SEMplR                            * 0.99.0    2025-12-21 [1] Bioconductor
+#>  sessioninfo                         1.2.3     2025-02-05 [2] RSPM (R 4.5.0)
+#>  shape                               1.4.6.1   2024-02-23 [1] RSPM (R 4.5.0)
+#>  SparseArray                         1.8.1     2025-07-23 [1] Bioconductor 3.21 (R 4.5.1)
+#>  stringi                             1.8.7     2025-03-27 [2] RSPM (R 4.5.0)
+#>  SummarizedExperiment              * 1.38.1    2025-04-30 [1] Bioconductor 3.21 (R 4.5.1)
+#>  systemfonts                         1.3.1     2025-10-01 [2] RSPM (R 4.5.0)
+#>  textshaping                         1.0.4     2025-10-10 [2] RSPM (R 4.5.0)
+#>  tibble                              3.3.0     2025-06-08 [2] RSPM (R 4.5.0)
+#>  tidyselect                          1.2.1     2024-03-11 [1] RSPM (R 4.5.0)
+#>  TxDb.Hsapiens.UCSC.hg38.knownGene * 3.21.0    2025-10-31 [1] Bioconductor
+#>  UCSC.utils                          1.4.0     2025-04-15 [1] Bioconductor 3.21 (R 4.5.1)
+#>  universalmotif                      1.26.3    2025-10-01 [1] Bioconductor 3.21 (R 4.5.1)
+#>  usethis                             3.2.1     2025-09-06 [2] RSPM (R 4.5.0)
+#>  VariantAnnotation                 * 1.54.1    2025-05-11 [1] Bioconductor 3.21 (R 4.5.1)
+#>  vctrs                               0.6.5     2023-12-01 [2] RSPM (R 4.5.0)
+#>  withr                               3.0.2     2024-10-28 [2] RSPM (R 4.5.0)
+#>  xfun                                0.55      2025-12-16 [2] RSPM (R 4.5.0)
+#>  XML                                 3.99-0.20 2025-11-08 [1] RSPM (R 4.5.0)
+#>  XVector                           * 0.48.0    2025-04-15 [1] Bioconductor 3.21 (R 4.5.1)
+#>  yaml                                2.3.12    2025-12-10 [2] RSPM (R 4.5.0)
 #> 
-#>  [1] /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/library
+#>  [1] /__w/_temp/Library
+#>  [2] /usr/local/lib/R/site-library
+#>  [3] /usr/local/lib/R/library
 #>  * ── Packages attached to the search path.
 #> 
 #> ──────────────────────────────────────────────────────────────────────────────

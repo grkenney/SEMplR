@@ -14,7 +14,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/grkenney/SEMplR/blob/HEAD/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/grkenney/SEMplR/blob/devel/DESCRIPTION)
 
 Kenney G, Phanstiel D (2025). *SEMplR: SNP Effect Matrix Pipeline in R*.
 R package version 0.99.0, <https://github.com/grkenney/SEMplR>.
