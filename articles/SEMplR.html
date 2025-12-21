@@ -30,7 +30,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="active nav-item"><a class="nav-link" href="../articles/SEMplR.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/SEMplR.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
@@ -55,7 +55,7 @@
       <h1>SEMplR Vignette</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/grkenney/SEMplR/blob/devel/vignettes/SEMplR.Rmd" class="external-link"><code>vignettes/SEMplR.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/grkenney/SEMplR/blob/HEAD/vignettes/SEMplR.Rmd" class="external-link"><code>vignettes/SEMplR.Rmd</code></a></small>
       <div class="d-none name"><code>SEMplR.Rmd</code></div>
     </div>
 
@@ -63,6 +63,7 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">VariantAnnotation</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'GenomicRanges' was built under R version 4.5.2</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/GenomicRanges" class="external-link">GenomicRanges</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">BSgenome.Hsapiens.UCSC.hg19</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/grkenney/SEMplR" class="external-link">SEMplR</a></span><span class="op">)</span></span></code></pre></div>
@@ -284,7 +285,7 @@ score.</p>
 <span>    motif <span class="op">=</span> <span class="st">"JUN"</span>,</span>
 <span>    motifSeq <span class="op">=</span> <span class="va">jun_score</span><span class="op">$</span><span class="va">seq</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="SEMplR_files/figure-html/plot_sem-1.png" class="r-plt" width="384"></p>
+<p><img src="SEMplR_files/figure-html/plot_sem-1.png" class="r-plt" alt="" width="384"></p>
 </div>
 </div>
 <div class="section level2">
@@ -449,7 +450,7 @@ threshold.</p>
 <span>    threshold <span class="op">=</span> <span class="fl">0.05</span>, method <span class="op">=</span> <span class="st">"WPCC"</span>,</span>
 <span>    pvalRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="SEMplR_files/figure-html/plotEnrich-1.png" class="r-plt" width="384"></p>
+<p><img src="SEMplR_files/figure-html/plotEnrich-1.png" class="r-plt" alt="" width="384"></p>
 </div>
 <div class="section level3">
 <h3 id="enrichment-in-promoters">Enrichment in Promoters<a class="anchor" aria-label="anchor" href="#enrichment-in-promoters"></a>
@@ -478,6 +479,8 @@ GRanges objects that can be directly supplied to
 <span><span class="co">#&gt; Loading required package: GenomicFeatures</span></span>
 <span><span class="co">#&gt; Loading required package: AnnotationDbi</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">BSgenome.Hsapiens.UCSC.hg38</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: GenomeInfoDb</span></span>
+<span><span class="co">#&gt; Warning: package 'GenomeInfoDb' was built under R version 4.5.2</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'BSgenome.Hsapiens.UCSC.hg38'</span></span>
 <span><span class="co">#&gt; The following object is masked from 'package:BSgenome.Hsapiens.UCSC.hg19':</span></span>
@@ -702,7 +705,7 @@ the alt allele of variant2, but no the ref allele.</p>
 <span>    variant <span class="op">=</span> <span class="st">"variant2"</span>,</span>
 <span>    label <span class="op">=</span> <span class="st">"transcription_factor"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="SEMplR_files/figure-html/plotSemMotifs-1.png" class="r-plt" width="384"></p>
+<p><img src="SEMplR_files/figure-html/plotSemMotifs-1.png" class="r-plt" alt="" width="384"></p>
 <p>The second function, <code>plotSEMVariants</code> plots the scores
 for all variants for a given SEM.</p>
 <p>Here, we can see that it’s variant2 where the mutation from the ref
@@ -710,7 +713,7 @@ to the alt allele creates the potential for a gained TF binding
 site.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSEMVariants.html">plotSEMVariants</a></span><span class="op">(</span><span class="va">sempl_results</span>, sem <span class="op">=</span> <span class="st">"HLF"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="SEMplR_files/figure-html/plotSEMVariants-1.png" class="r-plt" width="384"></p>
+<p><img src="SEMplR_files/figure-html/plotSEMVariants-1.png" class="r-plt" alt="" width="384"></p>
 </div>
 </div>
 <div class="section level2">
@@ -791,675 +794,6 @@ data to the names of the matrices.</p>
 <span>    semMetaKey <span class="op">=</span> <span class="st">"transcription_factor"</span>,</span>
 <span>    semIds <span class="op">=</span> <span class="va">sem_ids</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
-<span><span class="co">#&gt; Warning in `[.data.table`(sem, , ..expected_cols): Both 'expected_cols' and</span></span>
-<span><span class="co">#&gt; '..expected_cols' exist in calling scope. Please remove the '..expected_cols'</span></span>
-<span><span class="co">#&gt; variable in calling scope for clarity.</span></span>
 <span><span class="va">sc</span></span>
 <span><span class="co">#&gt; An object of class SNPEffectMatrixCollection</span></span>
 <span><span class="co">#&gt; SEMs(223): TFAP2B, ARNT ... ZNF18, ZSCAN4</span></span>
@@ -1468,141 +802,145 @@ data to the names of the matrices.</p>
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://sessioninfo.r-lib.org/reference/session_info.html" class="external-link">session_info</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB; font-weight: bold;">─ Session info ───────────────────────────────────────────────────────────────</span></span></span>
 <span><span class="co">#&gt;  <span style="color: #555555; font-style: italic;">setting </span> <span style="color: #555555; font-style: italic;">value</span></span></span>
-<span><span class="co">#&gt;  version  R version 4.5.2 (2025-10-31)</span></span>
-<span><span class="co">#&gt;  os       Ubuntu 24.04.3 LTS</span></span>
-<span><span class="co">#&gt;  system   x86_64, linux-gnu</span></span>
+<span><span class="co">#&gt;  version  R version 4.5.1 (2025-06-13)</span></span>
+<span><span class="co">#&gt;  os       macOS Ventura 13.7.8</span></span>
+<span><span class="co">#&gt;  system   aarch64, darwin20</span></span>
 <span><span class="co">#&gt;  ui       X11</span></span>
 <span><span class="co">#&gt;  language en</span></span>
 <span><span class="co">#&gt;  collate  en_US.UTF-8</span></span>
 <span><span class="co">#&gt;  ctype    en_US.UTF-8</span></span>
-<span><span class="co">#&gt;  tz       UTC</span></span>
-<span><span class="co">#&gt;  date     2025-12-20</span></span>
-<span><span class="co">#&gt;  pandoc   3.8.2.1 @ /usr/bin/ (via rmarkdown)</span></span>
-<span><span class="co">#&gt;  quarto   1.7.32 @ /usr/local/bin/quarto</span></span>
+<span><span class="co">#&gt;  tz       America/New_York</span></span>
+<span><span class="co">#&gt;  date     2025-12-21</span></span>
+<span><span class="co">#&gt;  pandoc   3.6.3 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/aarch64/ (via rmarkdown)</span></span>
+<span><span class="co">#&gt;  quarto   1.7.32 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/quarto</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB; font-weight: bold;">─ Packages ───────────────────────────────────────────────────────────────────</span></span></span>
 <span><span class="co">#&gt;  <span style="color: #555555; font-style: italic;">package                          </span> <span style="color: #555555; font-style: italic;">*</span> <span style="color: #555555; font-style: italic;">version  </span> <span style="color: #555555; font-style: italic;">date (UTC)</span> <span style="color: #555555; font-style: italic;">lib</span> <span style="color: #555555; font-style: italic;">source</span></span></span>
-<span><span class="co">#&gt;  abind                               1.4-8     <span style="color: #555555;">2024-09-12</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  AnnotationDbi                     * 1.70.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  Biobase                           * 2.68.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  BiocGenerics                      * 0.54.1    <span style="color: #555555;">2025-10-12</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  BiocIO                            * 1.18.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  BiocParallel                        1.42.2    <span style="color: #555555;">2025-09-14</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  Biostrings                        * 2.76.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  bit                                 4.6.0     <span style="color: #555555;">2025-03-06</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  bit64                               4.6.0-1   <span style="color: #555555;">2025-01-16</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  bitops                              1.0-9     <span style="color: #555555;">2024-10-03</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  blob                                1.2.4     <span style="color: #555555;">2023-03-17</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  BSgenome                          * 1.76.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  BSgenome.Hsapiens.UCSC.hg19       * 1.4.3     <span style="color: #555555;">2025-10-31</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
-<span><span class="co">#&gt;  BSgenome.Hsapiens.UCSC.hg38       * 1.4.5     <span style="color: #555555;">2025-10-31</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
-<span><span class="co">#&gt;  bslib                               0.9.0     <span style="color: #555555;">2025-01-30</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  cachem                              1.1.0     <span style="color: #555555;">2024-05-16</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  circlize                            0.4.17    <span style="color: #555555;">2025-12-08</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  cli                                 3.6.5     <span style="color: #555555;">2025-04-23</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  clue                                0.3-66    <span style="color: #555555;">2024-11-13</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  cluster                             2.1.8.1   <span style="color: #555555;">2025-03-12</span> <span style="color: #555555;">[3]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
-<span><span class="co">#&gt;  codetools                           0.2-20    <span style="color: #555555;">2024-03-31</span> <span style="color: #555555;">[3]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
-<span><span class="co">#&gt;  colorspace                          2.1-2     <span style="color: #555555;">2025-09-22</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  ComplexHeatmap                      2.24.1    <span style="color: #555555;">2025-06-25</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  crayon                              1.5.3     <span style="color: #555555;">2024-06-20</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  curl                                7.0.0     <span style="color: #555555;">2025-08-19</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  data.table                          1.17.8    <span style="color: #555555;">2025-07-10</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  DBI                                 1.2.3     <span style="color: #555555;">2024-06-02</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  DelayedArray                        0.34.1    <span style="color: #555555;">2025-04-17</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  desc                                1.4.3     <span style="color: #555555;">2023-12-10</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  devtools                            2.4.6     <span style="color: #555555;">2025-10-03</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  digest                              0.6.39    <span style="color: #555555;">2025-11-19</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  doParallel                          1.0.17    <span style="color: #555555;">2022-02-07</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  dplyr                               1.1.4     <span style="color: #555555;">2023-11-17</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  ellipsis                            0.3.2     <span style="color: #555555;">2021-04-29</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  evaluate                            1.0.5     <span style="color: #555555;">2025-08-27</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  farver                              2.1.2     <span style="color: #555555;">2024-05-13</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  fastmap                             1.2.0     <span style="color: #555555;">2024-05-15</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  foreach                             1.5.2     <span style="color: #555555;">2022-02-02</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  fs                                  1.6.6     <span style="color: #555555;">2025-04-12</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  generics                          * 0.1.4     <span style="color: #555555;">2025-05-09</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  GenomeInfoDb                      * 1.44.3    <span style="color: #555555;">2025-09-21</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  GenomeInfoDbData                    1.2.14    <span style="color: #555555;">2025-10-31</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
-<span><span class="co">#&gt;  GenomicAlignments                   1.44.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  GenomicFeatures                   * 1.60.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  GenomicRanges                     * 1.60.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  GetoptLong                          1.1.0     <span style="color: #555555;">2025-11-28</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  ggplot2                             4.0.1     <span style="color: #555555;">2025-11-14</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  ggrepel                             0.9.6     <span style="color: #555555;">2024-09-07</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  GlobalOptions                       0.1.3     <span style="color: #555555;">2025-11-28</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  glue                                1.8.0     <span style="color: #555555;">2024-09-30</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  gridBase                            0.4-7     <span style="color: #555555;">2014-02-24</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  gtable                              0.3.6     <span style="color: #555555;">2024-10-25</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  htmltools                           0.5.9     <span style="color: #555555;">2025-12-04</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  htmlwidgets                         1.6.4     <span style="color: #555555;">2023-12-06</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  httr                                1.4.7     <span style="color: #555555;">2023-08-15</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  IRanges                           * 2.42.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  iterators                           1.0.14    <span style="color: #555555;">2022-02-05</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  jquerylib                           0.1.4     <span style="color: #555555;">2021-04-26</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  jsonlite                            2.0.0     <span style="color: #555555;">2025-03-27</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  KEGGREST                            1.48.1    <span style="color: #555555;">2025-06-22</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  knitr                               1.50      <span style="color: #555555;">2025-03-16</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  labeling                            0.4.3     <span style="color: #555555;">2023-08-29</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  lattice                             0.22-7    <span style="color: #555555;">2025-04-02</span> <span style="color: #555555;">[3]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
-<span><span class="co">#&gt;  lifecycle                           1.0.4     <span style="color: #555555;">2023-11-07</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  magrittr                            2.0.4     <span style="color: #555555;">2025-09-12</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  MASS                                7.3-65    <span style="color: #555555;">2025-02-28</span> <span style="color: #555555;">[3]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
-<span><span class="co">#&gt;  Matrix                              1.7-4     <span style="color: #555555;">2025-08-28</span> <span style="color: #555555;">[3]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
-<span><span class="co">#&gt;  MatrixGenerics                    * 1.20.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  matrixStats                       * 1.5.0     <span style="color: #555555;">2025-01-07</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  memoise                             2.0.1     <span style="color: #555555;">2021-11-26</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  org.Hs.eg.db                      * 3.21.0    <span style="color: #555555;">2025-10-31</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
-<span><span class="co">#&gt;  pillar                              1.11.1    <span style="color: #555555;">2025-09-17</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  pkgbuild                            1.4.8     <span style="color: #555555;">2025-05-26</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  pkgconfig                           2.0.3     <span style="color: #555555;">2019-09-22</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  pkgdown                             2.2.0     <span style="color: #555555;">2025-11-06</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  pkgload                             1.4.1     <span style="color: #555555;">2025-09-23</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  png                                 0.1-8     <span style="color: #555555;">2022-11-29</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  purrr                               1.2.0     <span style="color: #555555;">2025-11-04</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  R6                                  2.6.1     <span style="color: #555555;">2025-02-15</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  ragg                                1.5.0     <span style="color: #555555;">2025-09-02</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  RColorBrewer                        1.1-3     <span style="color: #555555;">2022-04-03</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  Rcpp                                1.1.0     <span style="color: #555555;">2025-07-02</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.2)</span></span></span>
-<span><span class="co">#&gt;  RCurl                               1.98-1.17 <span style="color: #555555;">2025-03-22</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  remotes                             2.5.0     <span style="color: #555555;">2024-03-17</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  restfulr                            0.0.16    <span style="color: #555555;">2025-06-27</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  rjson                               0.2.23    <span style="color: #555555;">2024-09-16</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  rlang                               1.1.6     <span style="color: #555555;">2025-04-11</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  rmarkdown                           2.30      <span style="color: #555555;">2025-09-28</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  Rsamtools                         * 2.24.1    <span style="color: #555555;">2025-09-07</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  RSQLite                             2.4.5     <span style="color: #555555;">2025-11-30</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  rtracklayer                       * 1.68.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  S4Arrays                            1.8.1     <span style="color: #555555;">2025-06-01</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  S4Vectors                         * 0.46.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  S7                                  0.2.1     <span style="color: #555555;">2025-11-14</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  sass                                0.4.10    <span style="color: #555555;">2025-04-11</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  scales                              1.4.0     <span style="color: #555555;">2025-04-24</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  SEMplR                            * 0.99.0    <span style="color: #555555;">2025-12-20</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
-<span><span class="co">#&gt;  sessioninfo                         1.2.3     <span style="color: #555555;">2025-02-05</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  shape                               1.4.6.1   <span style="color: #555555;">2024-02-23</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  SparseArray                         1.8.1     <span style="color: #555555;">2025-07-23</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  stringi                             1.8.7     <span style="color: #555555;">2025-03-27</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  SummarizedExperiment              * 1.38.1    <span style="color: #555555;">2025-04-30</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  systemfonts                         1.3.1     <span style="color: #555555;">2025-10-01</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  textshaping                         1.0.4     <span style="color: #555555;">2025-10-10</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  tibble                              3.3.0     <span style="color: #555555;">2025-06-08</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  tidyselect                          1.2.1     <span style="color: #555555;">2024-03-11</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  TxDb.Hsapiens.UCSC.hg38.knownGene * 3.21.0    <span style="color: #555555;">2025-10-31</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
-<span><span class="co">#&gt;  UCSC.utils                          1.4.0     <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  universalmotif                      1.26.3    <span style="color: #555555;">2025-10-01</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  usethis                             3.2.1     <span style="color: #555555;">2025-09-06</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  VariantAnnotation                 * 1.54.1    <span style="color: #555555;">2025-05-11</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  vctrs                               0.6.5     <span style="color: #555555;">2023-12-01</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  withr                               3.0.2     <span style="color: #555555;">2024-10-28</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  xfun                                0.55      <span style="color: #555555;">2025-12-16</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  XML                                 3.99-0.20 <span style="color: #555555;">2025-11-08</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  XVector                           * 0.48.0    <span style="color: #555555;">2025-04-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.21 (R 4.5.1)</span></span></span>
-<span><span class="co">#&gt;  yaml                                2.3.12    <span style="color: #555555;">2025-12-10</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  abind                               1.4-8     <span style="color: #555555;">2024-09-12</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  AnnotationDbi                     * 1.72.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  Biobase                           * 2.70.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  BiocGenerics                      * 0.56.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  BiocIO                            * 1.20.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  BiocManager                         1.30.27   <span style="color: #555555;">2025-11-14</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">#&gt;  BiocParallel                        1.44.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  BiocStyle                         * 2.38.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  Biostrings                        * 2.78.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  bit                                 4.6.0     <span style="color: #555555;">2025-03-06</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  bit64                               4.6.0-1   <span style="color: #555555;">2025-01-16</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  bitops                              1.0-9     <span style="color: #555555;">2024-10-03</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  blob                                1.2.4     <span style="color: #555555;">2023-03-17</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  bookdown                            0.46      <span style="color: #555555;">2025-12-05</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">#&gt;  BSgenome                          * 1.78.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  BSgenome.Hsapiens.UCSC.hg19       * 1.4.3     <span style="color: #555555;">2025-09-23</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
+<span><span class="co">#&gt;  BSgenome.Hsapiens.UCSC.hg38       * 1.4.5     <span style="color: #555555;">2025-09-23</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
+<span><span class="co">#&gt;  bslib                               0.9.0     <span style="color: #555555;">2025-01-30</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  cachem                              1.1.0     <span style="color: #555555;">2024-05-16</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  cigarillo                           1.0.0     <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  circlize                            0.4.17    <span style="color: #555555;">2025-12-08</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">#&gt;  cli                                 3.6.5     <span style="color: #555555;">2025-04-23</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  clue                                0.3-66    <span style="color: #555555;">2024-11-13</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  cluster                             2.1.8.1   <span style="color: #555555;">2025-03-12</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  codetools                           0.2-20    <span style="color: #555555;">2024-03-31</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  colorspace                          2.1-2     <span style="color: #555555;">2025-09-22</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  ComplexHeatmap                      2.26.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  crayon                              1.5.3     <span style="color: #555555;">2024-06-20</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  curl                                7.0.0     <span style="color: #555555;">2025-08-19</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  data.table                          1.17.8    <span style="color: #555555;">2025-07-10</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  DBI                                 1.2.3     <span style="color: #555555;">2024-06-02</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  DelayedArray                        0.36.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  desc                                1.4.3     <span style="color: #555555;">2023-12-10</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  devtools                            2.4.6     <span style="color: #555555;">2025-10-03</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  digest                              0.6.39    <span style="color: #555555;">2025-11-19</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">#&gt;  doParallel                          1.0.17    <span style="color: #555555;">2022-02-07</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  dplyr                               1.1.4     <span style="color: #555555;">2023-11-17</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  ellipsis                            0.3.2     <span style="color: #555555;">2021-04-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  evaluate                            1.0.5     <span style="color: #555555;">2025-08-27</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  farver                              2.1.2     <span style="color: #555555;">2024-05-13</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  fastmap                             1.2.0     <span style="color: #555555;">2024-05-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  foreach                             1.5.2     <span style="color: #555555;">2022-02-02</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  fs                                  1.6.6     <span style="color: #555555;">2025-04-12</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  generics                          * 0.1.4     <span style="color: #555555;">2025-05-09</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  GenomeInfoDb                      * 1.46.2    <span style="color: #555555;">2025-12-08</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.2)</span></span></span>
+<span><span class="co">#&gt;  GenomicAlignments                   1.46.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  GenomicFeatures                   * 1.62.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  GenomicRanges                     * 1.62.1    <span style="color: #555555;">2025-12-08</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.2)</span></span></span>
+<span><span class="co">#&gt;  GetoptLong                          1.1.0     <span style="color: #555555;">2025-11-28</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">#&gt;  ggplot2                             4.0.1     <span style="color: #555555;">2025-11-14</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">#&gt;  ggrepel                             0.9.6     <span style="color: #555555;">2024-09-07</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  GlobalOptions                       0.1.3     <span style="color: #555555;">2025-11-28</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">#&gt;  glue                                1.8.0     <span style="color: #555555;">2024-09-30</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  gridBase                            0.4-7     <span style="color: #555555;">2014-02-24</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  gtable                              0.3.6     <span style="color: #555555;">2024-10-25</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  htmltools                           0.5.9     <span style="color: #555555;">2025-12-04</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">#&gt;  htmlwidgets                         1.6.4     <span style="color: #555555;">2023-12-06</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  httr                                1.4.7     <span style="color: #555555;">2023-08-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  IRanges                           * 2.44.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  iterators                           1.0.14    <span style="color: #555555;">2022-02-05</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  jquerylib                           0.1.4     <span style="color: #555555;">2021-04-26</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  jsonlite                            2.0.0     <span style="color: #555555;">2025-03-27</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  KEGGREST                            1.50.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  knitr                               1.51      <span style="color: #555555;">2025-12-20</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  labeling                            0.4.3     <span style="color: #555555;">2023-08-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  lattice                             0.22-7    <span style="color: #555555;">2025-04-02</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  lifecycle                           1.0.4     <span style="color: #555555;">2023-11-07</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  magrittr                            2.0.4     <span style="color: #555555;">2025-09-12</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  MASS                                7.3-65    <span style="color: #555555;">2025-02-28</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  Matrix                              1.7-4     <span style="color: #555555;">2025-08-28</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  MatrixGenerics                    * 1.22.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  matrixStats                       * 1.5.0     <span style="color: #555555;">2025-01-07</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  memoise                             2.0.1     <span style="color: #555555;">2021-11-26</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  org.Hs.eg.db                      * 3.22.0    <span style="color: #555555;">2025-10-22</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
+<span><span class="co">#&gt;  otel                                0.2.0     <span style="color: #555555;">2025-08-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  pillar                              1.11.1    <span style="color: #555555;">2025-09-17</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  pkgbuild                            1.4.8     <span style="color: #555555;">2025-05-26</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  pkgconfig                           2.0.3     <span style="color: #555555;">2019-09-22</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  pkgdown                             2.2.0     <span style="color: #555555;">2025-11-06</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  pkgload                             1.4.1     <span style="color: #555555;">2025-09-23</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  png                                 0.1-8     <span style="color: #555555;">2022-11-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  purrr                               1.2.0     <span style="color: #555555;">2025-11-04</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  R6                                  2.6.1     <span style="color: #555555;">2025-02-15</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  ragg                                1.5.0     <span style="color: #555555;">2025-09-02</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  RColorBrewer                        1.1-3     <span style="color: #555555;">2022-04-03</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  Rcpp                                1.1.0     <span style="color: #555555;">2025-07-02</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  RCurl                               1.98-1.17 <span style="color: #555555;">2025-03-22</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  remotes                             2.5.0     <span style="color: #555555;">2024-03-17</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  restfulr                            0.0.16    <span style="color: #555555;">2025-06-27</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  rjson                               0.2.23    <span style="color: #555555;">2024-09-16</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  rlang                               1.1.6     <span style="color: #555555;">2025-04-11</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  rmarkdown                           2.30      <span style="color: #555555;">2025-09-28</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  Rsamtools                         * 2.26.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  RSQLite                             2.4.5     <span style="color: #555555;">2025-11-30</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">#&gt;  rstudioapi                          0.17.1    <span style="color: #555555;">2024-10-22</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  rtracklayer                       * 1.70.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  S4Arrays                            1.10.1    <span style="color: #555555;">2025-12-08</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.2)</span></span></span>
+<span><span class="co">#&gt;  S4Vectors                         * 0.48.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  S7                                  0.2.1     <span style="color: #555555;">2025-11-14</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">#&gt;  sass                                0.4.10    <span style="color: #555555;">2025-04-11</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  scales                              1.4.0     <span style="color: #555555;">2025-04-24</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  SEMplR                            * 0.99.0    <span style="color: #555555;">2025-10-23</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
+<span><span class="co">#&gt;  Seqinfo                           * 1.0.0     <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  sessioninfo                         1.2.3     <span style="color: #555555;">2025-02-05</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  shape                               1.4.6.1   <span style="color: #555555;">2024-02-23</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  SparseArray                         1.10.6    <span style="color: #555555;">2025-12-08</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.2)</span></span></span>
+<span><span class="co">#&gt;  stringi                             1.8.7     <span style="color: #555555;">2025-03-27</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  SummarizedExperiment              * 1.40.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  systemfonts                         1.3.1     <span style="color: #555555;">2025-10-01</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  textshaping                         1.0.4     <span style="color: #555555;">2025-10-10</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  tibble                              3.3.0     <span style="color: #555555;">2025-06-08</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  tidyselect                          1.2.1     <span style="color: #555555;">2024-03-11</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  TxDb.Hsapiens.UCSC.hg38.knownGene * 3.22.0    <span style="color: #555555;">2025-10-22</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
+<span><span class="co">#&gt;  UCSC.utils                          1.6.1     <span style="color: #555555;">2025-12-11</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.2)</span></span></span>
+<span><span class="co">#&gt;  universalmotif                      1.28.0    <span style="color: #555555;">2025-10-30</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  usethis                             3.2.1     <span style="color: #555555;">2025-09-06</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  VariantAnnotation                 * 1.56.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  vctrs                               0.6.5     <span style="color: #555555;">2023-12-01</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  withr                               3.0.2     <span style="color: #555555;">2024-10-28</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  xfun                                0.55      <span style="color: #555555;">2025-12-16</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">#&gt;  XML                                 3.99-0.20 <span style="color: #555555;">2025-11-08</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  XVector                           * 0.50.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.1)</span></span></span>
+<span><span class="co">#&gt;  yaml                                2.3.12    <span style="color: #555555;">2025-12-10</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #555555;"> [1] /__w/_temp/Library</span></span></span>
-<span><span class="co">#&gt; <span style="color: #555555;"> [2] /usr/local/lib/R/site-library</span></span></span>
-<span><span class="co">#&gt; <span style="color: #555555;"> [3] /usr/local/lib/R/library</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;"> [1] /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/library</span></span></span>
 <span><span class="co">#&gt;  <span style="color: #BBBBBB; background-color: #BB0000;">*</span> ── Packages attached to the search path.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB; font-weight: bold;">──────────────────────────────────────────────────────────────────────────────</span></span></span></code></pre></div>

@@ -47,7 +47,6 @@ a `list` of matrices
 ## Examples
 
 ``` r
-
 # load SEMs
 data(SEMC)
 

@@ -66,7 +66,6 @@ loadSEMCollection(tf,
     semMetaData = md, semIds = "sem_id",
     semMetaKey = "sem_id", bls = 1
 )
-#> Warning: Both 'expected_cols' and '..expected_cols' exist in calling scope. Please remove the '..expected_cols' variable in calling scope for clarity.
 #> An object of class SNPEffectMatrixCollection
 #> SEMs(1): sem_id
 #> semData(3): transcription_factor, cell_type, sem_id

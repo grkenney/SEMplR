@@ -168,8 +168,9 @@ library(TxDb.Hsapiens.UCSC.hg38.knownGene)
 #> 
 #>     I, expand.grid, unname
 #> Loading required package: IRanges
-#> Loading required package: GenomeInfoDb
+#> Loading required package: Seqinfo
 #> Loading required package: GenomicRanges
+#> Warning: package ‘GenomicRanges’ was built under R version 4.5.2
 #> Loading required package: AnnotationDbi
 #> Loading required package: Biobase
 #> Welcome to Bioconductor
