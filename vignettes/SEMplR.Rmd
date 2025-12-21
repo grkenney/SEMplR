@@ -1,8 +1,7 @@
 ---
 title: "SEMplR Vignette"
 output:
-  rmarkdown::html_vignette: default
-  BiocStyle::html_vignette:
+  BiocStyle::html_document:
     toc: yes
     toc_float: yes
 vignette: >
