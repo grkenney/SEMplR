@@ -156,24 +156,3 @@ setClass("SEMplScores",
         scores = data.table::data.table()
     )
 )
-
-
-setValidity("SEMplScores", function(object) {
-    # if (nrow(object@scores) > 0) {
-    #   expected_column_names <- c("varId", "semId",
-    #                              "refSeq", "altSeq",
-    #                              "refScore", "altScore",
-    #                              "refNorm", "altNorm")
-    #   actual_column_names <- colnames(object@scores)
-    #   if (sum(expected_column_names %in%
-    #           actual_column_names) != length(expected_column_names)) {
-    #     "@scores must contain columns with names: varId, semId, refSeq,
-    # altSeq, refScore, altScore, refNorm, altNorm"
-    #   } else {
-    #     TRUE
-    #   }
-    # } else {
-    #   TRUE
-    # }
-    TRUE
-})
