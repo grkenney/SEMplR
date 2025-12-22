@@ -1495,7 +1495,7 @@ devtools::session_info()
 #>  collate  en_US.UTF-8
 #>  ctype    en_US.UTF-8
 #>  tz       UTC
-#>  date     2025-12-21
+#>  date     2025-12-22
 #>  pandoc   3.8.2.1 @ /usr/bin/ (via rmarkdown)
 #>  quarto   1.7.32 @ /usr/local/bin/quarto
 #> 
@@ -1601,7 +1601,7 @@ devtools::session_info()
 #>  S7                                  0.2.1     2025-11-14 [1] RSPM (R 4.5.0)
 #>  sass                                0.4.10    2025-04-11 [2] RSPM (R 4.5.0)
 #>  scales                              1.4.0     2025-04-24 [1] RSPM (R 4.5.0)
-#>  SEMplR                            * 0.99.0    2025-12-21 [1] Bioconductor
+#>  SEMplR                            * 0.99.0    2025-12-22 [1] Bioconductor
 #>  sessioninfo                         1.2.3     2025-02-05 [2] RSPM (R 4.5.0)
 #>  shape                               1.4.6.1   2024-02-23 [1] RSPM (R 4.5.0)
 #>  SparseArray                         1.8.1     2025-07-23 [1] Bioconductor 3.21 (R 4.5.1)
