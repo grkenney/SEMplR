@@ -1,32 +1,32 @@
 # Validate SEM format
 .validateSEM <- function(sem, semFile) {
-    ..expected_cols <- NA
-    expected_cols <- c("A", "C", "G", "T")
+  .SD <- NULL
+  expected_cols <- c("A", "C", "G", "T")
 
-    # check that all nucleotides are represented in columns of SEM
-    if (!all(expected_cols %in% colnames(sem))) {
-        rlang::abort(c(
-            paste0(
-                semFile, " does not contain all expected nucleotide columns"
-            ),
-            "i" = "SEM files must have 4 columns with names: 'A', 'C', 'G', 'T'"
-        ))
-    }
-
-    # check that each nucleotide only has one column
-    if (sum(colnames(sem) %in% expected_cols) > 4) {
-        rlang::abort(c(
-            paste0(
-                semFile, " has more than one column for one or more nucleotides"
-            ),
-            "i" = paste0(
-                "Each nucleotide ('A', 'C', 'G', 'T')",
-                "must have only one column"
-            )
-        ))
-    }
-
-    return(sem[, ..expected_cols])
+  # check that all nucleotides are represented in columns of SEM
+  if (!all(expected_cols %in% colnames(sem))) {
+    rlang::abort(c(
+      paste0(
+        semFile, " does not contain all expected nucleotide columns"
+      ),
+      "i" = "SEM files must have 4 columns with names: 'A', 'C', 'G', 'T'"
+    ))
+  }
+  
+  # check that each nucleotide only has one column
+  if (sum(colnames(sem) %in% expected_cols) > 4) {
+    rlang::abort(c(
+      paste0(
+        semFile, " has more than one column for one or more nucleotides"
+      ),
+      "i" = paste0(
+        "Each nucleotide ('A', 'C', 'G', 'T')",
+        "must have only one column"
+      )
+    ))
+  }
+  
+  return(sem[, .SD, .SDcols = expected_cols])
 }
 
 

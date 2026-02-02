@@ -90,7 +90,8 @@ test_that("enrichSEMs on 2 sites without specifying background", {
     sb_a <- scoreBinding(
         x = x,
         sem = SEMC,
-        genome = b
+        genome = b,
+        rc = FALSE
     )
     e_a <- enrichSEMs(
         x = sb_a, sem = SEMC,
@@ -144,13 +145,15 @@ test_that("enrichSEMs on 2 sites with specifying background", {
     sb_bg <- scoreBinding(
         x = bg,
         sem = SEMC,
-        genome = b
+        genome = b,
+        rc = FALSE
     )
 
     sb_a <- scoreBinding(
         x = x,
         sem = SEMC,
-        genome = b
+        genome = b,
+        rc = FALSE
     )
 
     e_a <- enrichSEMs(

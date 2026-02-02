@@ -5,6 +5,6 @@
 #' @importFrom data.table data.table
 #' @importFrom Rcpp sourceCpp
 #' @importFrom rlang :=
-#' @useDynLib SEMplR, .registration = TRUE
+#' @useDynLib SEMPLR, .registration = TRUE
 ## usethis namespace: end
 NULL

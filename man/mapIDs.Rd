@@ -60,15 +60,19 @@ library(org.Hs.eg.db)
 orgdb <- org.Hs.eg.db
 
 my_genes <- c("ENSG00000139618", "ENSG00000157764")
-ids <- mapIDs(orgdb = orgdb, 
-              foreground_ids = my_genes, 
-              id_type = "ENSEMBL")
-  
+ids <- mapIDs(
+    orgdb = orgdb,
+    foreground_ids = my_genes,
+    id_type = "ENSEMBL"
+)
+
 # Transcript Ids
 my_transcripts <- c("ENST00000245479", "ENST00000633194")
-ids <- mapIDs(orgdb = orgdb,
-              foreground_ids = my_transcripts,
-              id_type = "ENSEMBLTRANS",
-              transcript = TRUE)
+ids <- mapIDs(
+    orgdb = orgdb,
+    foreground_ids = my_transcripts,
+    id_type = "ENSEMBLTRANS",
+    transcript = TRUE
+)
 
 }

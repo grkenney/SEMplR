@@ -1,11 +1,11 @@
 ---
-title: "SEMplR Vignette"
+title: "SEMPLR Vignette"
 output:
   BiocStyle::html_document:
     toc: yes
     toc_float: yes
 vignette: >
-  %\VignetteIndexEntry{SEMplR Vignette} 
+  %\VignetteIndexEntry{SEMPLR Vignette} 
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -24,18 +24,18 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 library(VariantAnnotation)
 library(GenomicRanges)
 library(BSgenome.Hsapiens.UCSC.hg19)
-library(SEMplR)
+library(SEMPLR)
 ```
 
 
 # SNP Effect Matrices
 
-SEMplR uses SNP Effect Matrices (SEMs) to score potential motifs. These are 
+SEMPLR uses SNP Effect Matrices (SEMs) to score potential motifs. These are 
 matrices contain binding affinity scores and have rows equal to the length of 
 the motif and a column for each nucleotide. SEMs are produced by SEMpl, but a 
 default set of 223 are included with this package in the `SEMC` data object. 
 A full list of the transcription factors included in this default set can be 
-found [here](github.com/grkenney/SEMplR/blob/main/vignettes/sempl_metadata.csv) 
+found [here](github.com/grkenney/SEMPLR/blob/main/vignettes/sempl_metadata.csv) 
 or by running `semData(SEMC)`.
 
 SEMs are stored inside a `SNPEffectMatrix` object and sets of SEMs are stored 
@@ -63,7 +63,7 @@ We can access all SEMs in the collection the with the function `getSEMs()`
 or some subset of motifs by specifying a vector of semIds in the `semId` 
 parameter. All semIds can be viewed in the `transctiption_factor` column
 of the meta data. The resulting `SNPEffectMatrix` object contains the 
-semId, the baseline value used for normalization, and the SEM that SEMplR
+semId, the baseline value used for normalization, and the SEM that SEMPLR
 will use to score binding affinity.
 ```{r subset_sem_collection}
 getSEMs(SEMC, semId = "JUN")
@@ -99,7 +99,7 @@ A `seqId` parameter may also be used to specify a meta data column in the
 `GRanges` object to use as a unique identifier. Otherwise, a unique identifier
 will be created from positional information.
 
-The resulting data object is a `SEMplScores` object that stores information
+The resulting data object is a `SEMScores` object that stores information
 about the scored range and its associated sequence, the SEM meta data, and
 scoring information. 
 
@@ -154,13 +154,13 @@ jun_score
 # plot the JUN motif with the scored sequence
 plotSEM(SEMC,
     motif = "JUN",
-    motifSeq = jun_score$seq
+    motifSeq = jun_score$sequence
 )
 ```
 
 # Enrichment
 
-When scoring large sets of loci, you can also use SEMplR to predict if some
+When scoring large sets of loci, you can also use SEMPLR to predict if some
 transcription factors are enriched for binding, bound more than expected, 
 within the loci of interest.
 
@@ -296,7 +296,7 @@ While JUN was the top significant SEM of our enrichment analysis, there are
 also several other significant SEMs. Because some motif sequences can be very 
 similar, this is not unexpected.
 
-SEMplR's `plotEnrich` function takes this motif relatedness into account 
+SEMPLR's `plotEnrich` function takes this motif relatedness into account 
 when visualizing these enrichment results. SEMs are clustered by similarity
 and plotted on a dendrogram so similar motifs are plotted near eachother.
 
@@ -382,14 +382,14 @@ e <- enrichSEMs(sb, sem = SEMC, background = result$backgroundElements,
 
 # Scoring Variants
 
-SEMplR also provides functionality for scoring variants, comparing TF
+SEMPLR also provides functionality for scoring variants, comparing TF
 binding between alleles, and helping identify TFs whose binding is gained
 or lost with genetic variation.
 
 ## Prepare Inputs
 
 First, we will define the variants we want to score. Variants can be supplied 
-to SEMplR as either a `VRanges` or a `GRanges` object. If using `VRanges` 
+to SEMPLR as either a `VRanges` or a `GRanges` object. If using `VRanges` 
 alleles must be stored in the `ref` and `alt` parameters. If using `GRanges` 
 the alleles should be stored in seperate metadata columns. 
 
@@ -450,7 +450,7 @@ TF binding and more negative scores predict no TF binding.
 indeces in the scored sequence
 
 There are accessor functions to isolate each slot of the resulting data object:
-```{r SEMplScores_accessors, eval = FALSE}
+```{r SEMScores_accessors, eval = FALSE}
 # access the variants slot
 getRanges(sempl_results)
 
@@ -463,14 +463,14 @@ scores(sempl_results)
 
 ## Visualization
 
-SEMplR provides two visualization functions for `scoreVariants` results.
+SEMPLR provides two visualization functions for `scoreVariants` results.
 
 The first function, `plotSEMMotifs` plots all SEM scores for a given variant.
 
 Here, we can see that both HLF and CEBPG are predicted to be bound in the
 alt allele of variant2, but no the ref allele.
 
-```{r plotSemMotifs}
+```{r plotSemMotifs, fig.height=4, fig.width=4}
 plotSEMMotifs(
     s = sempl_results,
     variant = "variant2",
@@ -503,10 +503,10 @@ longest SEM (number of rows).
 
 ### Scoring
 
-SEMplR attempts to find the optimal binding location of the associated 
+SEMPLR attempts to find the optimal binding location of the associated 
 transcription factor by scoring every frame that includes at least one 
 nucleotide of the provided range. If no flanks were added (`nFlank = 0`) then
-SEMplR will find the optimal binding site within the provided region.
+SEMPLR will find the optimal binding site within the provided region.
 
 SEMs are log transformed matrices, and therefore can be added per base at 
 each position to generate a binding affinity score (stored in the `score`
@@ -524,7 +524,7 @@ no TF binding.
 ## Loading a custom set of SEMs
 
 The `SEMC` data object is provided with this package with a default set of 223
-SEMs. While we think this set may be sufficient for many analyses, SEMplR also
+SEMs. While we think this set may be sufficient for many analyses, SEMPLR also
 supports generation of new `SNPEffectMatrixCollection`s should you want to 
 generate a custom set of SEMs with the SEMpl command line tool.
 
@@ -534,12 +534,12 @@ If meta data is used, all SEMs must be represented in the meta data table.
 
 ```{r load_custom_sems}
 # find .sem files
-sem_folder <- system.file("extdata", "SEMs", package = "SEMplR")
+sem_folder <- system.file("extdata", "SEMs", package = "SEMPLR")
 sem_files <- list.files(sem_folder, full.names = TRUE)
 
 # load metadata
 sempl_metadata_file <- system.file("extdata", "sempl_metadata.csv",
-    package = "SEMplR"
+    package = "SEMPLR"
 )
 sempl_metadata <- read.csv(sempl_metadata_file)
 ```

@@ -39,7 +39,7 @@ setGeneric(
 )
 
 
-# ---- SEMplScores ----
+# ---- SEMScores ----
 
 #' @rdname getRanges
 #' @export

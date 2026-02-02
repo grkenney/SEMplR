@@ -9,7 +9,7 @@
     # check that variant is a valid id in s
     if (!(variant %in% scores(s)[, varId])) {
         rlang::abort(paste0(
-            "variant not found in SEMplScores object. ",
+            "variant not found in SEMScores object. ",
             variant, " is not in scores(s)[, varId]"
         ))
     }
@@ -62,9 +62,10 @@
 
 #' Plot non-alt versus alt binding propensity for a single variant
 #'
-#' @param s a SEMplScores object with scores populated
+#' @param s a SEMScores object with scores populated
 #' @param variant variant id to plot
 #' @param label column in sem_metadata slot of semplObj to use for point labels
+#' @param rc label SEM orientations
 #' @param labsize numeric size of the point labels
 #' @param cols vector of length 2 with colors to use for plotting gained
 #' and lost motifs respectively
@@ -94,9 +95,9 @@
 #' plotSEMMotifs(s, "chr12:94136009:G>C", label = "transcription_factor")
 #'
 plotSEMMotifs <- function(s, variant, label = "transcription_factor",
-                          labsize = 4,
+                          rc = TRUE, labsize = 4,
                           cols = c("#F8766D", "dodgerblue2"), ptsize = 1) {
-    refNorm <- altNorm <- varId <- sem <- .SD <- NULL
+    refNorm <- altNorm <- varId <- sem <- lab <- .SD <- NULL
     .validatePlotSemMotifsInputs(
         s = s, label = label,
         variant = variant, cols = cols
@@ -107,14 +108,19 @@ plotSEMMotifs <- function(s, variant, label = "transcription_factor",
 
     dt_key <- data.table::key(semData(s))
     dt <- merge(dt, semData(s),
-        by.x = "semId", by.y = data.table::key(semData(s))
+        by.x = "SEM", by.y = data.table::key(semData(s))
     )
-
-    # restore key column if not 'semId'
-    if (dt_key != "semId") {
+    
+    # restore key column if not 'SEM'
+    if (dt_key != "SEM") {
         dt <- cbind(dt, semData(s)[, .SD, .SDcols = dt_key])
     }
-
+    
+    if (rc) {
+        dt[, lab := do.call(paste, c(.SD, sep = "_")), .SDcols=c(label, "rc")]
+        label <- "lab"
+    }
+    
     sem_motif_plot <- .createBasePlotSEMMotifs(dt, cols, label, labsize, ptsize)
     sem_motif_plot <- sem_motif_plot +
         scale_x_continuous(

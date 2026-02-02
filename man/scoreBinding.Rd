@@ -5,7 +5,7 @@
 \title{Calculate binding propensity for all SEM motifs and
 genomic positions provided}
 \usage{
-scoreBinding(x, sem, genome, nFlank = NULL, seqId = NULL)
+scoreBinding(x, sem, genome, nFlank = NULL, seqId = NULL, rc = TRUE)
 }
 \arguments{
 \item{x}{\code{GRanges} object or a vector of DNA sequences}
@@ -23,9 +23,11 @@ if providing a vector of sequences.}
 \item{seqId}{Column in \code{GRanges} object to use for unique id.
 By default, ids will be generated from the \code{seqnames} and \code{ranges.}
 Ignored if not providing a \code{GRanges} object.}
+
+\item{rc}{plot the reverse complement SEMs}
 }
 \value{
-If a \code{GRanges} object is provided, return a \code{SEMplScores} object.
+If a \code{GRanges} object is provided, return a \code{SEMScores} object.
 If a list of sequences is provided, just return the scoring table
 }
 \description{

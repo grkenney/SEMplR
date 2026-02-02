@@ -8,17 +8,20 @@ plotSEMMotifs(
   s,
   variant,
   label = "transcription_factor",
+  rc = TRUE,
   labsize = 4,
   cols = c("#F8766D", "dodgerblue2"),
   ptsize = 1
 )
 }
 \arguments{
-\item{s}{a SEMplScores object with scores populated}
+\item{s}{a SEMScores object with scores populated}
 
 \item{variant}{variant id to plot}
 
 \item{label}{column in sem_metadata slot of semplObj to use for point labels}
+
+\item{rc}{label SEM orientations}
 
 \item{labsize}{numeric size of the point labels}
 

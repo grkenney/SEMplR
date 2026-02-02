@@ -2,6 +2,6 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 scoreSequence <- function(sem, dna_sequences, nFlank, bl, seqIds) {
-    .Call(`_SEMplR_scoreSequence`, sem, dna_sequences, nFlank, bl, seqIds)
+    .Call(`_SEMPLR_scoreSequence`, sem, dna_sequences, nFlank, bl, seqIds)
 }
 

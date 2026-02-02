@@ -5,7 +5,15 @@
 \title{Calculate risk/non-risk binding propensity for all SEM motifs and
 variants provided}
 \usage{
-scoreVariants(x, sem, genome, refCol = NULL, altCol = NULL, varId = NULL)
+scoreVariants(
+  x,
+  sem,
+  genome,
+  refCol = NULL,
+  altCol = NULL,
+  varId = NULL,
+  rc = TRUE
+)
 }
 \arguments{
 \item{x}{\code{VRanges} object}
@@ -22,9 +30,11 @@ reference (ref) allele. Ignored if providing a VRanges object.}
 alternative (alt) allele. Ignored if providing a VRanges object.}
 
 \item{varId}{A column name in the meta data of x to use as a unique id.}
+
+\item{rc}{plot the reverse complement SEMs}
 }
 \value{
-a SEMplScores object
+a SEMScores object
 }
 \description{
 Calculate risk/non-risk binding propensity for all SEM motifs and

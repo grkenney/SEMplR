@@ -2,18 +2,18 @@
 % Please edit documentation in R/AllGenerics.R, R/methods-SEMplScores.R
 \name{scores}
 \alias{scores}
-\alias{scores,SEMplScores-method}
-\title{Accessor scores slot in a SEMplScores object}
+\alias{scores,SEMScores-method}
+\title{Accessor scores slot in a SEMScores object}
 \usage{
 scores(x)
 
-\S4method{scores}{SEMplScores}(x)
+\S4method{scores}{SEMScores}(x)
 }
 \arguments{
-\item{x}{a SEMplScores object}
+\item{x}{a SEMScores object}
 }
 \description{
-Accessor scores slot in a SEMplScores object
+Accessor scores slot in a SEMScores object
 }
 \examples{
 library(VariantAnnotation)

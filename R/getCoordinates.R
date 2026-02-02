@@ -58,7 +58,7 @@
 
 
 .extractPromoters <- function(gr, promoterWindow, transcript,
-                                reduceOverlaps, onePromoterPerGene) {
+                              reduceOverlaps, onePromoterPerGene) {
     upstream <- promoterWindow[["upstream"]]
     downstream <- promoterWindow[["downstream"]]
 
@@ -174,11 +174,9 @@
 
 
 # Define and Sample Background Elements for Motif Enrichment
-.defineBackgroundElements <- function(
-  background_universe,
-  foreground_elements,
-  n_ratio
-) {
+.defineBackgroundElements <- function(background_universe,
+                                      foreground_elements,
+                                      n_ratio) {
     ## Pruning steps
     # Remove all background ranges from pool if any overlap with
     # foreground range

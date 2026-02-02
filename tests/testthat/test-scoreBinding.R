@@ -174,11 +174,13 @@ test_that("scoreBinding range scoring", {
     sb_a <- scoreBinding(
         x = x,
         sem = getSEMs(SEMC, "JUN"),
-        genome = b
+        genome = b,
+        rc = FALSE
     )
     scores_e <- data.table(
         seqId = "chr12:94136009",
         SEM = "JUN",
+        rc = "fwd",
         score = -0.96313179,
         scoreNorm = -0.02038131,
         index = 7,
@@ -187,7 +189,7 @@ test_that("scoreBinding range scoring", {
     x_e <- x
     S4Vectors::mcols(x_e)[, "id"] <- c("chr12:94136009")
     S4Vectors::mcols(x_e)[, "sequence"] <- c("AGGCTTTGAGGCATC")
-    sb_e <- SEMplScores(
+    sb_e <- SEMScores(
         ranges = x_e,
         semData = data.table(),
         scores = scores_e
@@ -202,11 +204,13 @@ test_that("scoreBinding sequence list scoring", {
     sb_a <- scoreBinding(
         x = x,
         sem = getSEMs(SEMC, "JUN"),
-        nFlank = 7, seqId = "A"
+        nFlank = 7, seqId = "A",
+        rc = FALSE
     )
     sb_e <- data.table(
-        seqId = "1",
+        seqId = "A",
         SEM = "JUN",
+        rc = "fwd",
         score = -0.96313179,
         scoreNorm = -0.02038131,
         index = 7,
@@ -222,11 +226,13 @@ test_that("scoreBinding test when flank is shorter than SEM", {
     sb_a <- scoreBinding(
         x = x,
         sem = getSEMs(SEMC, "JUN"),
-        nFlank = 1, seqId = "A"
+        nFlank = 1, seqId = "A",
+        rc = FALSE
     )
     sb_e <- data.table(
-        seqId = "1",
+        seqId = "A",
         SEM = "JUN",
+        rc = "fwd",
         score = 0.0100808,
         scoreNorm = 0.9231947,
         index = 2,
@@ -242,11 +248,13 @@ test_that("scoreBinding test when flank is zero", {
     sb_a <- scoreBinding(
         x = x,
         sem = getSEMs(SEMC, "JUN"),
-        nFlank = 0, seqId = "A"
+        nFlank = 0, seqId = "A",
+        rc = FALSE
     )
     sb_e <- data.table(
-        seqId = "1",
+        seqId = "A",
         SEM = "JUN",
+        rc = "fwd",
         score = 0.0100808,
         scoreNorm = 0.9231947,
         index = 2,
@@ -262,15 +270,39 @@ test_that("scoreBinding test when flank null", {
     sb_a <- scoreBinding(
         x = x,
         sem = getSEMs(SEMC, "JUN"),
-        seqId = "A"
+        seqId = "A",
+        rc = FALSE
     )
     sb_e <- data.table(
-        seqId = "1",
+        seqId = "A",
         SEM = "JUN",
+        rc = "fwd",
         score = 0.0100808,
         scoreNorm = 0.9231947,
         index = 2,
         seq = "TGAGTCA"
+    )
+    expect_equal(sb_a, sb_e, tolerance = 1e-6)
+})
+
+
+test_that("scoreBinding reverse complement sem", {
+    # invalid nFlank
+    x <- "AGGCTTTGAGGCATC"
+    sb_a <- scoreBinding(
+        x = x,
+        sem = getSEMs(SEMC, "JUN"),
+        nFlank = 7, seqId = "A", rc = TRUE
+    )
+    
+    sb_e <- data.table(
+        seqId = c("A", "A"),
+        SEM = "JUN",
+        rc = c("fwd", "rev"),
+        score = c(-0.96313179, -1.0092361),
+        scoreNorm = c(-0.02038131, -0.05119212),
+        index = 7,
+        seq = "TGAGGCA"
     )
     expect_equal(sb_a, sb_e, tolerance = 1e-6)
 })

@@ -40,10 +40,12 @@ txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 orgdb <- org.Hs.eg.db
 
 my_genes <- c("ENSG00000139618", "ENSG00000157764")
-ids <- mapIDs(orgdb = orgdb, 
-              foreground_ids = my_genes, 
-              id_type = "ENSEMBL")
-filtered <- poolFilter(ids, geneType="protein-coding")
+ids <- mapIDs(
+    orgdb = orgdb,
+    foreground_ids = my_genes,
+    id_type = "ENSEMBL"
+)
+filtered <- poolFilter(ids, geneType = "protein-coding")
 
 }
 \keyword{internal}

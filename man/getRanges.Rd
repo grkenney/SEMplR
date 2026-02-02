@@ -2,21 +2,21 @@
 % Please edit documentation in R/AllGenerics.R, R/methods-SEMplScores.R
 \name{getRanges}
 \alias{getRanges}
-\alias{getRanges,SEMplScores-method}
-\title{Access ranges slot in a SEMplScores object}
+\alias{getRanges,SEMScores-method}
+\title{Access ranges slot in a SEMScores object}
 \usage{
 getRanges(x)
 
-\S4method{getRanges}{SEMplScores}(x)
+\S4method{getRanges}{SEMScores}(x)
 }
 \arguments{
-\item{x}{a SEMplScores object}
+\item{x}{a SEMScores object}
 }
 \value{
 A GRanges or VRanges object
 }
 \description{
-Access ranges slot in a SEMplScores object
+Access ranges slot in a SEMScores object
 }
 \examples{
 library(VariantAnnotation)

@@ -31,13 +31,14 @@ test_that("scoreVariants SNP", {
 
     scores_a <- scoreVariants(
         x = x, sem = so,
-        genome = b
+        genome = b, rc = FALSE
     ) |>
         scores()
 
     scores_e <- data.table(
         varId = c("chr12:94136009:G>C", "chr19:10640062:T>A"),
-        semId = c("MA0151.1"),
+        SEM = c("MA0151.1"),
+        rc = "fwd",
         refSeq = c("TTTGAG", "ATCTCC"),
         altSeq = c("TTCAGG", "ATCACC"),
         refScore = c(-1.4004, -0.8193),
@@ -65,16 +66,18 @@ test_that("scoreVariants 1bp deletion", {
 
     scores_a <- scoreVariants(
         x = x, sem = so,
-        genome = b
+        genome = b, rc = FALSE
     ) |>
         scores()
-    scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] <-
-        scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] |>
-        round(4)
+    # # round the scores
+    # scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] <-
+    #     scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] |>
+    #     round(4)
 
     scores_e <- data.table(
         varId = c("chr12:94136009:delG"),
-        semId = c("MA0151.1"),
+        SEM = c("MA0151.1"),
+        rc = "fwd",
         refSeq = c("TTTGAG"),
         altSeq = c("TTTAGG"),
         refScore = c(-1.4004),
@@ -84,7 +87,7 @@ test_that("scoreVariants 1bp deletion", {
         refVarIndex = c(4),
         altVarIndex = c(4)
     )
-    expect_equal(scores_a, scores_e)
+    expect_equal(scores_a, scores_e, tolerance = 1e-4)
 })
 
 
@@ -102,7 +105,7 @@ test_that("scoreVariants make semList a named list if not already", {
 
     scores_a <- scoreVariants(
         x = x, sem = so,
-        genome = BSgenome.Hsapiens.UCSC.hg19::Hsapiens
+        genome = BSgenome.Hsapiens.UCSC.hg19::Hsapiens, rc = FALSE
     ) |>
         scores()
     scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] <-
@@ -111,7 +114,8 @@ test_that("scoreVariants make semList a named list if not already", {
 
     scores_e <- data.table(
         varId = c("chr12:94136009:delG"),
-        semId = c("MA0151.1"),
+        SEM = c("MA0151.1"),
+        rc = "fwd",
         refSeq = c("TTTGAG"),
         altSeq = c("TTTAGG"),
         refScore = c(-1.4004),
@@ -153,7 +157,7 @@ test_that("scoreVariants multiple variants not in alphanumeric order", {
     scores_a <- scoreVariants(
         x = x, sem = so,
         genome = BSgenome.Hsapiens.UCSC.hg19::Hsapiens,
-        varId = "id"
+        varId = "id", rc = FALSE
     ) |>
         scores()
     scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] <-
@@ -162,7 +166,8 @@ test_that("scoreVariants multiple variants not in alphanumeric order", {
 
     scores_e <- data.table(
         varId = c("A", "B"),
-        semId = c("sem_id"),
+        SEM = c("sem_id"),
+        rc = "fwd",
         refSeq = c("ACGC", "TTGA"),
         altSeq = c("ACTC", "TAGG"),
         refScore = c(3, 1),
@@ -191,7 +196,7 @@ test_that("scoreVariants score a GRanges object", {
     scores_a <- scoreVariants(
         x = x, sem = so,
         genome = b,
-        refCol = "ref", altCol = "alt"
+        refCol = "ref", altCol = "alt", rc = FALSE
     ) |>
         scores()
     scores_a[, c("refScore", "altScore", "refNorm", "altNorm")] <-
@@ -200,7 +205,8 @@ test_that("scoreVariants score a GRanges object", {
 
     scores_e <- data.table(
         varId = c("chr12:94136009:delG"),
-        semId = c("MA0151.1"),
+        SEM = c("MA0151.1"),
+        rc = "fwd",
         refSeq = c("TTTGAG"),
         altSeq = c("TTTAGG"),
         refScore = c(-1.4004),

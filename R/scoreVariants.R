@@ -1,24 +1,27 @@
-.scoreAllele <- function(x, sem, prefix, alleleCol, nFlank, id) {
+.scoreAllele <- function(x, sem, prefix, alleleCol, nFlank, genome, id, rc) {
     score_col_suffixes <- c("Score", "Norm", "VarIndex", "Seq")
     score_cols <- paste0(prefix, score_col_suffixes)
     ds <- S4Vectors::mcols(x[, alleleCol]) |>
         unlist() |>
         unname()
 
-    s <- lapply(
-        getSEMs(sem),
-        function(y) {
-            scoreSequence(
-                sem = as.matrix(getSEM(y)),
-                dna_sequences = ds,
-                nFlank = nFlank,
-                bl = getBaseline(y),
-                seqIds = id
-            )
-        }
-    ) |>
-        data.table::rbindlist(idcol = "SEM") |>
-        stats::setNames(c("semId", score_cols, "varId"))
+    # s <- lapply(
+    #     getSEMs(sem),
+    #     function(y) {
+    #         scoreSequence(
+    #             sem = as.matrix(getSEM(y)),
+    #             dna_sequences = ds,
+    #             nFlank = nFlank,
+    #             bl = getBaseline(y),
+    #             seqIds = id
+    #         )
+    #     }
+    # ) |>
+    #     data.table::rbindlist(idcol = "SEM") |>
+    #     stats::setNames(c("semId", score_cols, "varId"))
+    s <- scoreBinding(ds, sem = sem, genome = genome, 
+                      nFlank = nFlank, seqId = id, rc = rc)
+    colnames(s) <- c("varId", "SEM", "rc", score_cols) 
     return(s)
 }
 
@@ -34,8 +37,9 @@
 #' @param altCol If providing a GRanges, the meta data column name with the
 #' alternative (alt) allele. Ignored if providing a VRanges object.
 #' @param varId A column name in the meta data of x to use as a unique id.
+#' @param rc plot the reverse complement SEMs
 #'
-#' @return a SEMplScores object
+#' @return a SEMScores object
 #'
 #' @export
 #'
@@ -55,9 +59,11 @@
 #' # calculate binding propensity
 #' scoreVariants(x, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 #'
-scoreVariants <- function(x, sem, genome,
-    refCol = NULL, altCol = NULL,
-    varId = NULL ) {
+scoreVariants <- function(
+  x, sem, genome,
+  refCol = NULL, altCol = NULL,
+  varId = NULL, rc = TRUE
+) {
     riskNorm <- riskSeq <- nonRiskNorm <- nonRiskSeq <- NULL
 
     # Convert sem to a collection if it isn't one already
@@ -93,24 +99,25 @@ scoreVariants <- function(x, sem, genome,
     } else {
         id <- S4Vectors::mcols(x)[, varId]
     }
-
+    
     # Score each allele
     ref_scores <- .scoreAllele(
         x = x, sem = sem,
         prefix = "ref", alleleCol = "ref_seq",
-        nFlank = nFlank, id = id
+        nFlank = nFlank, genome = genome, id = id, rc = rc
     )
     alt_scores <- .scoreAllele(
         x = x, sem = sem,
         prefix = "alt", alleleCol = "alt_seq",
-        nFlank = nFlank, id = id
+        nFlank = nFlank, genome = genome, id = id, rc = rc
     )
 
-    scores_merge <- merge(ref_scores, alt_scores, by = c("varId", "semId"))
+    scores_merge <- merge(ref_scores, alt_scores, 
+                          by = c("varId", "SEM", "rc"))
 
     # reorder columns
     scores_merge <- scores_merge[, c(
-        "varId", "semId",
+        "varId", "SEM", "rc",
         "refSeq", "altSeq",
         "refScore", "altScore",
         "refNorm", "altNorm",
@@ -118,8 +125,8 @@ scoreVariants <- function(x, sem, genome,
     )]
     data.table::setkey(scores_merge, NULL) # clear the merge keys
 
-    ## Store results in a SEMplScores object
-    ss <- SEMplScores(
+    ## Store results in a SEMScores object
+    ss <- SEMScores(
         ranges = x,
         semData = semData(sem),
         scores = scores_merge

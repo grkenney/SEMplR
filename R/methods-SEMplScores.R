@@ -1,8 +1,8 @@
 # ---- constructor ----
 
-#' SEMplScores object and constructor
+#' SEMScores object and constructor
 #'
-#' Constructs a SEMplScores class object.
+#' Constructs a SEMScores class object.
 #'
 #' @param ranges A `GRanges` or `VRanges` object to hold one or more variants
 #' @param semData A named list of SNPEffectMatrix objects
@@ -13,7 +13,7 @@
 #' @importFrom VariantAnnotation VRanges
 #' @importFrom S4Vectors mcols
 #'
-#' @return a SEMplScores object
+#' @return a SEMScores object
 #' @docType class
 #' @export
 #'
@@ -28,9 +28,9 @@
 #'     ref = c("G", "T"), alt = c("C", "A")
 #' )
 #'
-#' SEMplScores(ranges = vr, semData = semData(SEMC))
+#' SEMScores(ranges = vr, semData = semData(SEMC))
 #'
-SEMplScores <- function(ranges = NULL, semData = NULL, scores = NULL) {
+SEMScores <- function(ranges = NULL, semData = NULL, scores = NULL) {
     # if no ranges provided, make an empty VRanges object
     if (all(is.null(ranges))) {
         r <- VariantAnnotation::VRanges()
@@ -48,7 +48,7 @@ SEMplScores <- function(ranges = NULL, semData = NULL, scores = NULL) {
         semData <- data.table()
     }
 
-    new("SEMplScores",
+    new("SEMScores",
         ranges = r,
         semData = semData,
         scores = scores_table
@@ -58,9 +58,9 @@ SEMplScores <- function(ranges = NULL, semData = NULL, scores = NULL) {
 
 # ---- accessors ----
 
-#' Access ranges slot in a SEMplScores object
+#' Access ranges slot in a SEMScores object
 #'
-#' @param x a SEMplScores object
+#' @param x a SEMScores object
 #' @rdname getRanges
 #' @export
 #'
@@ -85,14 +85,14 @@ SEMplScores <- function(ranges = NULL, semData = NULL, scores = NULL) {
 #' getRanges(s)
 #'
 setMethod(
-    "getRanges", "SEMplScores",
+    "getRanges", "SEMScores",
     function(x) x@ranges
 )
 
 
-#' Accessor semData slot in a SEMplScores object
+#' Accessor semData slot in a SEMScores object
 #'
-#' @param x a SEMplScores object
+#' @param x a SEMScores object
 #' @rdname semData
 #' @export
 #'
@@ -115,14 +115,14 @@ setMethod(
 #' semData(s)
 #'
 setMethod(
-    "semData", "SEMplScores",
+    "semData", "SEMScores",
     function(x) x@semData
 )
 
 
-#' Accessor scores slot in a SEMplScores object
+#' Accessor scores slot in a SEMScores object
 #'
-#' @param x a SEMplScores object
+#' @param x a SEMScores object
 #'
 #' @rdname scores
 #' @keywords internal
@@ -147,11 +147,11 @@ setMethod(
 #' scores(s)
 #'
 setMethod(
-    "scores", "SEMplScores",
+    "scores", "SEMScores",
     function(x) x@scores
 )
 
-setMethod("scores<-", "SEMplScores", function(x, value) {
+setMethod("scores<-", "SEMScores", function(x, value) {
     x@scores <- value
     x
 })
@@ -160,24 +160,24 @@ setMethod("scores<-", "SEMplScores", function(x, value) {
 # ---- show ----
 
 
-#' Show method for SEMplScores objects
+#' Show method for SEMScores objects
 #'
 #' Prints information about the number of variants, SEM meta data columns, and
 #' the scoring table if scoreVariants has been run.
 #'
-#' @param object a SEMplScores object
+#' @param object a SEMScores object
 #'
 #' @importFrom methods show
 #'
 #' @return An invisible NULL
 #'
-#' @rdname show-SEMplScores
+#' @rdname show-SEMScores
 #'
 #' @export
 setMethod(
-    "show", "SEMplScores",
+    "show", "SEMScores",
     function(object) {
-        cat("An object of class SEMplScores\n")
+        cat("An object of class SEMScores\n")
 
         # show ranges
         num_vars <- length(object@ranges)

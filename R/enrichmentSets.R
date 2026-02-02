@@ -65,19 +65,21 @@
 #' )
 #'
 #' @export
-enrichmentSets <- function(txdb, orgdb, id_type, foreground_ids,
-    background_ids = NULL,
-    transcript = FALSE,
-    threshold = 0.9,
-    stripVersions = TRUE,
-    inflateThresh = 1,
-    geneType = NULL,
-    overlapMinGap = 0,
-    onePromoterPerGene = FALSE,
-    n_ratio = 1,
-    promoterWindow = c(upstream = 300, downstream = 50),
-    standardChroms = TRUE,
-    reduceOverlaps = TRUE) {
+enrichmentSets <- function(
+  txdb, orgdb, id_type, foreground_ids,
+  background_ids = NULL,
+  transcript = FALSE,
+  threshold = 0.9,
+  stripVersions = TRUE,
+  inflateThresh = 1,
+  geneType = NULL,
+  overlapMinGap = 0,
+  onePromoterPerGene = FALSE,
+  n_ratio = 1,
+  promoterWindow = c(upstream = 300, downstream = 50),
+  standardChroms = TRUE,
+  reduceOverlaps = TRUE
+) {
     # Require that orgdb has a GENETYPE column if using geneType param
     if (!is.null(geneType)) {
         od_cols <- AnnotationDbi::columns(orgdb)

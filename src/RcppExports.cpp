@@ -12,7 +12,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 
 // scoreSequence
 Rcpp::DataFrame scoreSequence(Rcpp::NumericMatrix sem, Rcpp::CharacterVector dna_sequences, int nFlank, float bl, Rcpp::CharacterVector seqIds);
-RcppExport SEXP _SEMplR_scoreSequence(SEXP semSEXP, SEXP dna_sequencesSEXP, SEXP nFlankSEXP, SEXP blSEXP, SEXP seqIdsSEXP) {
+RcppExport SEXP _SEMPLR_scoreSequence(SEXP semSEXP, SEXP dna_sequencesSEXP, SEXP nFlankSEXP, SEXP blSEXP, SEXP seqIdsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -27,11 +27,11 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_SEMplR_scoreSequence", (DL_FUNC) &_SEMplR_scoreSequence, 5},
+    {"_SEMPLR_scoreSequence", (DL_FUNC) &_SEMPLR_scoreSequence, 5},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_SEMplR(DllInfo *dll) {
+RcppExport void R_init_SEMPLR(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

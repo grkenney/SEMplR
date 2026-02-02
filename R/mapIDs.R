@@ -15,8 +15,10 @@
                 "'", id_type,
                 "' is not an available key for in this mapping object."
             ),
-            "i" = paste0("Run AnnotationDbi::keytypes(orgdb) to determine",
-                         " valid keytypes.")
+            "i" = paste0(
+                "Run AnnotationDbi::keytypes(orgdb) to determine",
+                " valid keytypes."
+            )
         ))
     }
 
@@ -29,8 +31,11 @@
     pct_mapped <- nrow(mapped_ids) / length(ids)
 
     if (pct_mapped < threshold) {
-        rlang::abort(c(paste0("Unable to map >=", 
-                              threshold * 100, "% of your IDs."),
+        rlang::abort(c(
+            paste0(
+                "Unable to map >=",
+                threshold * 100, "% of your IDs."
+            ),
             "i" = "Ensure the idType provided is correct.",
             "i" = paste0(
                 "Run AnnotationDbi::columns(orgdb) ",
@@ -96,7 +101,7 @@
                     "Your IDs appear transcript-like: ",
                     paste0(
                         "Reverse-mapping shows ", inflation * 100, "% more ",
-                        "(", nMapped, " unique transcript IDs for ", 
+                        "(", nMapped, " unique transcript IDs for ",
                         nGenes, " genes). "
                     ),
                     "Downstream, only gene-level coordinates will be used.",
@@ -187,7 +192,7 @@ mapIDs <- function(orgdb,
         threshold = threshold
     )
 
-    # Background pool can be restricted according to background_ids 
+    # Background pool can be restricted according to background_ids
     # (if provided)
     if (is.null(background_ids)) {
         rlang::inform("Building background id set...")

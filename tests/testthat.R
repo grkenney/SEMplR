@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(SEMplR)
+library(SEMPLR)
 
-test_check("SEMplR")
+test_check("SEMPLR")

@@ -45,7 +45,7 @@ a \code{ggtree} object
 \description{
 Generates a circular dendrogram, clustering SNP Effect Matrices on
 similarity and a heatmap representing the -log10 transformed
-adjusted p-value of a SEMplR enrichment.
+adjusted p-value of a SEMPLR enrichment.
 }
 \examples{
 # load SEMs

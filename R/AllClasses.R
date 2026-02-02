@@ -130,7 +130,7 @@ setValidity("SNPEffectMatrixCollection", function(object) {
 })
 
 
-## SEMplScores class -----------------------------------------------------------
+## SEMScores class -----------------------------------------------------------
 
 #' Class for storing SEM motif binding calculations for multiple genomic ranges
 #' or variants
@@ -144,7 +144,7 @@ setValidity("SNPEffectMatrixCollection", function(object) {
 #' @importFrom VariantAnnotation VRanges
 #' @importFrom data.table data.table
 #'
-setClass("SEMplScores",
+setClass("SEMScores",
     slots = c(
         ranges = "GRangesOrVRanges",
         semData = "data.table",

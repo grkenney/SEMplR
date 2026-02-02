@@ -14,9 +14,9 @@ plotSEMVariants(
 )
 }
 \arguments{
-\item{s}{a SEMplScores object with scores populated}
+\item{s}{a SEMScores object with scores populated}
 
-\item{sem}{a single character vector matching a semId in the semplObj}
+\item{sem}{a single character vector matching a SEM in the semplObj}
 
 \item{label}{column in scores slot of semplObj to use for point labels}
 

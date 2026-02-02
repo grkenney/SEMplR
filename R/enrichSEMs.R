@@ -42,30 +42,23 @@
 
 # define the background set if not provided
 .defineBackground <- function(x, sem, background, seqs, nFlank, genome) {
+    rc <- ifelse(any(scores(x)$rc == TRUE), TRUE, FALSE)
     if (is.null(background)) {
         rlang::inform(paste0(
             "Building background set (this may take several ",
             "minutes) ..."
         ))
-        if (is(x, "SEMplScores")) {
+        if (is(x, "SEMScores")) {
             seqs <- getRanges(x)$sequence
         }
 
         scramb <- .scrambleSeqs(seqs)
-        bg <- lapply(
-            getSEMs(sem),
-            function(y) {
-                scoreSequence(
-                    sem = as.matrix(getSEM(y)),
-                    dna_sequences = scramb,
-                    nFlank = nFlank,
-                    bl = getBaseline(y),
-                    seqIds = seq_along(seqs)
-                )
-            }
-        ) |> data.table::rbindlist(idcol = "SEM")
+        
+        bg <- scoreBinding(x = scramb, sem = sem, 
+                           genome = genome, rc = rc)
     } else {
-        bg <- scoreBinding(x = background, sem = sem, genome = genome) |>
+        bg <- scoreBinding(x = background, sem = sem, 
+                           genome = genome, rc = rc) |>
             scores()
     }
     return(bg)
@@ -112,8 +105,10 @@
 #'
 #' @export
 enrichSEMs <- function(x, sem,
-                        background = NULL, seqs = NULL, nFlank = 0,
-                        genome = NULL) {
+                       background = NULL,
+                       seqs = NULL,
+                       nFlank = 0,
+                       genome = NULL) {
     sem_names <- getSEMs(sem) |> names()
 
     if (is(x, "data.table") &
@@ -122,12 +117,12 @@ enrichSEMs <- function(x, sem,
             "scoreNorm", "index", "seq"
         ) %in% colnames(x))) {
         x_scores <- x
-    } else if (is(x, "SEMplScores")) {
+    } else if (is(x, "SEMScores")) {
         x_scores <- scores(x)
     } else {
         rlang::abort(paste0(
             "x must be the score table resulting from ",
-            "scoreBinding or a SEMplScores object"
+            "scoreBinding or a SEMScores object"
         ))
     }
 

@@ -120,8 +120,9 @@
 #' @param seqId Column in `GRanges` object to use for unique id.
 #' By default, ids will be generated from the `seqnames` and `ranges.`
 #' Ignored if not providing a `GRanges` object.
+#' @param rc plot the reverse complement SEMs
 #'
-#' @return If a `GRanges` object is provided, return a `SEMplScores` object.
+#' @return If a `GRanges` object is provided, return a `SEMScores` object.
 #' If a list of sequences is provided, just return the scoring table
 #'
 #' @export
@@ -139,8 +140,8 @@
 #' # calculate binding propensity
 #' scoreBinding(gr, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 #'
-scoreBinding <- function(x, sem, genome, 
-                        nFlank = NULL, seqId = NULL) {
+scoreBinding <- function(x, sem, genome,
+                         nFlank = NULL, seqId = NULL, rc = TRUE) {
     # make sure nFlank is an integer, if provided
     if (!is.null(nFlank) & !is.numeric(nFlank)) {
         rlang::abort("nFlank must be an integer.")
@@ -152,7 +153,7 @@ scoreBinding <- function(x, sem, genome,
     is_sequence_list <- .testIfSequenceList(x)
     # convert sem to a collection if it isn't one already
     sem <- .convertToSNPEffectMatrixCollection(x = sem)
-
+    
     # if sequence list not provided, grab sequences from the reference genome
     if (!is_sequence_list) {
         # if the nFlank is not given, use length of the longest SEM
@@ -176,7 +177,15 @@ scoreBinding <- function(x, sem, genome,
     } else {
         # if sequence list is given, use sequences and apply an integer id
         seqs <- x
-        id <- seq_along(seqs)
+        if (is.null(seqId)) {
+            id <- seq_along(seqs)
+        } else {
+            if (length(seqId) != length(x)) {
+                rlang::abort("length of ids must equal the number of ranges")
+            }
+            id <- seqId
+        }
+        
         if (is.null(nFlank)) {
             nFlank <- 0
         }
@@ -194,14 +203,37 @@ scoreBinding <- function(x, sem, genome,
             )
         }
     )
-
     # combine nested list of tables into a single data.table with SEM column
     s <- s |> data.table::rbindlist(idcol = "SEM")
-    s <- s[, c("seqId", "SEM", "score", "scoreNorm", "index", "seq")]
+    s[, rc := "fwd"]
+    s <- s[, c("seqId", "SEM", "rc", "score", "scoreNorm", "index", "seq")]
 
-    # if GRanges, return in SEMplScores object, otherwise, return the data.table
+    # if rc is true, make a list of reverse complement SEMs
+    if (rc) {
+        rc_sem_list <- lapply(getSEMs(sem), reverseComplementSEM)
+        rc_s <- lapply(
+            rc_sem_list,
+            function(y) {
+                scoreSequence(
+                    sem = as.matrix(getSEM(y)),
+                    dna_sequences = seqs,
+                    nFlank = nFlank,
+                    bl = getBaseline(y),
+                    seqIds = id
+                )
+            }
+        )
+        # combine nested list of tables into a single data.table with SEM column
+        rc_s <- rc_s |> data.table::rbindlist(idcol = "SEM")
+        rc_s[, rc := "rev"]
+        rc_s <- rc_s[, c("seqId", "SEM", "rc", "score", "scoreNorm", 
+                         "index", "seq")]
+        s <- rbind(s, rc_s)
+    }
+    
+    # if GRanges, return in SEMScores object, otherwise, return the data.table
     if (!is_sequence_list) {
-        ss <- SEMplScores(ranges = x, semData = semData(sem), scores = s)
+        ss <- SEMScores(ranges = x, semData = semData(sem), scores = s)
     } else {
         ss <- s
     }

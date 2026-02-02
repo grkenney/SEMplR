@@ -1,5 +1,6 @@
 # validate label, variant, and cols parameters
 .validatePlotSemVariantsInputs <- function(s, label, semId, cols) {
+    SEM <- NULL
     # check that sem label is in the sem meta data
     meta_cols <- S4Vectors::mcols(getRanges(s)) |>
         colnames()
@@ -7,11 +8,11 @@
         rlang::abort("label not found in S4Vectors::mcols(getRanges(s)).")
     }
 
-    # check that semId is a valid id in s
-    if (!(semId %in% scores(s)[, semId])) {
+    # check that SEM is a valid id in s
+    if (!(semId %in% scores(s)[, SEM])) {
         rlang::abort(paste0(
-            "variant not found in SEMplScores object. ",
-            semId, " is not in scores(s)[, semId]"
+            "variant not found in SEMScores object. ",
+            semId, " is not in scores(s)[, SEM]"
         ))
     }
 
@@ -75,8 +76,8 @@
 
 #' Plot non-alt versus alt binding propensity for a single motif
 #'
-#' @param s a SEMplScores object with scores populated
-#' @param sem a single character vector matching a semId in the semplObj
+#' @param s a SEMScores object with scores populated
+#' @param sem a single character vector matching a SEM in the semplObj
 #' @param label column in scores slot of semplObj to use for point labels
 #' @param labsize numeric size of the point labels
 #' @param cols vector of length 2 with colors to use for plotting gained
@@ -108,12 +109,12 @@
 #'
 plotSEMVariants <- function(s, sem, label = "varId", labsize = 4,
                             cols = c("#F8766D", "dodgerblue2"), ptsize = 1) {
-    refNorm <- altNorm <- ix <- semId <- NA
+    refNorm <- altNorm <- ix <- SEM <- NA
     .validatePlotSemVariantsInputs <- function(s = s, label = label,
-                                                semId = sem, cols = cols) {
+                                               semId = sem, cols = cols) {
         rlang::inform(paste0("Plotting ", sem, "..."))
     }
-    ix <- sem == scores(s)[, semId]
+    ix <- sem == scores(s)[, SEM]
     scores_dt <- scores(s)[ix, ]
 
     var_plot <- .createBasePlotSEMVariants(

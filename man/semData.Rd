@@ -3,13 +3,13 @@
 %   R/methods-SNPEffectMatrixCollection.R
 \name{semData}
 \alias{semData}
-\alias{semData,SEMplScores-method}
+\alias{semData,SEMScores-method}
 \alias{semData,SNPEffectMatrixCollection-method}
-\title{Accessor semData slot in a SEMplScores object}
+\title{Accessor semData slot in a SEMScores object}
 \usage{
 semData(x)
 
-\S4method{semData}{SEMplScores}(x)
+\S4method{semData}{SEMScores}(x)
 
 \S4method{semData}{SNPEffectMatrixCollection}(x)
 }
@@ -20,7 +20,7 @@ semData(x)
 A \code{data.table} is returned
 }
 \description{
-Accessor semData slot in a SEMplScores object
+Accessor semData slot in a SEMScores object
 
 Access semData from a SNPEffectMatrixCollection object
 }

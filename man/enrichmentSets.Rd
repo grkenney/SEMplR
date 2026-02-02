@@ -100,9 +100,10 @@ orgdb <- org.Hs.eg.db
 
 my_genes <- c("ENSG00000139618", "ENSG00000157764")
 # Minimal run with defaults:
-results <- enrichmentSets(my_genes, 
-                          txdb = txdb, 
-                          orgdb = orgdb, 
-                          id_type = "ENSEMBL")
+results <- enrichmentSets(my_genes,
+    txdb = txdb,
+    orgdb = orgdb,
+    id_type = "ENSEMBL"
+)
 
 }

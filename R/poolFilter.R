@@ -77,8 +77,8 @@ poolFilter <- function(mapped, geneType = NULL) {
                 ),
                 keytype = "ENSEMBLTRANS"
             )
-            keep_trans <- ensembl_trans_df[ensembl_trans_df$GENETYPE == 
-                                             geneType, ]
+            keep_trans <- ensembl_trans_df[ensembl_trans_df$GENETYPE ==
+                geneType, ]
 
             # restrict both bg and fg to transcripts whose gene is in geneType
             bg_df <- bg_df[bg_df$ENTREZID %in% keep_trans$ENTREZID, ]
