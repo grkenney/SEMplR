@@ -51,7 +51,7 @@ slots. The first holds the `SNPEffectMatrix` objects with the matrices and
 baseline information for each motif. The second slots holds meta data for each
 SEM. This object contains 223 SEMs and 12 meta data features for each.
 ```{r display_data}
-SEMC
+data(SEMC)
 ```
 
 We can view the SEM meta data slot with the `semData` function.
