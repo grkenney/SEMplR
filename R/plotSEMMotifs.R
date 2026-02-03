@@ -80,7 +80,6 @@
 #'
 #' @examples
 #' library(VariantAnnotation)
-#' data(SEMC)
 #'
 #' # create a VRanges object
 #' vr <- VRanges(

@@ -44,7 +44,6 @@ variants provided
 library(VariantAnnotation)
 
 # load default SEMs
-data(SEMC)
 
 # create a VRanges object
 x <- VRanges(

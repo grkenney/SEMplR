@@ -19,7 +19,6 @@ where each entry is the probability of a base at each position in the motif.
 }
 \examples{
 # Load default SEMs
-data(SEMC)
 
 # From a SNPEffectMatrixCollection
 convertSEMsToPPMs(SEMC)

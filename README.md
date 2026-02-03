@@ -57,7 +57,6 @@ information about the ranges analyzed, SEM meta data, and a table with 446 rows
 library(BSgenome.Hsapiens.UCSC.hg19)
 
 # load the default set of SEMs
-data(SEMC)
 
 # define genomic loci to score
 gr <- GenomicRanges::GRanges(seqnames = c("chr12", "chr19"),

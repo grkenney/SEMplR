@@ -1,15 +1,15 @@
-.reformatSEMKey <- function(semData, semKey) {
+.reformatSEMKey <- function(semDat, semKey) {
     SEM_KEY <- .SD <- NULL
-    semData[, SEM_KEY := lapply(
-        semData[, .SD, .SDcols = semKey],
+    semDat[, SEM_KEY := lapply(
+        semDat[, .SD, .SDcols = semKey],
         function(x) gsub(".sem", "", x)
     )]
-    data.table::setkey(semData, SEM_KEY)
+    data.table::setkey(semDat, SEM_KEY)
     rlang::inform(paste0(
         "Removing .sem suffixes from semKey. ",
         "Formatted key now stored in column 'SEM_KEY'."
     ))
-    return(semData)
+    return(semDat)
 }
 
 

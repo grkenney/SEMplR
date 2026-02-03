@@ -41,19 +41,18 @@
 
 
 # define the background set if not provided
-.defineBackground <- function(x, sem, background, seqs, nFlank, genome) {
-    rc <- ifelse(any(scores(x)$rc == TRUE), TRUE, FALSE)
+.defineBackground <- function(x, sem, background, seqs, nFlank, genome, rc) {
     if (is.null(background)) {
         rlang::inform(paste0(
             "Building background set (this may take several ",
             "minutes) ..."
         ))
+        
         if (is(x, "SEMScores")) {
             seqs <- getRanges(x)$sequence
         }
 
         scramb <- .scrambleSeqs(seqs)
-        
         bg <- scoreBinding(x = scramb, sem = sem, 
                            genome = genome, rc = rc)
     } else {
@@ -87,7 +86,6 @@
 #' @examples
 #'
 #' # load SEMs
-#' data(SEMC)
 #'
 #' # note that this is a small example for demonstration purposes
 #' # in actual enrichment analyses sets of 100+ ranges are recommended
@@ -125,6 +123,7 @@ enrichSEMs <- function(x, sem,
             "scoreBinding or a SEMScores object"
         ))
     }
+    rc <- ifelse(any(x_scores[, "rc"] == "rev"), TRUE, FALSE)
 
     bg <- .defineBackground(
         x = x,
@@ -132,7 +131,8 @@ enrichSEMs <- function(x, sem,
         background = background,
         seqs = seqs,
         nFlank = nFlank,
-        genome = genome
+        genome = genome,
+        rc = rc
     )
 
     result <- lapply(

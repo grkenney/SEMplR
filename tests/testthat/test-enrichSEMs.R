@@ -95,7 +95,8 @@ test_that("enrichSEMs on 2 sites without specifying background", {
     )
     e_a <- enrichSEMs(
         x = sb_a, sem = SEMC,
-        genome = BSgenome.Hsapiens.UCSC.hg19::Hsapiens
+        genome = BSgenome.Hsapiens.UCSC.hg19::Hsapiens, 
+        background = NULL
     )
 
     # all SEMs are represented

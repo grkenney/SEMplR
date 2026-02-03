@@ -1,4 +1,3 @@
-data(SEMC)
 
 test_that("convertSEMsToPPMs errors on invalid input", {
     expect_error(convertSEMsToPPMs("foo"),

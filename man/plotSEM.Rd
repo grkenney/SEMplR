@@ -53,7 +53,6 @@ Plot SEM scores for each nucleic acid in each position of the motif
 }
 \examples{
 library(VariantAnnotation)
-data(SEMC)
 
 # Given a SNPEffectMatrix Collection
 plotSEM(SEMC, motif = "JUN")

@@ -163,7 +163,6 @@
 #'
 #' @examples
 #' # load SEMs
-#' data(SEMC)
 #'
 #' # note that this is a small example for demonstration purposes
 #' # in actual enrichment analyses sets of 100+ ranges are recommended

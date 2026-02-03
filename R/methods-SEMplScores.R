@@ -19,7 +19,6 @@
 #'
 #' @examples
 #' # load default SEMs
-#' data(SEMC)
 #'
 #' # create a VRanges object
 #' vr <- VariantAnnotation::VRanges(
@@ -70,7 +69,6 @@ SEMScores <- function(ranges = NULL, semData = NULL, scores = NULL) {
 #' library(VariantAnnotation)
 #'
 #' # load default SEMs
-#' data(SEMC)
 #'
 #' # create a VRanges object
 #' vr <- VRanges(
@@ -100,7 +98,6 @@ setMethod(
 #' library(VariantAnnotation)
 #'
 #' # load default SEMs
-#' data(SEMC)
 #'
 #' # create a VRanges object
 #' vr <- VRanges(
@@ -132,7 +129,6 @@ setMethod(
 #' library(VariantAnnotation)
 #'
 #' # load default SEMs
-#' data(SEMC)
 #'
 #' # create a VRanges object
 #' vr <- VRanges(

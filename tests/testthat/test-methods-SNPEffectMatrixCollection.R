@@ -2,7 +2,7 @@ test_that("SNPEffectMatrixCollection fails on invalid input", {
     expect_error(
         SNPEffectMatrixCollection(
             sems = getSEMs(SEMC)[[1]],
-            semData = semData(SEMC)[1, ],
+            semDat = semData(SEMC)[1, ],
             semKey = ""
         ),
         regexp = "must provide a semKey if providing semData"
@@ -11,7 +11,7 @@ test_that("SNPEffectMatrixCollection fails on invalid input", {
     expect_error(
         SNPEffectMatrixCollection(
             sems = getSEMs(SEMC)[[1]],
-            semData = semData(SEMC)[1, ],
+            semDat = semData(SEMC)[1, ],
             semKey = "foo"
         ),
         regexp = "semKey must be a column in semData"

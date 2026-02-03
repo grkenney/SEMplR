@@ -36,7 +36,6 @@ Plot non-alt versus alt binding propensity for a single motif
 }
 \examples{
 library(VariantAnnotation)
-data(SEMC)
 
 # create a VRanges object
 vr <- VRanges(

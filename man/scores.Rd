@@ -19,7 +19,6 @@ Accessor scores slot in a SEMScores object
 library(VariantAnnotation)
 
 # load default SEMs
-data(SEMC)
 
 # create a VRanges object
 vr <- VRanges(

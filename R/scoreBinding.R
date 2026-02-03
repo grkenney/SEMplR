@@ -129,7 +129,6 @@
 #'
 #' @examples
 #' # load SEMs
-#' data(SEMC)
 #'
 #' # create a GRanges object
 #' gr <- GenomicRanges::GRanges(

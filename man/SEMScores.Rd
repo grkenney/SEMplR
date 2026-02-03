@@ -23,7 +23,6 @@ Constructs a SEMScores class object.
 }
 \examples{
 # load default SEMs
-data(SEMC)
 
 # create a VRanges object
 vr <- VariantAnnotation::VRanges(

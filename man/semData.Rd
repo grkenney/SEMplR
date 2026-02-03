@@ -28,7 +28,6 @@ Access semData from a SNPEffectMatrixCollection object
 library(VariantAnnotation)
 
 # load default SEMs
-data(SEMC)
 
 # create a VRanges object
 vr <- VRanges(

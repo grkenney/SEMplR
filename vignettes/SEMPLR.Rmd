@@ -43,7 +43,7 @@ in a `SNPEffectMatrixCollection`.
 The default collection can be loaded with:
 
 ```{r load_data}
-data(SEMC)
+SEMC
 ```
 
 Printing the `SNPEffectMatrixCollection`, we can see that this object has 2
@@ -51,7 +51,7 @@ slots. The first holds the `SNPEffectMatrix` objects with the matrices and
 baseline information for each motif. The second slots holds meta data for each
 SEM. This object contains 223 SEMs and 12 meta data features for each.
 ```{r display_data}
-data(SEMC)
+SEMC
 ```
 
 We can view the SEM meta data slot with the `semData` function.

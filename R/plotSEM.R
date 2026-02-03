@@ -163,7 +163,6 @@
 #'
 #' @examples
 #' library(VariantAnnotation)
-#' data(SEMC)
 #'
 #' # Given a SNPEffectMatrix Collection
 #' plotSEM(SEMC, motif = "JUN")
