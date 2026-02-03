@@ -47,6 +47,7 @@ a `list` of matrices
 ## Examples
 
 ``` r
+
 # load SEMs
 
 # note that this is a small example for demonstration purposes
