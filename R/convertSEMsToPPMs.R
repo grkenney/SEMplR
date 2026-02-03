@@ -24,9 +24,9 @@
 convertSEMsToPPMs <- function(x) {
     if (is(x, "SNPEffectMatrixCollection")) {
         ss <- getSEMs(x)
-    } else if (is(x, "SNPEffectMatrix")[1]) {
+    } else if (is(x, "SNPEffectMatrix")) {
         ss <- list(x)
-    } else if (is(x, "list")[1] & is(x[[1]], "SNPEffectMatrix")) {
+    } else if (is(x, "list") & is(x[[1]], "SNPEffectMatrix")) {
         ss <- x
     } else {
         rlang::abort(paste0(

@@ -47,17 +47,21 @@
             "Building background set (this may take several ",
             "minutes) ..."
         ))
-        
+
         if (is(x, "SEMScores")) {
             seqs <- getRanges(x)$sequence
         }
 
         scramb <- .scrambleSeqs(seqs)
-        bg <- scoreBinding(x = scramb, sem = sem, 
-                           genome = genome, rc = rc)
+        bg <- scoreBinding(
+            x = scramb, sem = sem,
+            genome = genome, rc = rc
+        )
     } else {
-        bg <- scoreBinding(x = background, sem = sem, 
-                           genome = genome, rc = rc) |>
+        bg <- scoreBinding(
+            x = background, sem = sem,
+            genome = genome, rc = rc
+        ) |>
             scores()
     }
     return(bg)

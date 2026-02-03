@@ -109,17 +109,17 @@ plotSEMMotifs <- function(s, variant, label = "transcription_factor",
     dt <- merge(dt, semData(s),
         by.x = "SEM", by.y = data.table::key(semData(s))
     )
-    
+
     # restore key column if not 'SEM'
     if (dt_key != "SEM") {
         dt <- cbind(dt, semData(s)[, .SD, .SDcols = dt_key])
     }
-    
+
     if (rc) {
-        dt[, lab := do.call(paste, c(.SD, sep = "_")), .SDcols=c(label, "rc")]
+        dt[, lab := do.call(paste, c(.SD, sep = "_")), .SDcols = c(label, "rc")]
         label <- "lab"
     }
-    
+
     sem_motif_plot <- .createBasePlotSEMMotifs(dt, cols, label, labsize, ptsize)
     sem_motif_plot <- sem_motif_plot +
         scale_x_continuous(

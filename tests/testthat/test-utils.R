@@ -31,7 +31,7 @@ test_that(".convertToSNPEffectMatrixCollection given list", {
 
 
 test_that(".convertToSNPEffectMatrixCollection given SNPEffectMatrix", {
-    x <- getSEMs(SEMC)[[1]]
+    x <- getSEMs(SEMC)[["TFAP2B"]]
     expect_s4_class(
         .convertToSNPEffectMatrixCollection(x),
         "SNPEffectMatrixCollection"

@@ -87,7 +87,7 @@ test_that(".loadSEM loads sem file", {
 
 
 test_that("loadSEMCollection loads first SEM correctly", {
-    one_sem <- getSEMs(SEMC)[[1]]
+    one_sem <- getSEMs(SEMC)[["TFAP2B"]]
     one_sem_meta <- semData(SEMC)[transcription_factor == getSEMId(one_sem)]
 
     # write data to file
@@ -105,7 +105,7 @@ test_that("loadSEMCollection loads first SEM correctly", {
         bls = one_sem_meta$SEM_baseline
     )
     # check each slot
-    expect_equal(getSEMs(sem_col_e)[[1]], one_sem)
+    expect_equal(getSEMs(sem_col_e)[["TFAP2B"]], one_sem)
     expect_equal(semData(sem_col_e), one_sem_meta)
     expect_equal(sem_col_e@semKey, "transcription_factor")
 })

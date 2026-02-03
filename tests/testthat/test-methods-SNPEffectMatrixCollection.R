@@ -1,8 +1,9 @@
 test_that("SNPEffectMatrixCollection fails on invalid input", {
+    sk <- data.table::key(semData(SEMC))
     expect_error(
         SNPEffectMatrixCollection(
-            sems = getSEMs(SEMC)[[1]],
-            semDat = semData(SEMC)[1, ],
+            sems = getSEMs(SEMC)[["TFAP2B"]],
+            semDat = semData(SEMC)[eval(as.name(sk)) == "TFAP2B", ],
             semKey = ""
         ),
         regexp = "must provide a semKey if providing semData"
@@ -10,8 +11,8 @@ test_that("SNPEffectMatrixCollection fails on invalid input", {
 
     expect_error(
         SNPEffectMatrixCollection(
-            sems = getSEMs(SEMC)[[1]],
-            semDat = semData(SEMC)[1, ],
+            sems = getSEMs(SEMC)[["TFAP2B"]],
+            semDat = semData(SEMC)[eval(as.name(sk)) == "TFAP2B", ],
             semKey = "foo"
         ),
         regexp = "semKey must be a column in semData"
@@ -49,13 +50,13 @@ test_that("SNPEffectMatrixCollection makes collection without .sem suffix", {
         SEM = "TFAP2B"
     )
     semc_a <- SNPEffectMatrixCollection(
-        sems = getSEMs(SEMC)[[1]],
+        sems = getSEMs(SEMC)[["TFAP2B"]],
         semData = meta_dt,
         semKey = "SEM"
     )
     data.table::setkey(meta_dt, "SEM")
     # this test should match the first entry of the default data in the sems slot
-    expect_equal(getSEMs(semc_a)[[1]], getSEMs(SEMC)[[1]])
+    expect_equal(getSEMs(semc_a)[["TFAP2B"]], getSEMs(SEMC)[["TFAP2B"]])
     expect_equal(semData(semc_a), meta_dt)
     expect_equal(data.table::key(semData(semc_a)), "SEM")
 })
@@ -63,7 +64,7 @@ test_that("SNPEffectMatrixCollection makes collection without .sem suffix", {
 
 test_that("sems pulls correct data types and lengths", {
     # pulling a single SEM by index
-    sems_a <- getSEMs(SEMC)[[1]]
+    sems_a <- getSEMs(SEMC)[["TFAP2B"]]
     expect_s4_class(sems_a, "SNPEffectMatrix")
 
     # pulling all SEMs

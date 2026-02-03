@@ -294,7 +294,7 @@ test_that("scoreBinding reverse complement sem", {
         sem = getSEMs(SEMC, "JUN"),
         nFlank = 7, seqId = "A", rc = TRUE
     )
-    
+
     sb_e <- data.table(
         seqId = c("A", "A"),
         SEM = "JUN",

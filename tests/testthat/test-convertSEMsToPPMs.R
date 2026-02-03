@@ -1,4 +1,3 @@
-
 test_that("convertSEMsToPPMs errors on invalid input", {
     expect_error(convertSEMsToPPMs("foo"),
         regexp = "x must be of class SNPEffectMatrixCollection or"
@@ -11,9 +10,8 @@ test_that("convertSEMsToPPMs handle different input types", {
     expect_no_error(convertSEMsToPPMs(SEMC))
 
     # SNPEffectMatrix
-    expect_no_condition(convertSEMsToPPMs(getSEMs(SEMC)[[1]]))
+    expect_no_condition(convertSEMsToPPMs(getSEMs(SEMC)[["TFAP2B"]]))
 
     # list of SNPEffectMatrices
     expect_no_condition(convertSEMsToPPMs(getSEMs(SEMC)[seq_len(2)]))
 })
-

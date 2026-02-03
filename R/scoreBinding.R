@@ -152,7 +152,7 @@ scoreBinding <- function(x, sem, genome,
     is_sequence_list <- .testIfSequenceList(x)
     # convert sem to a collection if it isn't one already
     sem <- .convertToSNPEffectMatrixCollection(x = sem)
-    
+
     # if sequence list not provided, grab sequences from the reference genome
     if (!is_sequence_list) {
         # if the nFlank is not given, use length of the longest SEM
@@ -184,7 +184,7 @@ scoreBinding <- function(x, sem, genome,
             }
             id <- seqId
         }
-        
+
         if (is.null(nFlank)) {
             nFlank <- 0
         }
@@ -225,11 +225,13 @@ scoreBinding <- function(x, sem, genome,
         # combine nested list of tables into a single data.table with SEM column
         rc_s <- rc_s |> data.table::rbindlist(idcol = "SEM")
         rc_s[, rc := "rev"]
-        rc_s <- rc_s[, c("seqId", "SEM", "rc", "score", "scoreNorm", 
-                         "index", "seq")]
+        rc_s <- rc_s[, c(
+            "seqId", "SEM", "rc", "score", "scoreNorm",
+            "index", "seq"
+        )]
         s <- rbind(s, rc_s)
     }
-    
+
     # if GRanges, return in SEMScores object, otherwise, return the data.table
     if (!is_sequence_list) {
         ss <- SEMScores(ranges = x, semData = semData(sem), scores = s)

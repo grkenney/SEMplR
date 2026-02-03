@@ -19,9 +19,11 @@
     # ) |>
     #     data.table::rbindlist(idcol = "SEM") |>
     #     stats::setNames(c("semId", score_cols, "varId"))
-    s <- scoreBinding(ds, sem = sem, genome = genome, 
-                      nFlank = nFlank, seqId = id, rc = rc)
-    colnames(s) <- c("varId", "SEM", "rc", score_cols) 
+    s <- scoreBinding(ds,
+        sem = sem, genome = genome,
+        nFlank = nFlank, seqId = id, rc = rc
+    )
+    colnames(s) <- c("varId", "SEM", "rc", score_cols)
     return(s)
 }
 
@@ -58,11 +60,9 @@
 #' # calculate binding propensity
 #' scoreVariants(x, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 #'
-scoreVariants <- function(
-  x, sem, genome,
-  refCol = NULL, altCol = NULL,
-  varId = NULL, rc = TRUE
-) {
+scoreVariants <- function(x, sem, genome,
+                          refCol = NULL, altCol = NULL,
+                          varId = NULL, rc = TRUE) {
     riskNorm <- riskSeq <- nonRiskNorm <- nonRiskSeq <- NULL
 
     # Convert sem to a collection if it isn't one already
@@ -98,7 +98,7 @@ scoreVariants <- function(
     } else {
         id <- S4Vectors::mcols(x)[, varId]
     }
-    
+
     # Score each allele
     ref_scores <- .scoreAllele(
         x = x, sem = sem,
@@ -111,8 +111,9 @@ scoreVariants <- function(
         nFlank = nFlank, genome = genome, id = id, rc = rc
     )
 
-    scores_merge <- merge(ref_scores, alt_scores, 
-                          by = c("varId", "SEM", "rc"))
+    scores_merge <- merge(ref_scores, alt_scores,
+        by = c("varId", "SEM", "rc")
+    )
 
     # reorder columns
     scores_merge <- scores_merge[, c(

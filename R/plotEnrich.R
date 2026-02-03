@@ -92,10 +92,8 @@
 }
 
 
-.addLegend <- function(
-  em, sem, comps, heatmapCols, label, sigIds, sigCols,
-  textCex, pvalRange
-) {
+.addLegend <- function(em, sem, comps, heatmapCols, label, sigIds, sigCols,
+                       textCex, pvalRange) {
     graphics::plot.new()
     circle_size <- grid::unit(1, "snpc") # snpc unit gives you a square region
 
@@ -182,16 +180,14 @@
 #' @return NULL
 #'
 #' @export
-plotEnrich <- function(
-  e, sem,
-  label = "transcription_factor",
-  method = "WPCC",
-  threshold = 0.05,
-  textCols = c("darkgrey", "black"),
-  textCex = 0.7,
-  heatmapCols = c("white", "red"),
-  pvalRange = c(0, 20)
-) {
+plotEnrich <- function(e, sem,
+                       label = "transcription_factor",
+                       method = "WPCC",
+                       threshold = 0.05,
+                       textCols = c("darkgrey", "black"),
+                       textCex = 0.7,
+                       heatmapCols = c("white", "red"),
+                       pvalRange = c(0, 20)) {
     .SD <- NULL
 
     sk <- semData(sem) |> data.table::key()

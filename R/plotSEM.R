@@ -97,10 +97,8 @@
 }
 
 
-.createBasePlotSEM <- function(
-  sem_mtx_long, sem_mtx, hindex, motif,
-  hwidth, hcol, halpha, sem_baseline, size, lcol, lwidth
-) {
+.createBasePlotSEM <- function(sem_mtx_long, sem_mtx, hindex, motif,
+                               hwidth, hcol, halpha, sem_baseline, size, lcol, lwidth) {
     motif_pos <- sem_score <- NULL
 
     motif_plot <- ggplot2::ggplot(
