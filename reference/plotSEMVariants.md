@@ -19,11 +19,11 @@ plotSEMVariants(
 
 - s:
 
-  a SEMplScores object with scores populated
+  a SEMScores object with scores populated
 
 - sem:
 
-  a single character vector matching a semId in the semplObj
+  a single character vector matching a SEM in the semplObj
 
 - label:
 
@@ -51,7 +51,6 @@ propensity
 
 ``` r
 library(VariantAnnotation)
-data(SEMC)
 
 # create a VRanges object
 vr <- VRanges(

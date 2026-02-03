@@ -1,4 +1,4 @@
 # License
 
     YEAR: 2024
-    COPYRIGHT HOLDER: SEMplR authors
+    COPYRIGHT HOLDER: SEMPLR authors

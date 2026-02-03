@@ -6,13 +6,13 @@ promoter regions plus matched background sets for downstream motif
 enrichment. It performs:
 
 1.  ID mapping via
-    [`mapIDs()`](https://grkenney.github.io/SEMplR/reference/mapIDs.md).
+    [`mapIDs()`](https://grkenney.github.io/SEMPLR/reference/mapIDs.md).
 
 2.  Optional biotype filtering via
-    [`poolFilter()`](https://grkenney.github.io/SEMplR/reference/poolFilter.md).
+    [`poolFilter()`](https://grkenney.github.io/SEMPLR/reference/poolFilter.md).
 
 3.  Promoter coordinate extraction via
-    [`getCoordinates()`](https://grkenney.github.io/SEMplR/reference/getCoordinates.md).
+    [`getCoordinates()`](https://grkenney.github.io/SEMPLR/reference/getCoordinates.md).
 
 4.  Background sampling within that same call.
 
@@ -116,7 +116,7 @@ enrichmentSets(
 ## Value
 
 A `list` containing the output of
-[`getCoordinates()`](https://grkenney.github.io/SEMplR/reference/getCoordinates.md),
+[`getCoordinates()`](https://grkenney.github.io/SEMPLR/reference/getCoordinates.md),
 namely:
 
 - backgroundElements:
@@ -135,60 +135,18 @@ namely:
 
 ``` r
 library(TxDb.Hsapiens.UCSC.hg38.knownGene)
-#> Loading required package: GenomicFeatures
-#> Loading required package: BiocGenerics
-#> Loading required package: generics
-#> 
-#> Attaching package: ‘generics’
-#> The following objects are masked from ‘package:base’:
-#> 
-#>     as.difftime, as.factor, as.ordered, intersect, is.element, setdiff,
-#>     setequal, union
-#> 
-#> Attaching package: ‘BiocGenerics’
-#> The following objects are masked from ‘package:stats’:
-#> 
-#>     IQR, mad, sd, var, xtabs
-#> The following objects are masked from ‘package:base’:
-#> 
-#>     Filter, Find, Map, Position, Reduce, anyDuplicated, aperm, append,
-#>     as.data.frame, basename, cbind, colnames, dirname, do.call,
-#>     duplicated, eval, evalq, get, grep, grepl, is.unsorted, lapply,
-#>     mapply, match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
-#>     rank, rbind, rownames, sapply, saveRDS, table, tapply, unique,
-#>     unsplit, which.max, which.min
-#> Loading required package: S4Vectors
-#> Loading required package: stats4
-#> 
-#> Attaching package: ‘S4Vectors’
-#> The following object is masked from ‘package:utils’:
-#> 
-#>     findMatches
-#> The following objects are masked from ‘package:base’:
-#> 
-#>     I, expand.grid, unname
-#> Loading required package: IRanges
-#> Loading required package: GenomeInfoDb
-#> Loading required package: GenomicRanges
-#> Loading required package: AnnotationDbi
-#> Loading required package: Biobase
-#> Welcome to Bioconductor
-#> 
-#>     Vignettes contain introductory material; view with
-#>     'browseVignettes()'. To cite Bioconductor, see
-#>     'citation("Biobase")', and for packages 'citation("pkgname")'.
 library(org.Hs.eg.db)
-#> 
 
 txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 orgdb <- org.Hs.eg.db
 
 my_genes <- c("ENSG00000139618", "ENSG00000157764")
 # Minimal run with defaults:
-results <- enrichmentSets(my_genes, 
-                          txdb = txdb, 
-                          orgdb = orgdb, 
-                          id_type = "ENSEMBL")
+results <- enrichmentSets(my_genes,
+    txdb = txdb,
+    orgdb = orgdb,
+    id_type = "ENSEMBL"
+)
 #> Mapping foreground ids to ENTREZIDs...
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Successfully mapped 100% of the provided foreground ids.

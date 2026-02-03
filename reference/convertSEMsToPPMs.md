@@ -25,7 +25,6 @@ a `list` of matrices
 
 ``` r
 # Load default SEMs
-data(SEMC)
 
 # From a SNPEffectMatrixCollection
 convertSEMsToPPMs(SEMC)

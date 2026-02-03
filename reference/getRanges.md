@@ -1,13 +1,13 @@
-# Access ranges slot in a SEMplScores object
+# Access ranges slot in a SEMScores object
 
-Access ranges slot in a SEMplScores object
+Access ranges slot in a SEMScores object
 
 ## Usage
 
 ``` r
 getRanges(x)
 
-# S4 method for class 'SEMplScores'
+# S4 method for class 'SEMScores'
 getRanges(x)
 ```
 
@@ -15,7 +15,7 @@ getRanges(x)
 
 - x:
 
-  a SEMplScores object
+  a SEMScores object
 
 ## Value
 
@@ -25,52 +25,8 @@ A GRanges or VRanges object
 
 ``` r
 library(VariantAnnotation)
-#> Loading required package: MatrixGenerics
-#> Loading required package: matrixStats
-#> 
-#> Attaching package: ‘matrixStats’
-#> The following objects are masked from ‘package:Biobase’:
-#> 
-#>     anyMissing, rowMedians
-#> 
-#> Attaching package: ‘MatrixGenerics’
-#> The following objects are masked from ‘package:matrixStats’:
-#> 
-#>     colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
-#>     colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
-#>     colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
-#>     colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
-#>     colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
-#>     colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
-#>     colWeightedMeans, colWeightedMedians, colWeightedSds,
-#>     colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
-#>     rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
-#>     rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
-#>     rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
-#>     rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
-#>     rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
-#>     rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
-#>     rowWeightedSds, rowWeightedVars
-#> The following object is masked from ‘package:Biobase’:
-#> 
-#>     rowMedians
-#> Loading required package: SummarizedExperiment
-#> Loading required package: Rsamtools
-#> Loading required package: Biostrings
-#> Loading required package: XVector
-#> 
-#> Attaching package: ‘Biostrings’
-#> The following object is masked from ‘package:base’:
-#> 
-#>     strsplit
-#> 
-#> Attaching package: ‘VariantAnnotation’
-#> The following object is masked from ‘package:base’:
-#> 
-#>     tabulate
 
 # load default SEMs
-data(SEMC)
 
 # create a VRanges object
 vr <- VRanges(

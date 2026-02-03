@@ -6,7 +6,7 @@ provided
 ## Usage
 
 ``` r
-scoreBinding(x, sem, genome, nFlank = NULL, seqId = NULL)
+scoreBinding(x, sem, genome, nFlank = NULL, seqId = NULL, rc = TRUE)
 ```
 
 ## Arguments
@@ -38,16 +38,19 @@ scoreBinding(x, sem, genome, nFlank = NULL, seqId = NULL)
   be generated from the `seqnames` and `ranges.` Ignored if not
   providing a `GRanges` object.
 
+- rc:
+
+  plot the reverse complement SEMs
+
 ## Value
 
-If a `GRanges` object is provided, return a `SEMplScores` object. If a
+If a `GRanges` object is provided, return a `SEMScores` object. If a
 list of sequences is provided, just return the scoring table
 
 ## Examples
 
 ``` r
 # load SEMs
-data(SEMC)
 
 # create a GRanges object
 gr <- GenomicRanges::GRanges(
@@ -57,21 +60,21 @@ gr <- GenomicRanges::GRanges(
 
 # calculate binding propensity
 scoreBinding(gr, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
-#> An object of class SEMplScores
+#> An object of class SEMScores
 #> ranges(1): chr12:94136009
 #> semData(12): transcription_factor, ensembl_id ... dnase_ENCODE_accession, PWM_source
-#> scores(223):
-#>               seqId    SEM      score  scoreNorm index              seq
-#>              <char> <char>      <num>      <num> <int>           <char>
-#>   1: chr12:94136009 TFAP2B  -1.689754 -0.3068238    15       GCTTTGAGGC
-#>   2: chr12:94136009   ARNT  -6.892799 -0.9693833    17        TTTGAGGCA
-#>   3: chr12:94136009   ATF1  -7.079925 -0.9420095    16      CTTTGAGGCAT
-#>   4: chr12:94136009   ATF2  -4.890126 -0.9098440    16      CTTTGAGGCAT
-#>   5: chr12:94136009   ATF3  -8.605675 -0.9885365    14      GGCTTTGAGGC
-#>  ---                                                                   
-#> 219: chr12:94136009 ZBTB7A  -1.859506 -0.6349682    12        AAGGCTTTG
-#> 220: chr12:94136009    ZFX  -1.459472 -0.5682106    19       TGAGGCATCT
-#> 221: chr12:94136009 ZNF281  -4.347612 -0.9355197     8  GGAGAAGGCTTTGAG
-#> 222: chr12:94136009  ZNF18  -5.410220 -0.9264060    15     GCTTTGAGGCAT
-#> 223: chr12:94136009 ZSCAN4 -15.439087 -0.9998307    15 GCTTTGAGGCATCTGC
+#> scores(446):
+#>               seqId    SEM     rc      score  scoreNorm index              seq
+#>              <char> <char> <char>      <num>      <num> <int>           <char>
+#>   1: chr12:94136009 TFAP2B    fwd  -1.689754 -0.3068238    15       GCTTTGAGGC
+#>   2: chr12:94136009   ARNT    fwd  -6.892799 -0.9693833    17        TTTGAGGCA
+#>   3: chr12:94136009   ATF1    fwd  -7.079925 -0.9420095    16      CTTTGAGGCAT
+#>   4: chr12:94136009   ATF2    fwd  -4.890126 -0.9098440    16      CTTTGAGGCAT
+#>   5: chr12:94136009   ATF3    fwd  -8.605675 -0.9885365    14      GGCTTTGAGGC
+#>  ---                                                                          
+#> 442: chr12:94136009 ZBTB7A    rev  -1.967170 -0.6612178    18        TTGAGGCAT
+#> 443: chr12:94136009    ZFX    rev  -1.162039 -0.4693499    19       TGAGGCATCT
+#> 444: chr12:94136009 ZNF281    rev  -5.713722 -0.9749858    14  GGCTTTGAGGCATCT
+#> 445: chr12:94136009  ZNF18    rev  -6.739405 -0.9707101    14     GGCTTTGAGGCA
+#> 446: chr12:94136009 ZSCAN4    rev -14.469707 -0.9996685    15 GCTTTGAGGCATCTGC
 ```

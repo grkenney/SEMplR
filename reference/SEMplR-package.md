@@ -1,6 +1,6 @@
-# SEMplR: SNP Effect Matrix Pipeline in R
+# SEMPLR: SNP Effect Matrix Pipeline in R
 
-SEMplR computes transcription factor binding affinity scores for genomic
+SEMPLR computes transcription factor binding affinity scores for genomic
 positions and genetic variants. Scores are computed from SNP Effect
 Matrices (SEMs) produced by SEMpl. 223 pre-computed SEMs are included
 with the package or custom sets can be provided. Enrichment can be
@@ -15,11 +15,11 @@ variant/position level.
 
 Useful links:
 
-- <https://github.com/grkenney/SEMplR>
+- <https://github.com/grkenney/SEMPLR>
 
-- <https://grkenney.github.io/SEMplR>
+- <https://grkenney.github.io/SEMPLR>
 
-- Report bugs at <https://www.github.com/grkenney/SEMplR/issues>
+- Report bugs at <https://www.github.com/grkenney/SEMPLR/issues>
 
 ## Author
 

@@ -1,9 +1,9 @@
-pandoc: 3.8.2.1
+pandoc: 3.6.3
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
-  SEMplR: SEMplR.html
-last_built: 2025-12-22T15:34Z
+  SEMPLR: SEMPLR.html
+last_built: 2026-02-03T01:35Z
 urls:
-  reference: https://grkenney.github.io/SEMplR/reference
-  article: https://grkenney.github.io/SEMplR/articles
+  reference: https://grkenney.github.io/SEMPLR/reference
+  article: https://grkenney.github.io/SEMPLR/articles

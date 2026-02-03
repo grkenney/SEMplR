@@ -1,13 +1,13 @@
-# SEMplR [![SEMplR website](reference/figures/SEMplR-new.png)](https://grkenney.github.io/SEMplR)
+# SEMPLR [![SEMplR website](reference/figures/SEMplR-new.png)](https://grkenney.github.io/SEMplR)
 
 ## Overview
 
-SEMplR (SNP Effect Matrix Pipeline in R) is an R package that predicts
-transcription factor (TF) binding. SEMplR can be used to predict binding
+SEMPLR (SNP Effect Matrix Pipeline in R) is an R package that predicts
+transcription factor (TF) binding. SEMPLR can be used to predict binding
 affinity of TFs at genomic loci or predict the affect of genetic
 variation on TF binding.
 
-SEMplR scores genomic regions or sequences of interest against SNP
+SEMPLR scores genomic regions or sequences of interest against SNP
 Effect Matrices (SEMs). SEMs are position x nucleotide matrix, generated
 by integrating information from position weighted matrices (PWMs),
 ChIP-seq, and DNase-seq data. This integration of binding data means
@@ -24,7 +24,7 @@ Michigan. To support data analysis and visualizations with SEMs.
 
 ## Citation
 
-If you use SEMplR in your work, please also cite SEMpl:
+If you use SEMPLR in your work, please also cite SEMpl:
 
 Sierra S Nishizaki, Natalie Ng, Shengcheng Dong, Robert S Porter, Cody
 Morterud, Colten Williams, Courtney Asman, Jessica A Switzenberg, Alan P
@@ -34,18 +34,18 @@ affinity, *Bioinformatics*, Volume 36, Issue 2, 15 January 2020, Pages
 
 ## Installation
 
-    devtools::install_github("grkenney/SEMplR")
+    devtools::install_github("grkenney/SEMPLR")
 
 ## Basic Usage
 
 Below are some examples of basic usage. Please see the
-[vignette](https://grkenney.github.io/SEMplR/) for more detailed
+[vignette](https://grkenney.github.io/SEMPLR/) for more detailed
 workflow examples.
 
 ### Predicting transcription factor binding
 
-SEMplR accepts GRanges objects or lists of sequences to score. Here, we
-analyze two loci with SEMplR’s default set of 223 pre-computed SEMs,
+SEMPLR accepts GRanges objects or lists of sequences to score. Here, we
+analyze two loci with SEMPLR’s default set of 223 pre-computed SEMs,
 stored in the `SEMC` object. The `scoreBinding` function produces a data
 object with information about the ranges analyzed, SEM meta data, and a
 table with 446 rows (an entry for each loci and SEM combination).
@@ -53,7 +53,6 @@ table with 446 rows (an entry for each loci and SEM combination).
     library(BSgenome.Hsapiens.UCSC.hg19)
 
     # load the default set of SEMs
-    data(SEMC)
 
     # define genomic loci to score
     gr <- GenomicRanges::GRanges(seqnames = c("chr12", "chr19"),
@@ -65,7 +64,7 @@ table with 446 rows (an entry for each loci and SEM combination).
                        genome = Hsapiens)
 
 When analyzing large sets of loci, it can be helpful to know if one or
-more TFs are bound more than we would expect by chance. SEMplR includes
+more TFs are bound more than we would expect by chance. SEMPLR includes
 enrichment and plotting functions to address this question.
 
     # compute enrichment
@@ -76,15 +75,15 @@ enrichment and plotting functions to address this question.
 
 ### Predicting effect of genetic variation on transcription factor binding
 
-SEMplR accepts both VRanges and GRanges objects, specifying a reference
+SEMPLR accepts both VRanges and GRanges objects, specifying a reference
 an alternative allele. Every variant is scored against every SEM and a
 scoring is done for each allele independently.
 
 The resulting object contains three slots containing the variants
 scored, SEM meta data, and the scoring table. These can be accessed with
 the `variants()`,
-[`semData()`](https://grkenney.github.io/SEMplR/reference/semData.md),
-and [`scores()`](https://grkenney.github.io/SEMplR/reference/scores.md)
+[`semData()`](https://grkenney.github.io/SEMPLR/reference/semData.md),
+and [`scores()`](https://grkenney.github.io/SEMPLR/reference/scores.md)
 functions respectively.
 
     vr <- VRanges(seqnames = c("chr12", "chr19"),
@@ -95,7 +94,7 @@ functions respectively.
                         sem = SEMC,
                         genome = Hsapiens)
 
-SEMplR includes two plotting functions to help users predict (1) which
+SEMPLR includes two plotting functions to help users predict (1) which
 TFs change binding with a genetic variant and (2) which variants change
 the binding of a TF.
 
@@ -103,4 +102,4 @@ the binding of a TF.
     plotSEMMotifs(s, "A")
 
 Please see more information on these plots and their interpretation in
-our [vignette](https://grkenney.github.io/SEMplR/).
+our [vignette](https://grkenney.github.io/SEMPLR/).

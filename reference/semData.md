@@ -1,6 +1,6 @@
-# Accessor semData slot in a SEMplScores object
+# Accessor semData slot in a SEMScores object
 
-Accessor semData slot in a SEMplScores object
+Accessor semData slot in a SEMScores object
 
 Access semData from a SNPEffectMatrixCollection object
 
@@ -9,7 +9,7 @@ Access semData from a SNPEffectMatrixCollection object
 ``` r
 semData(x)
 
-# S4 method for class 'SEMplScores'
+# S4 method for class 'SEMScores'
 semData(x)
 
 # S4 method for class 'SNPEffectMatrixCollection'
@@ -32,7 +32,6 @@ A `data.table` is returned
 library(VariantAnnotation)
 
 # load default SEMs
-data(SEMC)
 
 # create a VRanges object
 vr <- VRanges(

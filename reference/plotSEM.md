@@ -78,7 +78,6 @@ a `ggplot` with sem scores for each nucleic acid per position
 
 ``` r
 library(VariantAnnotation)
-data(SEMC)
 
 # Given a SNPEffectMatrix Collection
 plotSEM(SEMC, motif = "JUN")

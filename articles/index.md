@@ -2,5 +2,5 @@
 
 ### All vignettes
 
-- [SEMplR
-  Vignette](https://grkenney.github.io/SEMplR/articles/SEMplR.md):
+- [SEMPLR
+  Vignette](https://grkenney.github.io/SEMPLR/articles/SEMPLR.md):

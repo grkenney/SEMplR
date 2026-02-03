@@ -2,7 +2,7 @@
 
 Generates a circular dendrogram, clustering SNP Effect Matrices on
 similarity and a heatmap representing the -log10 transformed adjusted
-p-value of a SEMplR enrichment.
+p-value of a SEMPLR enrichment.
 
 ## Usage
 
@@ -70,7 +70,6 @@ a `ggtree` object
 
 ``` r
 # load SEMs
-data(SEMC)
 
 # note that this is a small example for demonstration purposes
 # in actual enrichment analyses sets of 100+ ranges are recommended

@@ -1,6 +1,6 @@
 # Changelog
 
-## SEMplR 0.99.0
+## SEMPLR 0.99.0
 
 - Bioconductor ready
 

@@ -9,6 +9,7 @@ plotSEMMotifs(
   s,
   variant,
   label = "transcription_factor",
+  rc = TRUE,
   labsize = 4,
   cols = c("#F8766D", "dodgerblue2"),
   ptsize = 1
@@ -19,7 +20,7 @@ plotSEMMotifs(
 
 - s:
 
-  a SEMplScores object with scores populated
+  a SEMScores object with scores populated
 
 - variant:
 
@@ -28,6 +29,10 @@ plotSEMMotifs(
 - label:
 
   column in sem_metadata slot of semplObj to use for point labels
+
+- rc:
+
+  label SEM orientations
 
 - labsize:
 
@@ -51,7 +56,6 @@ propensity
 
 ``` r
 library(VariantAnnotation)
-data(SEMC)
 
 # create a VRanges object
 vr <- VRanges(

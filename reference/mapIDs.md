@@ -87,9 +87,11 @@ library(org.Hs.eg.db)
 orgdb <- org.Hs.eg.db
 
 my_genes <- c("ENSG00000139618", "ENSG00000157764")
-ids <- mapIDs(orgdb = orgdb, 
-              foreground_ids = my_genes, 
-              id_type = "ENSEMBL")
+ids <- mapIDs(
+    orgdb = orgdb,
+    foreground_ids = my_genes,
+    id_type = "ENSEMBL"
+)
 #> Mapping foreground ids to ENTREZIDs...
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Successfully mapped 100% of the provided foreground ids.
@@ -97,13 +99,15 @@ ids <- mapIDs(orgdb = orgdb,
 #> 'select()' returned 1:many mapping between keys and columns
 #> Checking for inflation...
 #> 'select()' returned 1:1 mapping between keys and columns
-  
+
 # Transcript Ids
 my_transcripts <- c("ENST00000245479", "ENST00000633194")
-ids <- mapIDs(orgdb = orgdb,
-              foreground_ids = my_transcripts,
-              id_type = "ENSEMBLTRANS",
-              transcript = TRUE)
+ids <- mapIDs(
+    orgdb = orgdb,
+    foreground_ids = my_transcripts,
+    id_type = "ENSEMBLTRANS",
+    transcript = TRUE
+)
 #> Mapping foreground ids to ENTREZIDs...
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Successfully mapped 100% of the provided foreground ids.

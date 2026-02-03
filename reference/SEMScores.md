@@ -1,11 +1,11 @@
-# SEMplScores object and constructor
+# SEMScores object and constructor
 
-Constructs a SEMplScores class object.
+Constructs a SEMScores class object.
 
 ## Usage
 
 ``` r
-SEMplScores(ranges = NULL, semData = NULL, scores = NULL)
+SEMScores(ranges = NULL, semData = NULL, scores = NULL)
 ```
 
 ## Arguments
@@ -25,13 +25,12 @@ SEMplScores(ranges = NULL, semData = NULL, scores = NULL)
 
 ## Value
 
-a SEMplScores object
+a SEMScores object
 
 ## Examples
 
 ``` r
 # load default SEMs
-data(SEMC)
 
 # create a VRanges object
 vr <- VariantAnnotation::VRanges(
@@ -40,8 +39,8 @@ vr <- VariantAnnotation::VRanges(
     ref = c("G", "T"), alt = c("C", "A")
 )
 
-SEMplScores(ranges = vr, semData = semData(SEMC))
-#> An object of class SEMplScores
+SEMScores(ranges = vr, semData = semData(SEMC))
+#> An object of class SEMScores
 #> ranges(2): 
 #> semData(12): transcription_factor, ensembl_id ... dnase_ENCODE_accession, PWM_source
 #> scores(0):
