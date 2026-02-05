@@ -10,8 +10,9 @@ plotEnrich(
   label = "transcription_factor",
   method = "WPCC",
   threshold = 0.05,
+  lineWidth = 0.5,
   textCols = c("darkgrey", "black"),
-  textCex = 0.7,
+  textCex = 1,
   heatmapCols = c("white", "red"),
   pvalRange = c(0, 20)
 )
@@ -27,6 +28,8 @@ plotEnrich(
 See ?universalmotif::compare_motifs for options.}
 
 \item{threshold}{The adjusted p-value threshold for coloring SEMs}
+
+\item{lineWidth}{A numeric specifying the dendrogram line width}
 
 \item{textCols}{A vector of two colors to label non-significant and
 significant SEMs respectively.}

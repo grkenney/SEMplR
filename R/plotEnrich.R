@@ -40,101 +40,6 @@
 }
 
 
-.circlizePlot <- function(em, sem, comps, ds, col_fun, label, sigIds, sigCols) {
-    .SD <- NULL
-    dend <- stats::as.dendrogram(comps)
-
-    padjs <- data.frame(padj = -log10(em$padj))
-    rownames(padjs) <- em[, .SD, .SDcols = label] |> unlist()
-
-    column_od <- comps$order
-    labels_od <- comps$labels[comps$order]
-    ordered_mtx <- as.matrix(padjs[labels_od, 1])
-    rownames(ordered_mtx) <- labels_od
-
-    ordered_text_cols <- lapply(
-        rownames(ordered_mtx),
-        function(x) {
-            ifelse(x %in% sigIds,
-                sigCols[2], sigCols[1]
-            )
-        }
-    ) |>
-        unlist()
-
-    circlize::circos.clear()
-
-    circlize::circos.heatmap(ordered_mtx,
-        col = col_fun,
-        rownames.side = "outside",
-        cluster = FALSE, clustering.method = NULL,
-        track.height = 0.04,
-        dend.callback = function(dend, m, si) {
-            dendsort::dendsort(dend)
-        }, rownames.col = ordered_text_cols
-    )
-
-    graphics::par(new = TRUE)
-    circlize::circos.trackPlotRegion(
-        ylim = c(0, 1),
-        bg.border = NA,
-        track.height = min(ds) * 0.11 / 1.02,
-        panel.fun = function(x, y) {
-            circlize::circos.dendrogram(
-                dend = dend,
-                facing = "outside",
-                max_height = 1
-            )
-        }
-    )
-    circlize::circos.clear()
-    return()
-}
-
-
-.addLegend <- function(em, sem, comps, heatmapCols, label, sigIds, sigCols,
-                       textCex, pvalRange) {
-    graphics::plot.new()
-    circle_size <- grid::unit(1, "snpc") # snpc unit gives you a square region
-
-    grid::pushViewport(grid::viewport(
-        x = 0, y = 0.5, width = circle_size,
-        height = circle_size,
-        just = c("left", "center")
-    ))
-    graphics::par(
-        omi = gridBase::gridOMI(), new = TRUE,
-        cex = textCex, mar = c(0, 0, 0, 0)
-    )
-    ds <- grDevices::dev.size()
-
-    col_fun <- circlize::colorRamp2(pvalRange, heatmapCols)
-    .circlizePlot(
-        em = em, sem = sem, comps = comps,
-        ds = ds, col_fun = col_fun,
-        label = label,
-        sigIds = sigIds, sigCols = sigCols
-    )
-    grid::upViewport()
-
-    lgd <- ComplexHeatmap::Legend(
-        title = "-log10(Adj. P-value)", col_fun = col_fun,
-        title_gp = grid::gpar(fontsize = 8),
-        labels_gp = grid::gpar(fontsize = 8),
-        direction = "horizontal"
-    )
-
-    lgd_list <- ComplexHeatmap::packLegend(lgd,
-        max_height = unit(0.9 * ds[2], "inch")
-    )
-    ComplexHeatmap::draw(lgd_list,
-        x = circle_size * 0.95,
-        y = circle_size * 0.95,
-        just = c("center", "top")
-    )
-}
-
-
 #' Plot the results of `enrichSEMs`
 #'
 #' Generates a circular dendrogram, clustering SNP Effect Matrices on
@@ -147,6 +52,7 @@
 #' @param method Method to use for SEM comparison.
 #' See ?universalmotif::compare_motifs for options.
 #' @param threshold The adjusted p-value threshold for coloring SEMs
+#' @param lineWidth A numeric specifying the dendrogram line width
 #' @param textCols A vector of two colors to label non-significant and
 #' significant SEMs respectively.
 #' @param textCex Text size of SEM labels.
@@ -156,8 +62,6 @@
 #' heatmap of `-log10(padj)`.
 #'
 #' @return a `ggtree` object
-#'
-#' @importFrom circlize circos.trackPlotRegion
 #'
 #' @examples
 #' # load SEMs
@@ -184,34 +88,49 @@ plotEnrich <- function(e, sem,
                        label = "transcription_factor",
                        method = "WPCC",
                        threshold = 0.05,
+                       lineWidth = 0.5,
                        textCols = c("darkgrey", "black"),
-                       textCex = 0.7,
+                       textCex = 1,
                        heatmapCols = c("white", "red"),
                        pvalRange = c(0, 20)) {
-    .SD <- NULL
-
+    .SD <- group <- NULL
     sk <- semData(sem) |> data.table::key()
-
     em <- merge(semData(sem), e, by.x = sk, by.y = "SEM")
-
     motifs <- .formatMotifs(sem, label)
     labels <- lapply(motifs, function(x) x["altname"]) |> unlist()
 
     comparisons <- .constructComparisons(
         motifs = motifs,
         labels = labels,
-        method = method
-    )
-
+        method = method )
+    
+    den <- stats::as.dendrogram(comparisons)
+    circ <- ggtree::ggtree(den, layout = "circular")
+    em_df <- as.data.frame(-log10(em[, "padj"]))
+    rownames(em_df) <- em[, .SD, .SDcols = label] |> unlist()
+    colnames(em_df) <- "padj"
     sigIds <- em[, .SD, .SDcols = label][which(em$padj <= threshold)] |>
-        unlist() |>
-        unname()
-
-    .addLegend(
-        em = em, sem = sem,
-        comps = comparisons, heatmapCols = heatmapCols,
-        label = label,
-        sigIds = sigIds, sigCols = textCols, textCex = textCex,
-        pvalRange = pvalRange
-    )
+        unlist() |> unname()
+    
+    if (length(sigIds) > 0) {
+        circ <- ggtree::groupOTU(circ, sigIds)
+    } else {
+        circ <- ggtree::groupOTU(circ, 
+                                 unname(unlist(em[, .SD, .SDcols = label])))
+        textCols <- c("darkgrey", "darkgrey")
+    }
+    
+    plt <- ggtree::gheatmap(circ, em_df, width=.1, colnames_angle=0, 
+                            offset = -0.01, colnames = FALSE) +
+        ggtree::geom_tiplab(aes(color = group), 
+                            align = TRUE, size = textCex, offset = 0.1, 
+                            linesize = 0) +
+        ggplot2::scale_fill_gradient(name = "padj",
+                                     low = heatmapCols[1], 
+                                     high = heatmapCols[2], 
+                                     limits = pvalRange, 
+                                     oob = scales::squish) +
+        ggplot2::scale_color_manual(values=c(textCols[1], textCols[2]), 
+                                    guide = "none")
+    return(plt)
 }

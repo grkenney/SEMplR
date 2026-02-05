@@ -107,7 +107,7 @@
 #' plotSEMVariants(s, "IKZF1_HUMAN.GM12878")
 #'
 plotSEMVariants <- function(s, sem, label = "varId", labsize = 4,
-                            cols = c("#F8766D", "dodgerblue2"), ptsize = 1) {
+    cols = c("#F8766D", "dodgerblue2"), ptsize = 1) {
     refNorm <- altNorm <- ix <- SEM <- NA
     .validatePlotSemVariantsInputs <- function(s = s, label = label,
                                                semId = sem, cols = cols) {

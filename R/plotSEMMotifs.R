@@ -94,13 +94,11 @@
 #' plotSEMMotifs(s, "chr12:94136009:G>C", label = "transcription_factor")
 #'
 plotSEMMotifs <- function(s, variant, label = "transcription_factor",
-                          rc = TRUE, labsize = 4,
-                          cols = c("#F8766D", "dodgerblue2"), ptsize = 1) {
+    rc = TRUE, labsize = 4,
+    cols = c("#F8766D", "dodgerblue2"), ptsize = 1) {
     refNorm <- altNorm <- varId <- sem <- lab <- .SD <- NULL
-    .validatePlotSemMotifsInputs(
-        s = s, label = label,
-        variant = variant, cols = cols
-    )
+    .validatePlotSemMotifsInputs( s = s, label = label, 
+                                  variant = variant, cols = cols )
 
     ix <- variant == scores(s)[, varId]
     dt <- scores(s)[ix, ]
@@ -116,7 +114,8 @@ plotSEMMotifs <- function(s, variant, label = "transcription_factor",
     }
 
     if (rc) {
-        dt[, lab := do.call(paste, c(.SD, sep = "_")), .SDcols = c(label, "rc")]
+        dt[, lab := do.call(paste, c(.SD, sep = "_")), 
+           .SDcols = c(label, "rc")]
         label <- "lab"
     }
 
@@ -130,10 +129,7 @@ plotSEMMotifs <- function(s, variant, label = "transcription_factor",
             breaks = scales::pretty_breaks(),
             limits = function(x) ifelse(abs(x) < 1, c(-1, 1), x)
         ) +
-        labs(
-            x = "ref binding propensity",
-            y = "alt binding propensity"
-        ) +
+        labs( x = "ref binding propensity", y = "alt binding propensity" ) +
         theme_classic() +
         theme(
             panel.grid = element_blank(),

@@ -8,6 +8,7 @@ plotSEM(
   sem,
   motif = NULL,
   motifSeq = NULL,
+  rc = FALSE,
   cols = c("lightgrey", "dodgerblue"),
   size = 7,
   hindex = NULL,
@@ -27,6 +28,9 @@ this parameter is ignored and the SNPEffectMatrix's semId is used for
 plotting.}
 
 \item{motifSeq}{Character sequence to color on plot}
+
+\item{rc}{Boolean indicating whether to plot the reverse complement
+orientation of the SEM}
 
 \item{cols}{A vector of two colors to color the nucleotides not included
 and included in the provided motifSeq respectively}

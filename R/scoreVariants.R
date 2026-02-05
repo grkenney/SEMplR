@@ -5,20 +5,6 @@
         unlist() |>
         unname()
 
-    # s <- lapply(
-    #     getSEMs(sem),
-    #     function(y) {
-    #         scoreSequence(
-    #             sem = as.matrix(getSEM(y)),
-    #             dna_sequences = ds,
-    #             nFlank = nFlank,
-    #             bl = getBaseline(y),
-    #             seqIds = id
-    #         )
-    #     }
-    # ) |>
-    #     data.table::rbindlist(idcol = "SEM") |>
-    #     stats::setNames(c("semId", score_cols, "varId"))
     s <- scoreBinding(ds,
         sem = sem, genome = genome,
         nFlank = nFlank, seqId = id, rc = rc
@@ -26,6 +12,27 @@
     colnames(s) <- c("varId", "SEM", "rc", score_cols)
     return(s)
 }
+
+
+.getVarId <- function(x, varId, refCol, altCol) {
+    if (is.null(varId)) {
+        x$id <- lapply(
+            seq_along(x),
+            function(i) {
+                .makeVariantId(x[i],
+                               refCol = refCol,
+                               altCol = altCol
+                )
+            }
+        ) |>
+            unlist()
+        id <- x$id
+    } else {
+        id <- S4Vectors::mcols(x)[, varId]
+    }
+    return(id)
+}
+
 
 #' Calculate risk/non-risk binding propensity for all SEM motifs and
 #' variants provided
@@ -61,8 +68,8 @@
 #' scoreVariants(x, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 #'
 scoreVariants <- function(x, sem, genome,
-                          refCol = NULL, altCol = NULL,
-                          varId = NULL, rc = TRUE) {
+    refCol = NULL, altCol = NULL,
+    varId = NULL, rc = TRUE) {
     riskNorm <- riskSeq <- nonRiskNorm <- nonRiskSeq <- NULL
 
     # Convert sem to a collection if it isn't one already
@@ -71,9 +78,7 @@ scoreVariants <- function(x, sem, genome,
     # Get maximum kmer length of all TFs ##
     nFlank <- lapply(getSEMs(sem), function(x) {
         nrow(getSEM(x))
-    }) |>
-        unlist() |>
-        max()
+    }) |> unlist() |> max()
 
     # Collect up/downstream sequences
     x <- getRangeSeqs(x,
@@ -82,22 +87,7 @@ scoreVariants <- function(x, sem, genome,
         refCol = refCol, altCol = altCol
     )
 
-    # If a unique id
-    if (is.null(varId)) {
-        x$id <- lapply(
-            seq_along(x),
-            function(i) {
-                .makeVariantId(x[i],
-                    refCol = refCol,
-                    altCol = altCol
-                )
-            }
-        ) |>
-            unlist()
-        id <- x$id
-    } else {
-        id <- S4Vectors::mcols(x)[, varId]
-    }
+    id <- .getVarId(x, varId, refCol, altCol)
 
     # Score each allele
     ref_scores <- .scoreAllele(
@@ -111,26 +101,18 @@ scoreVariants <- function(x, sem, genome,
         nFlank = nFlank, genome = genome, id = id, rc = rc
     )
 
-    scores_merge <- merge(ref_scores, alt_scores,
-        by = c("varId", "SEM", "rc")
-    )
+    scores_merge <- merge(ref_scores, alt_scores, by = c("varId", "SEM", "rc"))
 
     # reorder columns
     scores_merge <- scores_merge[, c(
-        "varId", "SEM", "rc",
-        "refSeq", "altSeq",
-        "refScore", "altScore",
-        "refNorm", "altNorm",
+        "varId", "SEM", "rc", "refSeq", "altSeq",
+        "refScore", "altScore", "refNorm", "altNorm",
         "refVarIndex", "altVarIndex"
     )]
     data.table::setkey(scores_merge, NULL) # clear the merge keys
 
     ## Store results in a SEMScores object
-    ss <- SEMScores(
-        ranges = x,
-        semData = semData(sem),
-        scores = scores_merge
-    )
+    ss <- SEMScores(ranges = x, semData = semData(sem), scores = scores_merge)
 
     return(ss)
 }

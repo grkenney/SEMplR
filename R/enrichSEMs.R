@@ -41,7 +41,8 @@
 
 
 # define the background set if not provided
-.defineBackground <- function(x, sem, background, seqs, nFlank, genome, rc) {
+.defineBackground <- function(x, sem, background, seqs, nFlank, 
+                              genome, rc) {
     if (is.null(background)) {
         rlang::inform(paste0(
             "Building background set (this may take several ",

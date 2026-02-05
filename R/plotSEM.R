@@ -98,7 +98,8 @@
 
 
 .createBasePlotSEM <- function(sem_mtx_long, sem_mtx, hindex, motif,
-                               hwidth, hcol, halpha, sem_baseline, size, lcol, lwidth) {
+                               hwidth, hcol, halpha, sem_baseline, 
+                               size, lcol, lwidth) {
     motif_pos <- sem_score <- NULL
 
     motif_plot <- ggplot2::ggplot(
@@ -143,6 +144,8 @@
 #' this parameter is ignored and the SNPEffectMatrix's semId is used for
 #' plotting.
 #' @param motifSeq Character sequence to color on plot
+#' @param rc Boolean indicating whether to plot the reverse complement 
+#' orientation of the SEM
 #' @param cols A vector of two colors to color the nucleotides not included
 #' and included in the provided motifSeq respectively
 #' @param size Font size of nucleotides in plot
@@ -172,13 +175,17 @@
 #' # color by sequence
 #' plotSEM(sem, motifSeq = "TGAGTCA", hindex = 2)
 plotSEM <- function(sem, motif = NULL,
-                    motifSeq = NULL,
+                    motifSeq = NULL, rc = FALSE,
                     cols = c("lightgrey", "dodgerblue"), size = 7,
                     hindex = NULL, hcol = "dodgerblue", halpha = 0.1,
                     hwidth = 15,
                     lcol = "#d7dbdd", lwidth = 1) {
     alt <- ref <- motif_pos <- mseq <- .SD <-
         semId <- sem_score <- sm <- varId <- NA
+    
+    if (rc) {
+        sem <- reverseComplementSEM(sem)
+    }
 
     sem_params <- .definePlotSEMParams(sem, motif)
     sem_baseline <- sem_params$sem_baseline

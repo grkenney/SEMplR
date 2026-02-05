@@ -185,15 +185,10 @@ mapIDs <- function(orgdb,
     }
 
     rlang::inform("Mapping foreground ids to ENTREZIDs...")
-    fg_id_map <- .mapToEntrezIds(
-        id_type = id_type,
-        orgdb = orgdb,
-        ids = foreground_ids,
-        threshold = threshold
-    )
+    fg_id_map <- .mapToEntrezIds( id_type = id_type, orgdb = orgdb,
+                                  ids = foreground_ids, threshold = threshold )
 
-    # Background pool can be restricted according to background_ids
-    # (if provided)
+    # Restrict background pool according to background_ids (if provided)
     if (is.null(background_ids)) {
         rlang::inform("Building background id set...")
         # Otherwise background pool is all records in orgdb
@@ -204,12 +199,9 @@ mapIDs <- function(orgdb,
         print_msg <- TRUE
     }
 
-    bg_id_map <- .mapToEntrezIds(
-        id_type = id_type, orgdb = orgdb,
-        ids = background_ids,
-        threshold = threshold,
-        print_msg = print_msg
-    )
+    bg_id_map <- .mapToEntrezIds( id_type = id_type, orgdb = orgdb,
+                                  ids = background_ids, threshold = threshold,
+                                  print_msg = print_msg )
 
     # Ensure background pool is the same universe as foreground by dropping any
     # rows with no available value for best mappedID type
@@ -218,25 +210,13 @@ mapIDs <- function(orgdb,
 
     if (!transcript) {
         rlang::inform("Checking for inflation...")
-        .checkForInflation(
-            orgdb = orgdb,
-            ids = fg_id_map,
-            id_type = id_type,
-            inflateThresh = inflateThresh
-        )
+        .checkForInflation( orgdb = orgdb, ids = fg_id_map,
+            id_type = id_type, inflateThresh = inflateThresh )
     }
 
-    # Report mapping statistics:
-    # Make output list
-    mapped <- c(
-        orgdb = orgdb,
-        list(
-            fg_ids = fg_id_map,
-            bg_ids = bg_id_map,
-            userIDtype = id_type,
-            transcript = transcript
-        )
-    )
-
+    # Report mapping statistics: Make output list
+    mapped <- c( orgdb = orgdb,
+                 list( fg_ids = fg_id_map, bg_ids = bg_id_map,
+                       userIDtype = id_type, transcript = transcript ) )
     return(mapped)
 }

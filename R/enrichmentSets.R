@@ -93,28 +93,19 @@ enrichmentSets <- function(txdb, orgdb, id_type, foreground_ids,
 
     # Map the user's IDs — a bit heavier, but now we know geneType is valid
     mapped <- mapIDs(
-        orgdb = orgdb,
-        foreground_ids = foreground_ids,
-        background_ids = background_ids,
-        id_type = id_type,
-        threshold = threshold,
-        transcript = transcript,
-        stripVersions = stripVersions,
-        inflateThresh = inflateThresh
+        orgdb = orgdb, foreground_ids = foreground_ids, 
+        background_ids = background_ids, id_type = id_type,
+        threshold = threshold, transcript = transcript,
+        stripVersions = stripVersions, inflateThresh = inflateThresh
     )
 
     # Pool‐level filtering
-    filtered <- poolFilter(
-        mapped    = mapped,
-        geneType  = geneType
-    )
+    filtered <- poolFilter(mapped = mapped, geneType = geneType)
 
     # Coordinate extraction (lazy until collect, then quick)
     coords <- getCoordinates(
-        mapped = filtered,
-        txdb = txdb,
-        transcript = transcript,
-        n_ratio = n_ratio,
+        mapped = filtered, txdb = txdb,
+        transcript = transcript, n_ratio = n_ratio,
         promoterWindow = promoterWindow,
         standardChroms = standardChroms,
         reduceOverlaps = reduceOverlaps,
