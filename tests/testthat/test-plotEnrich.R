@@ -42,3 +42,9 @@ test_that(".constructComparisons returns correctly sized object", {
     )
     expect_s3_class(comps, "hclust")
 })
+
+
+test_that("plotEnrich produces a ggtree object", {
+    plt <- plotEnrich(e, SEMC)
+    expect_s3_class(plt, "ggtree")
+})
