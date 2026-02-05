@@ -61,7 +61,7 @@
     start_pos <- IRanges::start(IRanges::ranges(x))
     end_pos <- IRanges::end(IRanges::ranges(x))
     sn <- GenomeInfoDb::seqnames(x)
-
+    
     if (is(x, "VRanges")) {
         ref_allele <- as.character(VariantAnnotation::ref(x))
         alt_allele <- as.character(VariantAnnotation::alt(x))
@@ -75,7 +75,7 @@
         ref_allele <- as.character(S4Vectors::mcols(x)[, refCol])
         alt_allele <- as.character(S4Vectors::mcols(x)[, altCol])
     }
-
+    
     if (ref_allele == "") {
         allele_str <- paste0("ins", alt_allele)
     } else if (alt_allele == "") {
@@ -83,11 +83,11 @@
     } else {
         allele_str <- paste0(ref_allele, ">", alt_allele)
     }
-
+    
     pos_str <- ifelse(start_pos == end_pos,
-        start_pos, paste0(start_pos, "-", end_pos)
+                      start_pos, paste0(start_pos, "-", end_pos)
     )
-
+    
     vid <- paste0(sn, ":", pos_str, ":", allele_str)
     return(vid)
 }
@@ -138,7 +138,8 @@
     if (standardChroms) {
         bg_ranges <- GenomeInfoDb::keepStandardChromosomes(bg_ranges,
                                                            species = organism,
-                                                           pruning.mode = "coarse"
+                                                           pruning.mode = 
+                                                               "coarse"
         )
     }
     # Generate foreground elements granges by subsetting bg_gr by mappedID
