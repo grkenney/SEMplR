@@ -439,14 +439,6 @@ plotEnrich(e,
     threshold = 0.05, method = "WPCC",
     pvalRange = c(0, 50)
 )
-#> ! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
-#> ! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
-#> ! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
-#> ! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
-#> ℹ invalid tbl_tree object. Missing column: label.
-#> ℹ invalid tbl_tree object. Missing column: label.
-#> ! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
-#> ! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
 #> Scale for y is already present.
 #> Adding another scale for y, which will replace the existing scale.
 #> Scale for fill is already present.

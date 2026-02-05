@@ -91,14 +91,6 @@ sb <- scoreBinding(gr, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 e <- enrichSEMs(sb, SEMC)
 #> Building background set (this may take several minutes) ...
 plotEnrich(e, SEMC)
-#> ! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
-#> ! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
-#> ! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
-#> ! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
-#> ℹ invalid tbl_tree object. Missing column: label.
-#> ℹ invalid tbl_tree object. Missing column: label.
-#> ! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
-#> ! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
 #> Scale for y is already present.
 #> Adding another scale for y, which will replace the existing scale.
 #> Scale for fill is already present.
