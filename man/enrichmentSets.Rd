@@ -71,8 +71,7 @@ promoter flank widths in bp (default \code{c(300,50)}).}
 \item{reduceOverlaps}{Logical; merge overlapping promoter windows.}
 }
 \value{
-A \code{list} containing the output of
-\code{\link{getCoordinates}()}, namely:
+A \code{list} containing:
 \describe{
 \item{backgroundElements}{\code{GRanges} of sampled background promoters}
 \item{foregroundElements}{\code{GRanges} of foreground promoters}
@@ -85,10 +84,10 @@ user‐provided IDs from a differential expression analysis and returns
 promoter regions plus matched background sets for downstream motif
 enrichment.  It performs:
 \enumerate{
-\item ID mapping via \code{mapIDs()}.
-\item Optional biotype filtering via \code{poolFilter()}.
-\item Promoter coordinate extraction via \code{getCoordinates()}.
-\item Background sampling within that same call.
+\item ID mapping
+\item Optional biotype filtering
+\item Promoter coordinate extraction
+\item Background sampling within that same call
 }
 }
 \examples{

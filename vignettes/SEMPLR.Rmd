@@ -323,8 +323,8 @@ for binding the promoters of the genes of interest; providing supporting
 evidence for a mechanism where the differential expression is driven by
 differences in TF activity.
 
-The getCoordinates function extracts promoter sequences and tests for predicted
-binding site enrichment in foreground sets using enrichmentSets. Significant
+Promoter sequences are extracted and tested for predicted
+binding site enrichment in foreground sets. Significant
 enrichment of TF binding in the promoters of upregulated genes can provide
 mechanistic insight into gene expression changes.
 

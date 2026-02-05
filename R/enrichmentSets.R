@@ -41,8 +41,7 @@
 #' @param standardChroms Logical; restrict to standard chromosomes.
 #' @param reduceOverlaps Logical; merge overlapping promoter windows.
 #'
-#' @return A \code{list} containing the output of
-#'   \code{\link{getCoordinates}()}, namely:
+#' @return A \code{list} containing:
 #'   \describe{
 #'     \item{backgroundElements}{\code{GRanges} of sampled background promoters}
 #'     \item{foregroundElements}{\code{GRanges} of foreground promoters}

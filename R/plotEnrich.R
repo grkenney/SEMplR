@@ -40,7 +40,8 @@
 }
 
 
-.addTipLabels <- function(circ, sigIds) {
+.addTipLabels <- function(circ, sigIds, textCex, textCols) {
+    group <- textCex <- textCols <- NA
     if (length(sigIds) > 0) {
         withCallingHandlers(
             {circ <- ggtree::groupOTU(circ, sigIds)},
