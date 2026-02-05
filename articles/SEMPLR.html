@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">SEMPLR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -469,11 +469,10 @@ genes) and a background set (e.g. all expressed genes), we could try to
 predict there are TFs enriched for binding the promoters of the genes of
 interest; providing supporting evidence for a mechanism where the
 differential expression is driven by differences in TF activity.</p>
-<p>The getCoordinates function extracts promoter sequences and tests for
-predicted binding site enrichment in foreground sets using
-enrichmentSets. Significant enrichment of TF binding in the promoters of
-upregulated genes can provide mechanistic insight into gene expression
-changes.</p>
+<p>Promoter sequences are extracted and tested for predicted binding
+site enrichment in foreground sets. Significant enrichment of TF binding
+in the promoters of upregulated genes can provide mechanistic insight
+into gene expression changes.</p>
 <p>To aid in this analysis, we have provided a helper function,
 <code>enrichmentSets</code>, to pull genomic ranges of gene promoter
 and, optionally, background sets given gene or transcript ids. Below is
@@ -870,7 +869,7 @@ data to the names of the matrices.</p>
 <span><span class="co">#&gt;  GenomicFeatures                   * 1.62.0    <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.2)</span></span></span>
 <span><span class="co">#&gt;  GenomicRanges                     * 1.62.1    <span style="color: #555555;">2025-12-08</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.2)</span></span></span>
 <span><span class="co">#&gt;  ggfun                               0.2.0     <span style="color: #555555;">2025-07-15</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  ggiraph                             0.9.3     <span style="color: #555555;">2026-01-19</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
+<span><span class="co">#&gt;  ggiraph                             0.9.4     <span style="color: #555555;">2026-02-04</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  ggplot2                             4.0.2     <span style="color: #555555;">2026-02-03</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  ggplotify                           0.1.3     <span style="color: #555555;">2025-09-20</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  ggrepel                             0.9.6     <span style="color: #555555;">2024-09-07</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
@@ -926,7 +925,7 @@ data to the names of the matrices.</p>
 <span><span class="co">#&gt;  S7                                  0.2.1     <span style="color: #555555;">2025-11-14</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  sass                                0.4.10    <span style="color: #555555;">2025-04-11</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  scales                              1.4.0     <span style="color: #555555;">2025-04-24</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  SEMPLR                            * 0.99.0    <span style="color: #555555;">2026-02-05</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
+<span><span class="co">#&gt;  SEMPLR                            * 0.99.1    <span style="color: #555555;">2026-02-05</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
 <span><span class="co">#&gt;  Seqinfo                           * 1.0.0     <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.2)</span></span></span>
 <span><span class="co">#&gt;  sessioninfo                         1.2.3     <span style="color: #555555;">2025-02-05</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  SparseArray                         1.10.8    <span style="color: #555555;">2025-12-18</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.2)</span></span></span>

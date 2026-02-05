@@ -5,16 +5,13 @@ user‐provided IDs from a differential expression analysis and returns
 promoter regions plus matched background sets for downstream motif
 enrichment. It performs:
 
-1.  ID mapping via
-    [`mapIDs()`](https://grkenney.github.io/SEMPLR/reference/mapIDs.md).
+1.  ID mapping
 
-2.  Optional biotype filtering via
-    [`poolFilter()`](https://grkenney.github.io/SEMPLR/reference/poolFilter.md).
+2.  Optional biotype filtering
 
-3.  Promoter coordinate extraction via
-    [`getCoordinates()`](https://grkenney.github.io/SEMPLR/reference/getCoordinates.md).
+3.  Promoter coordinate extraction
 
-4.  Background sampling within that same call.
+4.  Background sampling within that same call
 
 ## Usage
 
@@ -115,9 +112,7 @@ enrichmentSets(
 
 ## Value
 
-A `list` containing the output of
-[`getCoordinates()`](https://grkenney.github.io/SEMPLR/reference/getCoordinates.md),
-namely:
+A `list` containing:
 
 - backgroundElements:
 

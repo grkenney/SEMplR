@@ -20,7 +20,6 @@
 <url><loc>https://grkenney.github.io/SEMPLR/reference/enrichSEMs.html</loc></url>
 <url><loc>https://grkenney.github.io/SEMPLR/reference/enrichmentSets.html</loc></url>
 <url><loc>https://grkenney.github.io/SEMPLR/reference/getBaseline.html</loc></url>
-<url><loc>https://grkenney.github.io/SEMPLR/reference/getCoordinates.html</loc></url>
 <url><loc>https://grkenney.github.io/SEMPLR/reference/getRangeSeqs.html</loc></url>
 <url><loc>https://grkenney.github.io/SEMPLR/reference/getRanges.html</loc></url>
 <url><loc>https://grkenney.github.io/SEMPLR/reference/getSEM.html</loc></url>
@@ -28,12 +27,10 @@
 <url><loc>https://grkenney.github.io/SEMPLR/reference/getSEMs.html</loc></url>
 <url><loc>https://grkenney.github.io/SEMPLR/reference/index.html</loc></url>
 <url><loc>https://grkenney.github.io/SEMPLR/reference/loadSEMCollection.html</loc></url>
-<url><loc>https://grkenney.github.io/SEMPLR/reference/mapIDs.html</loc></url>
 <url><loc>https://grkenney.github.io/SEMPLR/reference/plotEnrich.html</loc></url>
 <url><loc>https://grkenney.github.io/SEMPLR/reference/plotSEM.html</loc></url>
 <url><loc>https://grkenney.github.io/SEMPLR/reference/plotSEMMotifs.html</loc></url>
 <url><loc>https://grkenney.github.io/SEMPLR/reference/plotSEMVariants.html</loc></url>
-<url><loc>https://grkenney.github.io/SEMPLR/reference/poolFilter.html</loc></url>
 <url><loc>https://grkenney.github.io/SEMPLR/reference/scoreBinding.html</loc></url>
 <url><loc>https://grkenney.github.io/SEMPLR/reference/scoreVariants.html</loc></url>
 <url><loc>https://grkenney.github.io/SEMPLR/reference/scores.html</loc></url>

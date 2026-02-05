@@ -38,9 +38,6 @@
 - [`getBaseline()`](https://grkenney.github.io/SEMPLR/reference/getBaseline.md)
   : Access baseline from a SNPEffectMatrix object
 
-- [`getCoordinates()`](https://grkenney.github.io/SEMPLR/reference/getCoordinates.md)
-  : Retrieve Promoter Regions and Sample Background Elements
-
 - [`getRangeSeqs()`](https://grkenney.github.io/SEMPLR/reference/getRangeSeqs.md)
   : Get sequence for genomic ranges and variants
 
@@ -58,9 +55,6 @@
 
 - [`loadSEMCollection()`](https://grkenney.github.io/SEMPLR/reference/loadSEMCollection.md)
   : Load .sem files and meta data into a SNPEffectMatrixCollection
-
-- [`mapIDs()`](https://grkenney.github.io/SEMPLR/reference/mapIDs.md) :
-  Map User IDs to Entrez and Determine Best Keytype
 
 - [`plotEnrich()`](https://grkenney.github.io/SEMPLR/reference/plotEnrich.md)
   :

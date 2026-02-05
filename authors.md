@@ -17,12 +17,12 @@ Source:
 [`DESCRIPTION`](https://github.com/grkenney/SEMPLR/blob/devel/DESCRIPTION)
 
 Kenney G, Phanstiel D (2026). *SEMPLR: SNP Effect Matrix Pipeline in R*.
-R package version 0.99.0, <https://github.com/grkenney/SEMPLR>.
+R package version 0.99.1, <https://github.com/grkenney/SEMPLR>.
 
     @Manual{,
       title = {SEMPLR: SNP Effect Matrix Pipeline in R},
       author = {Grace Kenney and Douglas Phanstiel},
       year = {2026},
-      note = {R package version 0.99.0},
+      note = {R package version 0.99.1},
       url = {https://github.com/grkenney/SEMPLR},
     }

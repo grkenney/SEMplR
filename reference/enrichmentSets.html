@@ -3,19 +3,19 @@
 user‐provided IDs from a differential expression analysis and returns
 promoter regions plus matched background sets for downstream motif
 enrichment.  It performs:
-ID mapping via mapIDs().
-Optional biotype filtering via poolFilter().
-Promoter coordinate extraction via getCoordinates().
-Background sampling within that same call.
+ID mapping
+Optional biotype filtering
+Promoter coordinate extraction
+Background sampling within that same call
 
 "><meta property="og:description" content="enrichmentSets() is a one‐stop wrapper that takes a vector of
 user‐provided IDs from a differential expression analysis and returns
 promoter regions plus matched background sets for downstream motif
 enrichment.  It performs:
-ID mapping via mapIDs().
-Optional biotype filtering via poolFilter().
-Promoter coordinate extraction via getCoordinates().
-Background sampling within that same call.
+ID mapping
+Optional biotype filtering
+Promoter coordinate extraction
+Background sampling within that same call
 
 "></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -25,7 +25,7 @@ Background sampling within that same call.
 
     <a class="navbar-brand me-2" href="../index.html">SEMPLR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,10 +56,10 @@ Background sampling within that same call.
     <p><code>enrichmentSets()</code> is a one‐stop wrapper that takes a vector of
 user‐provided IDs from a differential expression analysis and returns
 promoter regions plus matched background sets for downstream motif
-enrichment.  It performs:</p><ol><li><p>ID mapping via <code><a href="mapIDs.html">mapIDs()</a></code>.</p></li>
-<li><p>Optional biotype filtering via <code><a href="poolFilter.html">poolFilter()</a></code>.</p></li>
-<li><p>Promoter coordinate extraction via <code><a href="getCoordinates.html">getCoordinates()</a></code>.</p></li>
-<li><p>Background sampling within that same call.</p></li>
+enrichment.  It performs:</p><ol><li><p>ID mapping</p></li>
+<li><p>Optional biotype filtering</p></li>
+<li><p>Promoter coordinate extraction</p></li>
+<li><p>Background sampling within that same call</p></li>
 </ol></div>
 
     <div class="section level2">
@@ -168,8 +168,7 @@ promoter flank widths in bp (default <code>c(300,50)</code>).</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <code>list</code> containing the output of
-<code><a href="getCoordinates.html">getCoordinates()</a></code>, namely:</p><dl><dt>backgroundElements</dt>
+    <p>A <code>list</code> containing:</p><dl><dt>backgroundElements</dt>
 <dd><p><code>GRanges</code> of sampled background promoters</p></dd>
 
 <dt>foregroundElements</dt>

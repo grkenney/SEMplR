@@ -457,11 +457,10 @@ predict there are TFs enriched for binding the promoters of the genes of
 interest; providing supporting evidence for a mechanism where the
 differential expression is driven by differences in TF activity.
 
-The getCoordinates function extracts promoter sequences and tests for
-predicted binding site enrichment in foreground sets using
-enrichmentSets. Significant enrichment of TF binding in the promoters of
-upregulated genes can provide mechanistic insight into gene expression
-changes.
+Promoter sequences are extracted and tested for predicted binding site
+enrichment in foreground sets. Significant enrichment of TF binding in
+the promoters of upregulated genes can provide mechanistic insight into
+gene expression changes.
 
 To aid in this analysis, we have provided a helper function,
 `enrichmentSets`, to pull genomic ranges of gene promoter and,
@@ -889,7 +888,7 @@ devtools::session_info()
 #>  GenomicFeatures                   * 1.62.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  GenomicRanges                     * 1.62.1    2025-12-08 [1] Bioconductor 3.22 (R 4.5.2)
 #>  ggfun                               0.2.0     2025-07-15 [1] RSPM (R 4.5.0)
-#>  ggiraph                             0.9.3     2026-01-19 [1] RSPM (R 4.5.0)
+#>  ggiraph                             0.9.4     2026-02-04 [1] RSPM (R 4.5.0)
 #>  ggplot2                             4.0.2     2026-02-03 [1] RSPM (R 4.5.0)
 #>  ggplotify                           0.1.3     2025-09-20 [1] RSPM (R 4.5.0)
 #>  ggrepel                             0.9.6     2024-09-07 [1] RSPM (R 4.5.0)
@@ -945,7 +944,7 @@ devtools::session_info()
 #>  S7                                  0.2.1     2025-11-14 [1] RSPM (R 4.5.0)
 #>  sass                                0.4.10    2025-04-11 [2] RSPM (R 4.5.0)
 #>  scales                              1.4.0     2025-04-24 [1] RSPM (R 4.5.0)
-#>  SEMPLR                            * 0.99.0    2026-02-05 [1] Bioconductor
+#>  SEMPLR                            * 0.99.1    2026-02-05 [1] Bioconductor
 #>  Seqinfo                           * 1.0.0     2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  sessioninfo                         1.2.3     2025-02-05 [2] RSPM (R 4.5.0)
 #>  SparseArray                         1.10.8    2025-12-18 [1] Bioconductor 3.22 (R 4.5.2)
