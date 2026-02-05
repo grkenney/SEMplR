@@ -71,7 +71,7 @@ x <- VRanges(
 # calculate binding propensity
 scoreVariants(x, SEMC, BSgenome.Hsapiens.UCSC.hg19::Hsapiens)
 #> An object of class SEMScores
-#> ranges(1): chr12:94136009:G>C
+#> ranges(1): 
 #> semData(12): transcription_factor, ensembl_id ... dnase_ENCODE_accession, PWM_source
 #> scores(446):
 #>                   varId            SEM     rc           refSeq           altSeq

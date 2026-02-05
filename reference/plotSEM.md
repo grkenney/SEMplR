@@ -9,6 +9,7 @@ plotSEM(
   sem,
   motif = NULL,
   motifSeq = NULL,
+  rc = FALSE,
   cols = c("lightgrey", "dodgerblue"),
   size = 7,
   hindex = NULL,
@@ -36,6 +37,11 @@ plotSEM(
 - motifSeq:
 
   Character sequence to color on plot
+
+- rc:
+
+  Boolean indicating whether to plot the reverse complement orientation
+  of the SEM
 
 - cols:
 

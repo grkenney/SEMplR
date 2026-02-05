@@ -439,6 +439,18 @@ plotEnrich(e,
     threshold = 0.05, method = "WPCC",
     pvalRange = c(0, 50)
 )
+#> ! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
+#> ! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
+#> ! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
+#> ! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
+#> ℹ invalid tbl_tree object. Missing column: label.
+#> ℹ invalid tbl_tree object. Missing column: label.
+#> ! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
+#> ! # Invaild edge matrix for <phylo>. A <tbl_df> is returned.
+#> Scale for y is already present.
+#> Adding another scale for y, which will replace the existing scale.
+#> Scale for fill is already present.
+#> Adding another scale for fill, which will replace the existing scale.
 ```
 
 ![](SEMPLR_files/figure-html/plotEnrich-1.png)
@@ -831,7 +843,7 @@ devtools::session_info()
 #>  collate  en_US.UTF-8
 #>  ctype    en_US.UTF-8
 #>  tz       UTC
-#>  date     2026-02-03
+#>  date     2026-02-05
 #>  pandoc   3.8.2.1 @ /usr/bin/ (via rmarkdown)
 #>  quarto   1.7.32 @ /usr/local/bin/quarto
 #> 
@@ -839,6 +851,8 @@ devtools::session_info()
 #>  package                           * version   date (UTC) lib source
 #>  abind                               1.4-8     2024-09-12 [1] RSPM (R 4.5.0)
 #>  AnnotationDbi                     * 1.72.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
+#>  ape                                 5.8-1     2024-12-16 [1] RSPM (R 4.5.0)
+#>  aplot                               0.2.9     2025-09-12 [1] RSPM (R 4.5.0)
 #>  Biobase                           * 2.70.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  BiocGenerics                      * 0.56.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  BiocIO                            * 1.20.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
@@ -857,13 +871,8 @@ devtools::session_info()
 #>  bslib                               0.10.0    2026-01-26 [1] RSPM (R 4.5.0)
 #>  cachem                              1.1.0     2024-05-16 [2] RSPM (R 4.5.0)
 #>  cigarillo                           1.0.0     2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
-#>  circlize                            0.4.17    2025-12-08 [1] RSPM (R 4.5.0)
 #>  cli                                 3.6.5     2025-04-23 [2] RSPM (R 4.5.0)
-#>  clue                                0.3-66    2024-11-13 [1] RSPM (R 4.5.0)
-#>  cluster                             2.1.8.1   2025-03-12 [3] CRAN (R 4.5.2)
 #>  codetools                           0.2-20    2024-03-31 [3] CRAN (R 4.5.2)
-#>  colorspace                          2.1-2     2025-09-22 [1] RSPM (R 4.5.0)
-#>  ComplexHeatmap                      2.26.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  crayon                              1.5.3     2024-06-20 [2] RSPM (R 4.5.0)
 #>  curl                                7.0.0     2025-08-19 [2] RSPM (R 4.5.0)
 #>  data.table                          1.18.2.1  2026-01-27 [1] RSPM (R 4.5.0)
@@ -872,37 +881,41 @@ devtools::session_info()
 #>  desc                                1.4.3     2023-12-10 [2] RSPM (R 4.5.0)
 #>  devtools                            2.4.6     2025-10-03 [2] RSPM (R 4.5.0)
 #>  digest                              0.6.39    2025-11-19 [2] RSPM (R 4.5.0)
-#>  doParallel                          1.0.17    2022-02-07 [1] RSPM (R 4.5.0)
-#>  dplyr                               1.1.4     2023-11-17 [1] RSPM (R 4.5.0)
+#>  dplyr                               1.2.0     2026-02-03 [1] RSPM (R 4.5.0)
 #>  ellipsis                            0.3.2     2021-04-29 [2] RSPM (R 4.5.0)
 #>  evaluate                            1.0.5     2025-08-27 [2] RSPM (R 4.5.0)
 #>  farver                              2.1.2     2024-05-13 [1] RSPM (R 4.5.0)
 #>  fastmap                             1.2.0     2024-05-15 [2] RSPM (R 4.5.0)
-#>  foreach                             1.5.2     2022-02-02 [1] RSPM (R 4.5.0)
+#>  fontBitstreamVera                   0.1.1     2017-02-01 [1] RSPM (R 4.5.0)
+#>  fontLiberation                      0.1.0     2016-10-15 [1] RSPM (R 4.5.0)
+#>  fontquiver                          0.2.1     2017-02-01 [1] RSPM (R 4.5.0)
 #>  fs                                  1.6.6     2025-04-12 [2] RSPM (R 4.5.0)
+#>  gdtools                             0.4.4     2025-10-06 [1] RSPM (R 4.5.0)
 #>  generics                          * 0.1.4     2025-05-09 [1] RSPM (R 4.5.0)
 #>  GenomeInfoDb                      * 1.46.2    2025-12-04 [1] Bioconductor 3.22 (R 4.5.2)
 #>  GenomicAlignments                   1.46.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  GenomicFeatures                   * 1.62.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  GenomicRanges                     * 1.62.1    2025-12-08 [1] Bioconductor 3.22 (R 4.5.2)
-#>  GetoptLong                          1.1.0     2025-11-28 [1] RSPM (R 4.5.0)
-#>  ggplot2                             4.0.1     2025-11-14 [1] RSPM (R 4.5.0)
+#>  ggfun                               0.2.0     2025-07-15 [1] RSPM (R 4.5.0)
+#>  ggiraph                             0.9.3     2026-01-19 [1] RSPM (R 4.5.0)
+#>  ggplot2                             4.0.2     2026-02-03 [1] RSPM (R 4.5.0)
+#>  ggplotify                           0.1.3     2025-09-20 [1] RSPM (R 4.5.0)
 #>  ggrepel                             0.9.6     2024-09-07 [1] RSPM (R 4.5.0)
-#>  GlobalOptions                       0.1.3     2025-11-28 [1] RSPM (R 4.5.0)
+#>  ggtree                              4.0.4     2026-01-05 [1] Bioconductor 3.22 (R 4.5.2)
 #>  glue                                1.8.0     2024-09-30 [2] RSPM (R 4.5.0)
-#>  gridBase                            0.4-7     2014-02-24 [1] RSPM (R 4.5.0)
+#>  gridGraphics                        0.5-1     2020-12-13 [1] RSPM (R 4.5.0)
 #>  gtable                              0.3.6     2024-10-25 [1] RSPM (R 4.5.0)
 #>  htmltools                           0.5.9     2025-12-04 [2] RSPM (R 4.5.0)
 #>  htmlwidgets                         1.6.4     2023-12-06 [2] RSPM (R 4.5.0)
 #>  httr                                1.4.7     2023-08-15 [1] RSPM (R 4.5.0)
 #>  IRanges                           * 2.44.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
-#>  iterators                           1.0.14    2022-02-05 [1] RSPM (R 4.5.0)
 #>  jquerylib                           0.1.4     2021-04-26 [2] RSPM (R 4.5.0)
 #>  jsonlite                            2.0.0     2025-03-27 [2] RSPM (R 4.5.0)
 #>  KEGGREST                            1.50.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  knitr                               1.51      2025-12-20 [1] RSPM (R 4.5.0)
 #>  labeling                            0.4.3     2023-08-29 [1] RSPM (R 4.5.0)
 #>  lattice                             0.22-7    2025-04-02 [3] CRAN (R 4.5.2)
+#>  lazyeval                            0.2.2     2019-03-15 [1] RSPM (R 4.5.0)
 #>  lifecycle                           1.0.5     2026-01-08 [1] RSPM (R 4.5.0)
 #>  magrittr                            2.0.4     2025-09-12 [2] RSPM (R 4.5.0)
 #>  MASS                                7.3-65    2025-02-28 [3] CRAN (R 4.5.2)
@@ -910,17 +923,20 @@ devtools::session_info()
 #>  MatrixGenerics                    * 1.22.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  matrixStats                       * 1.5.0     2025-01-07 [1] RSPM (R 4.5.0)
 #>  memoise                             2.0.1     2021-11-26 [2] RSPM (R 4.5.0)
+#>  nlme                                3.1-168   2025-03-31 [3] CRAN (R 4.5.2)
 #>  org.Hs.eg.db                      * 3.22.0    2026-02-03 [1] Bioconductor
 #>  otel                                0.2.0     2025-08-29 [2] RSPM (R 4.5.0)
+#>  patchwork                           1.3.2     2025-08-25 [1] RSPM (R 4.5.0)
 #>  pillar                              1.11.1    2025-09-17 [2] RSPM (R 4.5.0)
 #>  pkgbuild                            1.4.8     2025-05-26 [2] RSPM (R 4.5.0)
 #>  pkgconfig                           2.0.3     2019-09-22 [2] RSPM (R 4.5.0)
 #>  pkgdown                             2.2.0     2025-11-06 [2] RSPM (R 4.5.0)
-#>  pkgload                             1.4.1     2025-09-23 [2] RSPM (R 4.5.0)
+#>  pkgload                             1.5.0     2026-02-03 [2] RSPM (R 4.5.0)
 #>  png                                 0.1-8     2022-11-29 [1] RSPM (R 4.5.0)
 #>  purrr                               1.2.1     2026-01-09 [1] RSPM (R 4.5.0)
 #>  R6                                  2.6.1     2025-02-15 [2] RSPM (R 4.5.0)
 #>  ragg                                1.5.0     2025-09-02 [2] RSPM (R 4.5.0)
+#>  rappdirs                            0.3.4     2026-01-17 [1] RSPM (R 4.5.0)
 #>  RColorBrewer                        1.1-3     2022-04-03 [1] RSPM (R 4.5.0)
 #>  Rcpp                                1.1.1     2026-01-10 [1] RSPM (R 4.5.0)
 #>  RCurl                               1.98-1.17 2025-03-22 [1] RSPM (R 4.5.0)
@@ -937,17 +953,19 @@ devtools::session_info()
 #>  S7                                  0.2.1     2025-11-14 [1] RSPM (R 4.5.0)
 #>  sass                                0.4.10    2025-04-11 [2] RSPM (R 4.5.0)
 #>  scales                              1.4.0     2025-04-24 [1] RSPM (R 4.5.0)
-#>  SEMPLR                            * 0.99.0    2026-02-03 [1] Bioconductor
+#>  SEMPLR                            * 0.99.0    2026-02-05 [1] Bioconductor
 #>  Seqinfo                           * 1.0.0     2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  sessioninfo                         1.2.3     2025-02-05 [2] RSPM (R 4.5.0)
-#>  shape                               1.4.6.1   2024-02-23 [1] RSPM (R 4.5.0)
 #>  SparseArray                         1.10.8    2025-12-18 [1] Bioconductor 3.22 (R 4.5.2)
 #>  stringi                             1.8.7     2025-03-27 [2] RSPM (R 4.5.0)
 #>  SummarizedExperiment              * 1.40.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  systemfonts                         1.3.1     2025-10-01 [2] RSPM (R 4.5.0)
 #>  textshaping                         1.0.4     2025-10-10 [2] RSPM (R 4.5.0)
 #>  tibble                              3.3.1     2026-01-11 [1] RSPM (R 4.5.0)
+#>  tidyr                               1.3.2     2025-12-19 [1] RSPM (R 4.5.0)
 #>  tidyselect                          1.2.1     2024-03-11 [1] RSPM (R 4.5.0)
+#>  tidytree                            0.4.7     2026-01-08 [1] RSPM (R 4.5.0)
+#>  treeio                              1.34.0    2025-10-30 [1] Bioconductor 3.22 (R 4.5.2)
 #>  TxDb.Hsapiens.UCSC.hg38.knownGene * 3.22.0    2026-02-03 [1] Bioconductor
 #>  UCSC.utils                          1.6.1     2025-12-11 [1] Bioconductor 3.22 (R 4.5.2)
 #>  universalmotif                      1.28.0    2025-10-30 [1] Bioconductor 3.22 (R 4.5.2)
@@ -959,6 +977,7 @@ devtools::session_info()
 #>  XML                                 3.99-0.20 2025-11-08 [1] RSPM (R 4.5.0)
 #>  XVector                           * 0.50.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  yaml                                2.3.12    2025-12-10 [1] RSPM (R 4.5.0)
+#>  yulab.utils                         0.2.4     2026-02-02 [1] RSPM (R 4.5.0)
 #> 
 #>  [1] /__w/_temp/Library
 #>  [2] /usr/local/lib/R/site-library
