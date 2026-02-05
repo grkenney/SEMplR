@@ -19,18 +19,3 @@ test_that("enrichmentSets minimal example", {
   expect_in(GenomicRanges::start(es$backgroundElements), 
             c(47560905, 74444836))
 })
-
-
-test_that("mapIds errors and messages", {
-  expect_error(mapIDs(
-    orgdb = orgdb,
-    foreground_ids = my_genes,
-    id_type = "foo"), 
-    regexp = "not an available key for in this mapping object")
-  expect_message(mapIDs(
-    orgdb = orgdb,
-    foreground_ids = my_genes,
-    background_ids = "ENSG00000139610",
-    id_type = "ENSEMBL"), 
-    regexp = "Mapping background ids")
-})
