@@ -5,10 +5,10 @@
 #' user‐provided IDs from a differential expression analysis and returns
 #' promoter regions plus matched background sets for downstream motif
 #' enrichment.  It performs:
-#' 1. ID mapping via \code{mapIDs()}.
-#' 2. Optional biotype filtering via \code{poolFilter()}.
-#' 3. Promoter coordinate extraction via \code{getCoordinates()}.
-#' 4. Background sampling within that same call.
+#' 1. ID mapping
+#' 2. Optional biotype filtering
+#' 3. Promoter coordinate extraction
+#' 4. Background sampling within that same call
 #'
 #' @param txdb A TxDb object.
 #' (e.g. \code{TxDb.Hsapiens.UCSC.hg38.knownGene}).
