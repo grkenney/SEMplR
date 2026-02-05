@@ -40,6 +40,32 @@
 }
 
 
+.addTipLabels <- function(circ, sigIds) {
+    if (length(sigIds) > 0) {
+        withCallingHandlers(
+            {circ <- ggtree::groupOTU(circ, sigIds)},
+            message = function(w) if (grepl("Invaild edge matrix", 
+                                            conditionMessage(w))) 
+                invokeRestart("muffleMessage")
+        )
+        circ <- circ + ggtree::geom_tiplab(ggplot2::aes(color = group), 
+                                           align = TRUE, 
+                                           size = textCex, 
+                                           offset = 0.1, 
+                                           linesize = 0) +
+            ggplot2::scale_color_manual(values=c(textCols[1], textCols[2]), 
+                                        guide = "none")
+    } else {
+        circ <- circ + ggtree::geom_tiplab(color = textCols[1], 
+                                           align = TRUE, 
+                                           size = textCex, 
+                                           offset = 0.1, 
+                                           linesize = 0)
+    }
+    return(circ)
+}
+
+
 #' Plot the results of `enrichSEMs`
 #'
 #' Generates a circular dendrogram, clustering SNP Effect Matrices on
@@ -112,25 +138,19 @@ plotEnrich <- function(e, sem,
     sigIds <- em[, .SD, .SDcols = label][which(em$padj <= threshold)] |>
         unlist() |> unname()
     
-    if (length(sigIds) > 0) {
-        circ <- ggtree::groupOTU(circ, sigIds)
-    } else {
-        circ <- ggtree::groupOTU(circ, 
-                                 unname(unlist(em[, .SD, .SDcols = label])))
-        textCols <- c("darkgrey", "darkgrey")
-    }
-    
-    plt <- ggtree::gheatmap(circ, em_df, width=.1, colnames_angle=0, 
-                            offset = -0.01, colnames = FALSE) +
-        ggtree::geom_tiplab(aes(color = group), 
-                            align = TRUE, size = textCex, offset = 0.1, 
-                            linesize = 0) +
-        ggplot2::scale_fill_gradient(name = "padj",
-                                     low = heatmapCols[1], 
-                                     high = heatmapCols[2], 
-                                     limits = pvalRange, 
-                                     oob = scales::squish) +
-        ggplot2::scale_color_manual(values=c(textCols[1], textCols[2]), 
-                                    guide = "none")
+    withCallingHandlers( {
+        plt <- ggtree::gheatmap(circ, em_df, width=.1, colnames_angle=0, 
+                                offset = -0.01, colnames = FALSE) +
+            ggplot2::scale_fill_gradient(name = "padj",
+                                         low = heatmapCols[1], 
+                                         high = heatmapCols[2], 
+                                         limits = pvalRange, 
+                                         oob = scales::squish)
+            },
+        message = function(w) {
+            if (grepl("Invaild edge matrix", conditionMessage(w)) |
+                grepl("Missing column: label.", conditionMessage(w))) 
+                invokeRestart("muffleMessage") }
+    )
     return(plt)
 }
