@@ -101,6 +101,7 @@
         genome = genome,
         up = nFlank, down = nFlank
     )
+    S4Vectors::mcols(x)$id <- id
 
     return(x)
 }
