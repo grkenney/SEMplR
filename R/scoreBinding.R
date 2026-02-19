@@ -173,7 +173,17 @@
 #' @param rc plot the reverse complement SEMs
 #'
 #' @return If a `GRanges` object is provided, return a `SEMScores` object.
-#' If a list of sequences is provided, just return the scoring table
+#' If a list of sequences is provided, just return the scoring table.
+#' The scoring table will contain the following columns:
+#' - seqId: a unique identifier for the sequence scored
+#' - SEM: the identifier for the SEM
+#' - rc: the orientation of the sequence (fwd or rev)
+#' - score: the unnormalized SEM score
+#' - scoreNorm: the SEM score normalized to it's corresponding baseline
+#' - index: the index of the motif with the highest SEM score within the 
+#' sequence scored
+#' - seq: the motif sequence with the highest SEM scores within the sequence
+#' scored
 #'
 #' @export
 #'

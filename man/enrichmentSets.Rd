@@ -97,9 +97,13 @@ library(org.Hs.eg.db)
 txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 orgdb <- org.Hs.eg.db
 
-my_genes <- c("ENSG00000139618", "ENSG00000157764")
+# Note that this is a minimal set for demonstration only
+genes <- c("ENSG00000139618", "ENSG00000157764")
+background <- c("ENSG00000111640", "ENSG00000075624")
+
 # Minimal run with defaults:
-results <- enrichmentSets(my_genes,
+results <- enrichmentSets(genes,
+    background,
     txdb = txdb,
     orgdb = orgdb,
     id_type = "ENSEMBL"

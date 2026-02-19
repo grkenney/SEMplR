@@ -34,7 +34,24 @@ alternative (alt) allele. Ignored if providing a VRanges object.}
 \item{rc}{plot the reverse complement SEMs}
 }
 \value{
-a SEMScores object
+a SEMScores object with slots for the ranges of the provided
+variants with an added \code{sequence} column with the sequence scored,
+the SEM metadata, and the resulting scoring table.
+These slots are accessible with the \code{getRanges()}, \code{semData()}, and
+\code{scores()} accessor functions respectively.
+
+The scoring table will contain the following columns:
+\itemize{
+\item varId: a unique identifier for the sequence scored
+\item SEM: the identifier for the SEM
+\item rc: the orientation of the sequence (fwd or rev)
+\item score: the unnormalized SEM score
+\item scoreNorm: the SEM score normalized to it's corresponding baseline
+\item index: the index of the motif with the highest SEM score within the
+sequence scored
+\item seq: the motif sequence with the highest SEM scores within the sequence
+scored
+}
 }
 \description{
 Calculate risk/non-risk binding propensity for all SEM motifs and

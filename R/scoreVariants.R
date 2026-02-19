@@ -48,7 +48,22 @@
 #' @param varId A column name in the meta data of x to use as a unique id.
 #' @param rc plot the reverse complement SEMs
 #'
-#' @return a SEMScores object
+#' @return a SEMScores object with slots for the ranges of the provided
+#' variants with an added `sequence` column with the sequence scored, 
+#' the SEM metadata, and the resulting scoring table.
+#' These slots are accessible with the `getRanges()`, `semData()`, and 
+#' `scores()` accessor functions respectively.
+#' 
+#' The scoring table will contain the following columns:
+#' - varId: a unique identifier for the sequence scored
+#' - SEM: the identifier for the SEM
+#' - rc: the orientation of the sequence (fwd or rev)
+#' - score: the unnormalized SEM score
+#' - scoreNorm: the SEM score normalized to it's corresponding baseline
+#' - index: the index of the motif with the highest SEM score within the 
+#' sequence scored
+#' - seq: the motif sequence with the highest SEM scores within the sequence
+#' scored
 #'
 #' @export
 #'
