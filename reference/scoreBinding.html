@@ -83,8 +83,17 @@ Ignored if not providing a <code>GRanges</code> object.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>If a <code>GRanges</code> object is provided, return a <code>SEMScores</code> object.
-If a list of sequences is provided, just return the scoring table</p>
-    </div>
+If a list of sequences is provided, just return the scoring table.
+The scoring table will contain the following columns:</p><ul><li><p>seqId: a unique identifier for the sequence scored</p></li>
+<li><p>SEM: the identifier for the SEM</p></li>
+<li><p>rc: the orientation of the sequence (fwd or rev)</p></li>
+<li><p>score: the unnormalized SEM score</p></li>
+<li><p>scoreNorm: the SEM score normalized to it's corresponding baseline</p></li>
+<li><p>index: the index of the motif with the highest SEM score within the
+sequence scored</p></li>
+<li><p>seq: the motif sequence with the highest SEM scores within the sequence
+scored</p></li>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

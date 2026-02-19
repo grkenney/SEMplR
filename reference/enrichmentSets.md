@@ -178,9 +178,13 @@ library(org.Hs.eg.db)
 txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 orgdb <- org.Hs.eg.db
 
-my_genes <- c("ENSG00000139618", "ENSG00000157764")
+# Note that this is a minimal set for demonstration only
+genes <- c("ENSG00000139618", "ENSG00000157764")
+background <- c("ENSG00000111640", "ENSG00000075624")
+
 # Minimal run with defaults:
-results <- enrichmentSets(my_genes,
+results <- enrichmentSets(genes,
+    background,
     txdb = txdb,
     orgdb = orgdb,
     id_type = "ENSEMBL"
@@ -188,8 +192,9 @@ results <- enrichmentSets(my_genes,
 #> Mapping foreground ids to ENTREZIDs...
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Successfully mapped 100% of the provided foreground ids.
-#> Building background id set...
-#> 'select()' returned 1:many mapping between keys and columns
+#> Mapping background ids to ENTREZIDs...
+#> 'select()' returned 1:1 mapping between keys and columns
+#> Successfully mapped 100% of the provided foreground ids.
 #> Checking for inflation...
 #> 'select()' returned 1:1 mapping between keys and columns
 #> Combining overlapping promoter ranges within genes. (This step may take 1-2 minutes)...

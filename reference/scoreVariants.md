@@ -52,7 +52,32 @@ scoreVariants(
 
 ## Value
 
-a SEMScores object
+a SEMScores object with slots for the ranges of the provided variants
+with an added `sequence` column with the sequence scored, the SEM
+metadata, and the resulting scoring table. These slots are accessible
+with the
+[`getRanges()`](https://grkenney.github.io/SEMPLR/reference/getRanges.md),
+[`semData()`](https://grkenney.github.io/SEMPLR/reference/semData.md),
+and [`scores()`](https://grkenney.github.io/SEMPLR/reference/scores.md)
+accessor functions respectively.
+
+The scoring table will contain the following columns:
+
+- varId: a unique identifier for the sequence scored
+
+- SEM: the identifier for the SEM
+
+- rc: the orientation of the sequence (fwd or rev)
+
+- score: the unnormalized SEM score
+
+- scoreNorm: the SEM score normalized to it's corresponding baseline
+
+- index: the index of the motif with the highest SEM score within the
+  sequence scored
+
+- seq: the motif sequence with the highest SEM scores within the
+  sequence scored
 
 ## Examples
 

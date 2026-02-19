@@ -834,7 +834,7 @@ devtools::session_info()
 #>  collate  en_US.UTF-8
 #>  ctype    en_US.UTF-8
 #>  tz       UTC
-#>  date     2026-02-15
+#>  date     2026-02-19
 #>  pandoc   3.8.2.1 @ /usr/bin/ (via rmarkdown)
 #>  quarto   1.7.32 @ /usr/local/bin/quarto
 #> 
@@ -888,7 +888,7 @@ devtools::session_info()
 #>  GenomicFeatures                   * 1.62.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  GenomicRanges                     * 1.62.1    2025-12-08 [1] Bioconductor 3.22 (R 4.5.2)
 #>  ggfun                               0.2.0     2025-07-15 [1] RSPM (R 4.5.0)
-#>  ggiraph                             0.9.4     2026-02-04 [1] RSPM (R 4.5.0)
+#>  ggiraph                             0.9.5     2026-02-17 [1] RSPM (R 4.5.0)
 #>  ggplot2                             4.0.2     2026-02-03 [1] RSPM (R 4.5.0)
 #>  ggplotify                           0.1.3     2025-09-20 [1] RSPM (R 4.5.0)
 #>  ggrepel                             0.9.6     2024-09-07 [1] RSPM (R 4.5.0)
@@ -898,7 +898,7 @@ devtools::session_info()
 #>  gtable                              0.3.6     2024-10-25 [1] RSPM (R 4.5.0)
 #>  htmltools                           0.5.9     2025-12-04 [2] RSPM (R 4.5.0)
 #>  htmlwidgets                         1.6.4     2023-12-06 [2] RSPM (R 4.5.0)
-#>  httr                                1.4.7     2023-08-15 [1] RSPM (R 4.5.0)
+#>  httr                                1.4.8     2026-02-13 [1] RSPM (R 4.5.0)
 #>  IRanges                           * 2.44.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  jquerylib                           0.1.4     2021-04-26 [2] RSPM (R 4.5.0)
 #>  jsonlite                            2.0.0     2025-03-27 [2] RSPM (R 4.5.0)
@@ -944,7 +944,7 @@ devtools::session_info()
 #>  S7                                  0.2.1     2025-11-14 [1] RSPM (R 4.5.0)
 #>  sass                                0.4.10    2025-04-11 [2] RSPM (R 4.5.0)
 #>  scales                              1.4.0     2025-04-24 [1] RSPM (R 4.5.0)
-#>  SEMPLR                            * 0.99.1    2026-02-15 [1] Bioconductor
+#>  SEMPLR                            * 0.99.1    2026-02-19 [1] Bioconductor
 #>  Seqinfo                           * 1.0.0     2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  sessioninfo                         1.2.3     2025-02-05 [2] RSPM (R 4.5.0)
 #>  SparseArray                         1.10.8    2025-12-18 [1] Bioconductor 3.22 (R 4.5.2)

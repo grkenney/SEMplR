@@ -91,8 +91,21 @@ alternative (alt) allele. Ignored if providing a VRanges object.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a SEMScores object</p>
-    </div>
+    <p>a SEMScores object with slots for the ranges of the provided
+variants with an added <code>sequence</code> column with the sequence scored,
+the SEM metadata, and the resulting scoring table.
+These slots are accessible with the <code><a href="getRanges.html">getRanges()</a></code>, <code><a href="semData.html">semData()</a></code>, and
+<code><a href="scores.html">scores()</a></code> accessor functions respectively.</p>
+<p>The scoring table will contain the following columns:</p><ul><li><p>varId: a unique identifier for the sequence scored</p></li>
+<li><p>SEM: the identifier for the SEM</p></li>
+<li><p>rc: the orientation of the sequence (fwd or rev)</p></li>
+<li><p>score: the unnormalized SEM score</p></li>
+<li><p>scoreNorm: the SEM score normalized to it's corresponding baseline</p></li>
+<li><p>index: the index of the motif with the highest SEM score within the
+sequence scored</p></li>
+<li><p>seq: the motif sequence with the highest SEM scores within the sequence
+scored</p></li>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
