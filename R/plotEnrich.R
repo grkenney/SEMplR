@@ -41,7 +41,7 @@
 
 
 .addTipLabels <- function(circ, sigIds, textCex, textCols) {
-    group <- textCex <- textCols <- NA
+    group <- NA
     if (length(sigIds) > 0) {
         withCallingHandlers(
             {circ <- ggtree::groupOTU(circ, sigIds)},
@@ -52,7 +52,7 @@
         circ <- circ + ggtree::geom_tiplab(ggplot2::aes(color = group), 
                                            align = TRUE, 
                                            size = textCex, 
-                                           offset = 0.1, 
+                                           offset = 0.065, 
                                            linesize = 0) +
             ggplot2::scale_color_manual(values=c(textCols[1], textCols[2]), 
                                         guide = "none")
@@ -132,17 +132,22 @@ plotEnrich <- function(e, sem,
         method = method )
     
     den <- stats::as.dendrogram(comparisons)
-    circ <- ggtree::ggtree(den, layout = "circular")
+    circ <- ggtree::ggtree(den, layout = "circular") + 
+        ggtree::theme_dendrogram(bgcolor = "transparent", 
+                                 fgcolor = "transparent")
     em_df <- as.data.frame(-log10(em[, "padj"]))
     rownames(em_df) <- em[, .SD, .SDcols = label] |> unlist()
     colnames(em_df) <- "padj"
     sigIds <- em[, .SD, .SDcols = label][which(em$padj <= threshold)] |>
         unlist() |> unname()
     
+    circ <- .addTipLabels(circ = circ, sigIds = sigIds, 
+                          textCex = textCex, textCols = textCols)
+    
     withCallingHandlers( {
-        plt <- ggtree::gheatmap(circ, em_df, width=.1, colnames_angle=0, 
-                                offset = -0.01, colnames = FALSE) +
-            ggplot2::scale_fill_gradient(name = "padj",
+        plt <- ggtree::gheatmap(circ, em_df, width=.08, colnames_angle=0, 
+                                offset = -0.02, colnames = FALSE) +
+            ggplot2::scale_fill_gradient(name = "-log10(Adj. P-value)",
                                          low = heatmapCols[1], 
                                          high = heatmapCols[2], 
                                          limits = pvalRange, 
