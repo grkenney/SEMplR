@@ -199,12 +199,14 @@ We can access this scores table with the
 function and see that we have a row for each variant and SEM
 combination. The scoring results has 6 columns:
 
-- **varId**: unique id of the variant as defined in the `id` column of
+- **seqId**: unique id of the variant as defined in the `id` column of
   the input `GRanges` or `VRanges` object. If not defined, in the
   `seqId` parameter of the `scoreBinding` function, a custom unique
   identifier is generated in the format \[seqname\]:\[range\]
 
-- **semId**: the unique identifier of the SEM
+- **SEM**: the unique identifier of the SEM
+
+- **rc**: the orientation of the sequence scored
 
 - **score**: the raw (unnormalized) binding affinity score for the
   reference and alternative alleles respectively
@@ -247,17 +249,16 @@ score.
 ``` r
 
 # subset JUN score
-jun_score <- scores(sb)[SEM == "JUN"]
+jun_score <- scores(sb)[SEM == "JUN" & rc == "fwd"]
 jun_score
 #>             seqId    SEM     rc      score   scoreNorm index     seq
 #>            <char> <char> <char>      <num>       <num> <int>  <char>
 #> 1: chr12:94136009    JUN    fwd -0.9631318 -0.02038131    19 TGAGGCA
-#> 2: chr12:94136009    JUN    rev -1.0092361 -0.05119212    19 TGAGGCA
 
 # plot the JUN motif with the scored sequence
 plotSEM(SEMC,
     motif = "JUN",
-    motifSeq = jun_score$sequence
+    motifSeq = jun_score$seq
 )
 ```
 
@@ -437,7 +438,8 @@ threshold.
 plotEnrich(e,
     sem = SEMC,
     threshold = 0.05, method = "WPCC",
-    pvalRange = c(0, 50)
+    pvalRange = c(0, 50),
+    heatmapCols = c("lightgrey", "dodgerblue2")
 )
 #> Scale for y is already present.
 #> Adding another scale for y, which will replace the existing scale.
@@ -666,7 +668,9 @@ produces a table with 10 columns:
   unique identifier is generated in the format
   \[seqname\]:\[range\]:\[ref_allele\]\>\[alt_allele\]
 
-- **semId**: the unique identifier of the SEM
+- **SEM**: the unique identifier of the SEM
+
+- **rc**: the orientation of the sequence scored
 
 - **refSeq** and **altSeq**: the optimally scored sequence for the
   reference and alternative alleles respectively
@@ -834,7 +838,7 @@ devtools::session_info()
 #>  collate  en_US.UTF-8
 #>  ctype    en_US.UTF-8
 #>  tz       UTC
-#>  date     2026-02-19
+#>  date     2026-02-24
 #>  pandoc   3.8.2.1 @ /usr/bin/ (via rmarkdown)
 #>  quarto   1.7.32 @ /usr/local/bin/quarto
 #> 
@@ -888,7 +892,7 @@ devtools::session_info()
 #>  GenomicFeatures                   * 1.62.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  GenomicRanges                     * 1.62.1    2025-12-08 [1] Bioconductor 3.22 (R 4.5.2)
 #>  ggfun                               0.2.0     2025-07-15 [1] RSPM (R 4.5.0)
-#>  ggiraph                             0.9.5     2026-02-17 [1] RSPM (R 4.5.0)
+#>  ggiraph                             0.9.6     2026-02-21 [1] RSPM (R 4.5.0)
 #>  ggplot2                             4.0.2     2026-02-03 [1] RSPM (R 4.5.0)
 #>  ggplotify                           0.1.3     2025-09-20 [1] RSPM (R 4.5.0)
 #>  ggrepel                             0.9.6     2024-09-07 [1] RSPM (R 4.5.0)
@@ -944,7 +948,7 @@ devtools::session_info()
 #>  S7                                  0.2.1     2025-11-14 [1] RSPM (R 4.5.0)
 #>  sass                                0.4.10    2025-04-11 [2] RSPM (R 4.5.0)
 #>  scales                              1.4.0     2025-04-24 [1] RSPM (R 4.5.0)
-#>  SEMPLR                            * 0.99.1    2026-02-19 [1] Bioconductor
+#>  SEMPLR                            * 0.99.1    2026-02-24 [1] Bioconductor
 #>  Seqinfo                           * 1.0.0     2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  sessioninfo                         1.2.3     2025-02-05 [2] RSPM (R 4.5.0)
 #>  SparseArray                         1.10.8    2025-12-18 [1] Bioconductor 3.22 (R 4.5.2)
