@@ -116,12 +116,14 @@ We can access this scores table with the `scores()` function and
 see that we have a row for each variant and SEM combination. The scoring 
 results has 6 columns:
 
-- **varId**: unique id of the variant as defined in the `id` column of the 
+- **seqId**: unique id of the variant as defined in the `id` column of the 
 input `GRanges` or `VRanges` object. If not defined, in the `seqId` parameter
 of the `scoreBinding` function, a custom unique identifier 
 is generated in the format [seqname]:[range]
 
-- **semId**: the unique identifier of the SEM
+- **SEM**: the unique identifier of the SEM
+
+- **rc**: the orientation of the sequence scored
 
 - **score**: the raw (unnormalized) binding affinity score 
 for the reference and alternative alleles respectively
@@ -148,13 +150,13 @@ and see which nucleotides are contributing to this negative score.
 
 ```{r plot_sem}
 # subset JUN score
-jun_score <- scores(sb)[SEM == "JUN"]
+jun_score <- scores(sb)[SEM == "JUN" & rc == "fwd"]
 jun_score
 
 # plot the JUN motif with the scored sequence
 plotSEM(SEMC,
     motif = "JUN",
-    motifSeq = jun_score$sequence
+    motifSeq = jun_score$seq
 )
 ```
 
@@ -308,7 +310,8 @@ pvalue threshold.
 plotEnrich(e,
     sem = SEMC,
     threshold = 0.05, method = "WPCC",
-    pvalRange = c(0, 50)
+    pvalRange = c(0, 50),
+    heatmapCols = c("lightgrey", "dodgerblue2")
 )
 ```
 
@@ -434,7 +437,9 @@ Similar to the scoring table produced by `scoreBinding`,
 input `GRanges` or `VRanges` object. If not defined, a custom unique identifier 
 is generated in the format [seqname]:[range]:[ref_allele]>[alt_allele]
 
-- **semId**: the unique identifier of the SEM
+- **SEM**: the unique identifier of the SEM
+
+- **rc**: the orientation of the sequence scored
 
 - **refSeq** and **altSeq**: the optimally scored sequence for the reference 
 and alternative alleles respectively
