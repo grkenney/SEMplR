@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 # SEMPLR <a href="https://grkenney.github.io/SEMplR"><img src="man/figures/SEMplR-new.png" align="right" height="200" alt="SEMplR website" style="float:right; height:200px;" /></a>
-=======
-# SEMplR <a href="https://grkenney.github.io/SEMplR"><img src="man/figures/SEMplR-new.png" align="right" height="200" alt="SEMplR website" style="float:right; height:200px;" /></a>
->>>>>>> origin/main
 
 ## Overview
 
