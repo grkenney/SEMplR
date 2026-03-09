@@ -2,7 +2,7 @@
 
 ## SEMPLR 0.99.0
 
-- Bioconductor ready
+- Ready for Bioconductor
 
 - Your bug fixes. See more details at
   <http://bioconductor.org/developers/package-guidelines/#news>.
