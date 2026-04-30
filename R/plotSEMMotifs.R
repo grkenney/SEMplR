@@ -110,7 +110,7 @@ plotSEMMotifs <- function(s, variant, label = "transcription_factor",
 
     # restore key column if not 'SEM'
     if (dt_key != "SEM") {
-        dt <- cbind(dt, semData(s)[, .SD, .SDcols = dt_key])
+        dt[, (dt_key) := dt$SEM]
     }
 
     if (rc) {
