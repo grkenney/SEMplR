@@ -1,6 +1,6 @@
 Package: SEMPLR
 Title: SNP Effect Matrix Pipeline in R
-Version: 1.1.0
+Version: 1.1.1
 Authors@R: c(
     person("Grace", "Kenney", 
     email = "kenney.grace6@gmail.com", 
