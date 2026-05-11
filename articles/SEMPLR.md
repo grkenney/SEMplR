@@ -838,7 +838,7 @@ devtools::session_info()
 #>  collate  en_US.UTF-8
 #>  ctype    en_US.UTF-8
 #>  tz       UTC
-#>  date     2026-04-30
+#>  date     2026-05-11
 #>  pandoc   3.8.2.1 @ /usr/bin/ (via rmarkdown)
 #>  quarto   1.7.32 @ /usr/local/bin/quarto
 #> 
@@ -861,8 +861,8 @@ devtools::session_info()
 #>  blob                                1.3.0     2026-01-14 [1] RSPM (R 4.5.0)
 #>  bookdown                            0.46      2025-12-05 [1] RSPM (R 4.5.0)
 #>  BSgenome                          * 1.78.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
-#>  BSgenome.Hsapiens.UCSC.hg19       * 1.4.3     2026-04-30 [1] Bioconductor
-#>  BSgenome.Hsapiens.UCSC.hg38       * 1.4.5     2026-04-30 [1] Bioconductor
+#>  BSgenome.Hsapiens.UCSC.hg19       * 1.4.3     2026-05-11 [1] Bioconductor
+#>  BSgenome.Hsapiens.UCSC.hg38       * 1.4.5     2026-05-11 [1] Bioconductor
 #>  bslib                               0.10.0    2026-01-26 [1] RSPM (R 4.5.0)
 #>  cachem                              1.1.0     2024-05-16 [2] RSPM (R 4.5.0)
 #>  cigarillo                           1.0.0     2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
@@ -870,11 +870,11 @@ devtools::session_info()
 #>  codetools                           0.2-20    2024-03-31 [3] CRAN (R 4.5.2)
 #>  crayon                              1.5.3     2024-06-20 [2] RSPM (R 4.5.0)
 #>  curl                                7.1.0     2026-04-22 [1] RSPM (R 4.5.0)
-#>  data.table                          1.18.2.1  2026-01-27 [1] RSPM (R 4.5.0)
+#>  data.table                          1.18.4    2026-05-06 [1] RSPM (R 4.5.0)
 #>  DBI                                 1.3.0     2026-02-25 [1] RSPM (R 4.5.0)
 #>  DelayedArray                        0.36.1    2026-03-31 [1] Bioconductor 3.22 (R 4.5.2)
 #>  desc                                1.4.3     2023-12-10 [2] RSPM (R 4.5.0)
-#>  devtools                            2.5.1     2026-04-16 [1] RSPM (R 4.5.0)
+#>  devtools                            2.5.2     2026-04-30 [1] RSPM (R 4.5.0)
 #>  digest                              0.6.39    2025-11-19 [2] RSPM (R 4.5.0)
 #>  dplyr                               1.2.1     2026-04-03 [1] RSPM (R 4.5.0)
 #>  ellipsis                            0.3.3     2026-04-04 [1] RSPM (R 4.5.0)
@@ -919,7 +919,7 @@ devtools::session_info()
 #>  matrixStats                       * 1.5.0     2025-01-07 [1] RSPM (R 4.5.0)
 #>  memoise                             2.0.1     2021-11-26 [2] RSPM (R 4.5.0)
 #>  nlme                                3.1-169   2026-03-27 [1] RSPM (R 4.5.0)
-#>  org.Hs.eg.db                      * 3.22.0    2026-04-30 [1] Bioconductor
+#>  org.Hs.eg.db                      * 3.22.0    2026-05-11 [1] Bioconductor
 #>  otel                                0.2.0     2025-08-29 [2] RSPM (R 4.5.0)
 #>  patchwork                           1.3.2     2025-08-25 [1] RSPM (R 4.5.0)
 #>  pillar                              1.11.1    2025-09-17 [2] RSPM (R 4.5.0)
@@ -940,14 +940,14 @@ devtools::session_info()
 #>  rlang                               1.2.0     2026-04-06 [1] RSPM (R 4.5.0)
 #>  rmarkdown                           2.31      2026-03-26 [1] RSPM (R 4.5.0)
 #>  Rsamtools                         * 2.26.0    2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
-#>  RSQLite                             2.4.6     2026-02-06 [1] RSPM (R 4.5.0)
+#>  RSQLite                             3.52.0    2026-05-10 [1] RSPM (R 4.5.0)
 #>  rtracklayer                       * 1.70.1    2025-12-22 [1] Bioconductor 3.22 (R 4.5.2)
 #>  S4Arrays                            1.10.1    2025-12-01 [1] Bioconductor 3.22 (R 4.5.2)
 #>  S4Vectors                         * 0.48.1    2026-04-05 [1] Bioconductor 3.22 (R 4.5.2)
 #>  S7                                  0.2.2     2026-04-22 [1] RSPM (R 4.5.0)
 #>  sass                                0.4.10    2025-04-11 [2] RSPM (R 4.5.0)
 #>  scales                              1.4.0     2025-04-24 [1] RSPM (R 4.5.0)
-#>  SEMPLR                            * 0.99.2    2026-04-30 [1] Bioconductor
+#>  SEMPLR                            * 1.1.1     2026-05-11 [1] Bioconductor
 #>  Seqinfo                           * 1.0.0     2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  sessioninfo                         1.2.3     2025-02-05 [2] RSPM (R 4.5.0)
 #>  SparseArray                         1.10.10   2026-03-30 [1] Bioconductor 3.22 (R 4.5.2)
@@ -960,7 +960,7 @@ devtools::session_info()
 #>  tidyselect                          1.2.1     2024-03-11 [1] RSPM (R 4.5.0)
 #>  tidytree                            0.4.7     2026-01-08 [1] RSPM (R 4.5.0)
 #>  treeio                              1.34.0    2025-10-30 [1] Bioconductor 3.22 (R 4.5.2)
-#>  TxDb.Hsapiens.UCSC.hg38.knownGene * 3.22.0    2026-04-30 [1] Bioconductor
+#>  TxDb.Hsapiens.UCSC.hg38.knownGene * 3.22.0    2026-05-11 [1] Bioconductor
 #>  UCSC.utils                          1.6.1     2025-12-11 [1] Bioconductor 3.22 (R 4.5.2)
 #>  universalmotif                      1.28.0    2025-10-30 [1] Bioconductor 3.22 (R 4.5.2)
 #>  usethis                             3.2.1     2025-09-06 [2] RSPM (R 4.5.0)
