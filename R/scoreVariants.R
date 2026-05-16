@@ -58,12 +58,12 @@
 #' - varId: a unique identifier for the sequence scored
 #' - SEM: the identifier for the SEM
 #' - rc: the orientation of the sequence (fwd or rev)
-#' - score: the unnormalized SEM score
-#' - scoreNorm: the SEM score normalized to it's corresponding baseline
-#' - index: the index of the motif with the highest SEM score within the 
-#' sequence scored
-#' - seq: the motif sequence with the highest SEM scores within the sequence
-#' scored
+#' - refSeq/altSeq: the motif sequence with the highest SEM scores within 
+#' the sequence scored
+#' - refScore/altScore: the unnormalized SEM score
+#' - refNorm/altNorm: the SEM score normalized to it's corresponding baseline
+#' - refVarIndex/altVarIndex: the index of the motif with the highest SEM score 
+#' within the sequence scored
 #'
 #' @export
 #'

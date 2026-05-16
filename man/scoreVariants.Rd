@@ -45,12 +45,12 @@ The scoring table will contain the following columns:
 \item varId: a unique identifier for the sequence scored
 \item SEM: the identifier for the SEM
 \item rc: the orientation of the sequence (fwd or rev)
-\item score: the unnormalized SEM score
-\item scoreNorm: the SEM score normalized to it's corresponding baseline
-\item index: the index of the motif with the highest SEM score within the
-sequence scored
-\item seq: the motif sequence with the highest SEM scores within the sequence
-scored
+\item refSeq/altSeq: the motif sequence with the highest SEM scores within
+the sequence scored
+\item refScore/altScore: the unnormalized SEM score
+\item refNorm/altNorm: the SEM score normalized to it's corresponding baseline
+\item refVarIndex/altVarIndex: the index of the motif with the highest SEM score
+within the sequence scored
 }
 }
 \description{
