@@ -280,6 +280,11 @@ provided to use as a background.
 `enrichSEMs` performs a binomal test to determine if any of the transcription
 factors scored are bound more than expected by chance. 
 
+Note that, in instances where scores for both forward and reverse
+orientations are provided, only the orientation with the highest
+binding score is considered for each sequence/SEM combination in
+enrichment calculations.
+
 ```{r enrichSEMs}
 e <- enrichSEMs(sb, sem = SEMC, seqs = all_seqs)
 

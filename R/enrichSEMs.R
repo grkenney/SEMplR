@@ -8,6 +8,15 @@
 }
 
 
+# subset scores table to only include the orientation with the highest scoreNorm
+.subsetScoresToStrandMostBound <- function(x) {
+    scoreNorm <- seqId <- SEM <- NULL
+    x_sub <- x[x[, .I[which.max(scoreNorm)], 
+                 by = .(seqId, SEM)]$V1]
+    return(x_sub)
+}
+
+
 # perform a binomial test on sem scores versus a scores from a background for a
 # single sem
 .binomSEMEnrich <- function(xs, bg, semName) {
@@ -73,6 +82,10 @@
 #'
 #' Perform a binomial test to determine if SNP Effect Matrices are bound more
 #' often than expected.
+#' 
+#' In instances where scores for both forward and reverse orientations are 
+#' provided, only the orientation with the highest binding score is considered
+#' for each sequence/SEM combination in enrichment calculations.
 #'
 #' @param x The scoring table produced by `scoreBinding`
 #' @param sem A `SNPEffectMatrix` or `SNPEffectMatrixCollection` object
@@ -131,26 +144,26 @@ enrichSEMs <- function(x, sem,
     rc <- ifelse(any(x_scores[, "rc"] == "rev"), TRUE, FALSE)
 
     bg <- .defineBackground(
-        x = x,
-        sem = sem,
-        background = background,
-        seqs = seqs,
-        nFlank = nFlank,
-        genome = genome,
+        x = x, sem = sem,
+        background = background, seqs = seqs,
+        nFlank = nFlank, genome = genome,
         rc = rc
     )
+    
+    # if multiple orientations, subset to highest scoring orientation
+    if (rc) {
+        x_scores <- .subsetScoresToStrandMostBound(x_scores)
+        bg <- .subsetScoresToStrandMostBound(bg)
+    }
 
     result <- lapply(
         seq_along(sem_names),
         function(i) {
             .binomSEMEnrich(
-                xs = x_scores,
-                bg = bg,
-                semName = sem_names[i]
+                xs = x_scores, bg = bg, semName = sem_names[i]
             )
         }
-    ) |>
-        data.table::rbindlist()
+    ) |> data.table::rbindlist()
 
     result$padj <- stats::p.adjust(result$pvalue, method = "BH")
     return(result[, c("SEM", "pvalue", "padj", "n_bound", "n_bound_bg")])

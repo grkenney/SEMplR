@@ -31,6 +31,11 @@ a \code{list} of matrices
 Perform a binomial test to determine if SNP Effect Matrices are bound more
 often than expected.
 }
+\details{
+In instances where scores for both forward and reverse orientations are
+provided, only the orientation with the highest binding score is considered
+for each sequence/SEM combination in enrichment calculations.
+}
 \examples{
 
 # load SEMs
