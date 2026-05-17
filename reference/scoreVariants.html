@@ -9,7 +9,7 @@ variants provided"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">SEMPLR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,12 +99,12 @@ These slots are accessible with the <code><a href="getRanges.html">getRanges()</
 <p>The scoring table will contain the following columns:</p><ul><li><p>varId: a unique identifier for the sequence scored</p></li>
 <li><p>SEM: the identifier for the SEM</p></li>
 <li><p>rc: the orientation of the sequence (fwd or rev)</p></li>
-<li><p>score: the unnormalized SEM score</p></li>
-<li><p>scoreNorm: the SEM score normalized to it's corresponding baseline</p></li>
-<li><p>index: the index of the motif with the highest SEM score within the
-sequence scored</p></li>
-<li><p>seq: the motif sequence with the highest SEM scores within the sequence
-scored</p></li>
+<li><p>refSeq/altSeq: the motif sequence with the highest SEM scores within
+the sequence scored</p></li>
+<li><p>refScore/altScore: the unnormalized SEM score</p></li>
+<li><p>refNorm/altNorm: the SEM score normalized to it's corresponding baseline</p></li>
+<li><p>refVarIndex/altVarIndex: the index of the motif with the highest SEM score
+within the sequence scored</p></li>
 </ul></div>
 
     <div class="section level2">

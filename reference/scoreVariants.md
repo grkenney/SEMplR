@@ -69,15 +69,16 @@ The scoring table will contain the following columns:
 
 - rc: the orientation of the sequence (fwd or rev)
 
-- score: the unnormalized SEM score
+- refSeq/altSeq: the motif sequence with the highest SEM scores within
+  the sequence scored
 
-- scoreNorm: the SEM score normalized to it's corresponding baseline
+- refScore/altScore: the unnormalized SEM score
 
-- index: the index of the motif with the highest SEM score within the
-  sequence scored
+- refNorm/altNorm: the SEM score normalized to it's corresponding
+  baseline
 
-- seq: the motif sequence with the highest SEM scores within the
-  sequence scored
+- refVarIndex/altVarIndex: the index of the motif with the highest SEM
+  score within the sequence scored
 
 ## Examples
 

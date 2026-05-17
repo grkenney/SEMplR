@@ -9,7 +9,7 @@ often than expected."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">SEMPLR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,6 +82,12 @@ were scored rather than a <code>GRanges</code>), use <code>nFlank = 0</code>.</p
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>a <code>list</code> of matrices</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>In instances where scores for both forward and reverse orientations are
+provided, only the orientation with the highest binding score is considered
+for each sequence/SEM combination in enrichment calculations.</p>
     </div>
 
     <div class="section level2">

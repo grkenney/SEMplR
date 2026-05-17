@@ -44,6 +44,12 @@ enrichSEMs(x, sem, background = NULL, seqs = NULL, nFlank = 0, genome = NULL)
 
 a `list` of matrices
 
+## Details
+
+In instances where scores for both forward and reverse orientations are
+provided, only the orientation with the highest binding score is
+considered for each sequence/SEM combination in enrichment calculations.
+
 ## Examples
 
 ``` r

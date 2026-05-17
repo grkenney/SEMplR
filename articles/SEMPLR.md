@@ -396,6 +396,11 @@ scored sequences provided to use as a background.
 `enrichSEMs` performs a binomal test to determine if any of the
 transcription factors scored are bound more than expected by chance.
 
+Note that, in instances where scores for both forward and reverse
+orientations are provided, only the orientation with the highest binding
+score is considered for each sequence/SEM combination in enrichment
+calculations.
+
 ``` r
 
 e <- enrichSEMs(sb, sem = SEMC, seqs = all_seqs)
@@ -403,14 +408,14 @@ e <- enrichSEMs(sb, sem = SEMC, seqs = all_seqs)
 
 # order the results by adjusted pvalue
 head(e[order(padj, decreasing = FALSE)])
-#>       SEM        pvalue          padj n_bound n_bound_bg
-#>    <char>         <num>         <num>   <int>      <int>
-#> 1:    JUN 7.631583e-201 1.701843e-198     318         32
-#> 2:  FOSL1 2.342732e-139 2.612146e-137     134          4
-#> 3:   JUND  4.070893e-92  3.026030e-90      86          2
-#> 4:   JUNB  1.432315e-74  7.985158e-73      55          0
-#> 5:  FOSL2  4.037096e-54  1.800545e-52      43          0
-#> 6:   NFE2  4.098514e-32  1.523281e-30      41          2
+#>       SEM       pvalue         padj n_bound n_bound_bg
+#>    <char>        <num>        <num>   <int>      <int>
+#> 1:    JUN 1.521416e-99 3.392757e-97     159         16
+#> 2:  FOSL1 1.715017e-72 1.912244e-70      72          2
+#> 3:   JUND 3.903556e-43 2.901643e-41      44          1
+#> 4:   JUNB 2.936398e-32 1.637042e-30      29          0
+#> 5:  FOSL2 4.782771e-25 1.777597e-23      24          0
+#> 6: NFE2L2 3.991381e-25 1.777597e-23      30          1
 ```
 
 The resulting columns contain the p-value from the binomal test, the
@@ -838,7 +843,7 @@ devtools::session_info()
 #>  collate  en_US.UTF-8
 #>  ctype    en_US.UTF-8
 #>  tz       UTC
-#>  date     2026-05-11
+#>  date     2026-05-17
 #>  pandoc   3.8.2.1 @ /usr/bin/ (via rmarkdown)
 #>  quarto   1.7.32 @ /usr/local/bin/quarto
 #> 
@@ -947,7 +952,7 @@ devtools::session_info()
 #>  S7                                  0.2.2     2026-04-22 [1] RSPM (R 4.5.0)
 #>  sass                                0.4.10    2025-04-11 [2] RSPM (R 4.5.0)
 #>  scales                              1.4.0     2025-04-24 [1] RSPM (R 4.5.0)
-#>  SEMPLR                            * 1.1.1     2026-05-11 [1] Bioconductor
+#>  SEMPLR                            * 1.1.2     2026-05-17 [1] Bioconductor
 #>  Seqinfo                           * 1.0.0     2025-10-29 [1] Bioconductor 3.22 (R 4.5.2)
 #>  sessioninfo                         1.2.3     2025-02-05 [2] RSPM (R 4.5.0)
 #>  SparseArray                         1.10.10   2026-03-30 [1] Bioconductor 3.22 (R 4.5.2)

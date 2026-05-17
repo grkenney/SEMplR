@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">SEMPLR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -416,20 +416,24 @@ scramble the scored sequences provided to use as a background.</p>
 <p><code>enrichSEMs</code> performs a binomal test to determine if any
 of the transcription factors scored are bound more than expected by
 chance.</p>
+<p>Note that, in instances where scores for both forward and reverse
+orientations are provided, only the orientation with the highest binding
+score is considered for each sequence/SEM combination in enrichment
+calculations.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">e</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichSEMs.html">enrichSEMs</a></span><span class="op">(</span><span class="va">sb</span>, sem <span class="op">=</span> <span class="va">SEMC</span>, seqs <span class="op">=</span> <span class="va">all_seqs</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Building background set (this may take several minutes) ...</span></span>
 <span></span>
 <span><span class="co"># order the results by adjusted pvalue</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">e</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">padj</span>, decreasing <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;       SEM        pvalue          padj n_bound n_bound_bg</span></span>
-<span><span class="co">#&gt;    &lt;char&gt;         &lt;num&gt;         &lt;num&gt;   &lt;int&gt;      &lt;int&gt;</span></span>
-<span><span class="co">#&gt; 1:    JUN 7.631583e-201 1.701843e-198     318         32</span></span>
-<span><span class="co">#&gt; 2:  FOSL1 2.342732e-139 2.612146e-137     134          4</span></span>
-<span><span class="co">#&gt; 3:   JUND  4.070893e-92  3.026030e-90      86          2</span></span>
-<span><span class="co">#&gt; 4:   JUNB  1.432315e-74  7.985158e-73      55          0</span></span>
-<span><span class="co">#&gt; 5:  FOSL2  4.037096e-54  1.800545e-52      43          0</span></span>
-<span><span class="co">#&gt; 6:   NFE2  4.098514e-32  1.523281e-30      41          2</span></span></code></pre></div>
+<span><span class="co">#&gt;       SEM       pvalue         padj n_bound n_bound_bg</span></span>
+<span><span class="co">#&gt;    &lt;char&gt;        &lt;num&gt;        &lt;num&gt;   &lt;int&gt;      &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1:    JUN 1.521416e-99 3.392757e-97     159         16</span></span>
+<span><span class="co">#&gt; 2:  FOSL1 1.715017e-72 1.912244e-70      72          2</span></span>
+<span><span class="co">#&gt; 3:   JUND 3.903556e-43 2.901643e-41      44          1</span></span>
+<span><span class="co">#&gt; 4:   JUNB 2.936398e-32 1.637042e-30      29          0</span></span>
+<span><span class="co">#&gt; 5:  FOSL2 4.782771e-25 1.777597e-23      24          0</span></span>
+<span><span class="co">#&gt; 6: NFE2L2 3.991381e-25 1.777597e-23      30          1</span></span></code></pre></div>
 <p>The resulting columns contain the p-value from the binomal test, the
 Benjamini &amp; Hochberg ajusted p-value, and the number of sequences
 where each TF was predicted to be bound in the foreground set (n_bound)
@@ -819,7 +823,7 @@ data to the names of the matrices.</p>
 <span><span class="co">#&gt;  collate  en_US.UTF-8</span></span>
 <span><span class="co">#&gt;  ctype    en_US.UTF-8</span></span>
 <span><span class="co">#&gt;  tz       UTC</span></span>
-<span><span class="co">#&gt;  date     2026-05-11</span></span>
+<span><span class="co">#&gt;  date     2026-05-17</span></span>
 <span><span class="co">#&gt;  pandoc   3.8.2.1 @ /usr/bin/ (via rmarkdown)</span></span>
 <span><span class="co">#&gt;  quarto   1.7.32 @ /usr/local/bin/quarto</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -928,7 +932,7 @@ data to the names of the matrices.</p>
 <span><span class="co">#&gt;  S7                                  0.2.2     <span style="color: #555555;">2026-04-22</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  sass                                0.4.10    <span style="color: #555555;">2025-04-11</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  scales                              1.4.0     <span style="color: #555555;">2025-04-24</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
-<span><span class="co">#&gt;  SEMPLR                            * 1.1.1     <span style="color: #555555;">2026-05-11</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
+<span><span class="co">#&gt;  SEMPLR                            * 1.1.2     <span style="color: #555555;">2026-05-17</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>
 <span><span class="co">#&gt;  Seqinfo                           * 1.0.0     <span style="color: #555555;">2025-10-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.2)</span></span></span>
 <span><span class="co">#&gt;  sessioninfo                         1.2.3     <span style="color: #555555;">2025-02-05</span> <span style="color: #555555;">[2]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM (R 4.5.0)</span></span></span>
 <span><span class="co">#&gt;  SparseArray                         1.10.10   <span style="color: #555555;">2026-03-30</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor 3.22 (R 4.5.2)</span></span></span>
